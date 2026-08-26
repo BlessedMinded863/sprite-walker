@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#101218">
+<title>Fatal Instinct Sprite Walker V3</title>
+<style>
+:root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--gold:#ffdd4d}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}
+header{padding:16px 16px 8px}
+h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}
+main{padding:0 12px 28px}
+.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}
+button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}
+.workspace{display:grid;grid-template-columns:1fr;gap:12px}
+.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:56vh;min-height:390px;max-height:650px;touch-action:none}
+#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}
+.panel label.title{display:block;font-weight:800;margin-bottom:6px}
+select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}
+.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}
+.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}
+.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}
+.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}
+.switchRow input{width:22px;height:22px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}
+.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}
+.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}
+@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 380px}.canvasWrap{height:72vh}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Fatal Instinct Sprite Walker <span class="badge">V3</span></h1>
+  <div class="sub">Joint-Locked Skeleton • iPhone / Safari</div>
+</header>
+<main>
+  <div class="topbar">
+    <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
+    <button id="saveRig">Save Rig</button>
+    <label class="btn">Load Rig<input id="rigInput" type="file" accept=".json,application/json"></label>
+  </div>
+
+  <div class="workspace">
+    <div class="canvasWrap">
+      <canvas id="mainCanvas"></canvas>
+      <div id="hint" class="hint">Load the approved character image to begin.</div>
+    </div>
+
+    <div class="panel">
+      <label class="title">Body part</label>
+      <select id="part"></select>
+
+      <div class="modes">
+        <button id="traceBtn" class="active">Trace Part</button>
+        <button id="pivotBtn">Set Pivot</button>
+        <button id="inspectBtn">Inspect</button>
+      </div>
+
+      <div class="help">
+        <p><b>V3 joint lock:</b> shin pivot = knee, foot pivot = ankle. The engine now calculates the next joint from the previous bone so pieces stay attached.</p>
+        <p><b>Saved V2 rigs:</b> compatible. Load your existing rig and test it before retracing anything.</p>
+      </div>
+
+      <div class="sliders">
+        <div class="slider"><label>Leg swing <span><b id="legV">18</b>°</span></label><input id="leg" type="range" min="0" max="45" value="18"></div>
+        <div class="slider"><label>Knee bend <span><b id="kneeV">16</b>°</span></label><input id="knee" type="range" min="0" max="50" value="16"></div>
+        <div class="slider"><label>Arm swing <span><b id="armV">12</b>°</span></label><input id="arm" type="range" min="0" max="45" value="12"></div>
+        <div class="slider"><label>Body bob <span><b id="bobV">2</b> px</span></label><input id="bob" type="range" min="0" max="10" value="2"></div>
+        <div class="slider"><label>Tail swing <span><b id="tailV">8</b>°</span></label><input id="tail" type="range" min="0" max="35" value="8"></div>
+      </div>
+
+      <div class="switchRow">
+        <span>Lock planted foot</span>
+        <input id="footLock" type="checkbox" checked>
+      </div>
+
+      <div class="grid">
+        <button id="generate" class="primary">Generate 8 Frames</button>
+        <button id="preview">Preview</button>
+        <button id="export">Export Sprite Sheet</button>
+        <button id="clear">Clear Selected Part</button>
+      </div>
+      <div id="status" class="status">Ready.</div>
+    </div>
+  </div>
+
+  <section class="frames">
+    <h2>Generated Frames</h2>
+    <div id="strip" class="strip"></div>
+  </section>
+</main>
+
+<script>
+const PARTS=[
+"torso","head",
+"left_upper_arm","left_forearm","left_hand",
+"right_upper_arm","right_forearm","right_hand",
+"left_thigh","left_shin","left_foot",
+"right_thigh","right_shin","right_foot","tail"
+];
+
+const ORDER=[
+"tail",
+"left_upper_arm","left_forearm","left_hand",
+"left_thigh","left_shin","left_foot",
+"torso","head",
+"right_thigh","right_shin","right_foot",
+"right_upper_arm","right_forearm","right_hand"
+];
+
+const $=id=>document.getElementById(id);
+const canvas=$("mainCanvas"),ctx=canvas.getContext("2d");
+const partSel=$("part"),hint=$("hint"),statusEl=$("status"),strip=$("strip");
+PARTS.forEach(p=>{const o=document.createElement("option");o.value=p;o.textContent=p;partSel.appendChild(o)});
+
+let source=null,sourceName="",rig={},mode="trace",tracePoints=[],drawing=false,dragPivot=false;
+let frames=[],timer=null,frameIndex=0;
+
+function status(s){statusEl.textContent=s}
+function setMode(m){
+  mode=m;
+  $("traceBtn").classList.toggle("active",m==="trace");
+  $("pivotBtn").classList.toggle("active",m==="pivot");
+  $("inspectBtn").classList.toggle("active",m==="inspect");
+  status(m==="trace"?"Trace tightly around the selected part.":m==="pivot"?"Tap or drag the selected joint pivot.":"Inspect mode.");
+}
+$("traceBtn").onclick=()=>setMode("trace");
+$("pivotBtn").onclick=()=>setMode("pivot");
+$("inspectBtn").onclick=()=>setMode("inspect");
+
+function bindSlider(id,out){const a=$(id),b=$(out);a.oninput=()=>b.textContent=a.value}
+bindSlider("leg","legV");bindSlider("knee","kneeV");bindSlider("arm","armV");bindSlider("bob","bobV");bindSlider("tail","tailV");
+
+function resize(){
+  const r=canvas.getBoundingClientRect(),d=Math.max(1,window.devicePixelRatio||1);
+  canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);
+  ctx.setTransform(d,0,0,d,0,0);draw();
+}
+new ResizeObserver(resize).observe(canvas);window.addEventListener("resize",resize);
+
+function view(){
+  if(!source)return{s:1,ox:0,oy:0};
+  const w=canvas.clientWidth,h=canvas.clientHeight;
+  const s=Math.max(.05,Math.min((w-22)/source.width,(h-22)/source.height,4));
+  return{s,ox:(w-source.width*s)/2,oy:(h-source.height*s)/2};
+}
+function toImg(cx,cy){
+  const r=canvas.getBoundingClientRect(),{s,ox,oy}=view();
+  return{x:Math.max(0,Math.min(source.width-1,(cx-r.left-ox)/s)),y:Math.max(0,Math.min(source.height-1,(cy-r.top-oy)/s))}
+}
+function toScreen(x,y){const {s,ox,oy}=view();return{x:ox+x*s,y:oy+y*s}}
+
+function drawPolygon(points,color,width=2,close=true){
+  if(!points||points.length<2)return;
+  ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();
+  let p=toScreen(points[0][0],points[0][1]);ctx.moveTo(p.x,p.y);
+  for(let i=1;i<points.length;i++){p=toScreen(points[i][0],points[i][1]);ctx.lineTo(p.x,p.y)}
+  if(close)ctx.closePath();ctx.stroke();
+}
+function draw(frame=null){
+  const w=canvas.clientWidth,h=canvas.clientHeight;ctx.clearRect(0,0,w,h);ctx.fillStyle="#090b0f";ctx.fillRect(0,0,w,h);
+  if(!source){hint.style.display="grid";return} hint.style.display="none";
+  const {s,ox,oy}=view();ctx.imageSmoothingEnabled=false;ctx.drawImage(frame||source,ox,oy,source.width*s,source.height*s);
+  if(frame)return;
+
+  for(const [name,data] of Object.entries(rig)){
+    if(data.poly)drawPolygon(data.poly,name===partSel.value?"#62e7ad":"#3da778",name===partSel.value?3:1.2,true);
+    if(data.pivot){
+      const p=toScreen(data.pivot[0],data.pivot[1]),r=5;
+      ctx.strokeStyle=name===partSel.value?"#ffdd4d":"#c4a93c";ctx.lineWidth=2;
+      ctx.beginPath();ctx.arc(p.x,p.y,r,0,Math.PI*2);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(p.x-8,p.y);ctx.lineTo(p.x+8,p.y);ctx.moveTo(p.x,p.y-8);ctx.lineTo(p.x,p.y+8);ctx.stroke();
+    }
+  }
+  if(tracePoints.length>1)drawPolygon(tracePoints,"#ff4d73",2,false);
+}
+
+$("imageInput").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const u=URL.createObjectURL(f),im=new Image();
+  im.onload=()=>{source=im;sourceName=f.name;rig={};frames=[];strip.innerHTML="";URL.revokeObjectURL(u);status(`Loaded ${f.name} — ${im.width}×${im.height}`);draw()};
+  im.src=u;
+};
+
+function pointDistance(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
+canvas.addEventListener("pointerdown",e=>{
+  if(!source)return;
+  canvas.setPointerCapture(e.pointerId);
+  const p=toImg(e.clientX,e.clientY),name=partSel.value;
+  if(mode==="trace"){drawing=true;tracePoints=[[p.x,p.y]];draw();return}
+  if(mode==="pivot"){
+    const old=rig[name]?.pivot;
+    if(old&&Math.hypot(old[0]-p.x,old[1]-p.y)<20)dragPivot=true;
+    else{rig[name]=rig[name]||{};rig[name].pivot=[p.x,p.y];dragPivot=true}
+    draw();
+  }
+});
+canvas.addEventListener("pointermove",e=>{
+  if(!source)return;
+  const p=toImg(e.clientX,e.clientY),name=partSel.value;
+  if(mode==="trace"&&drawing){
+    const last=tracePoints[tracePoints.length-1],cur={x:p.x,y:p.y};
+    if(!last||pointDistance({x:last[0],y:last[1]},cur)>2.2)tracePoints.push([p.x,p.y]);
+    draw();
+  }else if(mode==="pivot"&&dragPivot){
+    rig[name]=rig[name]||{};rig[name].pivot=[p.x,p.y];draw();
+  }
+});
+canvas.addEventListener("pointerup",()=>{
+  const name=partSel.value;
+  if(mode==="trace"&&drawing){
+    drawing=false;
+    if(tracePoints.length>=8){
+      rig[name]=rig[name]||{};rig[name].poly=simplify(tracePoints,1.4);
+      if(!rig[name].pivot){
+        let sx=0,sy=0;rig[name].poly.forEach(q=>{sx+=q[0];sy+=q[1]});
+        rig[name].pivot=[sx/rig[name].poly.length,sy/rig[name].poly.length];
+      }
+      status(`${name}: shape captured. Now set its pivot.`);
+    }else status("Trace was too short. Try again.");
+    tracePoints=[];draw();
+  }
+  dragPivot=false;
+});
+canvas.addEventListener("pointercancel",()=>{drawing=false;dragPivot=false;tracePoints=[];draw()});
+
+function simplify(points,tol){
+  if(points.length<3)return points;
+  const out=[points[0]];let last=points[0];
+  for(let i=1;i<points.length-1;i++){
+    const p=points[i];
+    if(Math.hypot(p[0]-last[0],p[1]-last[1])>=tol){out.push(p);last=p}
+  }
+  out.push(points[points.length-1]);return out;
+}
+$("clear").onclick=()=>{delete rig[partSel.value];status(`${partSel.value} cleared.`);draw()};
+
+function download(blob,name){
+  const a=document.createElement("a"),u=URL.createObjectURL(blob);
+  a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u),1000);
+}
+$("saveRig").onclick=()=>{
+  if(!source){status("Load a character first.");return}
+  const data={version:3,source_name:sourceName,source_size:[source.width,source.height],parts:rig};
+  download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"fatal_instinct_rig_v3.json");
+  status("Rig JSON exported.");
+};
+$("rigInput").onchange=async e=>{
+  const f=e.target.files[0];if(!f)return;
+  try{
+    const d=JSON.parse(await f.text());
+    rig=d.parts||{};
+    status(`Loaded rig: ${f.name} (V${d.version||"?"})`);
+    draw();
+  }catch(err){status("Could not read rig JSON.")}
+};
+
+function maskedPart(name){
+  const data=rig[name];if(!data?.poly)return null;
+  const c=document.createElement("canvas");c.width=source.width;c.height=source.height;
+  const g=c.getContext("2d");g.save();g.beginPath();g.moveTo(data.poly[0][0],data.poly[0][1]);
+  for(let i=1;i<data.poly.length;i++)g.lineTo(data.poly[i][0],data.poly[i][1]);
+  g.closePath();g.clip();g.drawImage(source,0,0);g.restore();return c;
+}
+
+function rotatePoint(p,origin,deg){
+  const a=deg*Math.PI/180,c=Math.cos(a),s=Math.sin(a),x=p[0]-origin[0],y=p[1]-origin[1];
+  return[origin[0]+x*c-y*s,origin[1]+x*s+y*c];
+}
+function transformPoint(p,origin,targetOrigin,deg){
+  const r=rotatePoint(p,origin,deg);
+  return[r[0]-origin[0]+targetOrigin[0],r[1]-origin[1]+targetOrigin[1]];
+}
+function matrixForRigid(originalPivot,targetPivot,deg){
+  const a=deg*Math.PI/180,c=Math.cos(a),s=Math.sin(a),px=originalPivot[0],py=originalPivot[1];
+  const e=targetPivot[0]-c*px+s*py;
+  const f=targetPivot[1]-s*px-c*py;
+  return{a:c,b:s,c:-s,d:c,e,f};
+}
+function applyM(g,M){g.setTransform(M.a,M.b,M.c,M.d,M.e,M.f)}
+function pivot(name){return rig[name]?.pivot ? [...rig[name].pivot] : null}
+
+function torsoTransform(bob,lean,rootShift=[0,0]){
+  const p=pivot("torso")||[source.width/2,source.height/2];
+  const tp=[p[0]+rootShift[0],p[1]+bob+rootShift[1]];
+  return matrixForRigid(p,tp,lean);
+}
+function pointThroughM(p,M){return[M.a*p[0]+M.c*p[1]+M.e,M.b*p[0]+M.d*p[1]+M.f]}
+
+function animation(i){
+  const phase=2*Math.PI*i/8,s=Math.sin(phase),so=Math.sin(phase+Math.PI);
+  const leg=+$("leg").value,knee=+$("knee").value,arm=+$("arm").value,bob=+$("bob").value,tail=+$("tail").value;
+  const bendL=Math.max(0,Math.sin(phase-Math.PI/2));
+  const bendR=Math.max(0,Math.sin(phase+Math.PI/2));
+  return{
+    phase,
+    bob:-Math.abs(Math.sin(phase))*bob,
+    torsoLean:1.2*Math.sin(phase*2),
+    leftThigh:-leg*s,
+    rightThigh:-leg*so,
+    leftShin:knee*bendL+6*Math.max(0,-s),
+    rightShin:knee*bendR+6*Math.max(0,-so),
+    leftFoot:-6*s,
+    rightFoot:-6*so,
+    leftArm:arm*s,rightArm:arm*so,
+    leftForearm:7+.45*arm*s,rightForearm:7+.45*arm*so,
+    tail:tail*Math.sin(phase+Math.PI/2)
+  };
+}
+
+function buildSkeleton(ani,rootShift=[0,0]){
+  const torsoM=torsoTransform(ani.bob,ani.torsoLean,rootShift);
+  const out={torso:torsoM};
+
+  function leg(side){
+    const thigh=`${side}_thigh`,shin=`${side}_shin`,foot=`${side}_foot`;
+    const hip0=pivot(thigh),knee0=pivot(shin),ankle0=pivot(foot);
+    if(!hip0||!knee0||!ankle0)return;
+
+    const hipTarget=pointThroughM(hip0,torsoM);
+    const thighDelta=side==="left"?ani.leftThigh:ani.rightThigh;
+    const shinDelta=side==="left"?ani.leftShin:ani.rightShin;
+    const footDelta=side==="left"?ani.leftFoot:ani.rightFoot;
+
+    const thighWorldAngle=ani.torsoLean+thighDelta;
+    const thighM=matrixForRigid(hip0,hipTarget,thighWorldAngle);
+    const kneeTarget=pointThroughM(knee0,thighM);
+
+    const shinWorldAngle=ani.torsoLean+thighDelta+shinDelta;
+    const shinM=matrixForRigid(knee0,kneeTarget,shinWorldAngle);
+    const ankleTarget=pointThroughM(ankle0,shinM);
+
+    const footWorldAngle=ani.torsoLean+thighDelta+shinDelta+footDelta;
+    const footM=matrixForRigid(ankle0,ankleTarget,footWorldAngle);
+
+    out[thigh]=thighM;out[shin]=shinM;out[foot]=footM;
+    out[`${side}_hip_target`]=hipTarget;
+    out[`${side}_knee_target`]=kneeTarget;
+    out[`${side}_ankle_target`]=ankleTarget;
+  }
+
+  leg("left");leg("right");
+
+  function arm(side){
+    const upper=`${side}_upper_arm`,fore=`${side}_forearm`,hand=`${side}_hand`;
+    const sh0=pivot(upper),el0=pivot(fore),wr0=pivot(hand);
+    if(!sh0)return;
+    const shoulderTarget=pointThroughM(sh0,torsoM);
+    const upperDelta=side==="left"?ani.leftArm:ani.rightArm;
+    const upperAngle=ani.torsoLean+upperDelta;
+    const upperM=matrixForRigid(sh0,shoulderTarget,upperAngle);out[upper]=upperM;
+    if(el0){
+      const elbowTarget=pointThroughM(el0,upperM);
+      const foreDelta=side==="left"?ani.leftForearm:ani.rightForearm;
+      const foreAngle=upperAngle+foreDelta;
+      const foreM=matrixForRigid(el0,elbowTarget,foreAngle);out[fore]=foreM;
+      if(wr0){
+        const wristTarget=pointThroughM(wr0,foreM);
+        out[hand]=matrixForRigid(wr0,wristTarget,foreAngle);
+      }
+    }
+  }
+  arm("left");arm("right");
+
+  if(pivot("head"))out.head=matrixForRigid(pivot("head"),pointThroughM(pivot("head"),torsoM),ani.torsoLean*.25);
+  if(pivot("tail"))out.tail=matrixForRigid(pivot("tail"),pointThroughM(pivot("tail"),torsoM),ani.torsoLean+ani.tail);
+
+  return out;
+}
+
+function plantedSide(phase){
+  return Math.cos(phase)>=0 ? "right" : "left";
+}
+
+function computeRootLock(ani){
+  if(!$("footLock").checked)return[0,0];
+  const side=plantedSide(ani.phase),ankle0=pivot(`${side}_foot`);
+  if(!ankle0)return[0,0];
+
+  const raw=buildSkeleton(ani,[0,0]);
+  const target=raw[`${side}_ankle_target`];
+  if(!target)return[0,0];
+
+  // Keep stance ankle at its original location. This removes most visible sliding.
+  let dx=ankle0[0]-target[0];
+  let dy=ankle0[1]-target[1];
+
+  // Avoid violent root jumps if a rough pivot is far off.
+  dx=Math.max(-18,Math.min(18,dx));
+  dy=Math.max(-12,Math.min(12,dy));
+  return[dx,dy];
+}
+
+function matrixForPart(name,skel,ani){
+  if(skel[name])return skel[name];
+  // Unrigged-to-chain decorative pieces follow torso so they do not float.
+  return skel.torso;
+}
+
+function generate(){
+  if(!source){status("Load a character image first.");return}
+  const valid=PARTS.filter(p=>rig[p]?.poly&&rig[p]?.pivot);
+  const required=["torso","left_thigh","left_shin","left_foot","right_thigh","right_shin","right_foot"];
+  const missing=required.filter(p=>!valid.includes(p));
+  if(missing.length){status("Missing required rig parts: "+missing.join(", "));return}
+
+  const masks={};valid.forEach(p=>masks[p]=maskedPart(p));
+  frames=[];
+
+  for(let i=0;i<8;i++){
+    const ani=animation(i);
+    const rootShift=computeRootLock(ani);
+    const skel=buildSkeleton(ani,rootShift);
+
+    const f=document.createElement("canvas");f.width=source.width;f.height=source.height;
+    const g=f.getContext("2d");
+    const ordered=[...ORDER.filter(p=>valid.includes(p)),...valid.filter(p=>!ORDER.includes(p))];
+
+    for(const name of ordered){
+      const M=matrixForPart(name,skel,ani);
+      g.save();applyM(g,M);g.drawImage(masks[name],0,0);g.restore();
+    }
+    frames.push(f);
+  }
+
+  renderFrames();draw(frames[0]);
+  status("Generated 8-frame V3 walk with locked knees, ankles, and planted-foot stabilization.");
+}
+$("generate").onclick=generate;
+
+function renderFrames(){
+  strip.innerHTML="";
+  frames.forEach((f,i)=>{
+    const card=document.createElement("div");card.className="card";
+    const c=document.createElement("canvas");c.width=f.width;c.height=f.height;c.getContext("2d").drawImage(f,0,0);
+    const t=document.createElement("div");t.textContent=`Frame ${i+1}`;
+    card.append(c,t);strip.appendChild(card);
+  });
+}
+
+$("preview").onclick=()=>{
+  if(!frames.length)generate();if(!frames.length)return;
+  if(timer){clearInterval(timer);timer=null;draw();status("Preview stopped.");return}
+  frameIndex=0;status("Previewing V3 walk. Tap Preview again to stop.");
+  timer=setInterval(()=>{draw(frames[frameIndex]);frameIndex=(frameIndex+1)%frames.length},120);
+};
+
+$("export").onclick=()=>{
+  if(!frames.length)generate();if(!frames.length)return;
+  const s=document.createElement("canvas");s.width=source.width*frames.length;s.height=source.height;
+  const g=s.getContext("2d");frames.forEach((f,i)=>g.drawImage(f,i*source.width,0));
+  s.toBlob(b=>{if(b){download(b,"walk_sheet_v3.png");status("V3 sprite sheet exported to Downloads.")}},"image/png");
+};
+
+partSel.onchange=()=>draw();
+resize();
+</script>
+</body>
+</html>
