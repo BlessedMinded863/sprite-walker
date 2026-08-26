@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<title>Fatal Instinct Sprite Walker</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+  <div>
+    <h1>Fatal Instinct Sprite Walker</h1>
+    <p>iPhone / Safari MVP</p>
+  </div>
+</header>
+
+<main>
+  <section class="toolbar">
+    <label class="button file-button">
+      Load Character PNG
+      <input id="fileInput" type="file" accept="image/png,image/webp,image/jpeg" />
+    </label>
+    <button id="saveRigBtn">Save Rig</button>
+    <label class="button file-button secondary">
+      Load Rig
+      <input id="rigInput" type="file" accept=".json,application/json" />
+    </label>
+  </section>
+
+  <section class="workspace">
+    <div class="canvas-wrap">
+      <canvas id="canvas"></canvas>
+      <div id="hint">Load a transparent PNG to begin.</div>
+    </div>
+
+    <div class="panel">
+      <label>Body part</label>
+      <select id="partSelect"></select>
+
+      <div class="segmented">
+        <button id="boxModeBtn" class="active">Draw Part Box</button>
+        <button id="pivotModeBtn">Set Pivot</button>
+      </div>
+
+      <div class="help">
+        <strong>Touch controls</strong>
+        <p><b>Draw Part Box:</b> drag around the body part.</p>
+        <p><b>Set Pivot:</b> tap the joint where it rotates.</p>
+      </div>
+
+      <div class="slider-group">
+        <label>Leg swing <span id="legValue">24</span>°</label>
+        <input id="legSwing" type="range" min="0" max="45" value="24" />
+      </div>
+
+      <div class="slider-group">
+        <label>Knee bend <span id="kneeValue">18</span>°</label>
+        <input id="kneeBend" type="range" min="0" max="40" value="18" />
+      </div>
+
+      <div class="slider-group">
+        <label>Arm swing <span id="armValue">20</span>°</label>
+        <input id="armSwing" type="range" min="0" max="40" value="20" />
+      </div>
+
+      <div class="slider-group">
+        <label>Body bob <span id="bobValue">4</span> px</label>
+        <input id="bodyBob" type="range" min="0" max="10" value="4" />
+      </div>
+
+      <div class="slider-group">
+        <label>Tail swing <span id="tailValue">12</span>°</label>
+        <input id="tailSwing" type="range" min="0" max="35" value="12" />
+      </div>
+
+      <div class="action-grid">
+        <button id="generateBtn" class="primary">Generate 8-Frame Walk</button>
+        <button id="previewBtn">Preview</button>
+        <button id="exportBtn">Export Sprite Sheet</button>
+        <button id="clearPartBtn">Clear Selected Part</button>
+      </div>
+
+      <div id="status">Ready.</div>
+    </div>
+  </section>
+
+  <section class="frames">
+    <h2>Generated Frames</h2>
+    <div id="frameStrip"></div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
