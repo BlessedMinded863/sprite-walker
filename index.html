@@ -4,1512 +4,695 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Marius Attack Lab V9.4</title>
+<title>Fatal Instinct Sprite Animator V10</title>
 <style>
-:root{
-  --bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;
-  --text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--gold:#ffdd4d;--blue:#7fb5ff;
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}
-header{padding:16px 16px 8px}
-h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}
-main{padding:0 12px 28px}
-.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
-button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}
-button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}
-.workspace{display:grid;grid-template-columns:1fr;gap:12px}
-.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:56vh;min-height:390px;max-height:650px;touch-action:none}
-#mainCanvas{width:100%;height:100%;display:block}
-.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}
-.panel label.title{display:block;font-weight:800;margin-bottom:6px}
-select{width:100%}
-.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}
-.dual{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
-.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}
-.help p{margin:5px 0}
-.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}
-.sliders{margin-top:12px}
-.slider{margin:12px 0}
-.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}
-.slider input{width:100%;margin-top:7px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-.frames{margin-top:14px}
-.frames h2{font-size:18px}
-.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}
-.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}
-.card canvas{width:100%;display:block;image-rendering:pixelated}
-.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}.card .saveFrame{width:100%;padding:7px 8px;margin-top:6px;font-size:12px;border-radius:9px}
-.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}
-.small{font-size:12px;color:var(--muted)}
-@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 390px}.canvasWrap{height:72vh}}
+:root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}.card .saveFrame{width:100%;padding:7px 8px;margin-top:6px;font-size:12px;border-radius:9px}.sectionTitle{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);font-weight:800;margin-top:14px}.danger{border-color:#7d3949}.mini{padding:8px 10px;font-size:13px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
 </style>
 </head>
 <body>
-<header>
-  <h1>Fatal Instinct — Marius Attack Lab <span class="badge">V9.4</span></h1>
-  <div class="sub">True Claw Slash Arc + Facing-Aware Strikes • Existing Rig Compatible • iPhone / Safari</div>
-</header>
+<header><h1>Fatal Instinct Sprite Animator <span class="badge">V10</span></h1><div class="sub">Skeleton-First Walk + Idle + Combat Rig • Preview motion first, bind sprite second</div></header>
 <main>
-  <div class="topbar">
-    <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
-    <button id="saveRig">Save Rig</button>
-    <label class="btn">Load Rig<input id="rigInput" type="file" accept=".json,application/json"></label>
-  </div>
+<div class="topbar">
+<label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
+<button id="seedRig">Seed Humanoid Rig</button>
+<button id="swapLR">Swap L/R Rig Labels</button>
+<button id="saveRig">Save Rig</button>
+<label class="btn">Load Rig<input id="rigInput" type="file" accept=".json,application/json"></label>
+</div>
 
-  <div class="workspace">
-    <div class="canvasWrap">
-      <canvas id="mainCanvas"></canvas>
-      <div id="hint" class="hint">Load the approved character image to begin.</div>
-    </div>
+<div class="workspace">
+<div class="canvasWrap">
+<canvas id="mainCanvas"></canvas>
+<div id="hint" class="hint">Press <b>Seed Humanoid Rig</b> to create a walking skeleton.<br>Then preview the rig, or load Marius and a saved rig to bind the sprite.</div>
+</div>
 
-    <div class="panel">
-      <label class="title">Animation</label>
-      <select id="animationMode">
-        <option value="walk">Walk — 8 Frames</option>
-        <option value="right_punch" selected>Punch / Claw Strike — 4 Frames</option>
-        <option value="right_kick">Front Kick — 4 Frames</option>
-      </select>
+<div class="panel">
 
-      <label class="title" style="margin-top:12px">Character facing</label>
-      <select id="facingDirection">
-        <option value="right" selected>Faces Right →</option>
-        <option value="left">← Faces Left</option>
-      </select>
+<label class="title">Animation</label>
+<select id="animationMode">
+  <option value="walk" selected>Walk — 8 Frames</option>
+  <option value="idle">Breathing Idle — 4 Frames</option>
+  <option value="punch">Straight Punch — 4 Frames</option>
+  <option value="slash">Claw Slash — 4 Frames</option>
+  <option value="kick">Front Kick — 4 Frames</option>
+</select>
 
-      <label class="title" style="margin-top:12px">Body part</label>
-      <select id="part"></select>
+<div id="combatSelectors">
+  <label class="title" style="margin-top:10px">Character facing</label>
+  <select id="facingDirection">
+    <option value="right" selected>Faces Right →</option>
+    <option value="left">← Faces Left</option>
+  </select>
 
-      <label class="title" style="margin-top:10px">Joint</label>
-      <select id="joint"></select>
+  <label class="title" style="margin-top:10px">Attack limb</label>
+  <select id="attackLimb">
+    <option value="front" selected>Front Limb — Recommended</option>
+    <option value="rear">Rear Limb</option>
+    <option value="rig_right">Rig Right</option>
+    <option value="rig_left">Rig Left</option>
+  </select>
+</div>
 
-      <div class="modes">
-        <button id="traceBtn" class="active">Trace Part</button>
-        <button id="jointBtn">Set Joint</button>
-        <button id="inspectBtn">Inspect</button>
-      </div>
+<div class="grid" style="margin-top:10px">
+  <button id="applyPreset" class="mini">Load Mode Preset</button>
+  <button id="validateRig" class="mini">Validate Rig</button>
+</div>
 
-      <div class="help">
-        <p><b>Trace Part:</b> outline the visual shape for the selected piece.</p>
-        <p><b>Set Joint:</b> tap or drag the selected bone joint.</p>
-        <p id="modeHelp"><b>Marius Strike:</b> Front Arm is detected from the shoulder positions and current facing. Claw Slash now uses a true high-back to forward-down slash arc.</p>
-        <p><b>Rig compatibility:</b> V2/V3/V4/V5/V6/V7/V8 rigs remain compatible. V9 adds attacks without forcing a retrace.</p>
-      </div>
+<div class="sectionTitle">Rig / Binding</div>
+<label class="title">Body part</label><select id="part"></select>
+<label class="title" style="margin-top:10px">Joint</label><select id="joint"></select>
+<div class="modes"><button id="traceBtn" class="active">Trace Part</button><button id="jointBtn">Set Joint</button><button id="inspectBtn">Inspect</button></div>
 
-      <div id="walkControls" class="sliders">
-        <div class="slider"><label>Stride <span><b id="strideV">36</b>% leg</span></label><input id="stride" type="range" min="10" max="60" value="36"></div>
-        <div class="slider"><label>Step height <span><b id="stepV">20</b>% leg</span></label><input id="step" type="range" min="5" max="35" value="20"></div>
-        <div class="slider"><label>Body bob <span><b id="bobV">4</b>% leg</span></label><input id="bob" type="range" min="0" max="10" value="4"></div>
-        <div class="slider"><label>Torso lean <span><b id="leanV">2</b>°</span></label><input id="lean" type="range" min="0" max="12" value="2"></div>
-        <div class="slider"><label>Arm swing <span><b id="armV">12</b>°</span></label><input id="arm" type="range" min="0" max="30" value="12"></div>
-        <div class="slider"><label>Tail swing <span><b id="tailV">8</b>°</span></label><input id="tail" type="range" min="0" max="25" value="8"></div>
-        <div class="slider"><label>Weight shift <span><b id="weightV">70</b>%</span></label><input id="weight" type="range" min="0" max="100" value="70"></div>
-        <div class="slider"><label>Foot plant <span><b id="plantV">85</b>%</span></label><input id="plant" type="range" min="0" max="100" value="85"></div>
-      </div>
+<div class="help">
+<p><b>Skeleton-first:</b> preview Walk, Idle, Punch, Slash, or Kick on the bones before binding sprite art.</p>
+<p><b>Facing-aware combat:</b> Front/Rear limbs are detected from the current shoulder or hip positions, so traced left/right labels cannot silently reverse the attack.</p>
+<p><b>Rig repair:</b> if the art was outlined opposite the rig, use <b>Swap L/R Rig Labels</b> once instead of retracing.</p>
+<p><b>Compatibility:</b> V4–V9 rig JSON files remain loadable.</p>
+</div>
 
+<div id="walkControls" class="sliders">
+  <div class="slider"><label>Stride <span><b id="strideV">36</b>% leg</span></label><input id="stride" type="range" min="10" max="60" value="36"></div>
+  <div class="slider"><label>Step height <span><b id="stepV">20</b>% leg</span></label><input id="step" type="range" min="5" max="35" value="20"></div>
+  <div class="slider"><label>Body bob <span><b id="bobV">4</b>% leg</span></label><input id="bob" type="range" min="0" max="10" value="4"></div>
+  <div class="slider"><label>Torso lean <span><b id="leanV">3</b>°</span></label><input id="lean" type="range" min="0" max="12" value="3"></div>
+  <div class="slider"><label>Arm swing <span><b id="armV">12</b>°</span></label><input id="arm" type="range" min="0" max="30" value="12"></div>
+  <div class="slider"><label>Tail swing <span><b id="tailV">8</b>°</span></label><input id="tail" type="range" min="0" max="25" value="8"></div>
+</div>
 
-      <div class="help" style="margin-top:10px;border:1px solid #4a5f8a">
-        <p><b>Marius starting preset:</b> Wind-up 48° • Reach 100% • Strike -2° • Twist 16° • Lean 6° • Hip drive 12% • Claw -18° • Guard 12°.</p>
-        <p><b>Goal:</b> Front Arm + Faces Right should produce a genuine rightward strike. Punch drives straight forward. Claw Slash now rises high/back, cuts diagonally forward/down, then follows through.</p>
-      </div>
+<div id="idleControls" class="sliders" style="display:none">
+  <div class="slider"><label>Breath lift <span><b id="breathV">3</b>% leg</span></label><input id="breath" type="range" min="0" max="8" value="3"></div>
+  <div class="slider"><label>Shoulder rise <span><b id="shoulderRiseV">2</b>% leg</span></label><input id="shoulderRise" type="range" min="0" max="6" value="2"></div>
+  <div class="slider"><label>Idle lean <span><b id="idleLeanV">2</b>°</span></label><input id="idleLean" type="range" min="0" max="8" value="2"></div>
+  <div class="slider"><label>Tail life <span><b id="idleTailV">5</b>°</span></label><input id="idleTail" type="range" min="0" max="18" value="5"></div>
+</div>
 
-      <div id="punchControls" class="sliders" style="display:none">
-        <div class="slider">
-          <label>Attack arm <span><b id="attackArmLabel">Front Arm</b></span></label>
-          <select id="attackArm">
-            <option value="front" selected>Front Arm — Recommended</option>
-            <option value="rear">Rear Arm</option>
-            <option value="rig_right">Rig Right Arm</option>
-            <option value="rig_left">Rig Left Arm</option>
-          </select>
-        </div>
+<div id="attackControls" class="sliders" style="display:none">
+  <div class="slider"><label>Wind-up <span><b id="windupV">48</b>°</span></label><input id="windup" type="range" min="0" max="75" value="48"></div>
+  <div class="slider"><label>Strike reach <span><b id="reachV">96</b>%</span></label><input id="reach" type="range" min="45" max="100" value="96"></div>
+  <div class="slider"><label>Strike angle <span><b id="strikeAngleV">0</b>°</span></label><input id="strikeAngle" type="range" min="-35" max="35" value="0"></div>
+  <div class="slider"><label>Torso twist <span><b id="twistV">16</b>°</span></label><input id="twist" type="range" min="0" max="26" value="16"></div>
+  <div class="slider"><label>Body lean <span><b id="attackLeanV">6</b>°</span></label><input id="attackLean" type="range" min="0" max="18" value="6"></div>
+  <div class="slider"><label>Hip drive <span><b id="hipDriveV">12</b>% leg</span></label><input id="hipDrive" type="range" min="0" max="20" value="12"></div>
+  <div class="slider"><label>Wrist / claw angle <span><b id="clawV">-18</b>°</span></label><input id="claw" type="range" min="-45" max="45" value="-18"></div>
+  <div class="slider"><label>Guard arm motion <span><b id="guardV">12</b>°</span></label><input id="guard" type="range" min="0" max="26" value="12"></div>
+</div>
 
-        <div class="slider">
-          <label>Strike type <span><b id="punchStyleLabel">Straight Punch</b></span></label>
-          <select id="punchStyle">
-            <option value="punch" selected>Straight Punch</option>
-            <option value="slash">Claw Slash</option>
-          </select>
-        </div>
-        <div class="slider"><label>Wind-up <span><b id="windupV">48</b>°</span></label><input id="windup" type="range" min="0" max="75" value="48"></div>
-        <div class="slider"><label>Strike reach <span><b id="reachV">100</b>%</span></label><input id="reach" type="range" min="45" max="100" value="100"></div>
-        <div class="slider"><label>Strike angle <span><b id="strikeAngleV">-2</b>°</span></label><input id="strikeAngle" type="range" min="-35" max="35" value="-2"></div>
-        <div class="slider"><label>Torso twist <span><b id="twistV">16</b>°</span></label><input id="twist" type="range" min="0" max="24" value="16"></div>
-        <div class="slider"><label>Body lean <span><b id="attackLeanV">6</b>°</span></label><input id="attackLean" type="range" min="0" max="16" value="6"></div>
-        <div class="slider"><label>Hip drive <span><b id="hipDriveV">12</b>% leg</span></label><input id="hipDrive" type="range" min="0" max="18" value="12"></div>
-        <div class="slider"><label>Wrist / claw angle <span><b id="clawV">-18</b>°</span></label><input id="claw" type="range" min="-45" max="45" value="-18"></div>
-        <div class="slider"><label>Guard arm motion <span><b id="guardV">12</b>°</span></label><input id="guard" type="range" min="0" max="24" value="12"></div>
-      </div>
+<div id="kickControls" class="sliders" style="display:none">
+  <div class="slider"><label>Kick reach <span><b id="kickReachV">72</b>% leg</span></label><input id="kickReach" type="range" min="25" max="95" value="72"></div>
+  <div class="slider"><label>Kick height <span><b id="kickHeightV">32</b>% leg</span></label><input id="kickHeight" type="range" min="5" max="70" value="32"></div>
+  <div class="slider"><label>Knee chamber <span><b id="kickChamberV">55</b>%</span></label><input id="kickChamber" type="range" min="20" max="90" value="55"></div>
+  <div class="slider"><label>Counter-lean <span><b id="kickLeanV">8</b>°</span></label><input id="kickLean" type="range" min="0" max="20" value="8"></div>
+  <div class="slider"><label>Kick hip drive <span><b id="kickHipV">8</b>% leg</span></label><input id="kickHip" type="range" min="0" max="18" value="8"></div>
+  <div class="slider"><label>Foot angle <span><b id="kickFootV">-12</b>°</span></label><input id="kickFoot" type="range" min="-45" max="45" value="-12"></div>
+</div>
 
-      <div id="kickControls" class="sliders" style="display:none">
-        <div class="slider"><label>Kick reach <span><b id="kickReachV">72</b>% leg</span></label><input id="kickReach" type="range" min="25" max="95" value="72"></div>
-        <div class="slider"><label>Kick height <span><b id="kickHeightV">32</b>% leg</span></label><input id="kickHeight" type="range" min="5" max="70" value="32"></div>
-        <div class="slider"><label>Knee chamber <span><b id="kickChamberV">55</b>%</span></label><input id="kickChamber" type="range" min="20" max="90" value="55"></div>
-        <div class="slider"><label>Torso counter-lean <span><b id="kickLeanV">8</b>°</span></label><input id="kickLean" type="range" min="0" max="20" value="8"></div>
-        <div class="slider"><label>Hip drive <span><b id="kickHipV">8</b>% leg</span></label><input id="kickHip" type="range" min="0" max="18" value="8"></div>
-        <div class="slider"><label>Foot angle <span><b id="kickFootV">-12</b>°</span></label><input id="kickFoot" type="range" min="-45" max="45" value="-12"></div>
-        <div class="slider"><label>Guard arm motion <span><b id="kickGuardV">10</b>°</span></label><input id="kickGuard" type="range" min="0" max="24" value="10"></div>
-      </div>
+<div class="switchRow"><span>Show sprite</span><input id="showSprite" type="checkbox" checked></div>
+<div class="switchRow"><span>Show skeleton</span><input id="showBones" type="checkbox" checked></div>
 
-      <div class="grid">
-        <button id="generate" class="primary">Generate Walk</button>
-        <button id="preview">Preview</button>
-        <button id="export">Export Sprite Sheet</button>
-        <button id="clear">Clear Selected Part</button>
-      </div>
-      <div id="status" class="status">Ready.</div>
-    </div>
-  </div>
+<div class="grid">
+<button id="previewRig">Preview Motion</button><button id="stopPreview">Stop</button>
+<button id="generate" class="primary">Generate 8 Frames</button><button id="export">Export Sprite Sheet</button>
+<button id="clear">Clear Selected Part</button><button id="resetFrames">Clear Frames</button>
+</div>
+<div id="status" class="status">V10 ready.</div>
+</div>
+</div>
+</div>
 
-  <section class="frames">
-    <h2>Generated Frames</h2>
-    <div id="strip" class="strip"></div>
-  </section>
+<section class="frames"><h2>Generated Frames</h2><div id="strip" class="strip"></div></section>
 </main>
 
 <script>
-const PARTS = [
-  "torso","head",
-  "left_upper_arm","left_forearm","left_hand",
-  "right_upper_arm","right_forearm","right_hand",
-  "left_thigh","left_shin","left_foot",
-  "right_thigh","right_shin","right_foot","tail"
-];
+const PARTS=["torso","head","left_upper_arm","left_forearm","left_hand","right_upper_arm","right_forearm","right_hand","left_thigh","left_shin","left_foot","right_thigh","right_shin","right_foot","tail"];
+const JOINTS=["pelvis","neck","left_shoulder","left_elbow","left_wrist","right_shoulder","right_elbow","right_wrist","left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe","tail_base","tail_tip"];
+const PART_BIND={torso:["pelvis","neck"],head:["neck","neck"],left_upper_arm:["left_shoulder","left_elbow"],left_forearm:["left_elbow","left_wrist"],left_hand:["left_wrist","left_wrist"],right_upper_arm:["right_shoulder","right_elbow"],right_forearm:["right_elbow","right_wrist"],right_hand:["right_wrist","right_wrist"],left_thigh:["left_hip","left_knee"],left_shin:["left_knee","left_ankle"],left_foot:["left_ankle","left_toe"],right_thigh:["right_hip","right_knee"],right_shin:["right_knee","right_ankle"],right_foot:["right_ankle","right_toe"],tail:["tail_base","tail_tip"]};
+const ORDER=["tail","left_upper_arm","left_forearm","left_hand","left_thigh","left_shin","left_foot","torso","head","right_thigh","right_shin","right_foot","right_upper_arm","right_forearm","right_hand"];
+const WALK_NAMES=["Contact","Down","Passing","High Step","Opp. Contact","Opp. Down","Opp. Passing","Opp. High Step"];
+const LEFT_WALK=[{x:-10,y:0,foot:+4,stance:"contact"},{x:-7,y:0,foot:0,stance:"flat"},{x:-1,y:-4,foot:-6,stance:"toe"},{x:+6,y:-13,foot:-14,stance:"air"},{x:+10,y:0,foot:+2,stance:"contact"},{x:+7,y:0,foot:0,stance:"flat"},{x:+1,y:-6,foot:-10,stance:"air"},{x:-5,y:-15,foot:-15,stance:"air"}];
+const RIGHT_WALK=[{x:+10,y:0,foot:+2,stance:"contact"},{x:+7,y:0,foot:0,stance:"flat"},{x:+1,y:-6,foot:-10,stance:"air"},{x:-5,y:-15,foot:-15,stance:"air"},{x:-10,y:0,foot:+4,stance:"contact"},{x:-7,y:0,foot:0,stance:"flat"},{x:-1,y:-4,foot:-6,stance:"toe"},{x:+6,y:-13,foot:-14,stance:"air"}];
+const PELVIS_X=[0.0,+0.45,+0.70,+0.35,0.0,-0.45,-0.70,-0.35];
+const PELVIS_Y=[0,2.2,0.8,-1.2,0,2.2,0.8,-1.2];
+const TORSO_LEAN=[+2.5,+1.5,-0.5,-2.0,-2.5,-1.5,+0.5,+2.0];
+const LEFT_ARM=[-14,-10,-3,+10,+14,+10,+3,-10];
+const RIGHT_ARM=[+14,+10,+3,-10,-14,-10,-3,+10];
+const SHOULDER_COUNTER=[-0.30,-0.45,-0.55,-0.30,+0.30,+0.45,+0.55,+0.30];
 
-const JOINTS = [
-  "pelvis","neck",
-  "left_shoulder","left_elbow","left_wrist",
-  "right_shoulder","right_elbow","right_wrist",
-  "left_hip","left_knee","left_ankle","left_toe",
-  "right_hip","right_knee","right_ankle","right_toe",
-  "tail_base","tail_tip"
-];
+const $=id=>document.getElementById(id);
+const canvas=$("mainCanvas"),ctx=canvas.getContext("2d"),partSel=$("part"),jointSel=$("joint"),animationMode=$("animationMode"),facingSel=$("facingDirection"),attackLimbSel=$("attackLimb"),hint=$("hint"),statusEl=$("status"),strip=$("strip");
+PARTS.forEach(p=>{const o=document.createElement("option");o.value=p;o.textContent=p;partSel.appendChild(o);});
+JOINTS.forEach(j=>{const o=document.createElement("option");o.value=j;o.textContent=j;jointSel.appendChild(o);});
 
-const PART_BIND = {
-  torso:["pelvis","neck"],
-  head:["neck","neck"],
-  left_upper_arm:["left_shoulder","left_elbow"],
-  left_forearm:["left_elbow","left_wrist"],
-  left_hand:["left_wrist","left_wrist"],
-  right_upper_arm:["right_shoulder","right_elbow"],
-  right_forearm:["right_elbow","right_wrist"],
-  right_hand:["right_wrist","right_wrist"],
-  left_thigh:["left_hip","left_knee"],
-  left_shin:["left_knee","left_ankle"],
-  left_foot:["left_ankle","left_toe"],
-  right_thigh:["right_hip","right_knee"],
-  right_shin:["right_knee","right_ankle"],
-  right_foot:["right_ankle","right_toe"],
-  tail:["tail_base","tail_tip"]
+let source=null,sourceName="",rig={parts:{},joints:{}},mode="trace",tracePoints=[],drawing=false,draggingJoint=false,frames=[],timer=null;
+
+function status(s){statusEl.textContent=s;}
+function bindSlider(id,out){const a=$(id),b=$(out);a.oninput=()=>b.textContent=a.value;}
+["stride","step","bob","lean","arm","tail","breath","shoulderRise","idleLean","idleTail","windup","reach","strikeAngle","twist","attackLean","hipDrive","claw","guard","kickReach","kickHeight","kickChamber","kickLean","kickHip","kickFoot"].forEach(id=>bindSlider(id,id+"V"));
+function setMode(m){mode=m;$("traceBtn").classList.toggle("active",m==="trace");$("jointBtn").classList.toggle("active",m==="joint");$("inspectBtn").classList.toggle("active",m==="inspect");status(m==="trace"?"Trace around the selected body part.":m==="joint"?"Tap or drag the selected joint.":"Inspect mode.");}
+$("traceBtn").onclick=()=>setMode("trace");$("jointBtn").onclick=()=>setMode("joint");$("inspectBtn").onclick=()=>setMode("inspect");
+
+const MODE_INFO={
+  walk:{frames:8,names:WALK_NAMES,label:"Walk",speed:130},
+  idle:{frames:4,names:["Neutral","Inhale","Exhale","Settle"],label:"Breathing Idle",speed:180},
+  punch:{frames:4,names:["Ready","Wind-up","Strike","Recovery"],label:"Straight Punch",speed:115},
+  slash:{frames:4,names:["Ready","High Wind-up","Slash / Contact","Follow-through"],label:"Claw Slash",speed:115},
+  kick:{frames:4,names:["Ready","Chamber","Extension","Recovery"],label:"Front Kick",speed:125}
 };
 
-const ORDER = [
-  "tail",
-  "left_upper_arm","left_forearm","left_hand",
-  "left_thigh","left_shin","left_foot",
-  "torso","head",
-  "right_thigh","right_shin","right_foot",
-  "right_upper_arm","right_forearm","right_hand"
-];
-
-const $ = id => document.getElementById(id);
-const canvas = $("mainCanvas"), ctx = canvas.getContext("2d");
-const partSel = $("part"), jointSel = $("joint"), animationMode = $("animationMode"), facingSel = $("facingDirection"), attackArmSel = $("attackArm"), punchStyleSel = $("punchStyle"), hint = $("hint"), statusEl = $("status"), strip = $("strip");
-
-PARTS.forEach(p=>{ const o=document.createElement("option"); o.value=p; o.textContent=p; partSel.appendChild(o); });
-JOINTS.forEach(j=>{ const o=document.createElement("option"); o.value=j; o.textContent=j; jointSel.appendChild(o); });
-
-let source = null, sourceName = "";
-let rig = {parts:{}, joints:{}};
-let mode = "trace";
-let tracePoints = [], drawing = false, draggingJoint = false;
-let frames = [], timer = null, frameIndex = 0;
-
-function status(s){ statusEl.textContent = s; }
-function bindSlider(id,out){ const a=$(id), b=$(out); a.oninput=()=>b.textContent=a.value; }
-bindSlider("stride","strideV");
-bindSlider("step","stepV");
-bindSlider("bob","bobV");
-bindSlider("lean","leanV");
-bindSlider("arm","armV");
-bindSlider("tail","tailV");
-bindSlider("weight","weightV");
-bindSlider("plant","plantV");
-bindSlider("windup","windupV");
-bindSlider("reach","reachV");
-bindSlider("strikeAngle","strikeAngleV");
-bindSlider("twist","twistV");
-bindSlider("attackLean","attackLeanV");
-bindSlider("hipDrive","hipDriveV");
-bindSlider("claw","clawV");
-bindSlider("guard","guardV");
-bindSlider("kickReach","kickReachV");
-bindSlider("kickHeight","kickHeightV");
-bindSlider("kickChamber","kickChamberV");
-bindSlider("kickLean","kickLeanV");
-bindSlider("kickHip","kickHipV");
-bindSlider("kickFoot","kickFootV");
-bindSlider("kickGuard","kickGuardV");
-
-const MODE_INFO = {
-  walk:{
-    label:"Walk",
-    frames:8,
-    help:"<b>Walk:</b> V8 grounded weight shift and foot plant are preserved exactly.",
-    button:"Generate 8-Frame Walk"
-  },
-  right_punch:{
-    label:"Punch / Claw Strike",
-    frames:4,
-    help:"<b>Marius Right Strike:</b> choose Straight Punch or Claw Slash. Both use Ready → Wind-up → Strike → Recovery with a more legitimate attack path.",
-    button:"Generate Right Attack"
-  },
-  left_punch:{
-    label:"Left Claw / Punch",
-    frames:4,
-    help:"<b>Left Claw / Punch:</b> Ready → Wind-up → Strike → Recovery. The left arm attacks while the opposite arm counter-balances.",
-    button:"Generate Left Attack"
-  },
-  right_kick:{
-    label:"Front Kick",
-    frames:4,
-    help:"<b>Right Kick:</b> Ready → Chamber → Extension → Recovery. The planted leg stays grounded while the right leg attacks.",
-    button:"Generate Right Kick"
-  },
-  left_kick:{
-    label:"Left Kick",
-    frames:4,
-    help:"<b>Left Kick:</b> Ready → Chamber → Extension → Recovery. The planted leg stays grounded while the left leg attacks.",
-    button:"Generate Left Kick"
-  }
+const PRESETS={
+  walk:{stride:36,step:20,bob:4,lean:3,arm:12,tail:8},
+  idle:{breath:3,shoulderRise:2,idleLean:2,idleTail:5},
+  punch:{windup:48,reach:100,strikeAngle:-2,twist:16,attackLean:6,hipDrive:12,claw:-12,guard:12},
+  slash:{windup:52,reach:92,strikeAngle:10,twist:18,attackLean:7,hipDrive:12,claw:-24,guard:10},
+  kick:{kickReach:72,kickHeight:32,kickChamber:55,kickLean:8,kickHip:8,kickFoot:-12}
 };
 
-function currentMode(){ return animationMode.value; }
+function currentAnimation(){return animationMode.value;}
+function modeInfo(){return MODE_INFO[currentAnimation()];}
+
+function setSliderValue(id,val){
+  const el=$(id),out=$(id+"V");
+  if(!el) return;
+  el.value=val;
+  if(out) out.textContent=val;
+}
+
+function applyModePreset(){
+  const p=PRESETS[currentAnimation()]||{};
+  Object.entries(p).forEach(([id,val])=>setSliderValue(id,val));
+  frames=[];
+  strip.innerHTML="";
+  draw();
+  status(`${modeInfo().label} preset loaded.`);
+}
 
 function updateAnimationUI(){
-  const mode = currentMode();
-  const info = MODE_INFO[mode];
-  $("walkControls").style.display = mode==="walk" ? "block" : "none";
-  $("punchControls").style.display = mode.endsWith("_punch") ? "block" : "none";
-  $("kickControls").style.display = mode.endsWith("_kick") ? "block" : "none";
-  $("modeHelp").innerHTML = info.help;
-  $("generate").textContent = info.button;
-  frames = [];
-  strip.innerHTML = "";
-  if(timer){ clearInterval(timer); timer=null; }
+  const m=currentAnimation();
+  $("walkControls").style.display=m==="walk"?"block":"none";
+  $("idleControls").style.display=m==="idle"?"block":"none";
+  $("attackControls").style.display=(m==="punch"||m==="slash")?"block":"none";
+  $("kickControls").style.display=m==="kick"?"block":"none";
+  $("combatSelectors").style.display=(m==="walk"||m==="idle")?"none":"block";
+  $("generate").textContent=`Generate ${MODE_INFO[m].frames} Frames`;
+  frames=[];
+  strip.innerHTML="";
+  if(timer){clearInterval(timer);timer=null;}
   draw();
-  status(`${info.label} mode ready.`);
+  status(`${MODE_INFO[m].label} mode ready.`);
 }
-animationMode.onchange = updateAnimationUI;
-if(punchStyleSel){
-  punchStyleSel.onchange = ()=>{
-    $("punchStyleLabel").textContent = punchStyleSel.value==="slash" ? "Claw Slash" : "Straight Punch";
-    frames = [];
-    strip.innerHTML = "";
-    if(timer){ clearInterval(timer); timer=null; }
-    draw();
-    status((punchStyleSel.value==="slash" ? "Claw Slash" : "Straight Punch") + " style ready.");
+animationMode.onchange=updateAnimationUI;
+facingSel.onchange=()=>{frames=[];strip.innerHTML="";draw();status(facingSel.value==="right"?"Facing Right →":"← Facing Left");};
+attackLimbSel.onchange=()=>{frames=[];strip.innerHTML="";draw();status(`${attackLimbSel.options[attackLimbSel.selectedIndex].text} selected.`);};
+$("applyPreset").onclick=applyModePreset;
+
+
+function resize(){const r=canvas.getBoundingClientRect(),d=Math.max(1,window.devicePixelRatio||1);canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);ctx.setTransform(d,0,0,d,0,0);draw();}
+new ResizeObserver(resize).observe(canvas);window.addEventListener("resize",resize);
+function sourceRect(){return source?{w:source.width,h:source.height}:{w:420,h:520};}
+function view(){const {w,h}=sourceRect(),cw=canvas.clientWidth,ch=canvas.clientHeight,s=Math.max(0.05,Math.min((cw-22)/w,(ch-22)/h,4));return{s,ox:(cw-w*s)/2,oy:(ch-h*s)/2,w,h};}
+function toImg(cx,cy){const r=canvas.getBoundingClientRect(),{s,ox,oy,w,h}=view();return{x:Math.max(0,Math.min(w-1,(cx-r.left-ox)/s)),y:Math.max(0,Math.min(h-1,(cy-r.top-oy)/s))};}
+function toScreen(x,y){const {s,ox,oy}=view();return{x:ox+x*s,y:oy+y*s};}
+function drawBackground(){ctx.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);ctx.fillStyle="#090b0f";ctx.fillRect(0,0,canvas.clientWidth,canvas.clientHeight);}
+function drawPolygon(points,color,width=2,close=true){if(!points||points.length<2) return;ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();let p=toScreen(points[0][0],points[0][1]);ctx.moveTo(p.x,p.y);for(let i=1;i<points.length;i++){p=toScreen(points[i][0],points[i][1]);ctx.lineTo(p.x,p.y);}if(close) ctx.closePath();ctx.stroke();}
+function drawLine(a,b,color,width=2){if(!a||!b) return;const p=toScreen(a[0],a[1]),q=toScreen(b[0],b[1]);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();}
+function drawJoint(name,p,active=false){if(!p) return;const s=toScreen(p[0],p[1]);ctx.strokeStyle=active?"#ffdd4d":"#caa83c";ctx.lineWidth=2;ctx.beginPath();ctx.arc(s.x,s.y,5,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(s.x-8,s.y);ctx.lineTo(s.x+8,s.y);ctx.moveTo(s.x,s.y-8);ctx.lineTo(s.x,s.y+8);ctx.stroke();ctx.fillStyle="#fff";ctx.font="11px -apple-system";ctx.fillText(name,s.x+7,s.y-7);}
+function drawSkeleton(j){[["pelvis","neck"],["left_shoulder","left_elbow"],["left_elbow","left_wrist"],["right_shoulder","right_elbow"],["right_elbow","right_wrist"],["left_hip","left_knee"],["left_knee","left_ankle"],["left_ankle","left_toe"],["right_hip","right_knee"],["right_knee","right_ankle"],["right_ankle","right_toe"],["tail_base","tail_tip"]].forEach(([a,b])=>drawLine(j[a],j[b],"#7fb5ff",3));if(j.pelvis&&j.left_shoulder) drawLine(j.pelvis,j.left_shoulder,"#416fa8",2);if(j.pelvis&&j.right_shoulder) drawLine(j.pelvis,j.right_shoulder,"#416fa8",2);JOINTS.forEach(name=>{if(j[name]) drawJoint(name,j[name],name===jointSel.value);});}
+function draw(frameCanvas=null,poseJoints=null){drawBackground();if(!source&&Object.keys(rig.joints).length===0){hint.style.display="grid";return;}hint.style.display="none";const {s,ox,oy}=view();if(source&&!frameCanvas&&$("showSprite").checked){ctx.imageSmoothingEnabled=false;ctx.drawImage(source,ox,oy,source.width*s,source.height*s);}if(frameCanvas){ctx.imageSmoothingEnabled=false;ctx.drawImage(frameCanvas,ox,oy,frameCanvas.width*s,frameCanvas.height*s);}if(!frameCanvas){Object.entries(rig.parts).forEach(([name,data])=>{if(data.poly) drawPolygon(data.poly,name===partSel.value?"#62e7ad":"#3da778",name===partSel.value?3:1.2,true);});}if(tracePoints.length>1) drawPolygon(tracePoints,"#ff4d73",2,false);if($("showBones").checked) drawSkeleton(poseJoints||rig.joints);}
+
+function simplify(points,tol){if(points.length<3) return points;const out=[points[0]];let last=points[0];for(let i=1;i<points.length-1;i++){const p=points[i];if(Math.hypot(p[0]-last[0],p[1]-last[1])>=tol){out.push(p);last=p;}}out.push(points[points.length-1]);return out;}
+function pointDistance(a,b){return Math.hypot(a.x-b.x,a.y-b.y);}
+$("imageInput").onchange=e=>{const f=e.target.files[0];if(!f) return;const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{source=im;sourceName=f.name;URL.revokeObjectURL(u);status(`Loaded ${f.name} — ${im.width}×${im.height}`);draw();};im.src=u;};
+
+canvas.addEventListener("pointerdown",e=>{const p=toImg(e.clientX,e.clientY);canvas.setPointerCapture(e.pointerId);if(mode==="trace"){if(!source){status("Load a character image first.");return;}drawing=true;tracePoints=[[p.x,p.y]];draw();return;}if(mode==="joint"){const cur=rig.joints[jointSel.value];if(cur&&Math.hypot(cur[0]-p.x,cur[1]-p.y)<20) draggingJoint=true;else{rig.joints[jointSel.value]=[p.x,p.y];draggingJoint=true;}draw();}});
+canvas.addEventListener("pointermove",e=>{const p=toImg(e.clientX,e.clientY);if(mode==="trace"&&drawing){const last=tracePoints[tracePoints.length-1],cur={x:p.x,y:p.y};if(!last||pointDistance({x:last[0],y:last[1]},cur)>2.2) tracePoints.push([p.x,p.y]);draw();}else if(mode==="joint"&&draggingJoint){rig.joints[jointSel.value]=[p.x,p.y];draw();}});
+canvas.addEventListener("pointerup",()=>{if(mode==="trace"&&drawing){drawing=false;if(tracePoints.length>=8){rig.parts[partSel.value]=rig.parts[partSel.value]||{};rig.parts[partSel.value].poly=simplify(tracePoints,1.4);status(`${partSel.value}: shape captured.`);}else status("Trace was too short. Try again.");tracePoints=[];draw();}draggingJoint=false;});
+canvas.addEventListener("pointercancel",()=>{drawing=false;draggingJoint=false;tracePoints=[];draw();});
+
+function seedHumanoidRig(){const {w,h}=sourceRect(),cx=w*0.50,pelvisY=h*0.54,neckY=h*0.25,hipDX=w*0.10,shoulderDX=w*0.15,kneeY=h*0.73,ankleY=h*0.92,toeY=h*0.96,armY=h*0.34,elbowY=h*0.52,wristY=h*0.69;rig.joints={pelvis:[cx,pelvisY],neck:[cx,neckY],left_shoulder:[cx-shoulderDX,armY],left_elbow:[cx-shoulderDX-22,elbowY],left_wrist:[cx-shoulderDX-28,wristY],right_shoulder:[cx+shoulderDX,armY],right_elbow:[cx+shoulderDX+22,elbowY],right_wrist:[cx+shoulderDX+28,wristY],left_hip:[cx-hipDX,pelvisY+8],left_knee:[cx-hipDX-6,kneeY],left_ankle:[cx-hipDX-10,ankleY],left_toe:[cx-hipDX+18,toeY],right_hip:[cx+hipDX,pelvisY+8],right_knee:[cx+hipDX+6,kneeY],right_ankle:[cx+hipDX+10,ankleY],right_toe:[cx+hipDX+36,toeY],tail_base:[cx-hipDX*1.3,pelvisY+10],tail_tip:[cx-w*0.22,pelvisY+30]};status("Seeded a basic humanoid walk rig. Adjust joints as needed, then Preview Rig.");draw();}
+$("seedRig").onclick=seedHumanoidRig;
+
+function pointFarthestFrom(points,p){let best=points[0],dist=-1;for(const q of points){const d=Math.hypot(q[0]-p[0],q[1]-p[1]);if(d>dist){dist=d;best=q;}}return[best[0],best[1]];}
+function inferJointsFromParts(){const p=rig.parts,j=rig.joints,ensure=(name,val)=>{if(!j[name]&&val) j[name]=val;};if(p.torso&&p.torso.pivot) ensure("pelvis",[...p.torso.pivot]);if(p.left_thigh&&p.left_thigh.pivot) ensure("left_hip",[...p.left_thigh.pivot]);if(p.left_shin&&p.left_shin.pivot) ensure("left_knee",[...p.left_shin.pivot]);if(p.left_foot&&p.left_foot.pivot) ensure("left_ankle",[...p.left_foot.pivot]);if(p.right_thigh&&p.right_thigh.pivot) ensure("right_hip",[...p.right_thigh.pivot]);if(p.right_shin&&p.right_shin.pivot) ensure("right_knee",[...p.right_shin.pivot]);if(p.right_foot&&p.right_foot.pivot) ensure("right_ankle",[...p.right_foot.pivot]);if(p.left_foot&&p.left_foot.poly&&j.left_ankle) ensure("left_toe",pointFarthestFrom(p.left_foot.poly,j.left_ankle));if(p.right_foot&&p.right_foot.poly&&j.right_ankle) ensure("right_toe",pointFarthestFrom(p.right_foot.poly,j.right_ankle));if(p.tail&&p.tail.pivot) ensure("tail_base",[...p.tail.pivot]);if(p.tail&&p.tail.poly&&j.tail_base) ensure("tail_tip",pointFarthestFrom(p.tail.poly,j.tail_base));if(!j.neck&&p.torso&&p.torso.poly){let minY=1e9,sumX=0,count=0;for(const q of p.torso.poly){if(q[1]<minY+10){if(q[1]<minY){minY=q[1];sumX=0;count=0;}sumX+=q[0];count++;}}if(count) j.neck=[sumX/count,minY+10];}if(!j.left_shoulder&&j.neck) j.left_shoulder=[j.neck[0]-24,j.neck[1]+12];if(!j.right_shoulder&&j.neck) j.right_shoulder=[j.neck[0]+24,j.neck[1]+12];}
+function download(blob,name){const a=document.createElement("a"),u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);}
+$("saveRig").onclick=()=>{
+  const settings={
+    animation:currentAnimation(),
+    facing:facingSel.value,
+    attack_limb:attackLimbSel.value
   };
-}
-if(facingSel){
-  facingSel.onchange = ()=>{
-    frames=[];
-    strip.innerHTML="";
-    if(timer){ clearInterval(timer); timer=null; }
-    draw();
-    status(facingSel.value==="right" ? "Facing Right →" : "← Facing Left");
-  };
-}
-if(attackArmSel){
-  attackArmSel.onchange = ()=>{
-    const labels={
-      front:"Front Arm",
-      rear:"Rear Arm",
-      rig_right:"Rig Right Arm",
-      rig_left:"Rig Left Arm"
-    };
-    $("attackArmLabel").textContent=labels[attackArmSel.value];
-    frames=[];
-    strip.innerHTML="";
-    if(timer){ clearInterval(timer); timer=null; }
-    draw();
-    status(labels[attackArmSel.value] + " selected.");
-  };
-}
-
-function setMode(m){
-  mode = m;
-  $("traceBtn").classList.toggle("active", m==="trace");
-  $("jointBtn").classList.toggle("active", m==="joint");
-  $("inspectBtn").classList.toggle("active", m==="inspect");
-  if(m==="trace") status("Trace tightly around the selected body part.");
-  else if(m==="joint") status("Tap or drag the selected joint.");
-  else status("Inspect mode.");
-}
-$("traceBtn").onclick = ()=>setMode("trace");
-$("jointBtn").onclick = ()=>setMode("joint");
-$("inspectBtn").onclick = ()=>setMode("inspect");
-
-function resize(){
-  const r = canvas.getBoundingClientRect(), d = Math.max(1, window.devicePixelRatio || 1);
-  canvas.width = Math.round(r.width * d);
-  canvas.height = Math.round(r.height * d);
-  ctx.setTransform(d,0,0,d,0,0);
-  draw();
-}
-new ResizeObserver(resize).observe(canvas);
-window.addEventListener("resize", resize);
-
-function view(){
-  if(!source) return {s:1, ox:0, oy:0};
-  const w = canvas.clientWidth, h = canvas.clientHeight;
-  const s = Math.max(0.05, Math.min((w-22)/source.width, (h-22)/source.height, 4));
-  return {s, ox:(w-source.width*s)/2, oy:(h-source.height*s)/2};
-}
-function toImg(cx, cy){
-  const r = canvas.getBoundingClientRect(), {s,ox,oy} = view();
-  return {
-    x: Math.max(0, Math.min(source.width-1, (cx-r.left-ox)/s)),
-    y: Math.max(0, Math.min(source.height-1, (cy-r.top-oy)/s))
-  };
-}
-function toScreen(x,y){ const {s,ox,oy}=view(); return {x:ox+x*s, y:oy+y*s}; }
-
-function drawPolygon(points, color, width=2, close=true){
-  if(!points || points.length<2) return;
-  ctx.strokeStyle = color; ctx.lineWidth = width; ctx.beginPath();
-  let p = toScreen(points[0][0], points[0][1]); ctx.moveTo(p.x, p.y);
-  for(let i=1;i<points.length;i++){ p = toScreen(points[i][0], points[i][1]); ctx.lineTo(p.x,p.y); }
-  if(close) ctx.closePath();
-  ctx.stroke();
-}
-function drawLine(a,b,color,width=2){
-  if(!a || !b) return;
-  const p = toScreen(a[0],a[1]), q = toScreen(b[0],b[1]);
-  ctx.strokeStyle = color; ctx.lineWidth = width; ctx.beginPath();
-  ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke();
-}
-function drawJoint(name, p, active=false){
-  if(!p) return;
-  const s = toScreen(p[0],p[1]);
-  ctx.strokeStyle = active ? "#ffdd4d" : "#caa83c";
-  ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.arc(s.x,s.y,5,0,Math.PI*2); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(s.x-8,s.y); ctx.lineTo(s.x+8,s.y); ctx.moveTo(s.x,s.y-8); ctx.lineTo(s.x,s.y+8); ctx.stroke();
-  ctx.fillStyle="#fff"; ctx.font="11px -apple-system"; ctx.fillText(name, s.x+7, s.y-7);
-}
-function draw(frame=null){
-  const w = canvas.clientWidth, h = canvas.clientHeight;
-  ctx.clearRect(0,0,w,h);
-  ctx.fillStyle="#090b0f"; ctx.fillRect(0,0,w,h);
-  if(!source){ hint.style.display="grid"; return; }
-  hint.style.display="none";
-  const {s,ox,oy} = view();
-  ctx.imageSmoothingEnabled = false;
-  ctx.drawImage(frame||source, ox, oy, source.width*s, source.height*s);
-  if(frame) return;
-
-  for(const [name,data] of Object.entries(rig.parts)){
-    if(data.poly) drawPolygon(data.poly, name===partSel.value ? "#62e7ad" : "#3da778", name===partSel.value ? 3 : 1.2, true);
-  }
-
-  const j = rig.joints;
-  const bones = [
-    ["pelvis","neck"],
-    ["left_shoulder","left_elbow"],["left_elbow","left_wrist"],
-    ["right_shoulder","right_elbow"],["right_elbow","right_wrist"],
-    ["left_hip","left_knee"],["left_knee","left_ankle"],["left_ankle","left_toe"],
-    ["right_hip","right_knee"],["right_knee","right_ankle"],["right_ankle","right_toe"],
-    ["tail_base","tail_tip"]
-  ];
-  bones.forEach(([a,b])=>drawLine(j[a], j[b], "#7fb5ff", 2));
-
-  for(const name of JOINTS){
-    if(j[name]) drawJoint(name, j[name], name===jointSel.value);
-  }
-
-  if(tracePoints.length>1) drawPolygon(tracePoints, "#ff4d73", 2, false);
-}
-
-$("imageInput").onchange = e=>{
-  const f=e.target.files[0]; if(!f) return;
-  const u=URL.createObjectURL(f), im=new Image();
-  im.onload=()=>{
-    source=im; sourceName=f.name; rig={parts:{}, joints:{}}; frames=[]; strip.innerHTML="";
-    URL.revokeObjectURL(u); status(`Loaded ${f.name} — ${im.width}×${im.height}`); draw();
-  };
-  im.src=u;
+  const sliderIds=["stride","step","bob","lean","arm","tail","breath","shoulderRise","idleLean","idleTail","windup","reach","strikeAngle","twist","attackLean","hipDrive","claw","guard","kickReach","kickHeight","kickChamber","kickLean","kickHip","kickFoot"];
+  settings.sliders={};
+  sliderIds.forEach(id=>{if($(id)) settings.sliders[id]=+$(id).value;});
+  const data={version:10,source_name:sourceName,source_size:source?[source.width,source.height]:null,parts:rig.parts,joints:rig.joints,settings};
+  download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"fatal_instinct_rig_v10.json");
+  status("V10 rig + animation settings exported.");
 };
-
-function pointDistance(a,b){ return Math.hypot(a.x-b.x, a.y-b.y); }
-function simplify(points, tol){
-  if(points.length<3) return points;
-  const out=[points[0]]; let last=points[0];
-  for(let i=1;i<points.length-1;i++){
-    const p=points[i];
-    if(Math.hypot(p[0]-last[0], p[1]-last[1]) >= tol){ out.push(p); last=p; }
-  }
-  out.push(points[points.length-1]);
-  return out;
-}
-function nearestJoint(p){
-  let best=null, dist=1e9;
-  for(const name of JOINTS){
-    const q=rig.joints[name];
-    if(!q) continue;
-    const d=Math.hypot(q[0]-p.x, q[1]-p.y);
-    if(d<dist){ dist=d; best=name; }
-  }
-  return {name:best, dist};
-}
-
-canvas.addEventListener("pointerdown", e=>{
-  if(!source) return;
-  canvas.setPointerCapture(e.pointerId);
-  const p = toImg(e.clientX, e.clientY);
-  if(mode==="trace"){
-    drawing=true; tracePoints=[[p.x,p.y]]; draw(); return;
-  }
-  if(mode==="joint"){
-    const pick = nearestJoint(p);
-    if(pick.name === jointSel.value && pick.dist < 22){
-      draggingJoint = true;
-    }else{
-      rig.joints[jointSel.value] = [p.x,p.y];
-      draggingJoint = true;
-    }
-    draw();
-  }
-});
-canvas.addEventListener("pointermove", e=>{
-  if(!source) return;
-  const p = toImg(e.clientX, e.clientY);
-  if(mode==="trace" && drawing){
-    const last=tracePoints[tracePoints.length-1], cur={x:p.x, y:p.y};
-    if(!last || pointDistance({x:last[0], y:last[1]}, cur) > 2.2) tracePoints.push([p.x,p.y]);
-    draw();
-  }else if(mode==="joint" && draggingJoint){
-    rig.joints[jointSel.value] = [p.x,p.y];
-    draw();
-  }
-});
-canvas.addEventListener("pointerup", ()=>{
-  if(mode==="trace" && drawing){
-    drawing=false;
-    if(tracePoints.length>=8){
-      rig.parts[partSel.value] = rig.parts[partSel.value] || {};
-      rig.parts[partSel.value].poly = simplify(tracePoints, 1.4);
-      status(`${partSel.value}: shape captured.`);
-    }else status("Trace was too short. Try again.");
-    tracePoints=[]; draw();
-  }
-  draggingJoint=false;
-});
-canvas.addEventListener("pointercancel", ()=>{ drawing=false; draggingJoint=false; tracePoints=[]; draw(); });
-
-$("clear").onclick = ()=>{
-  delete rig.parts[partSel.value];
-  status(`${partSel.value} cleared.`);
-  draw();
-};
-
-function download(blob, name){
-  const a=document.createElement("a"), u=URL.createObjectURL(blob);
-  a.href=u; a.download=name; document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(()=>URL.revokeObjectURL(u), 1000);
-}
-
-function pointFarthestFrom(points, p){
-  let best = points[0], dist=-1;
-  for(const q of points){
-    const d = Math.hypot(q[0]-p[0], q[1]-p[1]);
-    if(d>dist){ dist=d; best=q; }
-  }
-  return [...best];
-}
-
-function inferJointsFromParts(){
-  const p = rig.parts, j = rig.joints;
-  const ensure = (name, value)=>{ if(!j[name] && value) j[name] = value; };
-  if(p.torso && p.torso.pivot) ensure("pelvis", [...p.torso.pivot]);
-  if(p.left_thigh && p.left_thigh.pivot) ensure("left_hip", [...p.left_thigh.pivot]);
-  if(p.left_shin && p.left_shin.pivot) ensure("left_knee", [...p.left_shin.pivot]);
-  if(p.left_foot && p.left_foot.pivot) ensure("left_ankle", [...p.left_foot.pivot]);
-  if(p.right_thigh && p.right_thigh.pivot) ensure("right_hip", [...p.right_thigh.pivot]);
-  if(p.right_shin && p.right_shin.pivot) ensure("right_knee", [...p.right_shin.pivot]);
-  if(p.right_foot && p.right_foot.pivot) ensure("right_ankle", [...p.right_foot.pivot]);
-  if(p.left_foot && p.left_foot.poly && j.left_ankle) ensure("left_toe", pointFarthestFrom(p.left_foot.poly, j.left_ankle));
-  if(p.right_foot && p.right_foot.poly && j.right_ankle) ensure("right_toe", pointFarthestFrom(p.right_foot.poly, j.right_ankle));
-  if(p.tail && p.tail.pivot) ensure("tail_base", [...p.tail.pivot]);
-  if(p.tail && p.tail.poly && j.tail_base) ensure("tail_tip", pointFarthestFrom(p.tail.poly, j.tail_base));
-
-  if(!j.neck && p.torso && p.torso.poly){
-    let minY = 1e9, sumX = 0, count = 0;
-    for(const q of p.torso.poly){
-      if(q[1] < minY + 10){
-        if(q[1] < minY){ minY = q[1]; sumX = 0; count = 0; }
-        sumX += q[0]; count++;
-      }
-    }
-    if(count) j.neck = [sumX/count, minY+10];
-  }
-  if(!j.left_shoulder && j.neck) j.left_shoulder = [j.neck[0]-24, j.neck[1]+12];
-  if(!j.right_shoulder && j.neck) j.right_shoulder = [j.neck[0]+24, j.neck[1]+12];
-}
-
-$("saveRig").onclick = ()=>{
-  if(!source){ status("Load a character first."); return; }
-  const data = {
-    version:9.3,
-    source_name:sourceName,
-    source_size:[source.width, source.height],
-    parts:rig.parts,
-    joints:rig.joints
-  };
-  download(new Blob([JSON.stringify(data,null,2)], {type:"application/json"}), "fatal_instinct_rig_v9_3.json");
-  status("V9 rig exported.");
-};
-
-$("rigInput").onchange = async e=>{
-  const f=e.target.files[0]; if(!f) return;
+$("rigInput").onchange=async e=>{
+  const f=e.target.files[0];if(!f) return;
   try{
-    const d = JSON.parse(await f.text());
-    rig.parts = d.parts || {};
-    rig.joints = d.joints || {};
+    const d=JSON.parse(await f.text());
+    rig.parts=d.parts||{};
+    rig.joints=d.joints||{};
     inferJointsFromParts();
-    status(`Loaded rig: ${f.name} (V${d.version || "?"})`);
+    if(d.settings){
+      if(d.settings.animation && MODE_INFO[d.settings.animation]) animationMode.value=d.settings.animation;
+      if(d.settings.facing) facingSel.value=d.settings.facing;
+      if(d.settings.attack_limb) attackLimbSel.value=d.settings.attack_limb;
+      if(d.settings.sliders) Object.entries(d.settings.sliders).forEach(([id,val])=>{if($(id)) setSliderValue(id,val);});
+      updateAnimationUI();
+    }
+    status(`Loaded rig: ${f.name} (V${d.version||"?"})`);
     draw();
-  }catch(err){
-    status("Could not read rig JSON.");
-  }
+  }catch(err){status("Could not read rig JSON.");}
 };
-
-function maskedPart(name){
-  const data=rig.parts[name]; if(!data?.poly) return null;
-  const c=document.createElement("canvas");
-  c.width=source.width; c.height=source.height;
-  const g=c.getContext("2d");
-  g.save(); g.beginPath(); g.moveTo(data.poly[0][0], data.poly[0][1]);
-  for(let i=1;i<data.poly.length;i++) g.lineTo(data.poly[i][0], data.poly[i][1]);
-  g.closePath(); g.clip(); g.drawImage(source,0,0); g.restore();
-  return c;
+function swapObjectKeys(obj,a,b){
+  const av=obj[a],bv=obj[b];
+  if(bv===undefined) delete obj[a]; else obj[a]=bv;
+  if(av===undefined) delete obj[b]; else obj[b]=av;
 }
+function swapLeftRightRig(){
+  ["shoulder","elbow","wrist","hip","knee","ankle","toe"].forEach(base=>swapObjectKeys(rig.joints,`left_${base}`,`right_${base}`));
+  ["upper_arm","forearm","hand","thigh","shin","foot"].forEach(base=>swapObjectKeys(rig.parts,`left_${base}`,`right_${base}`));
+  frames=[];strip.innerHTML="";draw();
+  status("Left/right rig labels swapped. Preview the walk before saving.");
+}
+$("swapLR").onclick=swapLeftRightRig;
 
-
-function partBounds(poly){
-  let minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9;
-  for(const p of poly){
-    if(p[0]<minX) minX=p[0];
-    if(p[1]<minY) minY=p[1];
-    if(p[0]>maxX) maxX=p[0];
-    if(p[1]>maxY) maxY=p[1];
+function validateCurrentRig(){
+  inferJointsFromParts();
+  const mode=currentAnimation();
+  let need=[];
+  if(mode==="walk") need=["pelvis","neck","left_shoulder","right_shoulder","left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe"];
+  else if(mode==="idle") need=["pelvis","neck","left_shoulder","right_shoulder","left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe"];
+  else if(mode==="punch"||mode==="slash"){
+    const side=resolveAttackSide("arm");
+    need=["pelvis","neck",`${side}_shoulder`,`${side}_elbow`,`${side}_wrist`,"left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe"];
+  }else if(mode==="kick"){
+    const side=resolveAttackSide("leg");
+    const support=side==="left"?"right":"left";
+    need=["pelvis","neck",`${side}_hip`,`${side}_knee`,`${side}_ankle`,`${side}_toe`,`${support}_hip`,`${support}_knee`,`${support}_ankle`,`${support}_toe`];
   }
-  return {
-    minX:Math.floor(minX), minY:Math.floor(minY),
-    maxX:Math.ceil(maxX),  maxY:Math.ceil(maxY)
-  };
+  const missing=need.filter(j=>!joint(j));
+  if(missing.length){status(`Rig incomplete for ${MODE_INFO[mode].label}: ${missing.join(", ")}`);return false;}
+  status(`Rig validated for ${MODE_INFO[mode].label}.`);
+  return true;
 }
-
-function thighCapCanvas(name){
-  const data = rig.parts[name];
-  if(!data?.poly) return null;
-  const bounds = partBounds(data.poly);
-  const bandH = Math.max(10, Math.min(18, bounds.maxY - bounds.minY));
-  const c = document.createElement("canvas");
-  c.width = source.width; c.height = source.height;
-  const g = c.getContext("2d");
-  g.drawImage(source, 0, 0);
-
-  // Keep only a top strip of the thigh so it can tuck underneath the pelvis.
-  g.globalCompositeOperation = "destination-in";
-  g.beginPath();
-  g.rect(bounds.minX-2, bounds.minY-2, (bounds.maxX-bounds.minX)+4, bandH+4);
-  g.fill();
-
-  // Re-clip with the actual polygon, so only real thigh pixels remain.
-  g.globalCompositeOperation = "destination-in";
-  g.beginPath();
-  g.moveTo(data.poly[0][0], data.poly[0][1]);
-  for(let i=1;i<data.poly.length;i++) g.lineTo(data.poly[i][0], data.poly[i][1]);
-  g.closePath();
-  g.fill();
-
-  return c;
-}
-function angleOf(a,b){ return Math.atan2(b[1]-a[1], b[0]-a[0]); }
-function clamp(v,lo,hi){ return Math.max(lo, Math.min(hi, v)); }
-function length(a,b){ return Math.hypot(b[0]-a[0], b[1]-a[1]); }
-function crossZ(a,b,c){ return (b[0]-a[0])*(c[1]-a[1]) - (b[1]-a[1])*(c[0]-a[0]); }
-
-function matrixIdentity(){ return {a:1,b:0,c:0,d:1,e:0,f:0}; }
-function matrixFromAngleTranslation(theta, tx, ty){
-  return {a:Math.cos(theta), b:Math.sin(theta), c:-Math.sin(theta), d:Math.cos(theta), e:tx, f:ty};
-}
-function rigidFromPointAndAngle(origPoint, targetPoint, theta){
-  const c=Math.cos(theta), s=Math.sin(theta);
-  return {a:c,b:s,c:-s,d:c,e:targetPoint[0]-c*origPoint[0]+s*origPoint[1],f:targetPoint[1]-s*origPoint[0]-c*origPoint[1]};
-}
-function matrixFromTwoPoints(origA, origB, targetA, targetB){
-  const ang = angleOf(targetA,targetB) - angleOf(origA,origB);
-  return rigidFromPointAndAngle(origA, targetA, ang);
-}
-function applyM(g, M){ g.setTransform(M.a,M.b,M.c,M.d,M.e,M.f); }
-
-function transformPoint(M, p){
-  return [M.a*p[0] + M.c*p[1] + M.e, M.b*p[0] + M.d*p[1] + M.f];
-}
-
-function twoBoneIK(hip, knee0, ankle0, ankleTarget, bendSign){
-  const l1 = length(hip, knee0);
-  const l2 = length(knee0, ankle0);
-  let dx = ankleTarget[0]-hip[0], dy = ankleTarget[1]-hip[1];
-  let d = Math.hypot(dx,dy);
-  d = clamp(d, 1, l1 + l2 - 0.001);
-  const base = Math.atan2(dy, dx);
-  const cosA = clamp((l1*l1 + d*d - l2*l2)/(2*l1*d), -1, 1);
-  const a = Math.acos(cosA) * (bendSign || 1);
-  const kneeAng = base + a;
-  const knee = [hip[0] + Math.cos(kneeAng)*l1, hip[1] + Math.sin(kneeAng)*l1];
-  return {knee, ankle:[...ankleTarget]};
-}
-
-function footVector(ankle, toe){ return [toe[0]-ankle[0], toe[1]-ankle[1]]; }
-function rotateVec(v, deg){
-  const a=deg*Math.PI/180, c=Math.cos(a), s=Math.sin(a);
-  return [v[0]*c - v[1]*s, v[0]*s + v[1]*c];
-}
-function add(a,b){ return [a[0]+b[0], a[1]+b[1]]; }
-function sub(a,b){ return [a[0]-b[0], a[1]-b[1]]; }
-
-const WALK_NAMES = [
-  "Contact","Down","Passing","High Step",
-  "Opposite Contact","Opposite Down","Opposite Passing","Opposite High Step"
-];
-
-// V8 authored walk:
-// stronger passing/high-step shapes + stance metadata for grounding.
-const LEFT_WALK = [
-  {x:-10, y:  0, foot:+4,  stance:"contact"},
-  {x: -7, y:  0, foot: 0,  stance:"flat"},
-  {x: -1, y: -4, foot:-6,  stance:"toe"},
-  {x: +6, y:-13, foot:-14, stance:"air"},
-  {x:+10, y:  0, foot:+2,  stance:"contact"},
-  {x: +7, y:  0, foot: 0,  stance:"flat"},
-  {x: +1, y: -6, foot:-10, stance:"air"},
-  {x: -5, y:-15, foot:-15, stance:"air"}
-];
-
-const RIGHT_WALK = [
-  {x:+10, y:  0, foot:+2,  stance:"contact"},
-  {x: +7, y:  0, foot: 0,  stance:"flat"},
-  {x: +1, y: -6, foot:-10, stance:"air"},
-  {x: -5, y:-15, foot:-15, stance:"air"},
-  {x:-10, y:  0, foot:+4,  stance:"contact"},
-  {x: -7, y:  0, foot: 0,  stance:"flat"},
-  {x: -1, y: -4, foot:-6,  stance:"toe"},
-  {x: +6, y:-13, foot:-14, stance:"air"}
-];
-
-const PELVIS_X = [0.0, +0.45, +0.70, +0.35, 0.0, -0.45, -0.70, -0.35];
-const PELVIS_Y = [0, 2.2, 0.8, -1.2, 0, 2.2, 0.8, -1.2];
-const TORSO_LEAN = [+2.5, +1.5, -0.5, -2.0, -2.5, -1.5, +0.5, +2.0];
-const LEFT_ARM = [-14, -10, -3, +10, +14, +10, +3, -10];
-const RIGHT_ARM = [+14, +10, +3, -10, -14, -10, -3, +10];
-
-// Small shoulder counter-shift opposite the pelvis weight shift.
-const SHOULDER_COUNTER = [-0.30,-0.45,-0.55,-0.30,+0.30,+0.45,+0.55,+0.30];
-
-function partExists(name){ return !!(rig.parts[name] && rig.parts[name].poly); }
-function joint(name){ return rig.joints[name] ? [...rig.joints[name]] : null; }
-
-function requiredReady(){
-  const needParts = ["torso","left_thigh","left_shin","left_foot","right_thigh","right_shin","right_foot"];
-  const needJoints = ["pelvis","left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe"];
-  for(const p of needParts) if(!partExists(p)) return {ok:false, msg:"Missing required part trace: "+p};
-  for(const j of needJoints) if(!joint(j)) return {ok:false, msg:"Missing required joint: "+j};
-  return {ok:true};
-}
+$("validateRig").onclick=validateCurrentRig;
 
 
-function legMetrics(){
-  const lh=joint("left_hip"), lk=joint("left_knee"), la=joint("left_ankle");
-  const rh=joint("right_hip"), rk=joint("right_knee"), ra=joint("right_ankle");
-  if(!lh||!lk||!la||!rh||!rk||!ra) return null;
-
-  const leftUpper = length(lh,lk);
-  const leftLower = length(lk,la);
-  const rightUpper = length(rh,rk);
-  const rightLower = length(rk,ra);
-
-  const leftLeg = leftUpper + leftLower;
-  const rightLeg = rightUpper + rightLower;
-  const avgLeg = (leftLeg + rightLeg) / 2;
-
-  const lt=joint("left_toe"), rt=joint("right_toe");
-  const leftFoot = lt ? length(la,lt) : avgLeg*0.18;
-  const rightFoot = rt ? length(ra,rt) : avgLeg*0.18;
-  const avgFoot = (leftFoot + rightFoot) / 2;
-
-  const pelvisWidth = length(lh,rh);
-
-  return {
-    leftUpper,leftLower,rightUpper,rightLower,
-    leftLeg,rightLeg,avgLeg,
-    leftFoot,rightFoot,avgFoot,pelvisWidth
-  };
-}
-
-function scaledWalkValues(){
-  const m = legMetrics();
-  if(!m) return null;
-
-  const stridePct = (+$("stride").value) / 100.0;
-  const stepPct   = (+$("step").value) / 100.0;
-  const bobPct    = (+$("bob").value) / 100.0;
-
-  return {
-    metrics:m,
-    stridePx:m.avgLeg * stridePct,
-    stepPx:m.avgLeg * stepPct,
-    bobPx:m.avgLeg * bobPct,
-    pelvisShiftPx:m.pelvisWidth * 0.08
-  };
-}
-
+function joint(name){return rig.joints[name]?[...rig.joints[name]]:null;}
+function length(a,b){return Math.hypot(b[0]-a[0],b[1]-a[1]);}
+function angleOf(a,b){return Math.atan2(b[1]-a[1],b[0]-a[0]);}
+function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v));}
+function crossZ(a,b,c){return (b[0]-a[0])*(c[1]-a[1]) - (b[1]-a[1])*(c[0]-a[0]);}
+function add(a,b){return[a[0]+b[0],a[1]+b[1]];}
+function sub(a,b){return[a[0]-b[0],a[1]-b[1]];}
+function rotateVec(v,deg){const a=deg*Math.PI/180,c=Math.cos(a),s=Math.sin(a);return[v[0]*c-v[1]*s,v[0]*s+v[1]*c];}
+function footVector(ankle,toe){return[toe[0]-ankle[0],toe[1]-ankle[1]];}
+function matrixIdentity(){return{a:1,b:0,c:0,d:1,e:0,f:0};}
+function rigidFromPointAndAngle(origPoint,targetPoint,theta){const c=Math.cos(theta),s=Math.sin(theta);return{a:c,b:s,c:-s,d:c,e:targetPoint[0]-c*origPoint[0]+s*origPoint[1],f:targetPoint[1]-s*origPoint[0]-c*origPoint[1]};}
+function matrixFromTwoPoints(origA,origB,targetA,targetB){const ang=angleOf(targetA,targetB)-angleOf(origA,origB);return rigidFromPointAndAngle(origA,targetA,ang);}
+function transformPoint(M,p){return[M.a*p[0]+M.c*p[1]+M.e,M.b*p[0]+M.d*p[1]+M.f];}
+function applyM(g,M){g.setTransform(M.a,M.b,M.c,M.d,M.e,M.f);}
+function twoBoneIK(hip,knee0,ankle0,ankleTarget,bendSign){const l1=length(hip,knee0),l2=length(knee0,ankle0);let dx=ankleTarget[0]-hip[0],dy=ankleTarget[1]-hip[1];let d=Math.hypot(dx,dy);d=clamp(d,1,l1+l2-0.001);const base=Math.atan2(dy,dx),cosA=clamp((l1*l1+d*d-l2*l2)/(2*l1*d),-1,1),a=Math.acos(cosA)*(bendSign||1),kneeAng=base+a;return{knee:[hip[0]+Math.cos(kneeAng)*l1,hip[1]+Math.sin(kneeAng)*l1],ankle:[...ankleTarget]};}
+function legMetrics(){const lh=joint("left_hip"),lk=joint("left_knee"),la=joint("left_ankle"),rh=joint("right_hip"),rk=joint("right_knee"),ra=joint("right_ankle");if(!lh||!lk||!la||!rh||!rk||!ra) return null;const leftUpper=length(lh,lk),leftLower=length(lk,la),rightUpper=length(rh,rk),rightLower=length(rk,ra),leftLeg=leftUpper+leftLower,rightLeg=rightUpper+rightLower,avgLeg=(leftLeg+rightLeg)/2,lt=joint("left_toe"),rt=joint("right_toe"),leftFoot=lt?length(la,lt):avgLeg*0.18,rightFoot=rt?length(ra,rt):avgLeg*0.18,avgFoot=(leftFoot+rightFoot)/2,pelvisWidth=length(lh,rh);return{leftUpper,leftLower,rightUpper,rightLower,leftLeg,rightLeg,avgLeg,leftFoot,rightFoot,avgFoot,pelvisWidth};}
+function scaledWalkValues(){const m=legMetrics();if(!m) return null;return{metrics:m,stridePx:m.avgLeg*(+$("stride").value/100),stepPx:m.avgLeg*(+$("step").value/100),bobPx:m.avgLeg*(+$("bob").value/100),pelvisShiftPx:m.pelvisWidth*0.08};}
+function requiredReadyForWalk(){const need=["pelvis","neck","left_shoulder","right_shoulder","left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe"];for(const j of need) if(!joint(j)) return{ok:false,msg:"Missing required joint: "+j};return{ok:true};}
 function buildWalkPose(i){
-  const ready = requiredReady();
-  if(!ready.ok) return {error:ready.msg};
-
-  const scaled = scaledWalkValues();
-  if(!scaled) return {error:"Could not measure leg bones. Check hip, knee, and ankle joints."};
-
-  const {metrics, stridePx, stepPx, bobPx, pelvisShiftPx} = scaled;
-
-  const leanScale = (+$("lean").value) / 2.0;
-  const armScale = (+$("arm").value) / 12.0;
-  const tailSwing = +$("tail").value;
-  const weightStrength = (+$("weight").value) / 100.0;
-  const plantStrength = (+$("plant").value) / 100.0;
-
-  const orig = {};
-  JOINTS.forEach(j=>{ if(joint(j)) orig[j]=joint(j); });
-
-  const leftW = LEFT_WALK[i];
-  const rightW = RIGHT_WALK[i];
-
-  // Choose the support side for this frame.
-  function supportScore(w){
-    if(w.stance==="flat") return 3;
-    if(w.stance==="contact") return 2;
-    if(w.stance==="toe") return 1;
-    return 0;
-  }
-  const supportSide = supportScore(leftW) >= supportScore(rightW) ? "left" : "right";
-  const supportW = supportSide==="left" ? leftW : rightW;
-
-  // Root grounding correction: keep the support toe closer to its original world X.
-  // Full locking can look mechanical, so the slider blends into the lock.
-  const supportLeg = supportSide==="left" ? metrics.leftLeg : metrics.rightLeg;
-  const supportStride = stridePx * (supportLeg / metrics.avgLeg);
-  const supportToeOffsetX = (supportW.x / 10.0) * supportStride;
-  const footAnchorShiftX = -supportToeOffsetX * plantStrength;
-
-  const pose = {};
-  const pelvis0 = orig.pelvis;
-
-  // Shift body weight toward the planted leg.
-  const supportDir = supportSide==="left" ? -1 : +1;
-  const authoredPelvis = PELVIS_X[i] * pelvisShiftPx;
-  const supportWeight = supportDir * metrics.pelvisWidth * 0.10 * weightStrength;
-  const pelvisXOffset = authoredPelvis + supportWeight + footAnchorShiftX;
-
-  const pelvisYOffset = (PELVIS_Y[i] / 2.0) * bobPx;
-  const torsoLean = TORSO_LEAN[i] * leanScale;
-
-  pose.pelvis = [
-    pelvis0[0] + pelvisXOffset,
-    pelvis0[1] + pelvisYOffset
-  ];
-
-  // Build torso transform around pelvis.
-  let torsoM = matrixIdentity();
-  if(orig.neck){
-    const neckTarget = add(
-      pose.pelvis,
-      rotateVec(sub(orig.neck, orig.pelvis), torsoLean)
-    );
-    pose.neck = neckTarget;
-    torsoM = matrixFromTwoPoints(
-      orig.pelvis, orig.neck,
-      pose.pelvis, pose.neck
-    );
-  }else{
-    pose.neck = [pose.pelvis[0], pose.pelvis[1]-metrics.avgLeg*0.65];
-    torsoM = rigidFromPointAndAngle(
-      orig.pelvis,
-      pose.pelvis,
-      torsoLean*Math.PI/180
-    );
-  }
-
-  // Shoulder counter-motion.
-  const shoulderCounterPx = SHOULDER_COUNTER[i] * metrics.pelvisWidth * weightStrength;
-  ["left_shoulder","right_shoulder","tail_base"].forEach(n=>{
-    if(orig[n]){
-      pose[n] = transformPoint(torsoM, orig[n]);
-      if(n==="left_shoulder" || n==="right_shoulder"){
-        pose[n][0] += shoulderCounterPx;
-      }
-    }
-  });
-
-  if(orig.tail_tip){
-    const tailPhase = Math.sin((i/8)*Math.PI*2 + Math.PI/2);
-    pose.tail_tip = pose.tail_base
-      ? add(
-          pose.tail_base,
-          rotateVec(
-            sub(orig.tail_tip, orig.tail_base),
-            tailSwing * tailPhase
-          )
-        )
-      : [...orig.tail_tip];
-  }
-
-  // Resolution-independent foot targets -> ankle targets -> true two-bone IK.
-  ["left","right"].forEach(side=>{
-    const hip0 = orig[`${side}_hip`];
-    const knee0 = orig[`${side}_knee`];
-    const ankle0 = orig[`${side}_ankle`];
-    const toe0 = orig[`${side}_toe`];
-
-    const footVec0 = footVector(ankle0, toe0);
-    const hipTarget = transformPoint(torsoM, hip0);
-
-    // Carry the support-weight shift into the hip targets.
-    pose[`${side}_hip`] = hipTarget;
-
-    const table = side==="left" ? LEFT_WALK : RIGHT_WALK;
-    const w = table[i];
-
-    const sideLeg = side==="left" ? metrics.leftLeg : metrics.rightLeg;
-    const localStride = stridePx * (sideLeg / metrics.avgLeg);
-    const localStep = stepPx * (sideLeg / metrics.avgLeg);
-
-    let toeTarget = [
-      toe0[0] + (w.x / 10.0) * localStride,
-      toe0[1] + (w.y / 15.0) * localStep
-    ];
-
-    // Blend support foot toward a true planted world position.
-    if(side===supportSide && (w.stance==="flat" || w.stance==="contact" || w.stance==="toe")){
-      const lockedX = toe0[0];
-      toeTarget[0] = toeTarget[0]*(1-plantStrength) + lockedX*plantStrength;
-      toeTarget[1] = toe0[1];
-    }else if(w.stance==="contact" || w.stance==="flat" || w.stance==="toe"){
-      toeTarget[1] = toe0[1];
-    }
-
-    const footVecT = rotateVec(footVec0, w.foot);
-    let ankleTarget = [
-      toeTarget[0] - footVecT[0],
-      toeTarget[1] - footVecT[1]
-    ];
-
-    const footLen = side==="left" ? metrics.leftFoot : metrics.rightFoot;
-
-    if(w.stance==="flat"){
-      // Flatten the whole foot at stance.
-      const flatAnkleY = ankle0[1];
-      ankleTarget[1] = ankleTarget[1]*(1-plantStrength) + flatAnkleY*plantStrength;
-    }else if(w.stance==="contact"){
-      ankleTarget[1] = Math.min(ankleTarget[1], ankle0[1] + footLen*0.02);
-    }else if(w.stance==="toe"){
-      // Toe remains planted while heel rises.
-      ankleTarget[1] = Math.min(ankleTarget[1], ankle0[1] - footLen*0.14);
-    }
-
-    const bend = Math.sign(crossZ(hip0, ankle0, knee0)) || 1;
-    const solve = twoBoneIK(
-      hipTarget,
-      knee0,
-      ankle0,
-      ankleTarget,
-      bend
-    );
-
-    pose[`${side}_knee`] = solve.knee;
-    pose[`${side}_ankle`] = solve.ankle;
-    pose[`${side}_toe`] = toeTarget;
-  });
-
-  // Stronger authored arm counter-swing.
-  ["left","right"].forEach(side=>{
-    const s0 = orig[`${side}_shoulder`];
-    const e0 = orig[`${side}_elbow`];
-    const w0 = orig[`${side}_wrist`];
-    if(!s0) return;
-
-    const armTable = side==="left" ? LEFT_ARM : RIGHT_ARM;
-    const swing = armTable[i] * armScale;
-
-    // Use the already counter-shifted shoulder target if available.
-    pose[`${side}_shoulder`] = pose[`${side}_shoulder`] || transformPoint(torsoM, s0);
-
-    if(e0){
-      pose[`${side}_elbow`] = add(
-        pose[`${side}_shoulder`],
-        rotateVec(sub(e0,s0), swing + torsoLean)
-      );
-
-      if(w0){
-        pose[`${side}_wrist`] = add(
-          pose[`${side}_elbow`],
-          rotateVec(sub(w0,e0), swing*0.65 + torsoLean)
-        );
-      }
-    }
-  });
-
-  return {
-    pose,
-    torsoM,
-    phaseName: WALK_NAMES[i],
-    metrics,
-    scaled,
-    supportSide
-  };
+ const ready=requiredReadyForWalk(); if(!ready.ok) return{error:ready.msg};
+ const scaled=scaledWalkValues(); if(!scaled) return{error:"Could not measure leg bones."};
+ const {metrics,stridePx,stepPx,bobPx,pelvisShiftPx}=scaled;
+ const leanScale=(+$("lean").value)/2.0, armScale=(+$("arm").value)/12.0, tailSwing=(+$("tail").value);
+ const orig={}; JOINTS.forEach(j=>{if(joint(j)) orig[j]=joint(j);});
+ function supportScore(w){if(w.stance==="flat") return 3; if(w.stance==="contact") return 2; if(w.stance==="toe") return 1; return 0;}
+ const leftW=LEFT_WALK[i], rightW=RIGHT_WALK[i], supportSide=supportScore(leftW)>=supportScore(rightW)?"left":"right", supportDir=supportSide==="left"?-1:+1;
+ const pose={}, pelvis0=orig.pelvis, pelvisXOffset=PELVIS_X[i]*pelvisShiftPx + supportDir*metrics.pelvisWidth*0.07, pelvisYOffset=(PELVIS_Y[i]/2.0)*bobPx, torsoLean=TORSO_LEAN[i]*leanScale;
+ pose.pelvis=[pelvis0[0]+pelvisXOffset,pelvis0[1]+pelvisYOffset];
+ let torsoM=matrixIdentity();
+ if(orig.neck){pose.neck=add(pose.pelvis,rotateVec(sub(orig.neck,orig.pelvis),torsoLean));torsoM=matrixFromTwoPoints(orig.pelvis,orig.neck,pose.pelvis,pose.neck);}
+ else {pose.neck=[pose.pelvis[0],pose.pelvis[1]-metrics.avgLeg*0.65];torsoM=rigidFromPointAndAngle(orig.pelvis,pose.pelvis,torsoLean*Math.PI/180);}
+ const shoulderCounterPx=SHOULDER_COUNTER[i]*metrics.pelvisWidth*0.7;
+ ["left_shoulder","right_shoulder","tail_base"].forEach(n=>{if(orig[n]){pose[n]=transformPoint(torsoM,orig[n]);if(n==="left_shoulder"||n==="right_shoulder") pose[n][0]+=shoulderCounterPx;}});
+ if(orig.tail_tip&&pose.tail_base){const tailPhase=Math.sin((i/8)*Math.PI*2 + Math.PI/2);pose.tail_tip=add(pose.tail_base,rotateVec(sub(orig.tail_tip,orig.tail_base),tailSwing*tailPhase));}
+ ["left","right"].forEach(side=>{
+   const hip0=orig[`${side}_hip`], knee0=orig[`${side}_knee`], ankle0=orig[`${side}_ankle`], toe0=orig[`${side}_toe`];
+   const footVec0=footVector(ankle0,toe0), hipTarget=transformPoint(torsoM,hip0); pose[`${side}_hip`]=hipTarget;
+   const table=side==="left"?LEFT_WALK:RIGHT_WALK, w=table[i], sideLeg=side==="left"?metrics.leftLeg:metrics.rightLeg, localStride=stridePx*(sideLeg/metrics.avgLeg), localStep=stepPx*(sideLeg/metrics.avgLeg);
+   let toeTarget=[toe0[0]+(w.x/10.0)*localStride, toe0[1]+(w.y/15.0)*localStep];
+   if(w.stance==="contact"||w.stance==="flat"||w.stance==="toe") toeTarget[1]=toe0[1];
+   if(side===supportSide && (w.stance==="contact"||w.stance==="flat"||w.stance==="toe")) toeTarget[0]=toe0[0];
+   const footVecT=rotateVec(footVec0,w.foot); let ankleTarget=[toeTarget[0]-footVecT[0], toeTarget[1]-footVecT[1]];
+   const footLen=side==="left"?metrics.leftFoot:metrics.rightFoot;
+   if(w.stance==="flat") ankleTarget[1]=ankle0[1];
+   else if(w.stance==="contact") ankleTarget[1]=Math.min(ankleTarget[1], ankle0[1]+footLen*0.02);
+   else if(w.stance==="toe") ankleTarget[1]=Math.min(ankleTarget[1], ankle0[1]-footLen*0.14);
+   const bend=Math.sign(crossZ(hip0,ankle0,knee0))||1, solve=twoBoneIK(hipTarget,knee0,ankle0,ankleTarget,bend);
+   pose[`${side}_knee`]=solve.knee; pose[`${side}_ankle`]=solve.ankle; pose[`${side}_toe`]=toeTarget;
+ });
+ ["left","right"].forEach(side=>{
+   const s0=orig[`${side}_shoulder`], e0=orig[`${side}_elbow`], w0=orig[`${side}_wrist`]; if(!s0) return;
+   const armTable=side==="left"?LEFT_ARM:RIGHT_ARM, swing=armTable[i]*armScale;
+   pose[`${side}_shoulder`]=pose[`${side}_shoulder`]||transformPoint(torsoM,s0);
+   if(e0){pose[`${side}_elbow`]=add(pose[`${side}_shoulder`], rotateVec(sub(e0,s0), swing + torsoLean)); if(w0) pose[`${side}_wrist`]=add(pose[`${side}_elbow`], rotateVec(sub(w0,e0), swing*0.65 + torsoLean));}
+ });
+ return{pose,torsoM,phaseName:WALK_NAMES[i],metrics};
 }
 
+const IDLE_PHASES=[
+  {lift:0.00,shoulder:0.00,lean:0.00,tail:0.00},
+  {lift:1.00,shoulder:1.00,lean:-0.35,tail:0.45},
+  {lift:0.20,shoulder:0.15,lean:0.30,tail:-0.55},
+  {lift:0.55,shoulder:0.45,lean:0.00,tail:0.15}
+];
 
-const ATTACK_NAMES = ["Ready","Wind-up","Strike","Recovery"];
-const KICK_NAMES = ["Ready","Chamber","Extension","Recovery"];
+function facingSign(){return facingSel.value==="left"?-1:+1;}
 
-function attackRequiredReady(side, kind){
-  const needParts = ["torso"];
-  const needJoints = ["pelvis","neck"];
+function resolveAttackSide(kind="arm"){
+  const choice=attackLimbSel.value;
+  if(choice==="rig_right") return "right";
+  if(choice==="rig_left") return "left";
 
-  if(kind==="punch"){
-    needParts.push(`${side}_upper_arm`, `${side}_forearm`, `${side}_hand`);
-    needJoints.push(`${side}_shoulder`, `${side}_elbow`, `${side}_wrist`);
-  }else{
-    needParts.push(`${side}_thigh`, `${side}_shin`, `${side}_foot`);
-    needJoints.push(`${side}_hip`, `${side}_knee`, `${side}_ankle`, `${side}_toe`);
-    const support = side==="left" ? "right" : "left";
-    needParts.push(`${support}_thigh`, `${support}_shin`, `${support}_foot`);
-    needJoints.push(`${support}_hip`, `${support}_knee`, `${support}_ankle`, `${support}_toe`);
-  }
+  const a=kind==="leg" ? joint("left_hip") : joint("left_shoulder");
+  const b=kind==="leg" ? joint("right_hip") : joint("right_shoulder");
+  if(!a||!b) return "right";
 
-  for(const p of needParts) if(!partExists(p)) return {ok:false,msg:"Missing required part trace: "+p};
-  for(const jn of needJoints) if(!joint(jn)) return {ok:false,msg:"Missing required joint: "+jn};
-  return {ok:true};
+  const front=facingSign()>0 ? (a[0]>b[0]?"left":"right") : (a[0]<b[0]?"left":"right");
+  return choice==="rear" ? (front==="left"?"right":"left") : front;
 }
 
-function basePoseFromTorso(torsoRotateDeg=0, rootDX=0, rootDY=0){
-  const orig = {};
-  JOINTS.forEach(n=>{ if(joint(n)) orig[n]=joint(n); });
+function snapshotOrig(){
+  const orig={};
+  JOINTS.forEach(n=>{if(joint(n)) orig[n]=joint(n);});
+  return orig;
+}
 
-  const pose = {};
-  const pelvis0 = orig.pelvis;
-  pose.pelvis = [pelvis0[0]+rootDX, pelvis0[1]+rootDY];
+function basePoseFromTorso(rotationDeg=0,dx=0,dy=0){
+  const orig=snapshotOrig(),pose={};
+  if(!orig.pelvis) return {error:"Missing pelvis."};
 
-  let torsoM = matrixIdentity();
+  pose.pelvis=[orig.pelvis[0]+dx,orig.pelvis[1]+dy];
+  let torsoM=matrixIdentity();
+
   if(orig.neck){
-    pose.neck = add(pose.pelvis, rotateVec(sub(orig.neck,orig.pelvis), torsoRotateDeg));
-    torsoM = matrixFromTwoPoints(orig.pelvis,orig.neck,pose.pelvis,pose.neck);
-  }else{
-    torsoM = rigidFromPointAndAngle(orig.pelvis,pose.pelvis,torsoRotateDeg*Math.PI/180);
+    pose.neck=add(pose.pelvis,rotateVec(sub(orig.neck,orig.pelvis),rotationDeg));
+    torsoM=matrixFromTwoPoints(orig.pelvis,orig.neck,pose.pelvis,pose.neck);
   }
 
-  const torsoChildren = [
-    "left_shoulder","right_shoulder",
-    "left_hip","right_hip",
-    "tail_base","tail_tip"
-  ];
-  torsoChildren.forEach(n=>{
+  ["left_shoulder","right_shoulder","left_hip","right_hip","tail_base"].forEach(n=>{
     if(orig[n]) pose[n]=transformPoint(torsoM,orig[n]);
   });
 
   return {orig,pose,torsoM};
 }
 
-function armPoseFromAngles(side, built, upperAngle, elbowRelative, handAngleDeg=0){
-  const {orig,pose,torsoM}=built;
-  const s0=orig[`${side}_shoulder`], e0=orig[`${side}_elbow`], w0=orig[`${side}_wrist`];
+function plantLeg(side,built){
+  const {orig,pose}=built;
+  const h0=orig[`${side}_hip`],k0=orig[`${side}_knee`],a0=orig[`${side}_ankle`],t0=orig[`${side}_toe`];
+  if(!h0||!k0||!a0||!t0||!pose[`${side}_hip`]) return;
+  const bend=Math.sign(crossZ(h0,a0,k0))||1;
+  const solve=twoBoneIK(pose[`${side}_hip`],k0,a0,a0,bend);
+  pose[`${side}_knee`]=solve.knee;
+  pose[`${side}_ankle`]=solve.ankle;
+  pose[`${side}_toe`]=[...t0];
+}
+
+function plantBothLegs(built){plantLeg("left",built);plantLeg("right",built);}
+
+function armPoseToTarget(side,built,target,handAngleDeg=0){
+  const {orig,pose}=built;
+  const s0=orig[`${side}_shoulder`],e0=orig[`${side}_elbow`],w0=orig[`${side}_wrist`];
   if(!s0||!e0||!w0) return;
-
-  const shoulder = pose[`${side}_shoulder`] || transformPoint(torsoM,s0);
-  pose[`${side}_shoulder`] = shoulder;
-
-  const upperLen=length(s0,e0), lowerLen=length(e0,w0);
-  const elbow=[
-    shoulder[0]+Math.cos(upperAngle)*upperLen,
-    shoulder[1]+Math.sin(upperAngle)*upperLen
-  ];
-  const foreAngle=upperAngle+elbowRelative;
-  const wrist=[
-    elbow[0]+Math.cos(foreAngle)*lowerLen,
-    elbow[1]+Math.sin(foreAngle)*lowerLen
-  ];
-
-  pose[`${side}_elbow`]=elbow;
-  pose[`${side}_wrist`]=wrist;
-  pose.__handAngles = pose.__handAngles || {};
+  const shoulder=pose[`${side}_shoulder`];
+  const bend=Math.sign(crossZ(s0,w0,e0))||1;
+  const solve=twoBoneIK(shoulder,e0,w0,target,bend);
+  pose[`${side}_elbow`]=solve.knee;
+  pose[`${side}_wrist`]=solve.ankle;
+  pose.__handAngles=pose.__handAngles||{};
   pose.__handAngles[side]=handAngleDeg*Math.PI/180;
 }
 
-function guardArmPose(side, built, motionDeg){
+function relaxArm(side,built,extraDeg=0){
   const {orig,pose,torsoM}=built;
-  const s0=orig[`${side}_shoulder`], e0=orig[`${side}_elbow`], w0=orig[`${side}_wrist`];
-  if(!s0) return;
-
-  pose[`${side}_shoulder`] = pose[`${side}_shoulder`] || transformPoint(torsoM,s0);
+  const s0=orig[`${side}_shoulder`],e0=orig[`${side}_elbow`],w0=orig[`${side}_wrist`];
+  if(!s0)return;
+  const shoulder=pose[`${side}_shoulder`]||transformPoint(torsoM,s0);
+  pose[`${side}_shoulder`]=shoulder;
   if(e0){
-    pose[`${side}_elbow`] = add(
-      pose[`${side}_shoulder`],
-      rotateVec(sub(e0,s0), motionDeg)
-    );
-    if(w0){
-      pose[`${side}_wrist`] = add(
-        pose[`${side}_elbow`],
-        rotateVec(sub(w0,e0), motionDeg*0.65)
-      );
-    }
+    pose[`${side}_elbow`]=add(shoulder,rotateVec(sub(e0,s0),extraDeg));
+    if(w0)pose[`${side}_wrist`]=add(pose[`${side}_elbow`],rotateVec(sub(w0,e0),extraDeg*0.65));
   }
 }
 
-function armPoseToTarget(side, built, wristTarget, handAngleDeg=0){
-  const {orig,pose,torsoM} = built;
-  const s0=orig[`${side}_shoulder`], e0=orig[`${side}_elbow`], w0=orig[`${side}_wrist`];
-  if(!s0 || !e0 || !w0) return;
+function buildIdlePose(i){
+  const m=legMetrics();if(!m)return{error:"Could not measure leg bones."};
+  const p=IDLE_PHASES[i];
+  const lift=(+$("breath").value/100)*m.avgLeg*p.lift;
+  const shoulderRise=(+$("shoulderRise").value/100)*m.avgLeg*p.shoulder;
+  const lean=+$("idleLean").value*p.lean;
+  const built=basePoseFromTorso(lean,0,-lift);
+  if(built.error)return built;
 
-  const shoulder = pose[`${side}_shoulder`] || transformPoint(torsoM,s0);
-  pose[`${side}_shoulder`] = shoulder;
+  ["left_shoulder","right_shoulder"].forEach(n=>{if(built.pose[n])built.pose[n][1]-=shoulderRise;});
+  plantBothLegs(built);
+  relaxArm("left",built,-lean*0.25);
+  relaxArm("right",built,+lean*0.25);
 
-  const bendDir = Math.sign(crossZ(s0,w0,e0)) || 1;
-  const solve = twoBoneIK(shoulder,e0,w0,wristTarget,bendDir);
-
-  pose[`${side}_elbow`] = solve.knee;
-  pose[`${side}_wrist`] = solve.ankle;
-  pose.__handAngles = pose.__handAngles || {};
-  pose.__handAngles[side] = handAngleDeg * Math.PI / 180;
+  const {orig,pose}=built;
+  if(orig.tail_base&&orig.tail_tip&&pose.tail_base){
+    pose.tail_tip=add(pose.tail_base,rotateVec(sub(orig.tail_tip,orig.tail_base),(+$("idleTail").value)*p.tail));
+  }
+  return{pose,torsoM:built.torsoM,phaseName:MODE_INFO.idle.names[i]};
 }
 
-function facingSign(){
-  return ($("facingDirection") && $("facingDirection").value==="left") ? -1 : +1;
-}
-
-function resolveAttackSide(requestedSide="right"){
-  const choice = $("attackArm") ? $("attackArm").value : "front";
-
-  if(choice==="rig_right") return "right";
-  if(choice==="rig_left") return "left";
-
-  const ls=joint("left_shoulder");
-  const rs=joint("right_shoulder");
-
-  // Fallback if shoulder rig is incomplete.
-  if(!ls || !rs) return requestedSide;
-
+function buildPunchOrSlashPose(i,isSlash){
+  const side=resolveAttackSide("arm");
+  const m=legMetrics();if(!m)return{error:"Could not measure leg bones."};
   const dir=facingSign();
 
-  // Facing right: shoulder with greater X is visually front.
-  // Facing left: shoulder with smaller X is visually front.
-  const front = dir>0
-    ? (ls[0] > rs[0] ? "left" : "right")
-    : (ls[0] < rs[0] ? "left" : "right");
-
-  if(choice==="rear") return front==="left" ? "right" : "left";
-  return front;
-}
-
-function forwardPoint(origin, forward, vertical=0){
-  return [
-    origin[0] + facingSign()*forward,
-    origin[1] + vertical
-  ];
-}
-
-function signedTorsoRotation(deg){
-  // Mirror torso motion when the character faces left.
-  return deg * facingSign();
-}
-
-function buildPunchPose(i, requestedSide){
-  const side=resolveAttackSide(requestedSide);
-
-  const ready=attackRequiredReady(side,"punch");
-  if(!ready.ok) return {error:ready.msg};
-
-  const m=legMetrics();
-  const scaleLeg=m ? m.avgLeg : Math.max(60, source.height*0.42);
+  const s0=joint(`${side}_shoulder`),e0=joint(`${side}_elbow`),w0=joint(`${side}_wrist`);
+  if(!s0||!e0||!w0)return{error:`Missing ${side} shoulder/elbow/wrist.`};
 
   const windup=+$("windup").value;
   const reach=(+$("reach").value)/100;
-  const strikeAngleDeg=+$("strikeAngle").value;
+  const angle=+$("strikeAngle").value;
   const twist=+$("twist").value;
   const lean=+$("attackLean").value;
-  const hipDrive=(+$("hipDrive").value/100)*scaleLeg;
+  const hip=(+$("hipDrive").value/100)*m.avgLeg;
   const claw=+$("claw").value;
   const guard=+$("guard").value;
-  const strikeStyle = $("punchStyle") ? $("punchStyle").value : "punch";
-  const dir=facingSign();
 
-  const punchPhase=[
-    {root:0.00,torso: 0.00,guard: 0.00,tail: 0,target:"ready",hand: 0.10},
-    {root:-0.24,torso:-0.82,guard:+0.55,tail:-4,target:"windup",hand:-0.25},
-    {root:+0.88,torso:+1.00,guard:-1.00,tail:+8,target:"strike",hand:+1.00},
-    {root:+0.15,torso:+0.15,guard:-0.30,tail:+2,target:"recover",hand:+0.20}
+  const punch=[
+    {root:0.00,torso:0.00,target:"ready",hand:0.00,guard:0.00,tail:0},
+    {root:-0.22,torso:-0.80,target:"wind",hand:-0.20,guard:+0.50,tail:-4},
+    {root:+0.85,torso:+1.00,target:"hit",hand:+1.00,guard:-1.00,tail:+8},
+    {root:+0.15,torso:+0.18,target:"recover",hand:+0.20,guard:-0.30,tail:+2}
   ][i];
 
-  // Distinct slash arc: high/back load -> forward/down cut -> forward/down follow-through.
-  const slashPhase=[
-    {root:0.00,torso: 0.00,guard: 0.00,tail: 0,target:"ready",hand: 0.08},
-    {root:-0.20,torso:-0.65,guard:+0.45,tail:-4,target:"slash_windup",hand:-0.40},
-    {root:+0.70,torso:+0.95,guard:-0.85,tail:+10,target:"slash_strike",hand:+1.00},
-    {root:+0.28,torso:+0.30,guard:-0.18,tail:+4,target:"slash_follow",hand:+0.35}
+  const slash=[
+    {root:0.00,torso:0.00,target:"ready",hand:0.00,guard:0.00,tail:0},
+    {root:-0.18,torso:-0.65,target:"high",hand:-0.45,guard:+0.45,tail:-4},
+    {root:+0.68,torso:+0.95,target:"cut",hand:+1.00,guard:-0.85,tail:+10},
+    {root:+0.28,torso:+0.30,target:"follow",hand:+0.35,guard:-0.20,tail:+4}
   ][i];
 
-  const phase=strikeStyle==="slash" ? slashPhase : punchPhase;
+  const phase=isSlash?slash:punch;
+  const built=basePoseFromTorso(dir*phase.torso*(twist+lean*0.4),dir*phase.root*hip,0);
+  if(built.error)return built;
+  plantBothLegs(built);
 
-  const rootDX=dir*phase.root*hipDrive;
-  const torsoRot=signedTorsoRotation(phase.torso*(twist + lean*0.40));
-
-  const built=basePoseFromTorso(torsoRot,rootDX,0);
-  const {orig,pose,torsoM}=built;
-
-  const s0=orig[`${side}_shoulder`];
-  const e0=orig[`${side}_elbow`];
-  const w0=orig[`${side}_wrist`];
-
-  const shoulder=pose[`${side}_shoulder`] || transformPoint(torsoM,s0);
-  pose[`${side}_shoulder`]=shoulder;
-
-  const upperLen=length(s0,e0);
-  const lowerLen=length(e0,w0);
-  const armLen=upperLen+lowerLen;
-
-  let wristTarget=transformPoint(torsoM,w0);
+  const shoulder=built.pose[`${side}_shoulder`];
+  const armLen=length(s0,e0)+length(e0,w0);
+  let target=[...w0];
 
   if(phase.target==="ready"){
-    wristTarget=[
-      shoulder[0] + dir*armLen*0.18,
-      shoulder[1] + armLen*0.24
-    ];
-
-  }else if(phase.target==="windup"){
-    const back=armLen*(0.18 + windup/210);
-    wristTarget=[
-      shoulder[0] - dir*back,
-      shoulder[1] + armLen*0.06
-    ];
-
-  }else if(phase.target==="strike"){
-    const extension=armLen*(0.66 + 0.33*reach);
-    const a=strikeAngleDeg*Math.PI/180;
-    wristTarget=[
-      shoulder[0] + dir*Math.cos(a)*extension,
-      shoulder[1] + Math.sin(a)*extension
-    ];
-
+    target=transformPoint(built.torsoM,w0);
+  }else if(phase.target==="wind"){
+    target=[shoulder[0]-dir*armLen*(0.18+windup/220),shoulder[1]+armLen*0.05];
+  }else if(phase.target==="hit"){
+    const ext=armLen*(0.65+0.34*reach),a=angle*Math.PI/180;
+    target=[shoulder[0]+dir*Math.cos(a)*ext,shoulder[1]+Math.sin(a)*ext];
   }else if(phase.target==="recover"){
-    wristTarget=[
-      shoulder[0] + dir*armLen*0.26,
-      shoulder[1] + armLen*0.18
-    ];
-
-  }else if(phase.target==="slash_windup"){
-    // Lift the attacking claw high and behind the shoulder/head.
-    const backAmt = armLen*(0.16 + windup/260);
-    wristTarget=[
-      shoulder[0] - dir*backAmt,
-      shoulder[1] - armLen*0.34
-    ];
-
-  }else if(phase.target==="slash_strike"){
-    // True diagonal cut: forward and down across the target line.
-    // Positive strikeAngle adds a little more downward sweep.
-    const dropBias = 0.16 + Math.max(0, strikeAngleDeg)/90;
-    const extension = armLen*(0.62 + 0.22*reach);
-    wristTarget=[
-      shoulder[0] + dir*extension,
-      shoulder[1] + armLen*(0.26 + dropBias)
-    ];
-
-  }else if(phase.target==="slash_follow"){
-    // Follow-through stays somewhat forward/down instead of popping back up.
-    wristTarget=[
-      shoulder[0] + dir*armLen*0.34,
-      shoulder[1] + armLen*0.30
-    ];
+    target=[shoulder[0]+dir*armLen*0.24,shoulder[1]+armLen*0.18];
+  }else if(phase.target==="high"){
+    target=[shoulder[0]-dir*armLen*(0.14+windup/300),shoulder[1]-armLen*0.34];
+  }else if(phase.target==="cut"){
+    target=[shoulder[0]+dir*armLen*(0.64+0.20*reach),shoulder[1]+armLen*(0.32+Math.max(0,angle)/110)];
+  }else if(phase.target==="follow"){
+    target=[shoulder[0]+dir*armLen*0.34,shoulder[1]+armLen*0.30];
   }
 
-  armPoseToTarget(side,built,wristTarget,claw*phase.hand*dir);
+  armPoseToTarget(side,built,target,claw*phase.hand*dir);
 
-  const guardSide=side==="right" ? "left" : "right";
-  guardArmPose(
-    guardSide,
-    built,
-    guard*phase.guard*dir*(strikeStyle==="slash" ? 0.85 : 1.0)
-  );
+  const guardSide=side==="left"?"right":"left";
+  relaxArm(guardSide,built,guard*phase.guard*dir);
 
-  if(orig.tail_base && orig.tail_tip && pose.tail_base){
-    pose.tail_tip=add(
-      pose.tail_base,
-      rotateVec(
-        sub(orig.tail_tip,orig.tail_base),
-        phase.tail*dir
-      )
-    );
+  const {orig,pose}=built;
+  if(orig.tail_base&&orig.tail_tip&&pose.tail_base){
+    pose.tail_tip=add(pose.tail_base,rotateVec(sub(orig.tail_tip,orig.tail_base),phase.tail*dir));
   }
 
-  const armName =
-    side==="left" ? "Rig Left" : "Rig Right";
-
-  return {
-    pose,
-    torsoM,
-    phaseName:ATTACK_NAMES[i],
-    attackSide:side,
-    attackSideName:armName
-  };
+  return{pose,torsoM:built.torsoM,phaseName:(isSlash?MODE_INFO.slash.names:MODE_INFO.punch.names)[i]};
 }
 
-function buildKickPose(i, side){
-  const ready=attackRequiredReady(side,"kick");
-  if(!ready.ok) return {error:ready.msg};
-
-  const m=legMetrics();
-  if(!m) return {error:"Could not measure leg bones. Check hip, knee, ankle, and toe joints."};
-
-  const kickReach=(+$("kickReach").value/100)*m.avgLeg;
-  const kickHeight=(+$("kickHeight").value/100)*m.avgLeg;
-  const chamber=(+$("kickChamber").value)/100;
-  const counterLean=+$("kickLean").value;
-  const hipDrive=(+$("kickHip").value/100)*m.avgLeg;
-  const footAngle=+$("kickFoot").value;
-  const guard=+$("kickGuard").value;
-
-  const support=side==="right" ? "left" : "right";
-
+function buildKickPose(i){
+  const side=resolveAttackSide("leg"),support=side==="left"?"right":"left";
+  const m=legMetrics();if(!m)return{error:"Could not measure leg bones."};
+  const dir=facingSign();
   const phase=[
-    {x:0,y:0,lean:0,root:0,foot:0,guard:0},
-    {x:0.12,y:0.70,lean:-0.45,root:-0.20,foot:-0.40,guard:+0.45},
-    {x:1.00,y:1.00,lean:-1.00,root:+0.38,foot:+1.00,guard:-1.00},
-    {x:0.28,y:0.38,lean:-0.30,root:+0.10,foot:+0.25,guard:-0.30}
+    {root:0.00,x:0.00,y:0.00,lean:0.00,foot:0.00},
+    {root:-0.12,x:0.10,y:0.72,lean:-0.45,foot:-0.35},
+    {root:+0.30,x:1.00,y:1.00,lean:-1.00,foot:+1.00},
+    {root:+0.08,x:0.26,y:0.34,lean:-0.25,foot:+0.20}
   ][i];
 
-  const built=basePoseFromTorso(signedTorsoRotation(phase.lean*counterLean),facingSign()*phase.root*hipDrive,0);
-  const {orig,pose,torsoM}=built;
+  const reach=(+$("kickReach").value/100)*m.avgLeg;
+  const height=(+$("kickHeight").value/100)*m.avgLeg;
+  const chamber=(+$("kickChamber").value)/100;
+  const lean=+$("kickLean").value;
+  const hip=(+$("kickHip").value/100)*m.avgLeg;
+  const footAng=+$("kickFoot").value;
 
-  // Keep support foot planted in world space.
-  const sh=orig[`${support}_hip`], sk=orig[`${support}_knee`], sa=orig[`${support}_ankle`], st=orig[`${support}_toe`];
-  const supportHip=transformPoint(torsoM,sh);
-  pose[`${support}_hip`]=supportHip;
-  const supportSolve=twoBoneIK(
-    supportHip,sk,sa,sa,
-    Math.sign(crossZ(sh,sa,sk)) || 1
-  );
-  pose[`${support}_knee`]=supportSolve.knee;
-  pose[`${support}_ankle`]=supportSolve.ankle;
-  pose[`${support}_toe`]=[...st];
+  const built=basePoseFromTorso(dir*phase.lean*lean,dir*phase.root*hip,0);
+  if(built.error)return built;
+  plantLeg(support,built);
 
-  // Attack leg target.
-  const h0=orig[`${side}_hip`], k0=orig[`${side}_knee`], a0=orig[`${side}_ankle`], t0=orig[`${side}_toe`];
-  const hipTarget=transformPoint(torsoM,h0);
-  pose[`${side}_hip`]=hipTarget;
+  const {orig,pose}=built;
+  const h0=orig[`${side}_hip`],k0=orig[`${side}_knee`],a0=orig[`${side}_ankle`],t0=orig[`${side}_toe`];
+  if(!h0||!k0||!a0||!t0)return{error:`Missing ${side} kick-leg joints.`};
 
-  let xTravel=facingSign()*phase.x*kickReach;
-  let yTravel=-phase.y*kickHeight;
+  let x=dir*phase.x*reach,y=-phase.y*height;
+  if(i===1){x*=chamber*0.45;y*=chamber;}
 
-  if(i===1){
-    // Chamber: bring the foot back under the body while raising the knee.
-    xTravel*=chamber*0.45;
-    yTravel*=chamber;
-  }
-
-  const toeTarget=[t0[0]+xTravel,t0[1]+yTravel];
-  const fv=rotateVec(footVector(a0,t0),footAngle*phase.foot);
+  const toeTarget=[t0[0]+x,t0[1]+y];
+  const fv=rotateVec(footVector(a0,t0),footAng*phase.foot*dir);
   const ankleTarget=[toeTarget[0]-fv[0],toeTarget[1]-fv[1]];
+  const bend=Math.sign(crossZ(h0,a0,k0))||1;
+  const solve=twoBoneIK(pose[`${side}_hip`],k0,a0,ankleTarget,bend);
 
-  const solve=twoBoneIK(
-    hipTarget,k0,a0,ankleTarget,
-    Math.sign(crossZ(h0,a0,k0)) || 1
-  );
   pose[`${side}_knee`]=solve.knee;
   pose[`${side}_ankle`]=solve.ankle;
   pose[`${side}_toe`]=toeTarget;
 
-  // Both arms guard/counterbalance.
-  guardArmPose("left",built, side==="left" ? -guard*phase.guard : guard*phase.guard);
-  guardArmPose("right",built, side==="right" ? -guard*phase.guard : guard*phase.guard);
+  relaxArm("left",built,+8*phase.lean*dir);
+  relaxArm("right",built,-8*phase.lean*dir);
 
-  if(orig.tail_base && orig.tail_tip && pose.tail_base){
-    const tailDeg=[0,+5,-9,-3][i]*(side==="right"?1:-1);
-    pose.tail_tip=add(
-      pose.tail_base,
-      rotateVec(sub(orig.tail_tip,orig.tail_base),tailDeg)
-    );
-  }
-
-  return {
-    pose,
-    torsoM,
-    phaseName:KICK_NAMES[i]
-  };
+  return{pose,torsoM:built.torsoM,phaseName:MODE_INFO.kick.names[i]};
 }
 
-function buildSelectedPose(i){
-  const mode=currentMode();
-  if(mode==="walk") return buildWalkPose(i);
-  if(mode==="right_punch") return buildPunchPose(i,"right");
-  if(mode==="right_kick"){
-    const front=resolveAttackSide("right");
-    return buildKickPose(i,front);
-  }
-  return {error:"Unknown animation mode."};
+function buildAnimationPose(i){
+  const m=currentAnimation();
+  if(m==="walk")return buildWalkPose(i);
+  if(m==="idle")return buildIdlePose(i);
+  if(m==="punch")return buildPunchOrSlashPose(i,false);
+  if(m==="slash")return buildPunchOrSlashPose(i,true);
+  if(m==="kick")return buildKickPose(i);
+  return{error:"Unknown animation mode."};
 }
 
-function matrixForPart(name, pose, torsoM){
-  const bind = PART_BIND[name];
-  if(!bind) return torsoM || matrixIdentity();
-  const [a,b] = bind;
-  const oa = joint(a), ob = joint(b);
-  const ta = pose[a], tb = pose[b];
-
-  if((name==="left_hand" || name==="right_hand") && oa && ta){
-    const side=name.startsWith("left") ? "left" : "right";
-    const extra=pose.__handAngles?.[side] || 0;
+function partBounds(poly){let minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9;for(const p of poly){if(p[0]<minX)minX=p[0];if(p[1]<minY)minY=p[1];if(p[0]>maxX)maxX=p[0];if(p[1]>maxY)maxY=p[1];}return{minX:Math.floor(minX),minY:Math.floor(minY),maxX:Math.ceil(maxX),maxY:Math.ceil(maxY)};}
+function maskedPart(name){const data=rig.parts[name];if(!source||!data||!data.poly) return null;const c=document.createElement("canvas");c.width=source.width;c.height=source.height;const g=c.getContext("2d");g.save();g.beginPath();g.moveTo(data.poly[0][0],data.poly[0][1]);for(let i=1;i<data.poly.length;i++) g.lineTo(data.poly[i][0],data.poly[i][1]);g.closePath();g.clip();g.drawImage(source,0,0);g.restore();return c;}
+function thighCapCanvas(name){const data=rig.parts[name];if(!source||!data||!data.poly) return null;const b=partBounds(data.poly), bandH=Math.max(10,Math.min(18,b.maxY-b.minY));const c=document.createElement("canvas");c.width=source.width;c.height=source.height;const g=c.getContext("2d");g.drawImage(source,0,0);g.globalCompositeOperation="destination-in";g.beginPath();g.rect(b.minX-2,b.minY-2,(b.maxX-b.minX)+4,bandH+4);g.fill();g.globalCompositeOperation="destination-in";g.beginPath();g.moveTo(data.poly[0][0],data.poly[0][1]);for(let i=1;i<data.poly.length;i++) g.lineTo(data.poly[i][0],data.poly[i][1]);g.closePath();g.fill();return c;}
+function matrixForPart(name,pose,torsoM){
+  const bind=PART_BIND[name];if(!bind)return torsoM||matrixIdentity();
+  const [a,b]=bind,oa=joint(a),ob=joint(b),ta=pose[a],tb=pose[b];
+  if((name==="left_hand"||name==="right_hand")&&oa&&ta){
+    const side=name.startsWith("left")?"left":"right";
+    const extra=pose.__handAngles?.[side]||0;
     return rigidFromPointAndAngle(oa,ta,extra);
   }
-
-  if(oa && ob && ta && tb && (oa[0]!==ob[0] || oa[1]!==ob[1])) return matrixFromTwoPoints(oa, ob, ta, tb);
-  if(oa && ta) return rigidFromPointAndAngle(oa, ta, 0);
-  return torsoM || matrixIdentity();
+  if(oa&&ob&&ta&&tb&&(oa[0]!==ob[0]||oa[1]!==ob[1]))return matrixFromTwoPoints(oa,ob,ta,tb);
+  if(oa&&ta)return rigidFromPointAndAngle(oa,ta,0);
+  return torsoM||matrixIdentity();
 }
-
-function generate(){
-  if(!source){ status("Load a character image first."); return; }
-  inferJointsFromParts();
-
-  const mode=currentMode();
-  const info=MODE_INFO[mode];
-  const frameCount=info.frames;
-
-  let ready;
-  if(mode==="walk") ready=requiredReady();
-  else if(mode.endsWith("_punch")) ready=attackRequiredReady(mode.startsWith("right")?"right":"left","punch");
-  else ready=attackRequiredReady(mode.startsWith("right")?"right":"left","kick");
-
-  if(!ready.ok){ status(ready.msg); draw(); return; }
-
-  const masks = {};
-  for(const name of PARTS) if(partExists(name)) masks[name] = maskedPart(name);
-
-  const seamCaps = {
-    left_thigh: partExists("left_thigh") ? thighCapCanvas("left_thigh") : null,
-    right_thigh: partExists("right_thigh") ? thighCapCanvas("right_thigh") : null
-  };
-
-  frames = [];
-  for(let i=0;i<frameCount;i++){
-    const built = buildSelectedPose(i);
-    if(built.error){ status(built.error); return; }
-    const {pose, torsoM} = built;
-
-    const f = document.createElement("canvas");
-    f.width = source.width; f.height = source.height;
-    const g = f.getContext("2d");
-
-    for(const name of ORDER){
-      if(!masks[name]) continue;
-      const M = matrixForPart(name, pose, torsoM);
-
-      if((name==="left_thigh" || name==="right_thigh") && seamCaps[name]){
-        g.save();
-        applyM(g, M);
-        g.drawImage(seamCaps[name], 0, -6);
-        g.restore();
-      }
-
-      g.save();
-      applyM(g, M);
-      g.drawImage(masks[name],0,0);
-      g.restore();
+function buildFrameCanvas(i){
+  if(!source)return null;
+  const built=buildAnimationPose(i);
+  if(built.error)return null;
+  const {pose,torsoM}=built,masks={};
+  PARTS.forEach(name=>{const mm=maskedPart(name);if(mm)masks[name]=mm;});
+  const seamCaps={left_thigh:thighCapCanvas("left_thigh"),right_thigh:thighCapCanvas("right_thigh")};
+  const f=document.createElement("canvas");f.width=source.width;f.height=source.height;
+  const g=f.getContext("2d");
+  for(const name of ORDER){
+    if(!masks[name])continue;
+    const M=matrixForPart(name,pose,torsoM);
+    if((name==="left_thigh"||name==="right_thigh")&&seamCaps[name]){
+      g.save();applyM(g,M);g.drawImage(seamCaps[name],0,-6);g.restore();
     }
-    frames.push(f);
+    g.save();applyM(g,M);g.drawImage(masks[name],0,0);g.restore();
   }
-
-  renderFrames();
-  draw(frames[0]);
-
-  if(mode==="walk"){
-    const m=legMetrics();
-    status(`Generated V9 walk • leg ${m?m.avgLeg.toFixed(1):"?"} px • stride ${m?(m.avgLeg*(+$("stride").value/100)).toFixed(1):"?"} px • plant ${$("plant").value}%.`);
-  }else{
-    const extra = mode.endsWith("_punch") ? ` • ${$("punchStyle") && $("punchStyle").value==="slash" ? "Claw Slash" : "Straight Punch"}` : "";
-    status(`Generated ${info.label}${extra} • ${frameCount} frames • Ready → ${mode.endsWith("_kick")?"Chamber → Extension":"Wind-up → Strike"} → Recovery.`);
-  }
+  return{canvas:f,pose};
 }
-$("generate").onclick = generate;
 
-function framePhaseName(i){
-  const mode=currentMode();
-  if(mode==="walk") return WALK_NAMES[i];
-  if(mode.endsWith("_kick")) return KICK_NAMES[i];
-  return ATTACK_NAMES[i];
-}
+$("previewRig").onclick=()=>{
+  inferJointsFromParts();
+  if(!validateCurrentRig())return;
+  clearInterval(timer);
+  let i=0;
+  const info=modeInfo();
+  timer=setInterval(()=>{
+    const built=buildAnimationPose(i);
+    if(built.error){status(built.error);clearInterval(timer);return;}
+    draw(null,built.pose);
+    status(`Previewing ${info.label} • Frame ${i+1} • ${info.names[i]}`);
+    i=(i+1)%info.frames;
+  },info.speed);
+};
+
+$("stopPreview").onclick=()=>{clearInterval(timer);timer=null;draw();status("Preview stopped.");};
 
 function exportBaseName(){
-  return currentMode()
-    .replace("right_punch","punch_right")
-    .replace("left_punch","punch_left")
-    .replace("right_kick","kick_right")
-    .replace("left_kick","kick_left");
+  return currentAnimation().replace("idle","idle_breath");
 }
 
 function renderFrames(){
-  strip.innerHTML = "";
+  strip.innerHTML="";
+  const info=modeInfo();
   frames.forEach((f,i)=>{
-    const card=document.createElement("div"); card.className="card";
-    const c=document.createElement("canvas"); c.width=f.width; c.height=f.height; c.getContext("2d").drawImage(f,0,0);
-    const t=document.createElement("div"); t.textContent=`Frame ${i+1} • ${framePhaseName(i)}`;
-    const save=document.createElement("button"); save.className="saveFrame"; save.textContent="Save PNG";
-    save.onclick=()=>{
-      f.toBlob(b=>{
-        if(b) download(b,`${exportBaseName()}_${String(i+1).padStart(2,"0")}.png`);
-      },"image/png");
-    };
-    card.append(c,t,save); strip.appendChild(card);
+    const card=document.createElement("div");card.className="card";
+    const c=document.createElement("canvas");c.width=f.width;c.height=f.height;c.getContext("2d").drawImage(f,0,0);
+    const t=document.createElement("div");t.textContent=`Frame ${i+1} • ${info.names[i]}`;
+    const save=document.createElement("button");save.className="saveFrame";save.textContent="Save PNG";
+    save.onclick=()=>f.toBlob(b=>{if(b)download(b,`${exportBaseName()}_${String(i+1).padStart(2,"0")}.png`);},"image/png");
+    card.append(c,t,save);strip.appendChild(card);
   });
 }
 
-$("preview").onclick = ()=>{
-  if(!frames.length) generate();
-  if(!frames.length) return;
-  if(timer){ clearInterval(timer); timer=null; draw(); status("Preview stopped."); return; }
-  frameIndex=0; status(`Previewing ${MODE_INFO[currentMode()].label}. Tap Preview again to stop.`);
-  timer = setInterval(()=>{
-    draw(frames[frameIndex]);
-    frameIndex = (frameIndex + 1) % frames.length;
-  }, 120);
+$("generate").onclick=()=>{
+  inferJointsFromParts();
+  if(!validateCurrentRig())return;
+  frames=[];
+  const info=modeInfo();
+
+  if(source&&Object.keys(rig.parts).some(k=>rig.parts[k]&&rig.parts[k].poly)){
+    for(let i=0;i<info.frames;i++){
+      const built=buildFrameCanvas(i);
+      if(!built){status("Could not build frame. Check rig, traces, and joints.");return;}
+      frames.push(built.canvas);
+    }
+    renderFrames();
+    draw(frames[0]);
+    status(`Generated ${info.frames} ${info.label} sprite frames.`);
+  }else{
+    const built=buildAnimationPose(0);
+    if(!built.error)draw(null,built.pose);
+    status(`Skeleton motion is ready for ${info.label}. Bind traced sprite parts to generate artwork.`);
+  }
 };
 
-$("export").onclick = ()=>{
-  if(!frames.length) generate();
-  if(!frames.length) return;
+$("export").onclick=()=>{
+  if(!frames.length){status("Generate sprite-bound frames first.");return;}
   const s=document.createElement("canvas");
-  s.width=source.width*frames.length; s.height=source.height;
+  s.width=frames[0].width*frames.length;s.height=frames[0].height;
   const g=s.getContext("2d");
-  frames.forEach((f,i)=>g.drawImage(f,i*source.width,0));
-  const name=`${exportBaseName()}_sheet_v9.png`;
-  s.toBlob(b=>{ if(b){ download(b,name); status(`${MODE_INFO[currentMode()].label} sprite sheet exported to Downloads.`); } }, "image/png");
+  frames.forEach((f,i)=>g.drawImage(f,i*frames[0].width,0));
+  const name=`${exportBaseName()}_sheet_v10.png`;
+  s.toBlob(b=>{if(b){download(b,name);status(`${modeInfo().label} sprite sheet exported.`);}},"image/png");
 };
 
-partSel.onchange = ()=>draw();
-jointSel.onchange = ()=>draw();
+$("clear").onclick=()=>{delete rig.parts[partSel.value];status(`${partSel.value} cleared.`);draw();};
+$("resetFrames").onclick=()=>{frames=[];strip.innerHTML="";draw();status("Generated frames cleared.");};
+$("showSprite").onchange=()=>draw();$("showBones").onchange=()=>draw();partSel.onchange=()=>draw();jointSel.onchange=()=>draw();
 updateAnimationUI();
 resize();
 </script>
