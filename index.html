@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V4</title>
+<title>Fatal Instinct Sprite Walker V5</title>
 <style>
 :root{
   --bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;
@@ -49,8 +49,8 @@ select{width:100%}
 </head>
 <body>
 <header>
-  <h1>Fatal Instinct Sprite Walker <span class="badge">V4</span></h1>
-  <div class="sub">Bone Rig + IK Walk Generator • iPhone / Safari</div>
+  <h1>Fatal Instinct Sprite Walker <span class="badge">V5</span></h1>
+  <div class="sub">Bone Rig + Authored 8-Pose IK Walk • iPhone / Safari</div>
 </header>
 <main>
   <div class="topbar">
@@ -81,15 +81,15 @@ select{width:100%}
       <div class="help">
         <p><b>Trace Part:</b> outline the visual shape for the selected piece.</p>
         <p><b>Set Joint:</b> tap or drag the selected bone joint.</p>
-        <p><b>Load old rig:</b> if you load a V2/V3 rig, V4 will try to infer the pelvis, hip, knee, and ankle joints automatically from your old pivots.</p>
+        <p><b>V5 walk:</b> frames are explicitly authored as Contact → Down → Passing → High Step → opposite.</p><p><b>Load old rig:</b> V2/V3/V4 rigs remain compatible; V5 will infer missing leg joints when possible.</p>
       </div>
 
       <div class="sliders">
         <div class="slider"><label>Stride <span><b id="strideV">18</b> px</span></label><input id="stride" type="range" min="4" max="40" value="18"></div>
         <div class="slider"><label>Step height <span><b id="stepV">14</b> px</span></label><input id="step" type="range" min="0" max="30" value="14"></div>
-        <div class="slider"><label>Body bob <span><b id="bobV">4</b> px</span></label><input id="bob" type="range" min="0" max="12" value="4"></div>
-        <div class="slider"><label>Torso lean <span><b id="leanV">4</b>°</span></label><input id="lean" type="range" min="0" max="12" value="4"></div>
-        <div class="slider"><label>Arm swing <span><b id="armV">12</b>°</span></label><input id="arm" type="range" min="0" max="30" value="12"></div>
+        <div class="slider"><label>Body bob <span><b id="bobV">2</b> px</span></label><input id="bob" type="range" min="0" max="12" value="2"></div>
+        <div class="slider"><label>Torso lean <span><b id="leanV">2</b>°</span></label><input id="lean" type="range" min="0" max="12" value="2"></div>
+        <div class="slider"><label>Arm swing <span><b id="armV">10</b>°</span></label><input id="arm" type="range" min="0" max="30" value="10"></div>
         <div class="slider"><label>Tail swing <span><b id="tailV">8</b>°</span></label><input id="tail" type="range" min="0" max="25" value="8"></div>
       </div>
 
@@ -399,14 +399,14 @@ function inferJointsFromParts(){
 $("saveRig").onclick = ()=>{
   if(!source){ status("Load a character first."); return; }
   const data = {
-    version:4,
+    version:5,
     source_name:sourceName,
     source_size:[source.width, source.height],
     parts:rig.parts,
     joints:rig.joints
   };
-  download(new Blob([JSON.stringify(data,null,2)], {type:"application/json"}), "fatal_instinct_rig_v4.json");
-  status("V4 rig exported.");
+  download(new Blob([JSON.stringify(data,null,2)], {type:"application/json"}), "fatal_instinct_rig_v5.json");
+  status("V5 rig exported.");
 };
 
 $("rigInput").onchange = async e=>{
@@ -479,20 +479,40 @@ function rotateVec(v, deg){
 function add(a,b){ return [a[0]+b[0], a[1]+b[1]]; }
 function sub(a,b){ return [a[0]-b[0], a[1]-b[1]]; }
 
-const PHASES = [
-  {name:"contact",    sdx:+1.0, sdy:0.0, oy:0.0, lean:+1.0, foot:0},
-  {name:"down",       sdx:+0.5, sdy:0.0, oy:+1.0, lean:+0.4, foot:0},
-  {name:"passing",    sdx:0.0,  sdy:0.0, oy:0.2, lean:0.0,  foot:-6},
-  {name:"high",       sdx:-0.5, sdy:-1.0,oy:-0.5,lean:-0.4, foot:-12},
-  {name:"oppcontact", sdx:-1.0, sdy:0.0, oy:0.0, lean:-1.0, foot:0},
-  {name:"oppdown",    sdx:-0.5, sdy:0.0, oy:+1.0, lean:-0.4,foot:0},
-  {name:"opppassing", sdx:0.0,  sdy:0.0, oy:0.2, lean:0.0,  foot:-6},
-  {name:"opphigh",    sdx:+0.5, sdy:-1.0,oy:-0.5,lean:+0.4, foot:-12}
+const WALK_NAMES = [
+  "Contact","Down","Passing","High Step",
+  "Opposite Contact","Opposite Down","Opposite Passing","Opposite High Step"
 ];
-function phaseFor(side, i){
-  const p = PHASES[(i + (side==="right" ? 4 : 0)) % 8];
-  return p;
-}
+
+// Exact authored walk table.
+// X/Y values are offsets from each foot's neutral toe position.
+// Negative Y lifts the foot because canvas Y increases downward.
+const LEFT_WALK = [
+  {x:-9, y:  0, foot:+6},
+  {x:-6, y:  0, foot: 0},
+  {x:-2, y:  0, foot:-8},
+  {x:+4, y: -8, foot:-12},
+  {x:+9, y:  0, foot:+2},
+  {x:+6, y:  0, foot: 0},
+  {x: 0, y: -6, foot:-10},
+  {x:-5, y:-12, foot:-14}
+];
+
+const RIGHT_WALK = [
+  {x:+9, y:  0, foot:+2},
+  {x:+6, y:  0, foot: 0},
+  {x: 0, y: -6, foot:-10},
+  {x:-5, y:-12, foot:-14},
+  {x:-9, y:  0, foot:+6},
+  {x:-6, y:  0, foot: 0},
+  {x:-2, y:  0, foot:-8},
+  {x:+4, y: -8, foot:-12}
+];
+
+const PELVIS_Y = [0, 2, 1, -1, 0, 2, 1, -1];
+const TORSO_LEAN = [+2, +1, 0, -1, -2, -1, 0, +1];
+const LEFT_ARM = [-10, -6, 0, +8, +10, +6, 0, -8];
+const RIGHT_ARM = [+10, +6, 0, -8, -10, -6, 0, +8];
 
 function partExists(name){ return !!(rig.parts[name] && rig.parts[name].poly); }
 function joint(name){ return rig.joints[name] ? [...rig.joints[name]] : null; }
@@ -509,11 +529,12 @@ function buildPose(i){
   const ready = requiredReady();
   if(!ready.ok) return {error:ready.msg};
 
-  const stride = +$("stride").value;
-  const step = +$("step").value;
-  const bob = +$("bob").value;
-  const leanDeg = +$("lean").value;
-  const armSwing = +$("arm").value;
+  // Sliders scale the authored base walk rather than inventing the pose.
+  const xScale = (+$("stride").value) / 18.0;
+  const yScale = (+$("step").value) / 14.0;
+  const bobScale = (+$("bob").value) / 2.0;
+  const leanScale = (+$("lean").value) / 2.0;
+  const armScale = (+$("arm").value) / 10.0;
   const tailSwing = +$("tail").value;
 
   const orig = {};
@@ -521,65 +542,123 @@ function buildPose(i){
 
   const pose = {};
   const pelvis0 = orig.pelvis;
-  const torsoLean = (PHASES[i].lean || 0) * leanDeg;
 
-  // pelvis root
-  pose.pelvis = [pelvis0[0], pelvis0[1] + (PHASES[i].oy || 0) * bob];
+  // Exact body timing for the 8 authored frames.
+  const pelvisYOffset = PELVIS_Y[i] * bobScale;
+  const torsoLean = TORSO_LEAN[i] * leanScale;
+  pose.pelvis = [pelvis0[0], pelvis0[1] + pelvisYOffset];
 
-  // neck and torso related joints follow the torso transform
+  // Build torso transform around pelvis.
   let torsoM = matrixIdentity();
   if(orig.neck){
-    const neckTarget = add(pose.pelvis, rotateVec(sub(orig.neck, orig.pelvis), torsoLean));
+    const neckTarget = add(
+      pose.pelvis,
+      rotateVec(sub(orig.neck, orig.pelvis), torsoLean)
+    );
     pose.neck = neckTarget;
-    torsoM = matrixFromTwoPoints(orig.pelvis, orig.neck, pose.pelvis, pose.neck);
+    torsoM = matrixFromTwoPoints(
+      orig.pelvis, orig.neck,
+      pose.pelvis, pose.neck
+    );
   }else{
     pose.neck = [pose.pelvis[0], pose.pelvis[1]-80];
-    torsoM = rigidFromPointAndAngle(orig.pelvis, pose.pelvis, torsoLean*Math.PI/180);
+    torsoM = rigidFromPointAndAngle(
+      orig.pelvis,
+      pose.pelvis,
+      torsoLean*Math.PI/180
+    );
   }
 
-  // Shoulders follow torso if present
   ["left_shoulder","right_shoulder","tail_base"].forEach(n=>{
     if(orig[n]) pose[n] = transformPoint(torsoM, orig[n]);
   });
-  if(orig.tail_tip) pose.tail_tip = pose.tail_base ? add(pose.tail_base, rotateVec(sub(orig.tail_tip, orig.tail_base), tailSwing * Math.sin(i/8*Math.PI*2))) : [...orig.tail_tip];
 
-  // Leg solve using true 2-bone IK
+  if(orig.tail_tip){
+    const tailPhase = Math.sin((i/8)*Math.PI*2 + Math.PI/2);
+    pose.tail_tip = pose.tail_base
+      ? add(
+          pose.tail_base,
+          rotateVec(
+            sub(orig.tail_tip, orig.tail_base),
+            tailSwing * tailPhase
+          )
+        )
+      : [...orig.tail_tip];
+  }
+
+  // Exact foot targets -> ankle targets -> true two-bone IK.
   ["left","right"].forEach(side=>{
-    const hip0 = orig[`${side}_hip`], knee0 = orig[`${side}_knee`], ankle0 = orig[`${side}_ankle`], toe0 = orig[`${side}_toe`];
+    const hip0 = orig[`${side}_hip`];
+    const knee0 = orig[`${side}_knee`];
+    const ankle0 = orig[`${side}_ankle`];
+    const toe0 = orig[`${side}_toe`];
+
     const footVec0 = footVector(ankle0, toe0);
     const hipTarget = transformPoint(torsoM, hip0);
     pose[`${side}_hip`] = hipTarget;
 
-    const ph = phaseFor(side, i);
-    const toeTarget = [toe0[0] + ph.sdx * stride, toe0[1] + Math.max(0, ph.sdy * step)];
-    if(ph.sdy < 0) toeTarget[1] = toe0[1] + ph.sdy * step;
-    const footAngleDeg = ph.foot;
-    const footVecT = rotateVec(footVec0, footAngleDeg);
-    const ankleTarget = [toeTarget[0] - footVecT[0], toeTarget[1] - footVecT[1]];
+    const table = side==="left" ? LEFT_WALK : RIGHT_WALK;
+    const w = table[i];
+
+    const toeTarget = [
+      toe0[0] + w.x * xScale,
+      toe0[1] + w.y * yScale
+    ];
+
+    // Preserve foot length while rolling the foot around its toe/ankle axis.
+    const footVecT = rotateVec(footVec0, w.foot);
+    const ankleTarget = [
+      toeTarget[0] - footVecT[0],
+      toeTarget[1] - footVecT[1]
+    ];
+
+    // Preserve the original knee bend direction.
     const bend = Math.sign(crossZ(hip0, ankle0, knee0)) || 1;
-    const solve = twoBoneIK(hipTarget, knee0, ankle0, ankleTarget, bend);
+    const solve = twoBoneIK(
+      hipTarget,
+      knee0,
+      ankle0,
+      ankleTarget,
+      bend
+    );
+
     pose[`${side}_knee`] = solve.knee;
     pose[`${side}_ankle`] = solve.ankle;
     pose[`${side}_toe`] = toeTarget;
   });
 
-  // Simple FK arms if joints exist
+  // Authored arm timing: arms oppose the legs.
   ["left","right"].forEach(side=>{
-    const s0=orig[`${side}_shoulder`], e0=orig[`${side}_elbow`], w0=orig[`${side}_wrist`];
+    const s0 = orig[`${side}_shoulder`];
+    const e0 = orig[`${side}_elbow`];
+    const w0 = orig[`${side}_wrist`];
     if(!s0) return;
-    const swing = (side==="left" ? Math.sin(i/8*Math.PI*2) : Math.sin((i+4)/8*Math.PI*2)) * armSwing;
+
+    const armTable = side==="left" ? LEFT_ARM : RIGHT_ARM;
+    const swing = armTable[i] * armScale;
+
     pose[`${side}_shoulder`] = transformPoint(torsoM, s0);
+
     if(e0){
-      const upperTarget = add(pose[`${side}_shoulder`], rotateVec(sub(e0,s0), swing + torsoLean));
-      pose[`${side}_elbow`] = upperTarget;
+      pose[`${side}_elbow`] = add(
+        pose[`${side}_shoulder`],
+        rotateVec(sub(e0,s0), swing + torsoLean)
+      );
+
       if(w0){
-        const foreTarget = add(pose[`${side}_elbow`], rotateVec(sub(w0,e0), swing*0.6 + torsoLean));
-        pose[`${side}_wrist`] = foreTarget;
+        pose[`${side}_wrist`] = add(
+          pose[`${side}_elbow`],
+          rotateVec(sub(w0,e0), swing*0.60 + torsoLean)
+        );
       }
     }
   });
 
-  return {pose, torsoM};
+  return {
+    pose,
+    torsoM,
+    phaseName: WALK_NAMES[i]
+  };
 }
 
 function matrixForPart(name, pose, torsoM){
@@ -606,7 +685,7 @@ function generate(){
   for(let i=0;i<8;i++){
     const built = buildPose(i);
     if(built.error){ status(built.error); return; }
-    const {pose, torsoM} = built;
+    const {pose, torsoM, phaseName} = built;
 
     const f = document.createElement("canvas");
     f.width = source.width; f.height = source.height;
@@ -622,7 +701,7 @@ function generate(){
 
   renderFrames();
   draw(frames[0]);
-  status("Generated 8-frame V4 walk using bone joints + 2-bone IK.");
+  status("Generated V5 authored walk: Contact → Down → Passing → High Step → opposite.");
 }
 $("generate").onclick = generate;
 
@@ -631,7 +710,7 @@ function renderFrames(){
   frames.forEach((f,i)=>{
     const card=document.createElement("div"); card.className="card";
     const c=document.createElement("canvas"); c.width=f.width; c.height=f.height; c.getContext("2d").drawImage(f,0,0);
-    const t=document.createElement("div"); t.textContent=`Frame ${i+1}`;
+    const t=document.createElement("div"); t.textContent=`Frame ${i+1} • ${WALK_NAMES[i]}`;
     card.append(c,t); strip.appendChild(card);
   });
 }
@@ -640,7 +719,7 @@ $("preview").onclick = ()=>{
   if(!frames.length) generate();
   if(!frames.length) return;
   if(timer){ clearInterval(timer); timer=null; draw(); status("Preview stopped."); return; }
-  frameIndex=0; status("Previewing V4 walk. Tap Preview again to stop.");
+  frameIndex=0; status("Previewing V5 authored walk. Tap Preview again to stop.");
   timer = setInterval(()=>{
     draw(frames[frameIndex]);
     frameIndex = (frameIndex + 1) % frames.length;
@@ -654,7 +733,7 @@ $("export").onclick = ()=>{
   s.width=source.width*frames.length; s.height=source.height;
   const g=s.getContext("2d");
   frames.forEach((f,i)=>g.drawImage(f,i*source.width,0));
-  s.toBlob(b=>{ if(b){ download(b, "walk_sheet_v4.png"); status("V4 sprite sheet exported to Downloads."); } }, "image/png");
+  s.toBlob(b=>{ if(b){ download(b, "walk_sheet_v5.png"); status("V5 sprite sheet exported to Downloads."); } }, "image/png");
 };
 
 partSel.onchange = ()=>draw();
