@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V5</title>
+<title>Fatal Instinct Sprite Walker V6</title>
 <style>
 :root{
   --bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;
@@ -49,8 +49,8 @@ select{width:100%}
 </head>
 <body>
 <header>
-  <h1>Fatal Instinct Sprite Walker <span class="badge">V5</span></h1>
-  <div class="sub">Bone Rig + Authored 8-Pose IK Walk • iPhone / Safari</div>
+  <h1>Fatal Instinct Sprite Walker <span class="badge">V6</span></h1>
+  <div class="sub">Bone Rig + Seam Fix + Foot Plant Polish • iPhone / Safari</div>
 </header>
 <main>
   <div class="topbar">
@@ -81,15 +81,15 @@ select{width:100%}
       <div class="help">
         <p><b>Trace Part:</b> outline the visual shape for the selected piece.</p>
         <p><b>Set Joint:</b> tap or drag the selected bone joint.</p>
-        <p><b>V5 walk:</b> frames are explicitly authored as Contact → Down → Passing → High Step → opposite.</p><p><b>Load old rig:</b> V2/V3/V4 rigs remain compatible; V5 will infer missing leg joints when possible.</p>
+        <p><b>V6 polish:</b> adds thigh-overlap seam hiding, flatter stance-foot contact, cleaner push-off, and stronger authored walk poses.</p><p><b>Load old rig:</b> V2/V3/V4/V5 rigs remain compatible; V6 will infer missing leg joints when possible.</p>
       </div>
 
       <div class="sliders">
-        <div class="slider"><label>Stride <span><b id="strideV">18</b> px</span></label><input id="stride" type="range" min="4" max="40" value="18"></div>
-        <div class="slider"><label>Step height <span><b id="stepV">14</b> px</span></label><input id="step" type="range" min="0" max="30" value="14"></div>
+        <div class="slider"><label>Stride <span><b id="strideV">20</b> px</span></label><input id="stride" type="range" min="4" max="40" value="20"></div>
+        <div class="slider"><label>Step height <span><b id="stepV">16</b> px</span></label><input id="step" type="range" min="0" max="30" value="16"></div>
         <div class="slider"><label>Body bob <span><b id="bobV">2</b> px</span></label><input id="bob" type="range" min="0" max="12" value="2"></div>
         <div class="slider"><label>Torso lean <span><b id="leanV">2</b>°</span></label><input id="lean" type="range" min="0" max="12" value="2"></div>
-        <div class="slider"><label>Arm swing <span><b id="armV">10</b>°</span></label><input id="arm" type="range" min="0" max="30" value="10"></div>
+        <div class="slider"><label>Arm swing <span><b id="armV">12</b>°</span></label><input id="arm" type="range" min="0" max="30" value="12"></div>
         <div class="slider"><label>Tail swing <span><b id="tailV">8</b>°</span></label><input id="tail" type="range" min="0" max="25" value="8"></div>
       </div>
 
@@ -399,14 +399,14 @@ function inferJointsFromParts(){
 $("saveRig").onclick = ()=>{
   if(!source){ status("Load a character first."); return; }
   const data = {
-    version:5,
+    version:6,
     source_name:sourceName,
     source_size:[source.width, source.height],
     parts:rig.parts,
     joints:rig.joints
   };
-  download(new Blob([JSON.stringify(data,null,2)], {type:"application/json"}), "fatal_instinct_rig_v5.json");
-  status("V5 rig exported.");
+  download(new Blob([JSON.stringify(data,null,2)], {type:"application/json"}), "fatal_instinct_rig_v6.json");
+  status("V6 rig exported.");
 };
 
 $("rigInput").onchange = async e=>{
@@ -434,6 +434,47 @@ function maskedPart(name){
   return c;
 }
 
+
+function partBounds(poly){
+  let minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9;
+  for(const p of poly){
+    if(p[0]<minX) minX=p[0];
+    if(p[1]<minY) minY=p[1];
+    if(p[0]>maxX) maxX=p[0];
+    if(p[1]>maxY) maxY=p[1];
+  }
+  return {
+    minX:Math.floor(minX), minY:Math.floor(minY),
+    maxX:Math.ceil(maxX),  maxY:Math.ceil(maxY)
+  };
+}
+
+function thighCapCanvas(name){
+  const data = rig.parts[name];
+  if(!data?.poly) return null;
+  const bounds = partBounds(data.poly);
+  const bandH = Math.max(10, Math.min(18, bounds.maxY - bounds.minY));
+  const c = document.createElement("canvas");
+  c.width = source.width; c.height = source.height;
+  const g = c.getContext("2d");
+  g.drawImage(source, 0, 0);
+
+  // Keep only a top strip of the thigh so it can tuck underneath the pelvis.
+  g.globalCompositeOperation = "destination-in";
+  g.beginPath();
+  g.rect(bounds.minX-2, bounds.minY-2, (bounds.maxX-bounds.minX)+4, bandH+4);
+  g.fill();
+
+  // Re-clip with the actual polygon, so only real thigh pixels remain.
+  g.globalCompositeOperation = "destination-in";
+  g.beginPath();
+  g.moveTo(data.poly[0][0], data.poly[0][1]);
+  for(let i=1;i<data.poly.length;i++) g.lineTo(data.poly[i][0], data.poly[i][1]);
+  g.closePath();
+  g.fill();
+
+  return c;
+}
 function angleOf(a,b){ return Math.atan2(b[1]-a[1], b[0]-a[0]); }
 function clamp(v,lo,hi){ return Math.max(lo, Math.min(hi, v)); }
 function length(a,b){ return Math.hypot(b[0]-a[0], b[1]-a[1]); }
@@ -484,35 +525,37 @@ const WALK_NAMES = [
   "Opposite Contact","Opposite Down","Opposite Passing","Opposite High Step"
 ];
 
-// Exact authored walk table.
+// V6 refined walk table.
 // X/Y values are offsets from each foot's neutral toe position.
 // Negative Y lifts the foot because canvas Y increases downward.
+// "stance" tells the solver how strongly to flatten or plant the stance foot.
 const LEFT_WALK = [
-  {x:-9, y:  0, foot:+6},
-  {x:-6, y:  0, foot: 0},
-  {x:-2, y:  0, foot:-8},
-  {x:+4, y: -8, foot:-12},
-  {x:+9, y:  0, foot:+2},
-  {x:+6, y:  0, foot: 0},
-  {x: 0, y: -6, foot:-10},
-  {x:-5, y:-12, foot:-14}
+  {x:-10, y:  0, foot:+4,  stance:"contact"},
+  {x: -7, y:  0, foot: 0,  stance:"flat"},
+  {x: -1, y: -2, foot:-4,  stance:"toe"},
+  {x: +5, y:-10, foot:-12, stance:"air"},
+  {x:+10, y:  0, foot:+2,  stance:"contact"},
+  {x: +7, y:  0, foot: 0,  stance:"flat"},
+  {x: +1, y: -4, foot:-8,  stance:"air"},
+  {x: -4, y:-12, foot:-12, stance:"air"}
 ];
 
 const RIGHT_WALK = [
-  {x:+9, y:  0, foot:+2},
-  {x:+6, y:  0, foot: 0},
-  {x: 0, y: -6, foot:-10},
-  {x:-5, y:-12, foot:-14},
-  {x:-9, y:  0, foot:+6},
-  {x:-6, y:  0, foot: 0},
-  {x:-2, y:  0, foot:-8},
-  {x:+4, y: -8, foot:-12}
+  {x:+10, y:  0, foot:+2,  stance:"contact"},
+  {x: +7, y:  0, foot: 0,  stance:"flat"},
+  {x: +1, y: -4, foot:-8,  stance:"air"},
+  {x: -4, y:-12, foot:-12, stance:"air"},
+  {x:-10, y:  0, foot:+4,  stance:"contact"},
+  {x: -7, y:  0, foot: 0,  stance:"flat"},
+  {x: -1, y: -2, foot:-4,  stance:"toe"},
+  {x: +5, y:-10, foot:-12, stance:"air"}
 ];
 
+const PELVIS_X = [0, +1, +1, 0, 0, -1, -1, 0];
 const PELVIS_Y = [0, 2, 1, -1, 0, 2, 1, -1];
 const TORSO_LEAN = [+2, +1, 0, -1, -2, -1, 0, +1];
-const LEFT_ARM = [-10, -6, 0, +8, +10, +6, 0, -8];
-const RIGHT_ARM = [+10, +6, 0, -8, -10, -6, 0, +8];
+const LEFT_ARM = [-12, -8, -2, +8, +12, +8, +2, -8];
+const RIGHT_ARM = [+12, +8, +2, -8, -12, -8, -2, +8];
 
 function partExists(name){ return !!(rig.parts[name] && rig.parts[name].poly); }
 function joint(name){ return rig.joints[name] ? [...rig.joints[name]] : null; }
@@ -530,11 +573,11 @@ function buildPose(i){
   if(!ready.ok) return {error:ready.msg};
 
   // Sliders scale the authored base walk rather than inventing the pose.
-  const xScale = (+$("stride").value) / 18.0;
-  const yScale = (+$("step").value) / 14.0;
+  const xScale = (+$("stride").value) / 20.0;
+  const yScale = (+$("step").value) / 16.0;
   const bobScale = (+$("bob").value) / 2.0;
   const leanScale = (+$("lean").value) / 2.0;
-  const armScale = (+$("arm").value) / 10.0;
+  const armScale = (+$("arm").value) / 12.0;
   const tailSwing = +$("tail").value;
 
   const orig = {};
@@ -543,10 +586,11 @@ function buildPose(i){
   const pose = {};
   const pelvis0 = orig.pelvis;
 
-  // Exact body timing for the 8 authored frames.
+  const pelvisXOffset = PELVIS_X[i] * 1.0;
   const pelvisYOffset = PELVIS_Y[i] * bobScale;
   const torsoLean = TORSO_LEAN[i] * leanScale;
-  pose.pelvis = [pelvis0[0], pelvis0[1] + pelvisYOffset];
+
+  pose.pelvis = [pelvis0[0] + pelvisXOffset, pelvis0[1] + pelvisYOffset];
 
   // Build torso transform around pelvis.
   let torsoM = matrixIdentity();
@@ -600,19 +644,36 @@ function buildPose(i){
     const table = side==="left" ? LEFT_WALK : RIGHT_WALK;
     const w = table[i];
 
-    const toeTarget = [
+    let toeTarget = [
       toe0[0] + w.x * xScale,
       toe0[1] + w.y * yScale
     ];
 
+    // Stance refinement:
+    // - contact / flat keep the foot close to the ground plane
+    // - toe keeps the toe planted while the heel rises
+    if(w.stance === "contact" || w.stance === "flat"){
+      toeTarget[1] = toe0[1];
+    }
+    if(w.stance === "toe"){
+      toeTarget[1] = toe0[1];
+    }
+
     // Preserve foot length while rolling the foot around its toe/ankle axis.
     const footVecT = rotateVec(footVec0, w.foot);
-    const ankleTarget = [
+    let ankleTarget = [
       toeTarget[0] - footVecT[0],
       toeTarget[1] - footVecT[1]
     ];
 
-    // Preserve the original knee bend direction.
+    // Flatten stance foot more aggressively.
+    if(w.stance === "flat"){
+      ankleTarget[1] = ankle0[1];
+    }
+    if(w.stance === "contact"){
+      ankleTarget[1] = Math.min(ankleTarget[1], ankle0[1] + 1.0);
+    }
+
     const bend = Math.sign(crossZ(hip0, ankle0, knee0)) || 1;
     const solve = twoBoneIK(
       hipTarget,
@@ -681,6 +742,12 @@ function generate(){
   const masks = {};
   for(const name of PARTS) if(partExists(name)) masks[name] = maskedPart(name);
 
+  // Extra seam-hiding overlap strips for thighs.
+  const seamCaps = {
+    left_thigh: partExists("left_thigh") ? thighCapCanvas("left_thigh") : null,
+    right_thigh: partExists("right_thigh") ? thighCapCanvas("right_thigh") : null
+  };
+
   frames = [];
   for(let i=0;i<8;i++){
     const built = buildPose(i);
@@ -694,14 +761,26 @@ function generate(){
     for(const name of ORDER){
       if(!masks[name]) continue;
       const M = matrixForPart(name, pose, torsoM);
-      g.save(); applyM(g, M); g.drawImage(masks[name],0,0); g.restore();
+
+      // Before the full thigh, draw a tucked-under top strip slightly upward.
+      if((name==="left_thigh" || name==="right_thigh") && seamCaps[name]){
+        g.save();
+        applyM(g, M);
+        g.drawImage(seamCaps[name], 0, -6);
+        g.restore();
+      }
+
+      g.save();
+      applyM(g, M);
+      g.drawImage(masks[name],0,0);
+      g.restore();
     }
     frames.push(f);
   }
 
   renderFrames();
   draw(frames[0]);
-  status("Generated V5 authored walk: Contact → Down → Passing → High Step → opposite.");
+  status("Generated V6 polished walk with seam overlap and flatter stance-foot contact.");
 }
 $("generate").onclick = generate;
 
@@ -719,7 +798,7 @@ $("preview").onclick = ()=>{
   if(!frames.length) generate();
   if(!frames.length) return;
   if(timer){ clearInterval(timer); timer=null; draw(); status("Preview stopped."); return; }
-  frameIndex=0; status("Previewing V5 authored walk. Tap Preview again to stop.");
+  frameIndex=0; status("Previewing V6 polished walk. Tap Preview again to stop.");
   timer = setInterval(()=>{
     draw(frames[frameIndex]);
     frameIndex = (frameIndex + 1) % frames.length;
@@ -733,7 +812,7 @@ $("export").onclick = ()=>{
   s.width=source.width*frames.length; s.height=source.height;
   const g=s.getContext("2d");
   frames.forEach((f,i)=>g.drawImage(f,i*source.width,0));
-  s.toBlob(b=>{ if(b){ download(b, "walk_sheet_v5.png"); status("V5 sprite sheet exported to Downloads."); } }, "image/png");
+  s.toBlob(b=>{ if(b){ download(b, "walk_sheet_v6.png"); status("V6 sprite sheet exported to Downloads."); } }, "image/png");
 };
 
 partSel.onchange = ()=>draw();
