@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Animator V9</title>
+<title>Fatal Instinct Marius Attack Lab V9.3</title>
 <style>
 :root{
   --bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;
@@ -49,8 +49,8 @@ select{width:100%}
 </head>
 <body>
 <header>
-  <h1>Fatal Instinct Sprite Animator <span class="badge">V9</span></h1>
-  <div class="sub">Walk + Attack Generator • Bone Rig • iPhone / Safari</div>
+  <h1>Fatal Instinct — Marius Attack Lab <span class="badge">V9.3</span></h1>
+  <div class="sub">Facing-Aware Front/Rear Arm Strikes • Existing Rig Compatible • iPhone / Safari</div>
 </header>
 <main>
   <div class="topbar">
@@ -69,10 +69,14 @@ select{width:100%}
       <label class="title">Animation</label>
       <select id="animationMode">
         <option value="walk">Walk — 8 Frames</option>
-        <option value="right_punch">Right Claw / Punch — 4 Frames</option>
-        <option value="left_punch">Left Claw / Punch — 4 Frames</option>
-        <option value="right_kick">Right Kick — 4 Frames</option>
-        <option value="left_kick">Left Kick — 4 Frames</option>
+        <option value="right_punch" selected>Punch / Claw Strike — 4 Frames</option>
+        <option value="right_kick">Front Kick — 4 Frames</option>
+      </select>
+
+      <label class="title" style="margin-top:12px">Character facing</label>
+      <select id="facingDirection">
+        <option value="right" selected>Faces Right →</option>
+        <option value="left">← Faces Left</option>
       </select>
 
       <label class="title" style="margin-top:12px">Body part</label>
@@ -90,7 +94,7 @@ select{width:100%}
       <div class="help">
         <p><b>Trace Part:</b> outline the visual shape for the selected piece.</p>
         <p><b>Set Joint:</b> tap or drag the selected bone joint.</p>
-        <p id="modeHelp"><b>Walk:</b> the V8 grounded 8-frame walk is preserved exactly.</p>
+        <p id="modeHelp"><b>Marius Strike:</b> Front Arm is detected from the shoulder positions and current facing. The fist/claws always travel toward the opponent.</p>
         <p><b>Rig compatibility:</b> V2/V3/V4/V5/V6/V7/V8 rigs remain compatible. V9 adds attacks without forcing a retrace.</p>
       </div>
 
@@ -105,15 +109,38 @@ select{width:100%}
         <div class="slider"><label>Foot plant <span><b id="plantV">85</b>%</span></label><input id="plant" type="range" min="0" max="100" value="85"></div>
       </div>
 
+
+      <div class="help" style="margin-top:10px;border:1px solid #4a5f8a">
+        <p><b>Marius starting preset:</b> Wind-up 48° • Reach 100% • Strike -2° • Twist 16° • Lean 6° • Hip drive 12% • Claw -18° • Guard 12°.</p>
+        <p><b>Goal:</b> Front Arm + Faces Right should produce a genuine rightward hit: retract behind the shoulder → drive through the target → recover.</p>
+      </div>
+
       <div id="punchControls" class="sliders" style="display:none">
-        <div class="slider"><label>Wind-up <span><b id="windupV">38</b>°</span></label><input id="windup" type="range" min="0" max="75" value="38"></div>
-        <div class="slider"><label>Strike reach <span><b id="reachV">96</b>%</span></label><input id="reach" type="range" min="45" max="100" value="96"></div>
-        <div class="slider"><label>Strike angle <span><b id="strikeAngleV">-6</b>°</span></label><input id="strikeAngle" type="range" min="-35" max="35" value="-6"></div>
-        <div class="slider"><label>Torso twist <span><b id="twistV">10</b>°</span></label><input id="twist" type="range" min="0" max="24" value="10"></div>
-        <div class="slider"><label>Body lean <span><b id="attackLeanV">4</b>°</span></label><input id="attackLean" type="range" min="0" max="16" value="4"></div>
-        <div class="slider"><label>Hip drive <span><b id="hipDriveV">8</b>% leg</span></label><input id="hipDrive" type="range" min="0" max="18" value="8"></div>
-        <div class="slider"><label>Wrist / claw angle <span><b id="clawV">-8</b>°</span></label><input id="claw" type="range" min="-45" max="45" value="-8"></div>
-        <div class="slider"><label>Guard arm motion <span><b id="guardV">8</b>°</span></label><input id="guard" type="range" min="0" max="24" value="8"></div>
+        <div class="slider">
+          <label>Attack arm <span><b id="attackArmLabel">Front Arm</b></span></label>
+          <select id="attackArm">
+            <option value="front" selected>Front Arm — Recommended</option>
+            <option value="rear">Rear Arm</option>
+            <option value="rig_right">Rig Right Arm</option>
+            <option value="rig_left">Rig Left Arm</option>
+          </select>
+        </div>
+
+        <div class="slider">
+          <label>Strike type <span><b id="punchStyleLabel">Straight Punch</b></span></label>
+          <select id="punchStyle">
+            <option value="punch" selected>Straight Punch</option>
+            <option value="slash">Claw Slash</option>
+          </select>
+        </div>
+        <div class="slider"><label>Wind-up <span><b id="windupV">48</b>°</span></label><input id="windup" type="range" min="0" max="75" value="48"></div>
+        <div class="slider"><label>Strike reach <span><b id="reachV">100</b>%</span></label><input id="reach" type="range" min="45" max="100" value="100"></div>
+        <div class="slider"><label>Strike angle <span><b id="strikeAngleV">-2</b>°</span></label><input id="strikeAngle" type="range" min="-35" max="35" value="-2"></div>
+        <div class="slider"><label>Torso twist <span><b id="twistV">16</b>°</span></label><input id="twist" type="range" min="0" max="24" value="16"></div>
+        <div class="slider"><label>Body lean <span><b id="attackLeanV">6</b>°</span></label><input id="attackLean" type="range" min="0" max="16" value="6"></div>
+        <div class="slider"><label>Hip drive <span><b id="hipDriveV">12</b>% leg</span></label><input id="hipDrive" type="range" min="0" max="18" value="12"></div>
+        <div class="slider"><label>Wrist / claw angle <span><b id="clawV">-18</b>°</span></label><input id="claw" type="range" min="-45" max="45" value="-18"></div>
+        <div class="slider"><label>Guard arm motion <span><b id="guardV">12</b>°</span></label><input id="guard" type="range" min="0" max="24" value="12"></div>
       </div>
 
       <div id="kickControls" class="sliders" style="display:none">
@@ -189,7 +216,7 @@ const ORDER = [
 
 const $ = id => document.getElementById(id);
 const canvas = $("mainCanvas"), ctx = canvas.getContext("2d");
-const partSel = $("part"), jointSel = $("joint"), animationMode = $("animationMode"), hint = $("hint"), statusEl = $("status"), strip = $("strip");
+const partSel = $("part"), jointSel = $("joint"), animationMode = $("animationMode"), facingSel = $("facingDirection"), attackArmSel = $("attackArm"), punchStyleSel = $("punchStyle"), hint = $("hint"), statusEl = $("status"), strip = $("strip");
 
 PARTS.forEach(p=>{ const o=document.createElement("option"); o.value=p; o.textContent=p; partSel.appendChild(o); });
 JOINTS.forEach(j=>{ const o=document.createElement("option"); o.value=j; o.textContent=j; jointSel.appendChild(o); });
@@ -234,9 +261,9 @@ const MODE_INFO = {
     button:"Generate 8-Frame Walk"
   },
   right_punch:{
-    label:"Right Claw / Punch",
+    label:"Punch / Claw Strike",
     frames:4,
-    help:"<b>Right Claw / Punch:</b> Ready → Wind-up → Strike → Recovery. The right arm attacks while the opposite arm counter-balances.",
+    help:"<b>Marius Right Strike:</b> choose Straight Punch or Claw Slash. Both use Ready → Wind-up → Strike → Recovery with a more legitimate attack path.",
     button:"Generate Right Attack"
   },
   left_punch:{
@@ -246,7 +273,7 @@ const MODE_INFO = {
     button:"Generate Left Attack"
   },
   right_kick:{
-    label:"Right Kick",
+    label:"Front Kick",
     frames:4,
     help:"<b>Right Kick:</b> Ready → Chamber → Extension → Recovery. The planted leg stays grounded while the right leg attacks.",
     button:"Generate Right Kick"
@@ -276,6 +303,41 @@ function updateAnimationUI(){
   status(`${info.label} mode ready.`);
 }
 animationMode.onchange = updateAnimationUI;
+if(punchStyleSel){
+  punchStyleSel.onchange = ()=>{
+    $("punchStyleLabel").textContent = punchStyleSel.value==="slash" ? "Claw Slash" : "Straight Punch";
+    frames = [];
+    strip.innerHTML = "";
+    if(timer){ clearInterval(timer); timer=null; }
+    draw();
+    status((punchStyleSel.value==="slash" ? "Claw Slash" : "Straight Punch") + " style ready.");
+  };
+}
+if(facingSel){
+  facingSel.onchange = ()=>{
+    frames=[];
+    strip.innerHTML="";
+    if(timer){ clearInterval(timer); timer=null; }
+    draw();
+    status(facingSel.value==="right" ? "Facing Right →" : "← Facing Left");
+  };
+}
+if(attackArmSel){
+  attackArmSel.onchange = ()=>{
+    const labels={
+      front:"Front Arm",
+      rear:"Rear Arm",
+      rig_right:"Rig Right Arm",
+      rig_left:"Rig Left Arm"
+    };
+    $("attackArmLabel").textContent=labels[attackArmSel.value];
+    frames=[];
+    strip.innerHTML="";
+    if(timer){ clearInterval(timer); timer=null; }
+    draw();
+    status(labels[attackArmSel.value] + " selected.");
+  };
+}
 
 function setMode(m){
   mode = m;
@@ -500,13 +562,13 @@ function inferJointsFromParts(){
 $("saveRig").onclick = ()=>{
   if(!source){ status("Load a character first."); return; }
   const data = {
-    version:9,
+    version:9.3,
     source_name:sourceName,
     source_size:[source.width, source.height],
     parts:rig.parts,
     joints:rig.joints
   };
-  download(new Blob([JSON.stringify(data,null,2)], {type:"application/json"}), "fatal_instinct_rig_v9.json");
+  download(new Blob([JSON.stringify(data,null,2)], {type:"application/json"}), "fatal_instinct_rig_v9_3.json");
   status("V9 rig exported.");
 };
 
@@ -1018,7 +1080,66 @@ function guardArmPose(side, built, motionDeg){
   }
 }
 
-function buildPunchPose(i, side){
+function armPoseToTarget(side, built, wristTarget, handAngleDeg=0){
+  const {orig,pose,torsoM} = built;
+  const s0=orig[`${side}_shoulder`], e0=orig[`${side}_elbow`], w0=orig[`${side}_wrist`];
+  if(!s0 || !e0 || !w0) return;
+
+  const shoulder = pose[`${side}_shoulder`] || transformPoint(torsoM,s0);
+  pose[`${side}_shoulder`] = shoulder;
+
+  const bendDir = Math.sign(crossZ(s0,w0,e0)) || 1;
+  const solve = twoBoneIK(shoulder,e0,w0,wristTarget,bendDir);
+
+  pose[`${side}_elbow`] = solve.knee;
+  pose[`${side}_wrist`] = solve.ankle;
+  pose.__handAngles = pose.__handAngles || {};
+  pose.__handAngles[side] = handAngleDeg * Math.PI / 180;
+}
+
+function facingSign(){
+  return ($("facingDirection") && $("facingDirection").value==="left") ? -1 : +1;
+}
+
+function resolveAttackSide(requestedSide="right"){
+  const choice = $("attackArm") ? $("attackArm").value : "front";
+
+  if(choice==="rig_right") return "right";
+  if(choice==="rig_left") return "left";
+
+  const ls=joint("left_shoulder");
+  const rs=joint("right_shoulder");
+
+  // Fallback if shoulder rig is incomplete.
+  if(!ls || !rs) return requestedSide;
+
+  const dir=facingSign();
+
+  // Facing right: shoulder with greater X is visually front.
+  // Facing left: shoulder with smaller X is visually front.
+  const front = dir>0
+    ? (ls[0] > rs[0] ? "left" : "right")
+    : (ls[0] < rs[0] ? "left" : "right");
+
+  if(choice==="rear") return front==="left" ? "right" : "left";
+  return front;
+}
+
+function forwardPoint(origin, forward, vertical=0){
+  return [
+    origin[0] + facingSign()*forward,
+    origin[1] + vertical
+  ];
+}
+
+function signedTorsoRotation(deg){
+  // Mirror torso motion when the character faces left.
+  return deg * facingSign();
+}
+
+function buildPunchPose(i, requestedSide){
+  const side=resolveAttackSide(requestedSide);
+
   const ready=attackRequiredReady(side,"punch");
   if(!ready.ok) return {error:ready.msg};
 
@@ -1027,66 +1148,132 @@ function buildPunchPose(i, side){
 
   const windup=+$("windup").value;
   const reach=(+$("reach").value)/100;
-  const strikeAngle=(+$("strikeAngle").value)*Math.PI/180;
+  const strikeAngleDeg=+$("strikeAngle").value;
   const twist=+$("twist").value;
   const lean=+$("attackLean").value;
   const hipDrive=(+$("hipDrive").value/100)*scaleLeg;
   const claw=+$("claw").value;
   const guard=+$("guard").value;
+  const strikeStyle = $("punchStyle") ? $("punchStyle").value : "punch";
+  const dir=facingSign();
 
-  // Right-facing art: attack travels toward +X.
-  const phase=[
-    {root:0.00,torso:0.00,upper:"base",bend:"base",hand:0,guard:0},
-    {root:-0.15,torso:-0.70,upper:"wind",bend:"wind",hand:-0.35,guard:+0.50},
-    {root:+1.00,torso:+1.00,upper:"strike",bend:"strike",hand:+1.00,guard:-1.00},
-    {root:+0.28,torso:+0.25,upper:"recover",bend:"recover",hand:+0.30,guard:-0.35}
+  const punchPhase=[
+    {root:0.00,torso: 0.00,guard: 0.00,tail: 0,target:"ready",hand: 0.10},
+    {root:-0.24,torso:-0.82,guard:+0.55,tail:-4,target:"windup",hand:-0.25},
+    {root:+0.88,torso:+1.00,guard:-1.00,tail:+8,target:"strike",hand:+1.00},
+    {root:+0.15,torso:+0.15,guard:-0.30,tail:+2,target:"recover",hand:+0.20}
   ][i];
 
-  const sideSign = side==="right" ? 1 : 0.92;
-  const rootDX=phase.root*hipDrive*sideSign;
-  const torsoRot=phase.torso*twist + phase.torso*lean*0.35;
+  const slashPhase=[
+    {root:0.00,torso: 0.00,guard: 0.00,tail: 0,target:"ready",hand: 0.10},
+    {root:-0.22,torso:-0.80,guard:+0.55,tail:-5,target:"slash_windup",hand:-0.55},
+    {root:+0.72,torso:+0.92,guard:-0.90,tail:+10,target:"slash_strike",hand:+1.00},
+    {root:+0.10,torso:+0.12,guard:-0.22,tail:+2,target:"slash_recover",hand:+0.18}
+  ][i];
+
+  const phase=strikeStyle==="slash" ? slashPhase : punchPhase;
+
+  // Root actually moves backward during load and toward opponent during hit.
+  const rootDX=dir*phase.root*hipDrive;
+  const torsoRot=signedTorsoRotation(phase.torso*(twist + lean*0.40));
+
   const built=basePoseFromTorso(torsoRot,rootDX,0);
-  const {orig}=built;
+  const {orig,pose,torsoM}=built;
 
-  const s0=orig[`${side}_shoulder`], e0=orig[`${side}_elbow`], w0=orig[`${side}_wrist`];
-  const baseUpper=angleOf(s0,e0);
-  const baseFore=angleOf(e0,w0);
-  const baseRel=baseFore-baseUpper;
+  const s0=orig[`${side}_shoulder`];
+  const e0=orig[`${side}_elbow`];
+  const w0=orig[`${side}_wrist`];
 
-  let upperAngle=baseUpper;
-  let elbowRel=baseRel;
+  const shoulder=pose[`${side}_shoulder`] || transformPoint(torsoM,s0);
+  pose[`${side}_shoulder`]=shoulder;
 
-  if(phase.upper==="wind"){
-    upperAngle=baseUpper + windup*Math.PI/180;
-    // Cock the fist back toward the body.
-    elbowRel=baseRel - Math.max(0.45,windup*Math.PI/180*0.85);
-  }else if(phase.upper==="strike"){
-    upperAngle=strikeAngle;
-    // reach=100 => straight arm, lower reach leaves some elbow bend.
-    elbowRel=(1-reach)*(Math.PI/2.2);
-  }else if(phase.upper==="recover"){
-    upperAngle=baseUpper*0.58 + strikeAngle*0.42;
-    elbowRel=baseRel*0.58 + ((1-reach)*(Math.PI/2.2))*0.42;
+  const upperLen=length(s0,e0);
+  const lowerLen=length(e0,w0);
+  const armLen=upperLen+lowerLen;
+
+  let wristTarget=transformPoint(torsoM,w0);
+
+  if(phase.target==="ready"){
+    // Keep the hand near its natural guard side.
+    wristTarget=[
+      shoulder[0] + dir*armLen*0.18,
+      shoulder[1] + armLen*0.24
+    ];
+
+  }else if(phase.target==="windup"){
+    // Legitimate punch load: fist retracts BEHIND the shoulder.
+    const back=armLen*(0.18 + windup/210);
+    wristTarget=[
+      shoulder[0] - dir*back,
+      shoulder[1] + armLen*0.06
+    ];
+
+  }else if(phase.target==="strike"){
+    // Straight punch: shoulder -> fist line points directly at opponent.
+    const extension=armLen*(0.66 + 0.33*reach);
+    const a=strikeAngleDeg*Math.PI/180;
+    wristTarget=[
+      shoulder[0] + dir*Math.cos(a)*extension,
+      shoulder[1] + Math.sin(a)*extension
+    ];
+
+  }else if(phase.target==="recover"){
+    // Pull the fist back to guard rather than teleporting to idle.
+    wristTarget=[
+      shoulder[0] + dir*armLen*0.26,
+      shoulder[1] + armLen*0.18
+    ];
+
+  }else if(phase.target==="slash_windup"){
+    // Claw starts high and behind the shoulder.
+    wristTarget=[
+      shoulder[0] - dir*armLen*(0.10 + windup/280),
+      shoulder[1] - armLen*0.30
+    ];
+
+  }else if(phase.target==="slash_strike"){
+    // Diagonal high-to-low sweep THROUGH the opponent side.
+    wristTarget=[
+      shoulder[0] + dir*armLen*(0.76 + 0.20*reach),
+      shoulder[1] + armLen*0.30
+    ];
+
+  }else if(phase.target==="slash_recover"){
+    wristTarget=[
+      shoulder[0] + dir*armLen*0.22,
+      shoulder[1] + armLen*0.20
+    ];
   }
 
-  armPoseFromAngles(side,built,upperAngle,elbowRel,claw*phase.hand);
+  // Mirror hand/claw articulation with facing.
+  armPoseToTarget(side,built,wristTarget,claw*phase.hand*dir);
 
   const guardSide=side==="right" ? "left" : "right";
-  guardArmPose(guardSide,built,guard*phase.guard);
+  guardArmPose(
+    guardSide,
+    built,
+    guard*phase.guard*dir*(strikeStyle==="slash" ? 0.9 : 1.0)
+  );
 
-  // Small tail recoil if the tail is rigged.
-  if(orig.tail_base && orig.tail_tip && built.pose.tail_base){
-    const tailDeg=[0,-4,+7,+2][i] * (side==="right" ? 1 : -1);
-    built.pose.tail_tip=add(
-      built.pose.tail_base,
-      rotateVec(sub(orig.tail_tip,orig.tail_base),tailDeg)
+  if(orig.tail_base && orig.tail_tip && pose.tail_base){
+    pose.tail_tip=add(
+      pose.tail_base,
+      rotateVec(
+        sub(orig.tail_tip,orig.tail_base),
+        phase.tail*dir
+      )
     );
   }
 
+  const armName =
+    side==="left" ? "Rig Left" : "Rig Right";
+
   return {
-    pose:built.pose,
-    torsoM:built.torsoM,
-    phaseName:ATTACK_NAMES[i]
+    pose,
+    torsoM,
+    phaseName:ATTACK_NAMES[i],
+    attackSide:side,
+    attackSideName:armName
   };
 }
 
@@ -1114,7 +1301,7 @@ function buildKickPose(i, side){
     {x:0.28,y:0.38,lean:-0.30,root:+0.10,foot:+0.25,guard:-0.30}
   ][i];
 
-  const built=basePoseFromTorso(phase.lean*counterLean,phase.root*hipDrive,0);
+  const built=basePoseFromTorso(signedTorsoRotation(phase.lean*counterLean),facingSign()*phase.root*hipDrive,0);
   const {orig,pose,torsoM}=built;
 
   // Keep support foot planted in world space.
@@ -1134,7 +1321,7 @@ function buildKickPose(i, side){
   const hipTarget=transformPoint(torsoM,h0);
   pose[`${side}_hip`]=hipTarget;
 
-  let xTravel=phase.x*kickReach;
+  let xTravel=facingSign()*phase.x*kickReach;
   let yTravel=-phase.y*kickHeight;
 
   if(i===1){
@@ -1178,9 +1365,10 @@ function buildSelectedPose(i){
   const mode=currentMode();
   if(mode==="walk") return buildWalkPose(i);
   if(mode==="right_punch") return buildPunchPose(i,"right");
-  if(mode==="left_punch") return buildPunchPose(i,"left");
-  if(mode==="right_kick") return buildKickPose(i,"right");
-  if(mode==="left_kick") return buildKickPose(i,"left");
+  if(mode==="right_kick"){
+    const front=resolveAttackSide("right");
+    return buildKickPose(i,front);
+  }
   return {error:"Unknown animation mode."};
 }
 
@@ -1261,7 +1449,8 @@ function generate(){
     const m=legMetrics();
     status(`Generated V9 walk • leg ${m?m.avgLeg.toFixed(1):"?"} px • stride ${m?(m.avgLeg*(+$("stride").value/100)).toFixed(1):"?"} px • plant ${$("plant").value}%.`);
   }else{
-    status(`Generated ${info.label} • ${frameCount} frames • Ready → ${mode.endsWith("_kick")?"Chamber → Extension":"Wind-up → Strike"} → Recovery.`);
+    const extra = mode.endsWith("_punch") ? ` • ${$("punchStyle") && $("punchStyle").value==="slash" ? "Claw Slash" : "Straight Punch"}` : "";
+    status(`Generated ${info.label}${extra} • ${frameCount} frames • Ready → ${mode.endsWith("_kick")?"Chamber → Extension":"Wind-up → Strike"} → Recovery.`);
   }
 }
 $("generate").onclick = generate;
