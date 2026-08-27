@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V7</title>
+<title>Fatal Instinct Sprite Animator V9</title>
 <style>
 :root{
   --bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;
@@ -41,7 +41,7 @@ select{width:100%}
 .strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}
 .card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}
 .card canvas{width:100%;display:block;image-rendering:pixelated}
-.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}
+.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}.card .saveFrame{width:100%;padding:7px 8px;margin-top:6px;font-size:12px;border-radius:9px}
 .badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}
 .small{font-size:12px;color:var(--muted)}
 @media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 390px}.canvasWrap{height:72vh}}
@@ -49,8 +49,8 @@ select{width:100%}
 </head>
 <body>
 <header>
-  <h1>Fatal Instinct Sprite Walker <span class="badge">V7</span></h1>
-  <div class="sub">Bone Rig + Resolution-Independent Walk Scaling • iPhone / Safari</div>
+  <h1>Fatal Instinct Sprite Animator <span class="badge">V9</span></h1>
+  <div class="sub">Walk + Attack Generator • Bone Rig • iPhone / Safari</div>
 </header>
 <main>
   <div class="topbar">
@@ -66,7 +66,16 @@ select{width:100%}
     </div>
 
     <div class="panel">
-      <label class="title">Body part</label>
+      <label class="title">Animation</label>
+      <select id="animationMode">
+        <option value="walk">Walk — 8 Frames</option>
+        <option value="right_punch">Right Claw / Punch — 4 Frames</option>
+        <option value="left_punch">Left Claw / Punch — 4 Frames</option>
+        <option value="right_kick">Right Kick — 4 Frames</option>
+        <option value="left_kick">Left Kick — 4 Frames</option>
+      </select>
+
+      <label class="title" style="margin-top:12px">Body part</label>
       <select id="part"></select>
 
       <label class="title" style="margin-top:10px">Joint</label>
@@ -81,20 +90,44 @@ select{width:100%}
       <div class="help">
         <p><b>Trace Part:</b> outline the visual shape for the selected piece.</p>
         <p><b>Set Joint:</b> tap or drag the selected bone joint.</p>
-        <p><b>V7 scaling:</b> stride, lift, bob, and foot travel are calculated from the rigged bone lengths, so the same walk works on small or large source images.</p><p><b>Load old rig:</b> V2/V3/V4/V5/V6 rigs remain compatible; V7 will infer missing leg joints when possible.</p>
+        <p id="modeHelp"><b>Walk:</b> the V8 grounded 8-frame walk is preserved exactly.</p>
+        <p><b>Rig compatibility:</b> V2/V3/V4/V5/V6/V7/V8 rigs remain compatible. V9 adds attacks without forcing a retrace.</p>
       </div>
 
-      <div class="sliders">
+      <div id="walkControls" class="sliders">
         <div class="slider"><label>Stride <span><b id="strideV">36</b>% leg</span></label><input id="stride" type="range" min="10" max="60" value="36"></div>
         <div class="slider"><label>Step height <span><b id="stepV">20</b>% leg</span></label><input id="step" type="range" min="5" max="35" value="20"></div>
         <div class="slider"><label>Body bob <span><b id="bobV">4</b>% leg</span></label><input id="bob" type="range" min="0" max="10" value="4"></div>
         <div class="slider"><label>Torso lean <span><b id="leanV">2</b>°</span></label><input id="lean" type="range" min="0" max="12" value="2"></div>
         <div class="slider"><label>Arm swing <span><b id="armV">12</b>°</span></label><input id="arm" type="range" min="0" max="30" value="12"></div>
         <div class="slider"><label>Tail swing <span><b id="tailV">8</b>°</span></label><input id="tail" type="range" min="0" max="25" value="8"></div>
+        <div class="slider"><label>Weight shift <span><b id="weightV">70</b>%</span></label><input id="weight" type="range" min="0" max="100" value="70"></div>
+        <div class="slider"><label>Foot plant <span><b id="plantV">85</b>%</span></label><input id="plant" type="range" min="0" max="100" value="85"></div>
+      </div>
+
+      <div id="punchControls" class="sliders" style="display:none">
+        <div class="slider"><label>Wind-up <span><b id="windupV">38</b>°</span></label><input id="windup" type="range" min="0" max="75" value="38"></div>
+        <div class="slider"><label>Strike reach <span><b id="reachV">96</b>%</span></label><input id="reach" type="range" min="45" max="100" value="96"></div>
+        <div class="slider"><label>Strike angle <span><b id="strikeAngleV">-6</b>°</span></label><input id="strikeAngle" type="range" min="-35" max="35" value="-6"></div>
+        <div class="slider"><label>Torso twist <span><b id="twistV">10</b>°</span></label><input id="twist" type="range" min="0" max="24" value="10"></div>
+        <div class="slider"><label>Body lean <span><b id="attackLeanV">4</b>°</span></label><input id="attackLean" type="range" min="0" max="16" value="4"></div>
+        <div class="slider"><label>Hip drive <span><b id="hipDriveV">8</b>% leg</span></label><input id="hipDrive" type="range" min="0" max="18" value="8"></div>
+        <div class="slider"><label>Wrist / claw angle <span><b id="clawV">-8</b>°</span></label><input id="claw" type="range" min="-45" max="45" value="-8"></div>
+        <div class="slider"><label>Guard arm motion <span><b id="guardV">8</b>°</span></label><input id="guard" type="range" min="0" max="24" value="8"></div>
+      </div>
+
+      <div id="kickControls" class="sliders" style="display:none">
+        <div class="slider"><label>Kick reach <span><b id="kickReachV">72</b>% leg</span></label><input id="kickReach" type="range" min="25" max="95" value="72"></div>
+        <div class="slider"><label>Kick height <span><b id="kickHeightV">32</b>% leg</span></label><input id="kickHeight" type="range" min="5" max="70" value="32"></div>
+        <div class="slider"><label>Knee chamber <span><b id="kickChamberV">55</b>%</span></label><input id="kickChamber" type="range" min="20" max="90" value="55"></div>
+        <div class="slider"><label>Torso counter-lean <span><b id="kickLeanV">8</b>°</span></label><input id="kickLean" type="range" min="0" max="20" value="8"></div>
+        <div class="slider"><label>Hip drive <span><b id="kickHipV">8</b>% leg</span></label><input id="kickHip" type="range" min="0" max="18" value="8"></div>
+        <div class="slider"><label>Foot angle <span><b id="kickFootV">-12</b>°</span></label><input id="kickFoot" type="range" min="-45" max="45" value="-12"></div>
+        <div class="slider"><label>Guard arm motion <span><b id="kickGuardV">10</b>°</span></label><input id="kickGuard" type="range" min="0" max="24" value="10"></div>
       </div>
 
       <div class="grid">
-        <button id="generate" class="primary">Generate 8 Frames</button>
+        <button id="generate" class="primary">Generate Walk</button>
         <button id="preview">Preview</button>
         <button id="export">Export Sprite Sheet</button>
         <button id="clear">Clear Selected Part</button>
@@ -156,7 +189,7 @@ const ORDER = [
 
 const $ = id => document.getElementById(id);
 const canvas = $("mainCanvas"), ctx = canvas.getContext("2d");
-const partSel = $("part"), jointSel = $("joint"), hint = $("hint"), statusEl = $("status"), strip = $("strip");
+const partSel = $("part"), jointSel = $("joint"), animationMode = $("animationMode"), hint = $("hint"), statusEl = $("status"), strip = $("strip");
 
 PARTS.forEach(p=>{ const o=document.createElement("option"); o.value=p; o.textContent=p; partSel.appendChild(o); });
 JOINTS.forEach(j=>{ const o=document.createElement("option"); o.value=j; o.textContent=j; jointSel.appendChild(o); });
@@ -175,6 +208,74 @@ bindSlider("bob","bobV");
 bindSlider("lean","leanV");
 bindSlider("arm","armV");
 bindSlider("tail","tailV");
+bindSlider("weight","weightV");
+bindSlider("plant","plantV");
+bindSlider("windup","windupV");
+bindSlider("reach","reachV");
+bindSlider("strikeAngle","strikeAngleV");
+bindSlider("twist","twistV");
+bindSlider("attackLean","attackLeanV");
+bindSlider("hipDrive","hipDriveV");
+bindSlider("claw","clawV");
+bindSlider("guard","guardV");
+bindSlider("kickReach","kickReachV");
+bindSlider("kickHeight","kickHeightV");
+bindSlider("kickChamber","kickChamberV");
+bindSlider("kickLean","kickLeanV");
+bindSlider("kickHip","kickHipV");
+bindSlider("kickFoot","kickFootV");
+bindSlider("kickGuard","kickGuardV");
+
+const MODE_INFO = {
+  walk:{
+    label:"Walk",
+    frames:8,
+    help:"<b>Walk:</b> V8 grounded weight shift and foot plant are preserved exactly.",
+    button:"Generate 8-Frame Walk"
+  },
+  right_punch:{
+    label:"Right Claw / Punch",
+    frames:4,
+    help:"<b>Right Claw / Punch:</b> Ready → Wind-up → Strike → Recovery. The right arm attacks while the opposite arm counter-balances.",
+    button:"Generate Right Attack"
+  },
+  left_punch:{
+    label:"Left Claw / Punch",
+    frames:4,
+    help:"<b>Left Claw / Punch:</b> Ready → Wind-up → Strike → Recovery. The left arm attacks while the opposite arm counter-balances.",
+    button:"Generate Left Attack"
+  },
+  right_kick:{
+    label:"Right Kick",
+    frames:4,
+    help:"<b>Right Kick:</b> Ready → Chamber → Extension → Recovery. The planted leg stays grounded while the right leg attacks.",
+    button:"Generate Right Kick"
+  },
+  left_kick:{
+    label:"Left Kick",
+    frames:4,
+    help:"<b>Left Kick:</b> Ready → Chamber → Extension → Recovery. The planted leg stays grounded while the left leg attacks.",
+    button:"Generate Left Kick"
+  }
+};
+
+function currentMode(){ return animationMode.value; }
+
+function updateAnimationUI(){
+  const mode = currentMode();
+  const info = MODE_INFO[mode];
+  $("walkControls").style.display = mode==="walk" ? "block" : "none";
+  $("punchControls").style.display = mode.endsWith("_punch") ? "block" : "none";
+  $("kickControls").style.display = mode.endsWith("_kick") ? "block" : "none";
+  $("modeHelp").innerHTML = info.help;
+  $("generate").textContent = info.button;
+  frames = [];
+  strip.innerHTML = "";
+  if(timer){ clearInterval(timer); timer=null; }
+  draw();
+  status(`${info.label} mode ready.`);
+}
+animationMode.onchange = updateAnimationUI;
 
 function setMode(m){
   mode = m;
@@ -399,14 +500,14 @@ function inferJointsFromParts(){
 $("saveRig").onclick = ()=>{
   if(!source){ status("Load a character first."); return; }
   const data = {
-    version:7,
+    version:9,
     source_name:sourceName,
     source_size:[source.width, source.height],
     parts:rig.parts,
     joints:rig.joints
   };
-  download(new Blob([JSON.stringify(data,null,2)], {type:"application/json"}), "fatal_instinct_rig_v7.json");
-  status("V7 rig exported.");
+  download(new Blob([JSON.stringify(data,null,2)], {type:"application/json"}), "fatal_instinct_rig_v9.json");
+  status("V9 rig exported.");
 };
 
 $("rigInput").onchange = async e=>{
@@ -525,37 +626,38 @@ const WALK_NAMES = [
   "Opposite Contact","Opposite Down","Opposite Passing","Opposite High Step"
 ];
 
-// V6 refined walk table.
-// X/Y values are offsets from each foot's neutral toe position.
-// Negative Y lifts the foot because canvas Y increases downward.
-// "stance" tells the solver how strongly to flatten or plant the stance foot.
+// V8 authored walk:
+// stronger passing/high-step shapes + stance metadata for grounding.
 const LEFT_WALK = [
   {x:-10, y:  0, foot:+4,  stance:"contact"},
   {x: -7, y:  0, foot: 0,  stance:"flat"},
-  {x: -1, y: -2, foot:-4,  stance:"toe"},
-  {x: +5, y:-10, foot:-12, stance:"air"},
+  {x: -1, y: -4, foot:-6,  stance:"toe"},
+  {x: +6, y:-13, foot:-14, stance:"air"},
   {x:+10, y:  0, foot:+2,  stance:"contact"},
   {x: +7, y:  0, foot: 0,  stance:"flat"},
-  {x: +1, y: -4, foot:-8,  stance:"air"},
-  {x: -4, y:-12, foot:-12, stance:"air"}
+  {x: +1, y: -6, foot:-10, stance:"air"},
+  {x: -5, y:-15, foot:-15, stance:"air"}
 ];
 
 const RIGHT_WALK = [
   {x:+10, y:  0, foot:+2,  stance:"contact"},
   {x: +7, y:  0, foot: 0,  stance:"flat"},
-  {x: +1, y: -4, foot:-8,  stance:"air"},
-  {x: -4, y:-12, foot:-12, stance:"air"},
+  {x: +1, y: -6, foot:-10, stance:"air"},
+  {x: -5, y:-15, foot:-15, stance:"air"},
   {x:-10, y:  0, foot:+4,  stance:"contact"},
   {x: -7, y:  0, foot: 0,  stance:"flat"},
-  {x: -1, y: -2, foot:-4,  stance:"toe"},
-  {x: +5, y:-10, foot:-12, stance:"air"}
+  {x: -1, y: -4, foot:-6,  stance:"toe"},
+  {x: +6, y:-13, foot:-14, stance:"air"}
 ];
 
-const PELVIS_X = [0, +1, +1, 0, 0, -1, -1, 0];
-const PELVIS_Y = [0, 2, 1, -1, 0, 2, 1, -1];
-const TORSO_LEAN = [+2, +1, 0, -1, -2, -1, 0, +1];
-const LEFT_ARM = [-12, -8, -2, +8, +12, +8, +2, -8];
-const RIGHT_ARM = [+12, +8, +2, -8, -12, -8, -2, +8];
+const PELVIS_X = [0.0, +0.45, +0.70, +0.35, 0.0, -0.45, -0.70, -0.35];
+const PELVIS_Y = [0, 2.2, 0.8, -1.2, 0, 2.2, 0.8, -1.2];
+const TORSO_LEAN = [+2.5, +1.5, -0.5, -2.0, -2.5, -1.5, +0.5, +2.0];
+const LEFT_ARM = [-14, -10, -3, +10, +14, +10, +3, -10];
+const RIGHT_ARM = [+14, +10, +3, -10, -14, -10, -3, +10];
+
+// Small shoulder counter-shift opposite the pelvis weight shift.
+const SHOULDER_COUNTER = [-0.30,-0.45,-0.55,-0.30,+0.30,+0.45,+0.55,+0.30];
 
 function partExists(name){ return !!(rig.parts[name] && rig.parts[name].poly); }
 function joint(name){ return rig.joints[name] ? [...rig.joints[name]] : null; }
@@ -614,7 +716,7 @@ function scaledWalkValues(){
   };
 }
 
-function buildPose(i){
+function buildWalkPose(i){
   const ready = requiredReady();
   if(!ready.ok) return {error:ready.msg};
 
@@ -626,15 +728,41 @@ function buildPose(i){
   const leanScale = (+$("lean").value) / 2.0;
   const armScale = (+$("arm").value) / 12.0;
   const tailSwing = +$("tail").value;
+  const weightStrength = (+$("weight").value) / 100.0;
+  const plantStrength = (+$("plant").value) / 100.0;
 
   const orig = {};
   JOINTS.forEach(j=>{ if(joint(j)) orig[j]=joint(j); });
 
+  const leftW = LEFT_WALK[i];
+  const rightW = RIGHT_WALK[i];
+
+  // Choose the support side for this frame.
+  function supportScore(w){
+    if(w.stance==="flat") return 3;
+    if(w.stance==="contact") return 2;
+    if(w.stance==="toe") return 1;
+    return 0;
+  }
+  const supportSide = supportScore(leftW) >= supportScore(rightW) ? "left" : "right";
+  const supportW = supportSide==="left" ? leftW : rightW;
+
+  // Root grounding correction: keep the support toe closer to its original world X.
+  // Full locking can look mechanical, so the slider blends into the lock.
+  const supportLeg = supportSide==="left" ? metrics.leftLeg : metrics.rightLeg;
+  const supportStride = stridePx * (supportLeg / metrics.avgLeg);
+  const supportToeOffsetX = (supportW.x / 10.0) * supportStride;
+  const footAnchorShiftX = -supportToeOffsetX * plantStrength;
+
   const pose = {};
   const pelvis0 = orig.pelvis;
 
-  // Scale authored body motion from skeleton dimensions.
-  const pelvisXOffset = PELVIS_X[i] * pelvisShiftPx;
+  // Shift body weight toward the planted leg.
+  const supportDir = supportSide==="left" ? -1 : +1;
+  const authoredPelvis = PELVIS_X[i] * pelvisShiftPx;
+  const supportWeight = supportDir * metrics.pelvisWidth * 0.10 * weightStrength;
+  const pelvisXOffset = authoredPelvis + supportWeight + footAnchorShiftX;
+
   const pelvisYOffset = (PELVIS_Y[i] / 2.0) * bobPx;
   const torsoLean = TORSO_LEAN[i] * leanScale;
 
@@ -664,8 +792,15 @@ function buildPose(i){
     );
   }
 
+  // Shoulder counter-motion.
+  const shoulderCounterPx = SHOULDER_COUNTER[i] * metrics.pelvisWidth * weightStrength;
   ["left_shoulder","right_shoulder","tail_base"].forEach(n=>{
-    if(orig[n]) pose[n] = transformPoint(torsoM, orig[n]);
+    if(orig[n]){
+      pose[n] = transformPoint(torsoM, orig[n]);
+      if(n==="left_shoulder" || n==="right_shoulder"){
+        pose[n][0] += shoulderCounterPx;
+      }
+    }
   });
 
   if(orig.tail_tip){
@@ -681,8 +816,7 @@ function buildPose(i){
       : [...orig.tail_tip];
   }
 
-  // Convert the authored normalized walk table to actual pixels using bone lengths.
-  // Table X values are normalized around +/-10; Y lift around -12.
+  // Resolution-independent foot targets -> ankle targets -> true two-bone IK.
   ["left","right"].forEach(side=>{
     const hip0 = orig[`${side}_hip`];
     const knee0 = orig[`${side}_knee`];
@@ -691,6 +825,8 @@ function buildPose(i){
 
     const footVec0 = footVector(ankle0, toe0);
     const hipTarget = transformPoint(torsoM, hip0);
+
+    // Carry the support-weight shift into the hip targets.
     pose[`${side}_hip`] = hipTarget;
 
     const table = side==="left" ? LEFT_WALK : RIGHT_WALK;
@@ -702,11 +838,15 @@ function buildPose(i){
 
     let toeTarget = [
       toe0[0] + (w.x / 10.0) * localStride,
-      toe0[1] + (w.y / 12.0) * localStep
+      toe0[1] + (w.y / 15.0) * localStep
     ];
 
-    // Grounded frames stay on the original toe ground plane.
-    if(w.stance === "contact" || w.stance === "flat" || w.stance === "toe"){
+    // Blend support foot toward a true planted world position.
+    if(side===supportSide && (w.stance==="flat" || w.stance==="contact" || w.stance==="toe")){
+      const lockedX = toe0[0];
+      toeTarget[0] = toeTarget[0]*(1-plantStrength) + lockedX*plantStrength;
+      toeTarget[1] = toe0[1];
+    }else if(w.stance==="contact" || w.stance==="flat" || w.stance==="toe"){
       toeTarget[1] = toe0[1];
     }
 
@@ -716,15 +856,17 @@ function buildPose(i){
       toeTarget[1] - footVecT[1]
     ];
 
-    // Stronger stance stabilization based on actual foot size.
     const footLen = side==="left" ? metrics.leftFoot : metrics.rightFoot;
-    if(w.stance === "flat"){
-      ankleTarget[1] = ankle0[1];
-    }else if(w.stance === "contact"){
-      ankleTarget[1] = Math.min(ankleTarget[1], ankle0[1] + footLen*0.03);
-    }else if(w.stance === "toe"){
-      // Allow heel rise while keeping toe planted.
-      ankleTarget[1] = Math.min(ankleTarget[1], ankle0[1] - footLen*0.10);
+
+    if(w.stance==="flat"){
+      // Flatten the whole foot at stance.
+      const flatAnkleY = ankle0[1];
+      ankleTarget[1] = ankleTarget[1]*(1-plantStrength) + flatAnkleY*plantStrength;
+    }else if(w.stance==="contact"){
+      ankleTarget[1] = Math.min(ankleTarget[1], ankle0[1] + footLen*0.02);
+    }else if(w.stance==="toe"){
+      // Toe remains planted while heel rises.
+      ankleTarget[1] = Math.min(ankleTarget[1], ankle0[1] - footLen*0.14);
     }
 
     const bend = Math.sign(crossZ(hip0, ankle0, knee0)) || 1;
@@ -741,7 +883,7 @@ function buildPose(i){
     pose[`${side}_toe`] = toeTarget;
   });
 
-  // Authored arm timing with swing magnitude scaled to body proportions by rotation only.
+  // Stronger authored arm counter-swing.
   ["left","right"].forEach(side=>{
     const s0 = orig[`${side}_shoulder`];
     const e0 = orig[`${side}_elbow`];
@@ -751,7 +893,8 @@ function buildPose(i){
     const armTable = side==="left" ? LEFT_ARM : RIGHT_ARM;
     const swing = armTable[i] * armScale;
 
-    pose[`${side}_shoulder`] = transformPoint(torsoM, s0);
+    // Use the already counter-shifted shoulder target if available.
+    pose[`${side}_shoulder`] = pose[`${side}_shoulder`] || transformPoint(torsoM, s0);
 
     if(e0){
       pose[`${side}_elbow`] = add(
@@ -762,7 +905,7 @@ function buildPose(i){
       if(w0){
         pose[`${side}_wrist`] = add(
           pose[`${side}_elbow`],
-          rotateVec(sub(w0,e0), swing*0.60 + torsoLean)
+          rotateVec(sub(w0,e0), swing*0.65 + torsoLean)
         );
       }
     }
@@ -773,8 +916,272 @@ function buildPose(i){
     torsoM,
     phaseName: WALK_NAMES[i],
     metrics,
-    scaled
+    scaled,
+    supportSide
   };
+}
+
+
+const ATTACK_NAMES = ["Ready","Wind-up","Strike","Recovery"];
+const KICK_NAMES = ["Ready","Chamber","Extension","Recovery"];
+
+function attackRequiredReady(side, kind){
+  const needParts = ["torso"];
+  const needJoints = ["pelvis","neck"];
+
+  if(kind==="punch"){
+    needParts.push(`${side}_upper_arm`, `${side}_forearm`, `${side}_hand`);
+    needJoints.push(`${side}_shoulder`, `${side}_elbow`, `${side}_wrist`);
+  }else{
+    needParts.push(`${side}_thigh`, `${side}_shin`, `${side}_foot`);
+    needJoints.push(`${side}_hip`, `${side}_knee`, `${side}_ankle`, `${side}_toe`);
+    const support = side==="left" ? "right" : "left";
+    needParts.push(`${support}_thigh`, `${support}_shin`, `${support}_foot`);
+    needJoints.push(`${support}_hip`, `${support}_knee`, `${support}_ankle`, `${support}_toe`);
+  }
+
+  for(const p of needParts) if(!partExists(p)) return {ok:false,msg:"Missing required part trace: "+p};
+  for(const jn of needJoints) if(!joint(jn)) return {ok:false,msg:"Missing required joint: "+jn};
+  return {ok:true};
+}
+
+function basePoseFromTorso(torsoRotateDeg=0, rootDX=0, rootDY=0){
+  const orig = {};
+  JOINTS.forEach(n=>{ if(joint(n)) orig[n]=joint(n); });
+
+  const pose = {};
+  const pelvis0 = orig.pelvis;
+  pose.pelvis = [pelvis0[0]+rootDX, pelvis0[1]+rootDY];
+
+  let torsoM = matrixIdentity();
+  if(orig.neck){
+    pose.neck = add(pose.pelvis, rotateVec(sub(orig.neck,orig.pelvis), torsoRotateDeg));
+    torsoM = matrixFromTwoPoints(orig.pelvis,orig.neck,pose.pelvis,pose.neck);
+  }else{
+    torsoM = rigidFromPointAndAngle(orig.pelvis,pose.pelvis,torsoRotateDeg*Math.PI/180);
+  }
+
+  const torsoChildren = [
+    "left_shoulder","right_shoulder",
+    "left_hip","right_hip",
+    "tail_base","tail_tip"
+  ];
+  torsoChildren.forEach(n=>{
+    if(orig[n]) pose[n]=transformPoint(torsoM,orig[n]);
+  });
+
+  return {orig,pose,torsoM};
+}
+
+function armPoseFromAngles(side, built, upperAngle, elbowRelative, handAngleDeg=0){
+  const {orig,pose,torsoM}=built;
+  const s0=orig[`${side}_shoulder`], e0=orig[`${side}_elbow`], w0=orig[`${side}_wrist`];
+  if(!s0||!e0||!w0) return;
+
+  const shoulder = pose[`${side}_shoulder`] || transformPoint(torsoM,s0);
+  pose[`${side}_shoulder`] = shoulder;
+
+  const upperLen=length(s0,e0), lowerLen=length(e0,w0);
+  const elbow=[
+    shoulder[0]+Math.cos(upperAngle)*upperLen,
+    shoulder[1]+Math.sin(upperAngle)*upperLen
+  ];
+  const foreAngle=upperAngle+elbowRelative;
+  const wrist=[
+    elbow[0]+Math.cos(foreAngle)*lowerLen,
+    elbow[1]+Math.sin(foreAngle)*lowerLen
+  ];
+
+  pose[`${side}_elbow`]=elbow;
+  pose[`${side}_wrist`]=wrist;
+  pose.__handAngles = pose.__handAngles || {};
+  pose.__handAngles[side]=handAngleDeg*Math.PI/180;
+}
+
+function guardArmPose(side, built, motionDeg){
+  const {orig,pose,torsoM}=built;
+  const s0=orig[`${side}_shoulder`], e0=orig[`${side}_elbow`], w0=orig[`${side}_wrist`];
+  if(!s0) return;
+
+  pose[`${side}_shoulder`] = pose[`${side}_shoulder`] || transformPoint(torsoM,s0);
+  if(e0){
+    pose[`${side}_elbow`] = add(
+      pose[`${side}_shoulder`],
+      rotateVec(sub(e0,s0), motionDeg)
+    );
+    if(w0){
+      pose[`${side}_wrist`] = add(
+        pose[`${side}_elbow`],
+        rotateVec(sub(w0,e0), motionDeg*0.65)
+      );
+    }
+  }
+}
+
+function buildPunchPose(i, side){
+  const ready=attackRequiredReady(side,"punch");
+  if(!ready.ok) return {error:ready.msg};
+
+  const m=legMetrics();
+  const scaleLeg=m ? m.avgLeg : Math.max(60, source.height*0.42);
+
+  const windup=+$("windup").value;
+  const reach=(+$("reach").value)/100;
+  const strikeAngle=(+$("strikeAngle").value)*Math.PI/180;
+  const twist=+$("twist").value;
+  const lean=+$("attackLean").value;
+  const hipDrive=(+$("hipDrive").value/100)*scaleLeg;
+  const claw=+$("claw").value;
+  const guard=+$("guard").value;
+
+  // Right-facing art: attack travels toward +X.
+  const phase=[
+    {root:0.00,torso:0.00,upper:"base",bend:"base",hand:0,guard:0},
+    {root:-0.15,torso:-0.70,upper:"wind",bend:"wind",hand:-0.35,guard:+0.50},
+    {root:+1.00,torso:+1.00,upper:"strike",bend:"strike",hand:+1.00,guard:-1.00},
+    {root:+0.28,torso:+0.25,upper:"recover",bend:"recover",hand:+0.30,guard:-0.35}
+  ][i];
+
+  const sideSign = side==="right" ? 1 : 0.92;
+  const rootDX=phase.root*hipDrive*sideSign;
+  const torsoRot=phase.torso*twist + phase.torso*lean*0.35;
+  const built=basePoseFromTorso(torsoRot,rootDX,0);
+  const {orig}=built;
+
+  const s0=orig[`${side}_shoulder`], e0=orig[`${side}_elbow`], w0=orig[`${side}_wrist`];
+  const baseUpper=angleOf(s0,e0);
+  const baseFore=angleOf(e0,w0);
+  const baseRel=baseFore-baseUpper;
+
+  let upperAngle=baseUpper;
+  let elbowRel=baseRel;
+
+  if(phase.upper==="wind"){
+    upperAngle=baseUpper + windup*Math.PI/180;
+    // Cock the fist back toward the body.
+    elbowRel=baseRel - Math.max(0.45,windup*Math.PI/180*0.85);
+  }else if(phase.upper==="strike"){
+    upperAngle=strikeAngle;
+    // reach=100 => straight arm, lower reach leaves some elbow bend.
+    elbowRel=(1-reach)*(Math.PI/2.2);
+  }else if(phase.upper==="recover"){
+    upperAngle=baseUpper*0.58 + strikeAngle*0.42;
+    elbowRel=baseRel*0.58 + ((1-reach)*(Math.PI/2.2))*0.42;
+  }
+
+  armPoseFromAngles(side,built,upperAngle,elbowRel,claw*phase.hand);
+
+  const guardSide=side==="right" ? "left" : "right";
+  guardArmPose(guardSide,built,guard*phase.guard);
+
+  // Small tail recoil if the tail is rigged.
+  if(orig.tail_base && orig.tail_tip && built.pose.tail_base){
+    const tailDeg=[0,-4,+7,+2][i] * (side==="right" ? 1 : -1);
+    built.pose.tail_tip=add(
+      built.pose.tail_base,
+      rotateVec(sub(orig.tail_tip,orig.tail_base),tailDeg)
+    );
+  }
+
+  return {
+    pose:built.pose,
+    torsoM:built.torsoM,
+    phaseName:ATTACK_NAMES[i]
+  };
+}
+
+function buildKickPose(i, side){
+  const ready=attackRequiredReady(side,"kick");
+  if(!ready.ok) return {error:ready.msg};
+
+  const m=legMetrics();
+  if(!m) return {error:"Could not measure leg bones. Check hip, knee, ankle, and toe joints."};
+
+  const kickReach=(+$("kickReach").value/100)*m.avgLeg;
+  const kickHeight=(+$("kickHeight").value/100)*m.avgLeg;
+  const chamber=(+$("kickChamber").value)/100;
+  const counterLean=+$("kickLean").value;
+  const hipDrive=(+$("kickHip").value/100)*m.avgLeg;
+  const footAngle=+$("kickFoot").value;
+  const guard=+$("kickGuard").value;
+
+  const support=side==="right" ? "left" : "right";
+
+  const phase=[
+    {x:0,y:0,lean:0,root:0,foot:0,guard:0},
+    {x:0.12,y:0.70,lean:-0.45,root:-0.20,foot:-0.40,guard:+0.45},
+    {x:1.00,y:1.00,lean:-1.00,root:+0.38,foot:+1.00,guard:-1.00},
+    {x:0.28,y:0.38,lean:-0.30,root:+0.10,foot:+0.25,guard:-0.30}
+  ][i];
+
+  const built=basePoseFromTorso(phase.lean*counterLean,phase.root*hipDrive,0);
+  const {orig,pose,torsoM}=built;
+
+  // Keep support foot planted in world space.
+  const sh=orig[`${support}_hip`], sk=orig[`${support}_knee`], sa=orig[`${support}_ankle`], st=orig[`${support}_toe`];
+  const supportHip=transformPoint(torsoM,sh);
+  pose[`${support}_hip`]=supportHip;
+  const supportSolve=twoBoneIK(
+    supportHip,sk,sa,sa,
+    Math.sign(crossZ(sh,sa,sk)) || 1
+  );
+  pose[`${support}_knee`]=supportSolve.knee;
+  pose[`${support}_ankle`]=supportSolve.ankle;
+  pose[`${support}_toe`]=[...st];
+
+  // Attack leg target.
+  const h0=orig[`${side}_hip`], k0=orig[`${side}_knee`], a0=orig[`${side}_ankle`], t0=orig[`${side}_toe`];
+  const hipTarget=transformPoint(torsoM,h0);
+  pose[`${side}_hip`]=hipTarget;
+
+  let xTravel=phase.x*kickReach;
+  let yTravel=-phase.y*kickHeight;
+
+  if(i===1){
+    // Chamber: bring the foot back under the body while raising the knee.
+    xTravel*=chamber*0.45;
+    yTravel*=chamber;
+  }
+
+  const toeTarget=[t0[0]+xTravel,t0[1]+yTravel];
+  const fv=rotateVec(footVector(a0,t0),footAngle*phase.foot);
+  const ankleTarget=[toeTarget[0]-fv[0],toeTarget[1]-fv[1]];
+
+  const solve=twoBoneIK(
+    hipTarget,k0,a0,ankleTarget,
+    Math.sign(crossZ(h0,a0,k0)) || 1
+  );
+  pose[`${side}_knee`]=solve.knee;
+  pose[`${side}_ankle`]=solve.ankle;
+  pose[`${side}_toe`]=toeTarget;
+
+  // Both arms guard/counterbalance.
+  guardArmPose("left",built, side==="left" ? -guard*phase.guard : guard*phase.guard);
+  guardArmPose("right",built, side==="right" ? -guard*phase.guard : guard*phase.guard);
+
+  if(orig.tail_base && orig.tail_tip && pose.tail_base){
+    const tailDeg=[0,+5,-9,-3][i]*(side==="right"?1:-1);
+    pose.tail_tip=add(
+      pose.tail_base,
+      rotateVec(sub(orig.tail_tip,orig.tail_base),tailDeg)
+    );
+  }
+
+  return {
+    pose,
+    torsoM,
+    phaseName:KICK_NAMES[i]
+  };
+}
+
+function buildSelectedPose(i){
+  const mode=currentMode();
+  if(mode==="walk") return buildWalkPose(i);
+  if(mode==="right_punch") return buildPunchPose(i,"right");
+  if(mode==="left_punch") return buildPunchPose(i,"left");
+  if(mode==="right_kick") return buildKickPose(i,"right");
+  if(mode==="left_kick") return buildKickPose(i,"left");
+  return {error:"Unknown animation mode."};
 }
 
 function matrixForPart(name, pose, torsoM){
@@ -783,6 +1190,13 @@ function matrixForPart(name, pose, torsoM){
   const [a,b] = bind;
   const oa = joint(a), ob = joint(b);
   const ta = pose[a], tb = pose[b];
+
+  if((name==="left_hand" || name==="right_hand") && oa && ta){
+    const side=name.startsWith("left") ? "left" : "right";
+    const extra=pose.__handAngles?.[side] || 0;
+    return rigidFromPointAndAngle(oa,ta,extra);
+  }
+
   if(oa && ob && ta && tb && (oa[0]!==ob[0] || oa[1]!==ob[1])) return matrixFromTwoPoints(oa, ob, ta, tb);
   if(oa && ta) return rigidFromPointAndAngle(oa, ta, 0);
   return torsoM || matrixIdentity();
@@ -791,23 +1205,31 @@ function matrixForPart(name, pose, torsoM){
 function generate(){
   if(!source){ status("Load a character image first."); return; }
   inferJointsFromParts();
-  const ready = requiredReady();
+
+  const mode=currentMode();
+  const info=MODE_INFO[mode];
+  const frameCount=info.frames;
+
+  let ready;
+  if(mode==="walk") ready=requiredReady();
+  else if(mode.endsWith("_punch")) ready=attackRequiredReady(mode.startsWith("right")?"right":"left","punch");
+  else ready=attackRequiredReady(mode.startsWith("right")?"right":"left","kick");
+
   if(!ready.ok){ status(ready.msg); draw(); return; }
 
   const masks = {};
   for(const name of PARTS) if(partExists(name)) masks[name] = maskedPart(name);
 
-  // Extra seam-hiding overlap strips for thighs.
   const seamCaps = {
     left_thigh: partExists("left_thigh") ? thighCapCanvas("left_thigh") : null,
     right_thigh: partExists("right_thigh") ? thighCapCanvas("right_thigh") : null
   };
 
   frames = [];
-  for(let i=0;i<8;i++){
-    const built = buildPose(i);
+  for(let i=0;i<frameCount;i++){
+    const built = buildSelectedPose(i);
     if(built.error){ status(built.error); return; }
-    const {pose, torsoM, phaseName} = built;
+    const {pose, torsoM} = built;
 
     const f = document.createElement("canvas");
     f.width = source.width; f.height = source.height;
@@ -817,7 +1239,6 @@ function generate(){
       if(!masks[name]) continue;
       const M = matrixForPart(name, pose, torsoM);
 
-      // Before the full thigh, draw a tucked-under top strip slightly upward.
       if((name==="left_thigh" || name==="right_thigh") && seamCaps[name]){
         g.save();
         applyM(g, M);
@@ -835,17 +1256,44 @@ function generate(){
 
   renderFrames();
   draw(frames[0]);
-  const m=legMetrics(); status(`Generated V7 scaled walk • leg ${m?m.avgLeg.toFixed(1):"?"} px • stride ${m?(m.avgLeg*(+$("stride").value/100)).toFixed(1):"?"} px.`);
+
+  if(mode==="walk"){
+    const m=legMetrics();
+    status(`Generated V9 walk • leg ${m?m.avgLeg.toFixed(1):"?"} px • stride ${m?(m.avgLeg*(+$("stride").value/100)).toFixed(1):"?"} px • plant ${$("plant").value}%.`);
+  }else{
+    status(`Generated ${info.label} • ${frameCount} frames • Ready → ${mode.endsWith("_kick")?"Chamber → Extension":"Wind-up → Strike"} → Recovery.`);
+  }
 }
 $("generate").onclick = generate;
+
+function framePhaseName(i){
+  const mode=currentMode();
+  if(mode==="walk") return WALK_NAMES[i];
+  if(mode.endsWith("_kick")) return KICK_NAMES[i];
+  return ATTACK_NAMES[i];
+}
+
+function exportBaseName(){
+  return currentMode()
+    .replace("right_punch","punch_right")
+    .replace("left_punch","punch_left")
+    .replace("right_kick","kick_right")
+    .replace("left_kick","kick_left");
+}
 
 function renderFrames(){
   strip.innerHTML = "";
   frames.forEach((f,i)=>{
     const card=document.createElement("div"); card.className="card";
     const c=document.createElement("canvas"); c.width=f.width; c.height=f.height; c.getContext("2d").drawImage(f,0,0);
-    const t=document.createElement("div"); t.textContent=`Frame ${i+1} • ${WALK_NAMES[i]}`;
-    card.append(c,t); strip.appendChild(card);
+    const t=document.createElement("div"); t.textContent=`Frame ${i+1} • ${framePhaseName(i)}`;
+    const save=document.createElement("button"); save.className="saveFrame"; save.textContent="Save PNG";
+    save.onclick=()=>{
+      f.toBlob(b=>{
+        if(b) download(b,`${exportBaseName()}_${String(i+1).padStart(2,"0")}.png`);
+      },"image/png");
+    };
+    card.append(c,t,save); strip.appendChild(card);
   });
 }
 
@@ -853,7 +1301,7 @@ $("preview").onclick = ()=>{
   if(!frames.length) generate();
   if(!frames.length) return;
   if(timer){ clearInterval(timer); timer=null; draw(); status("Preview stopped."); return; }
-  frameIndex=0; status("Previewing V7 resolution-independent walk. Tap Preview again to stop.");
+  frameIndex=0; status(`Previewing ${MODE_INFO[currentMode()].label}. Tap Preview again to stop.`);
   timer = setInterval(()=>{
     draw(frames[frameIndex]);
     frameIndex = (frameIndex + 1) % frames.length;
@@ -867,11 +1315,13 @@ $("export").onclick = ()=>{
   s.width=source.width*frames.length; s.height=source.height;
   const g=s.getContext("2d");
   frames.forEach((f,i)=>g.drawImage(f,i*source.width,0));
-  s.toBlob(b=>{ if(b){ download(b, "walk_sheet_v7.png"); status("V7 sprite sheet exported to Downloads."); } }, "image/png");
+  const name=`${exportBaseName()}_sheet_v9.png`;
+  s.toBlob(b=>{ if(b){ download(b,name); status(`${MODE_INFO[currentMode()].label} sprite sheet exported to Downloads.`); } }, "image/png");
 };
 
 partSel.onchange = ()=>draw();
 jointSel.onchange = ()=>draw();
+updateAnimationUI();
 resize();
 </script>
 </body>
