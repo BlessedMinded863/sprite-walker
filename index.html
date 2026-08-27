@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Marius Attack Lab V9.3</title>
+<title>Fatal Instinct Marius Attack Lab V9.4</title>
 <style>
 :root{
   --bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;
@@ -49,8 +49,8 @@ select{width:100%}
 </head>
 <body>
 <header>
-  <h1>Fatal Instinct — Marius Attack Lab <span class="badge">V9.3</span></h1>
-  <div class="sub">Facing-Aware Front/Rear Arm Strikes • Existing Rig Compatible • iPhone / Safari</div>
+  <h1>Fatal Instinct — Marius Attack Lab <span class="badge">V9.4</span></h1>
+  <div class="sub">True Claw Slash Arc + Facing-Aware Strikes • Existing Rig Compatible • iPhone / Safari</div>
 </header>
 <main>
   <div class="topbar">
@@ -94,7 +94,7 @@ select{width:100%}
       <div class="help">
         <p><b>Trace Part:</b> outline the visual shape for the selected piece.</p>
         <p><b>Set Joint:</b> tap or drag the selected bone joint.</p>
-        <p id="modeHelp"><b>Marius Strike:</b> Front Arm is detected from the shoulder positions and current facing. The fist/claws always travel toward the opponent.</p>
+        <p id="modeHelp"><b>Marius Strike:</b> Front Arm is detected from the shoulder positions and current facing. Claw Slash now uses a true high-back to forward-down slash arc.</p>
         <p><b>Rig compatibility:</b> V2/V3/V4/V5/V6/V7/V8 rigs remain compatible. V9 adds attacks without forcing a retrace.</p>
       </div>
 
@@ -112,7 +112,7 @@ select{width:100%}
 
       <div class="help" style="margin-top:10px;border:1px solid #4a5f8a">
         <p><b>Marius starting preset:</b> Wind-up 48° • Reach 100% • Strike -2° • Twist 16° • Lean 6° • Hip drive 12% • Claw -18° • Guard 12°.</p>
-        <p><b>Goal:</b> Front Arm + Faces Right should produce a genuine rightward hit: retract behind the shoulder → drive through the target → recover.</p>
+        <p><b>Goal:</b> Front Arm + Faces Right should produce a genuine rightward strike. Punch drives straight forward. Claw Slash now rises high/back, cuts diagonally forward/down, then follows through.</p>
       </div>
 
       <div id="punchControls" class="sliders" style="display:none">
@@ -1164,16 +1164,16 @@ function buildPunchPose(i, requestedSide){
     {root:+0.15,torso:+0.15,guard:-0.30,tail:+2,target:"recover",hand:+0.20}
   ][i];
 
+  // Distinct slash arc: high/back load -> forward/down cut -> forward/down follow-through.
   const slashPhase=[
-    {root:0.00,torso: 0.00,guard: 0.00,tail: 0,target:"ready",hand: 0.10},
-    {root:-0.22,torso:-0.80,guard:+0.55,tail:-5,target:"slash_windup",hand:-0.55},
-    {root:+0.72,torso:+0.92,guard:-0.90,tail:+10,target:"slash_strike",hand:+1.00},
-    {root:+0.10,torso:+0.12,guard:-0.22,tail:+2,target:"slash_recover",hand:+0.18}
+    {root:0.00,torso: 0.00,guard: 0.00,tail: 0,target:"ready",hand: 0.08},
+    {root:-0.20,torso:-0.65,guard:+0.45,tail:-4,target:"slash_windup",hand:-0.40},
+    {root:+0.70,torso:+0.95,guard:-0.85,tail:+10,target:"slash_strike",hand:+1.00},
+    {root:+0.28,torso:+0.30,guard:-0.18,tail:+4,target:"slash_follow",hand:+0.35}
   ][i];
 
   const phase=strikeStyle==="slash" ? slashPhase : punchPhase;
 
-  // Root actually moves backward during load and toward opponent during hit.
   const rootDX=dir*phase.root*hipDrive;
   const torsoRot=signedTorsoRotation(phase.torso*(twist + lean*0.40));
 
@@ -1194,14 +1194,12 @@ function buildPunchPose(i, requestedSide){
   let wristTarget=transformPoint(torsoM,w0);
 
   if(phase.target==="ready"){
-    // Keep the hand near its natural guard side.
     wristTarget=[
       shoulder[0] + dir*armLen*0.18,
       shoulder[1] + armLen*0.24
     ];
 
   }else if(phase.target==="windup"){
-    // Legitimate punch load: fist retracts BEHIND the shoulder.
     const back=armLen*(0.18 + windup/210);
     wristTarget=[
       shoulder[0] - dir*back,
@@ -1209,7 +1207,6 @@ function buildPunchPose(i, requestedSide){
     ];
 
   }else if(phase.target==="strike"){
-    // Straight punch: shoulder -> fist line points directly at opponent.
     const extension=armLen*(0.66 + 0.33*reach);
     const a=strikeAngleDeg*Math.PI/180;
     wristTarget=[
@@ -1218,41 +1215,44 @@ function buildPunchPose(i, requestedSide){
     ];
 
   }else if(phase.target==="recover"){
-    // Pull the fist back to guard rather than teleporting to idle.
     wristTarget=[
       shoulder[0] + dir*armLen*0.26,
       shoulder[1] + armLen*0.18
     ];
 
   }else if(phase.target==="slash_windup"){
-    // Claw starts high and behind the shoulder.
+    // Lift the attacking claw high and behind the shoulder/head.
+    const backAmt = armLen*(0.16 + windup/260);
     wristTarget=[
-      shoulder[0] - dir*armLen*(0.10 + windup/280),
-      shoulder[1] - armLen*0.30
+      shoulder[0] - dir*backAmt,
+      shoulder[1] - armLen*0.34
     ];
 
   }else if(phase.target==="slash_strike"){
-    // Diagonal high-to-low sweep THROUGH the opponent side.
+    // True diagonal cut: forward and down across the target line.
+    // Positive strikeAngle adds a little more downward sweep.
+    const dropBias = 0.16 + Math.max(0, strikeAngleDeg)/90;
+    const extension = armLen*(0.62 + 0.22*reach);
     wristTarget=[
-      shoulder[0] + dir*armLen*(0.76 + 0.20*reach),
-      shoulder[1] + armLen*0.30
+      shoulder[0] + dir*extension,
+      shoulder[1] + armLen*(0.26 + dropBias)
     ];
 
-  }else if(phase.target==="slash_recover"){
+  }else if(phase.target==="slash_follow"){
+    // Follow-through stays somewhat forward/down instead of popping back up.
     wristTarget=[
-      shoulder[0] + dir*armLen*0.22,
-      shoulder[1] + armLen*0.20
+      shoulder[0] + dir*armLen*0.34,
+      shoulder[1] + armLen*0.30
     ];
   }
 
-  // Mirror hand/claw articulation with facing.
   armPoseToTarget(side,built,wristTarget,claw*phase.hand*dir);
 
   const guardSide=side==="right" ? "left" : "right";
   guardArmPose(
     guardSide,
     built,
-    guard*phase.guard*dir*(strikeStyle==="slash" ? 0.9 : 1.0)
+    guard*phase.guard*dir*(strikeStyle==="slash" ? 0.85 : 1.0)
   );
 
   if(orig.tail_base && orig.tail_tip && pose.tail_base){
