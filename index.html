@@ -4,10 +4,39 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V15</title>
+<title>Fatal Instinct Sprite Walker V17</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
+
+.traceLegend{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+.traceItem{display:flex;align-items:center;gap:7px;padding:8px;border:1px solid var(--line);border-radius:10px;background:#151922;font-size:12px;color:var(--muted)}
+.traceSwatch{width:16px;height:16px;border-radius:4px;flex:0 0 16px}
+.traceItem.ok{color:var(--text)}
+.traceItem.warn{border-color:#8a7040;color:#ffd58a}
+.traceItem.missing{border-color:#7e4350;color:#ff9caf}
+.traceStats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
+.traceStat{background:#131720;border-radius:10px;padding:9px;text-align:center}
+.traceStat b{display:block;font-size:18px;color:var(--text)}
+.traceStat span{font-size:11px;color:var(--muted)}
+
+
+.moduleBox{border:1px solid var(--line);border-radius:13px;padding:11px;margin-top:12px;background:#151923}
+.moduleHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.moduleHead b{font-size:14px}
+.pill{padding:3px 7px;border-radius:999px;font-size:11px;background:#202636;color:var(--muted)}
+.pill.ok{background:#153027;color:#77e6ae}.pill.warn{background:#3a2d16;color:#ffd37a}
+.stackRow{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.stackRow:last-child{border-bottom:0}.stackRow label{flex:1;font-size:13px;color:var(--muted)}
+.testGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.libraryList{max-height:170px;overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:8px}
+.libraryItem{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 9px;border-bottom:1px solid var(--line);font-size:12px}
+.libraryItem:last-child{border-bottom:0}.libraryItem button{padding:7px 9px;font-size:12px}
+.chainList{font-size:12px;color:var(--muted);line-height:1.55}
+.contactStrip{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;margin-top:6px}
+.contactCell{height:24px;border:1px solid var(--line);border-radius:5px;display:grid;place-items:center;font-size:9px;color:var(--muted)}
+.contactCell.left{background:#263b4d}.contactCell.right{background:#49343a}.contactCell.both{background:#3f3a29}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -22,7 +51,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V15</span></h1><div class="sub">Auto Trace + Hybrid Joint Mesh + FBX Retargeting</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V17</span></h1><div class="sub">Unified Animation Lab • Retarget + FBIK + Control Rig + Skinning + Batch</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -32,6 +61,12 @@
 <label class="btn">Load Rig<input id="rigInput" type="file" accept=".json,application/json"></label>
 <label class="btn">Import Animation<input id="animationInput" type="file" accept=".fbx,.zip,.json,application/json,application/zip"></label>
 <button id="saveAnimation">Save Animation</button>
+<button id="saveProject">Save Project</button>
+<label class="btn">Load Project<input id="projectInput" type="file" accept=".json,application/json"></label>
+<label class="btn">Batch FBX<input id="batchInput" type="file" accept=".fbx" multiple></label>
+<button id="exportBatch">Export Batch Motions</button>
+<button id="undoBtn">Undo</button>
+<button id="redoBtn">Redo</button>
 </div>
 
 <div class="workspace">
@@ -47,12 +82,12 @@
 <div class="help">
 <p><b>New workflow:</b> the walk rig exists first. You can preview a stick/bone version before using any sprite art.</p>
 <p><b>Bind sprite second:</b> load Marius, load or trace body parts, align joints, then generate walk frames from the rig.</p>
-<p><b>Compatible:</b> V4–V9 rig JSON files can still be loaded. V15 can also import MCO FBX animations and reusable Fatal Instinct motion JSON.</p>
+<p><b>Compatible:</b> V4–V16 rig JSON files can still be loaded. V17 imports MCO/Mixamo/Unreal-style FBX, native motion JSON, projects, and batch FBX queues.</p>
 </div>
 
 <div class="help" style="margin-top:10px">
-  <p><b>V15 Animation Import:</b> import a direct FBX, a Fatal Instinct motion JSON, or the full MCO demo ZIP.</p>
-  <p><b>MCO ZIP:</b> V12 automatically prefers <code>MOB1_Walk_F_IPC.fbx</code> — the in-place forward walk.</p>
+  <p><b>V17 Animation Import:</b> import a direct FBX, a Fatal Instinct motion JSON, or the full MCO demo ZIP.</p>
+  <p><b>MCO ZIP:</b> V17 automatically prefers <code>MOB1_Walk_F_IPC.fbx</code> — the in-place forward walk.</p>
 </div>
 
 <label class="title" style="margin-top:12px">Motion Source</label>
@@ -74,7 +109,7 @@
 
 
 <div class="help" style="margin-top:10px">
-  <p><b>V15 Auto Character Tracer:</b> uses the transparent PNG alpha channel plus the fitted skeleton to automatically divide the character into torso, limbs, feet, hands, head, and tail.</p>
+  <p><b>V17 Auto Character Tracer:</b> uses the transparent PNG alpha channel plus the fitted skeleton to automatically divide the character into torso, limbs, feet, hands, head, and tail.</p>
   <p><b>Hybrid Joint Mesh:</b> hips, knees, shoulders, and elbows get small weighted deformation zones while the rest of the sprite remains rigid and crisp.</p>
 </div>
 
@@ -106,10 +141,25 @@
   <label>Mesh grid <span><b id="meshGridV">4</b></span></label>
   <input id="meshGrid" type="range" min="2" max="7" value="4">
 </div>
+
+<label class="title" style="margin-top:12px">Inspect Auto Region</label>
+<select id="traceRegionSelect">
+  <option value="all">All regions</option>
+</select>
+
+<div class="switchRow"><span>Dim unselected regions</span><input id="dimUnselected" type="checkbox" checked></div>
+
+<div class="traceStats">
+  <div class="traceStat"><b id="traceDetected">0</b><span>detected</span></div>
+  <div class="traceStat"><b id="traceWarnings">0</b><span>warnings</span></div>
+  <div class="traceStat"><b id="traceMissing">0</b><span>missing</span></div>
+</div>
+
+<div id="traceLegend" class="traceLegend"></div>
 <div id="traceStatus" class="status">Auto tracer: fit/load a skeleton, then tap Auto Trace &amp; Bind.</div>
 
 <div class="help" style="margin-top:10px">
-  <p><b>V15 Foot Correction:</b> imported foot rotation is applied relative to Marius's original foot angle instead of copying the FBX foot direction absolutely.</p>
+  <p><b>V17 Foot Correction:</b> imported foot rotation is applied relative to Marius's original foot angle instead of copying the FBX foot direction absolutely.</p>
   <p>When a foot is detected near the ground, V13 clamps twist, grounds the toe, and re-solves the leg with IK to keep the knee/ankle connected.</p>
 </div>
 <div class="switchRow"><span>Correct imported feet</span><input id="correctFeet" type="checkbox" checked></div>
@@ -134,6 +184,89 @@
   <button id="previewMotion">Preview Motion</button>
 </div>
 <div id="mappingStatus" class="status">MCO mapping: waiting for animation.</div>
+
+
+<div class="moduleBox">
+  <div class="moduleHead"><b>Unreal-Style Test Modules</b><span id="moduleBadge" class="pill">READY</span></div>
+  <div class="testGrid">
+    <button id="testRetarget">1 • Retarget</button>
+    <button id="testContacts">2 • Contacts</button>
+    <button id="testFBIK">3 • Full-Body IK</button>
+    <button id="testControlRig">4 • Control Rig</button>
+    <button id="testSkinning">5 • Skinning</button>
+    <button id="testStack">6 • Correction Stack</button>
+    <button id="testLibrary">7 • Library</button>
+    <button id="testBatch">8 • Batch</button>
+  </div>
+  <div id="moduleStatus" class="status">Test modules independently after the full build is loaded.</div>
+</div>
+
+<div class="moduleBox">
+  <div class="moduleHead"><b>Retarget Rig</b><span id="profileBadge" class="pill">AUTO</span></div>
+  <label class="title">Retarget Profile</label>
+  <select id="retargetProfile">
+    <option value="auto">Auto Detect</option>
+    <option value="mco">MCO / MotusMan</option>
+    <option value="unreal">Unreal Mannequin</option>
+    <option value="mixamo">Mixamo</option>
+    <option value="generic">Generic Humanoid</option>
+  </select>
+  <div class="grid">
+    <button id="detectProfile">Detect Profile</button>
+    <button id="detectChains">Detect Chains</button>
+  </div>
+  <div id="chainStatus" class="chainList">Chains: waiting for rig.</div>
+</div>
+
+<div class="moduleBox">
+  <div class="moduleHead"><b>Automatic Contact Analysis</b><span id="contactBadge" class="pill">OFF</span></div>
+  <div class="switchRow"><span>Analyze foot contacts</span><input id="autoContacts" type="checkbox" checked></div>
+  <div class="slider"><label>Contact velocity <span><b id="contactVelocityV">32</b>% leg</span></label><input id="contactVelocity" type="range" min="10" max="60" value="32"></div>
+  <div id="contactStrip" class="contactStrip"></div>
+</div>
+
+<div class="moduleBox">
+  <div class="moduleHead"><b>Full-Body IK</b><span id="fbikBadge" class="pill">ON</span></div>
+  <div class="switchRow"><span>Enable FBIK pass</span><input id="enableFBIK" type="checkbox" checked></div>
+  <div class="slider"><label>Foot lock <span><b id="fbikFootV">90</b>%</span></label><input id="fbikFoot" type="range" min="0" max="100" value="90"></div>
+  <div class="slider"><label>Pelvis weight shift <span><b id="fbikPelvisV">55</b>%</span></label><input id="fbikPelvis" type="range" min="0" max="100" value="55"></div>
+  <div class="slider"><label>Spine counterbalance <span><b id="fbikSpineV">35</b>%</span></label><input id="fbikSpine" type="range" min="0" max="100" value="35"></div>
+</div>
+
+<div class="moduleBox">
+  <div class="moduleHead"><b>Control Rig</b><span id="controlBadge" class="pill">ZEROED</span></div>
+  <div class="slider"><label>Pelvis X <span><b id="ctlPelvisXV">0</b>% leg</span></label><input id="ctlPelvisX" type="range" min="-20" max="20" value="0"></div>
+  <div class="slider"><label>Pelvis Y <span><b id="ctlPelvisYV">0</b>% leg</span></label><input id="ctlPelvisY" type="range" min="-20" max="20" value="0"></div>
+  <div class="slider"><label>Left foot target X <span><b id="ctlLFootXV">0</b>% leg</span></label><input id="ctlLFootX" type="range" min="-25" max="25" value="0"></div>
+  <div class="slider"><label>Left foot target Y <span><b id="ctlLFootYV">0</b>% leg</span></label><input id="ctlLFootY" type="range" min="-25" max="25" value="0"></div>
+  <div class="slider"><label>Right foot target X <span><b id="ctlRFootXV">0</b>% leg</span></label><input id="ctlRFootX" type="range" min="-25" max="25" value="0"></div>
+  <div class="slider"><label>Right foot target Y <span><b id="ctlRFootYV">0</b>% leg</span></label><input id="ctlRFootY" type="range" min="-25" max="25" value="0"></div>
+  <div class="grid"><button id="resetControls">Reset Controls</button><button id="previewControls">Preview Controls</button></div>
+</div>
+
+<div class="moduleBox">
+  <div class="moduleHead"><b>Retarget Correction Stack</b><span id="stackBadge" class="pill ok">ACTIVE</span></div>
+  <div class="stackRow"><input id="opRoot" type="checkbox" checked><label for="opRoot">1. Root / scale normalization</label></div>
+  <div class="stackRow"><input id="opContacts" type="checkbox" checked><label for="opContacts">2. Automatic foot contacts</label></div>
+  <div class="stackRow"><input id="opFoot" type="checkbox" checked><label for="opFoot">3. Foot orientation + ground lock</label></div>
+  <div class="stackRow"><input id="opFBIK" type="checkbox" checked><label for="opFBIK">4. Full-body IK / weight transfer</label></div>
+  <div class="stackRow"><input id="opTwist" type="checkbox" checked><label for="opTwist">5. Limb twist clamp</label></div>
+  <div class="stackRow"><input id="opSmooth" type="checkbox" checked><label for="opSmooth">6. Motion smoothing</label></div>
+  <div class="stackRow"><input id="opControl" type="checkbox" checked><label for="opControl">7. Control Rig overrides</label></div>
+  <div class="stackRow"><input id="opSkin" type="checkbox" checked><label for="opSkin">8. Hybrid mesh skinning</label></div>
+</div>
+
+<div class="moduleBox">
+  <div class="moduleHead"><b>Animation Library</b><span id="libraryBadge" class="pill">0 CLIPS</span></div>
+  <div class="grid"><button id="addToLibrary">Add Current Motion</button><button id="clearLibrary">Clear Library</button></div>
+  <div id="animationLibrary" class="libraryList"></div>
+</div>
+
+<div class="moduleBox">
+  <div class="moduleHead"><b>Batch Processor</b><span id="batchBadge" class="pill">0 FILES</span></div>
+  <div class="small">Select multiple FBX files with <b>Batch FBX</b>. V17 converts each compatible clip to Fatal Instinct normalized motion data and packages them together.</div>
+  <div id="batchStatus" class="status">Batch queue empty.</div>
+</div>
 
 <div class="sliders">
 <div class="slider"><label>Stride <span><b id="strideV">36</b>% leg</span></label><input id="stride" type="range" min="10" max="60" value="36"></div>
@@ -223,6 +356,65 @@ let autoTraceCache = {
   scale:1
 };
 
+const EXPECTED_AUTO_PARTS = [
+  "torso","head",
+  "left_upper_arm","left_forearm","left_hand",
+  "right_upper_arm","right_forearm","right_hand",
+  "left_thigh","left_shin","left_foot",
+  "right_thigh","right_shin","right_foot",
+  "tail"
+];
+
+let traceDiagnostics = {
+  detected:0,
+  warnings:0,
+  missing:0,
+  items:{}
+};
+
+const RETARGET_CHAINS = {
+  spine:["pelvis","neck"],
+  left_arm:["left_shoulder","left_elbow","left_wrist"],
+  right_arm:["right_shoulder","right_elbow","right_wrist"],
+  left_leg:["left_hip","left_knee","left_ankle","left_toe"],
+  right_leg:["right_hip","right_knee","right_ankle","right_toe"],
+  tail:["tail_base","tail_tip"]
+};
+
+const PROFILE_ALIASES = {
+  mco:{
+    pelvis:["Hips","Pelvis"],
+    neck:["Neck","Spine2","Spine1"],
+    left_shoulder:["LeftArm","LeftShoulder"], left_elbow:["LeftForeArm","LeftForearm"], left_wrist:["LeftHand"],
+    right_shoulder:["RightArm","RightShoulder"], right_elbow:["RightForeArm","RightForearm"], right_wrist:["RightHand"],
+    left_hip:["LeftUpLeg","LeftThigh"], left_knee:["LeftLeg","LeftCalf"], left_ankle:["LeftFoot"], left_toe:["LeftToeBase","LeftToe"],
+    right_hip:["RightUpLeg","RightThigh"], right_knee:["RightLeg","RightCalf"], right_ankle:["RightFoot"], right_toe:["RightToeBase","RightToe"]
+  },
+  unreal:{
+    pelvis:["pelvis"], neck:["neck_01","spine_03"],
+    left_shoulder:["upperarm_l","clavicle_l"], left_elbow:["lowerarm_l"], left_wrist:["hand_l"],
+    right_shoulder:["upperarm_r","clavicle_r"], right_elbow:["lowerarm_r"], right_wrist:["hand_r"],
+    left_hip:["thigh_l"], left_knee:["calf_l"], left_ankle:["foot_l"], left_toe:["ball_l"],
+    right_hip:["thigh_r"], right_knee:["calf_r"], right_ankle:["foot_r"], right_toe:["ball_r"]
+  },
+  mixamo:{
+    pelvis:["mixamorigHips","Hips"], neck:["mixamorigNeck","mixamorigSpine2"],
+    left_shoulder:["mixamorigLeftArm","mixamorigLeftShoulder"], left_elbow:["mixamorigLeftForeArm"], left_wrist:["mixamorigLeftHand"],
+    right_shoulder:["mixamorigRightArm","mixamorigRightShoulder"], right_elbow:["mixamorigRightForeArm"], right_wrist:["mixamorigRightHand"],
+    left_hip:["mixamorigLeftUpLeg"], left_knee:["mixamorigLeftLeg"], left_ankle:["mixamorigLeftFoot"], left_toe:["mixamorigLeftToeBase"],
+    right_hip:["mixamorigRightUpLeg"], right_knee:["mixamorigRightLeg"], right_ankle:["mixamorigRightFoot"], right_toe:["mixamorigRightToeBase"]
+  },
+  generic:MCO_CANDIDATES
+};
+
+let animationLibrary=[];
+let batchFiles=[];
+let batchConverted=[];
+let undoStack=[],redoStack=[];
+let currentTestModule=0;
+
+
+
 const AUTO_COLORS = {
   torso:[224,86,115], head:[236,174,73],
   left_upper_arm:[78,154,223], left_forearm:[72,196,190], left_hand:[133,209,126],
@@ -247,7 +439,7 @@ const JOINT_MESHES = [
 
 function status(s){statusEl.textContent=s;}
 function bindSlider(id,out){const a=$(id),b=$(out);a.oninput=()=>b.textContent=a.value;}
-["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid"].forEach(id=>bindSlider(id,id+"V"));
+["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY"].forEach(id=>bindSlider(id,id+"V"));
 function setMode(m){mode=m;$("traceBtn").classList.toggle("active",m==="trace");$("jointBtn").classList.toggle("active",m==="joint");$("inspectBtn").classList.toggle("active",m==="inspect");status(m==="trace"?"Trace around the selected body part.":m==="joint"?"Tap or drag the selected joint.":"Inspect mode.");}
 $("traceBtn").onclick=()=>setMode("trace");$("jointBtn").onclick=()=>setMode("joint");$("inspectBtn").onclick=()=>setMode("inspect");
 
@@ -266,7 +458,7 @@ function draw(frameCanvas=null,poseJoints=null){drawBackground();if(!source&&Obj
   if($("showAutoTrace") && $("showAutoTrace").checked && source){
     if(generateAutoSegmentation(false) && autoTraceCache.preview){
       const {s,ox,oy}=view();
-      ctx.save();ctx.globalAlpha=0.55;ctx.imageSmoothingEnabled=false;
+      ctx.save();ctx.globalAlpha=0.88;ctx.imageSmoothingEnabled=false;
       ctx.drawImage(autoTraceCache.preview,ox,oy,source.width*s,source.height*s);
       ctx.restore();
     }
@@ -289,7 +481,7 @@ $("seedRig").onclick=seedHumanoidRig;
 function pointFarthestFrom(points,p){let best=points[0],dist=-1;for(const q of points){const d=Math.hypot(q[0]-p[0],q[1]-p[1]);if(d>dist){dist=d;best=q;}}return[best[0],best[1]];}
 function inferJointsFromParts(){const p=rig.parts,j=rig.joints,ensure=(name,val)=>{if(!j[name]&&val) j[name]=val;};if(p.torso&&p.torso.pivot) ensure("pelvis",[...p.torso.pivot]);if(p.left_thigh&&p.left_thigh.pivot) ensure("left_hip",[...p.left_thigh.pivot]);if(p.left_shin&&p.left_shin.pivot) ensure("left_knee",[...p.left_shin.pivot]);if(p.left_foot&&p.left_foot.pivot) ensure("left_ankle",[...p.left_foot.pivot]);if(p.right_thigh&&p.right_thigh.pivot) ensure("right_hip",[...p.right_thigh.pivot]);if(p.right_shin&&p.right_shin.pivot) ensure("right_knee",[...p.right_shin.pivot]);if(p.right_foot&&p.right_foot.pivot) ensure("right_ankle",[...p.right_foot.pivot]);if(p.left_foot&&p.left_foot.poly&&j.left_ankle) ensure("left_toe",pointFarthestFrom(p.left_foot.poly,j.left_ankle));if(p.right_foot&&p.right_foot.poly&&j.right_ankle) ensure("right_toe",pointFarthestFrom(p.right_foot.poly,j.right_ankle));if(p.tail&&p.tail.pivot) ensure("tail_base",[...p.tail.pivot]);if(p.tail&&p.tail.poly&&j.tail_base) ensure("tail_tip",pointFarthestFrom(p.tail.poly,j.tail_base));if(!j.neck&&p.torso&&p.torso.poly){let minY=1e9,sumX=0,count=0;for(const q of p.torso.poly){if(q[1]<minY+10){if(q[1]<minY){minY=q[1];sumX=0;count=0;}sumX+=q[0];count++;}}if(count) j.neck=[sumX/count,minY+10];}if(!j.left_shoulder&&j.neck) j.left_shoulder=[j.neck[0]-24,j.neck[1]+12];if(!j.right_shoulder&&j.neck) j.right_shoulder=[j.neck[0]+24,j.neck[1]+12];}
 function download(blob,name){const a=document.createElement("a"),u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);}
-$("saveRig").onclick=()=>{const data={version:15,source_name:sourceName,source_size:source?[source.width,source.height]:null,parts:rig.parts,joints:rig.joints};download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"fatal_instinct_rig_v15.json");status("V15 rig exported.");};
+$("saveRig").onclick=()=>{const data={version:17,source_name:sourceName,source_size:source?[source.width,source.height]:null,parts:rig.parts,joints:rig.joints};download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"fatal_instinct_rig_v17.json");status("V17 rig exported.");};
 $("rigInput").onchange=async e=>{const f=e.target.files[0];if(!f) return;try{const d=JSON.parse(await f.text());rig.parts=d.parts||{};rig.joints=d.joints||{};autoTraceCache.dirty=true;inferJointsFromParts();status(`Loaded rig: ${f.name} (V${d.version||"?"})`);draw();}catch(err){status("Could not read rig JSON.");}};
 
 function joint(name){return rig.joints[name]?[...rig.joints[name]]:null;}
@@ -416,6 +608,110 @@ function autoTraceCandidateParts(){
     return b && joint(b[0]) && joint(b[1]);
   });
 }
+
+function rgbaCss(rgb,a=1){
+  return `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${a})`;
+}
+function rebuildTraceRegionSelect(){
+  const sel=$("traceRegionSelect");
+  const current=sel.value||"all";
+  sel.innerHTML="";
+  const all=document.createElement("option");
+  all.value="all"; all.textContent="All regions"; sel.appendChild(all);
+  for(const p of EXPECTED_AUTO_PARTS){
+    const o=document.createElement("option");
+    o.value=p;
+    const d=traceDiagnostics.items[p];
+    const suffix=!d?" — missing":d.warning?" — check":"";
+    o.textContent=p+suffix;
+    sel.appendChild(o);
+  }
+  sel.value=[...sel.options].some(o=>o.value===current)?current:"all";
+}
+function rebuildTraceLegend(){
+  const box=$("traceLegend");
+  box.innerHTML="";
+  for(const p of EXPECTED_AUTO_PARTS){
+    const d=traceDiagnostics.items[p];
+    const row=document.createElement("div");
+    row.className="traceItem "+(!d?"missing":d.warning?"warn":"ok");
+    const sw=document.createElement("span");
+    sw.className="traceSwatch";
+    sw.style.background=rgbaCss(AUTO_COLORS[p]||[180,180,180],0.95);
+    const label=document.createElement("span");
+    if(!d) label.textContent=`${p}: missing`;
+    else if(d.warning) label.textContent=`${p}: tiny region`;
+    else label.textContent=`${p}: ${d.pixels.toLocaleString()} px`;
+    row.append(sw,label);
+    box.appendChild(row);
+  }
+  $("traceDetected").textContent=traceDiagnostics.detected;
+  $("traceWarnings").textContent=traceDiagnostics.warnings;
+  $("traceMissing").textContent=traceDiagnostics.missing;
+}
+function computeTraceDiagnostics(counts,scale){
+  const items={};
+  let detected=0,warnings=0,missing=0;
+  const leg=legMetrics()?.avgLeg||Math.max(source?.width||420,source?.height||520)*0.35;
+  const smallThreshold=Math.max(8,Math.round((leg*scale)*(leg*scale)*0.0017));
+  for(const p of EXPECTED_AUTO_PARTS){
+    const count=counts[p]||0;
+    if(count<=0){missing++;continue;}
+    const warning=count<smallThreshold;
+    if(warning) warnings++;
+    detected++;
+    items[p]={pixels:Math.round(count/(scale*scale)),rawPixels:count,warning};
+  }
+  traceDiagnostics={detected,warnings,missing,items};
+  rebuildTraceRegionSelect();
+  rebuildTraceLegend();
+}
+function buildStrongTracePreview(labels,idByPart,w,h){
+  const selected=$("traceRegionSelect")?.value||"all";
+  const dim=$("dimUnselected")?.checked!==false;
+  const partById={};
+  Object.entries(idByPart).forEach(([p,id])=>partById[id]=p);
+
+  const preview=document.createElement("canvas");
+  preview.width=w;preview.height=h;
+  const pg=preview.getContext("2d");
+  const out=pg.createImageData(w,h);
+
+  for(let i=0;i<labels.length;i++){
+    const p=partById[labels[i]];
+    if(!p) continue;
+    const c=AUTO_COLORS[p]||[180,180,180];
+    const chosen=selected==="all" || p===selected;
+    const alpha=selected==="all" ? 190 : chosen ? 235 : (dim?45:105);
+    out.data[i*4]=c[0];
+    out.data[i*4+1]=c[1];
+    out.data[i*4+2]=c[2];
+    out.data[i*4+3]=alpha;
+  }
+  pg.putImageData(out,0,0);
+
+  // Add visible white boundaries for the selected region or all region transitions.
+  const edge=pg.createImageData(w,h);
+  for(let y=1;y<h-1;y++){
+    for(let x=1;x<w-1;x++){
+      const i=y*w+x, id=labels[i];
+      if(!id) continue;
+      const p=partById[id];
+      if(selected!=="all" && p!==selected) continue;
+      if(labels[i-1]!==id || labels[i+1]!==id || labels[i-w]!==id || labels[i+w]!==id){
+        edge.data[i*4]=255;edge.data[i*4+1]=255;edge.data[i*4+2]=255;edge.data[i*4+3]=235;
+      }
+    }
+  }
+  pg.putImageData(edge,0,0);
+  return preview;
+}
+function refreshTracePreview(){
+  if(!source) return;
+  autoTraceCache.dirty=true;
+  if(generateAutoSegmentation(true)) draw();
+}
+
 function generateAutoSegmentation(force=false){
   if(!source) return false;
   const ready=requiredReadyForWalk();
@@ -507,20 +803,11 @@ function generateAutoSegmentation(force=false){
     masks[part]=cut;
   }
 
-  const preview=document.createElement("canvas");preview.width=w;preview.height=h;
-  const pg=preview.getContext("2d");
-  const pv=pg.createImageData(w,h);
-  const partById={};Object.entries(idByPart).forEach(([p,id])=>partById[id]=p);
-  for(let i=0;i<labels.length;i++){
-    const p=partById[labels[i]];
-    if(!p) continue;
-    const c=AUTO_COLORS[p]||[180,180,180];
-    pv.data[i*4]=c[0];pv.data[i*4+1]=c[1];pv.data[i*4+2]=c[2];pv.data[i*4+3]=150;
-  }
-  pg.putImageData(pv,0,0);
+  computeTraceDiagnostics(counts,scale);
+  const preview=buildStrongTracePreview(labels,idByPart,w,h);
 
-  autoTraceCache={dirty:false,masks,preview,counts,scale};
-  $("traceStatus").textContent=`Auto tracer: ${parts.length} regions built at ${w}×${h}. Manual traces can still override any part.`;
+  autoTraceCache={dirty:false,masks,preview,counts,scale,labels,idByPart,w,h};
+  $("traceStatus").textContent=`Auto tracer: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected • ${traceDiagnostics.warnings} warning(s) • ${traceDiagnostics.missing} missing.`;
   return true;
 }
 function autoTraceAndBind(){
@@ -535,7 +822,11 @@ function autoTraceAndBind(){
   }
   autoTraceCache.dirty=true;
   if(generateAutoSegmentation(true)){
-    status("V15 Auto Trace & Bind complete. Turn on Show auto-trace regions to inspect segmentation.");
+    $("showAutoTrace").checked=true;
+    $("showBones").checked=false;
+    $("showSprite").checked=true;
+    $("traceRegionSelect").value="all";
+    status(`V17 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Segmentation preview turned ON automatically.`);
     draw();
   }
 }
@@ -547,7 +838,7 @@ $("rebuildTrace").onclick=()=>{
     if(rig.parts[name] && !rig.parts[name].poly) rig.parts[name].auto=true;
   }
   autoTraceCache.dirty=true;
-  if(generateAutoSegmentation(true)){status("Auto trace rebuilt from current skeleton.");draw();}
+  if(generateAutoSegmentation(true)){$("showAutoTrace").checked=true;$("showBones").checked=false;status(`Auto trace rebuilt • ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} detected.`);draw();}
 };
 
 function autoMaskedPart(name){
@@ -623,7 +914,7 @@ function renderJointMesh(g,def,pose,torsoM){
   }
 }
 function renderHybridJointMeshes(g,pose,torsoM){
-  if(!$("useJointMesh").checked || !source) return;
+  if(!$("opSkin").checked || !$("useJointMesh").checked || !source) return;
   for(const def of JOINT_MESHES) renderJointMesh(g,def,pose,torsoM);
 }
 
@@ -646,6 +937,140 @@ function matrixForPart(name,pose,torsoM){const bind=PART_BIND[name];if(!bind) re
 function buildFrameCanvas(i){if(!source) return null;const built=buildPose(i);if(built.error) return null;const {pose,torsoM}=built,masks={};PARTS.forEach(name=>{const m=maskedPart(name);if(m) masks[name]=m;});const seamCaps={left_thigh:thighCapCanvas("left_thigh"),right_thigh:thighCapCanvas("right_thigh")};const f=document.createElement("canvas");f.width=source.width;f.height=source.height;const g=f.getContext("2d");for(const name of ORDER){if(!masks[name]) continue;const M=matrixForPart(name,pose,torsoM);if((name==="left_thigh"||name==="right_thigh")&&seamCaps[name]){g.save();applyM(g,M);g.drawImage(seamCaps[name],0,-6);g.restore();}g.save();applyM(g,M);g.drawImage(masks[name],0,0);g.restore();}renderHybridJointMeshes(g,pose,torsoM);return{canvas:f,pose};}
 
 
+
+function snapshotState(label="edit"){
+  try{
+    undoStack.push({
+      label,
+      rig:JSON.parse(JSON.stringify(rig)),
+      controls:{
+        ctlPelvisX:$("ctlPelvisX").value,ctlPelvisY:$("ctlPelvisY").value,
+        ctlLFootX:$("ctlLFootX").value,ctlLFootY:$("ctlLFootY").value,
+        ctlRFootX:$("ctlRFootX").value,ctlRFootY:$("ctlRFootY").value
+      }
+    });
+    if(undoStack.length>30) undoStack.shift();
+    redoStack=[];
+  }catch(e){}
+}
+function restoreSnapshot(s){
+  if(!s) return;
+  rig=JSON.parse(JSON.stringify(s.rig));
+  Object.entries(s.controls||{}).forEach(([k,v])=>{if($(k)) $(k).value=v;});
+  autoTraceCache.dirty=true;inferJointsFromParts();draw();
+}
+$("undoBtn").onclick=()=>{
+  if(!undoStack.length){status("Nothing to undo.");return;}
+  redoStack.push({label:"redo",rig:JSON.parse(JSON.stringify(rig)),controls:{}});
+  restoreSnapshot(undoStack.pop());status("Undo applied.");
+};
+$("redoBtn").onclick=()=>{
+  if(!redoStack.length){status("Nothing to redo.");return;}
+  undoStack.push({label:"undo",rig:JSON.parse(JSON.stringify(rig)),controls:{}});
+  restoreSnapshot(redoStack.pop());status("Redo applied.");
+};
+
+function profileCandidates(profile,target){
+  const p=PROFILE_ALIASES[profile]||PROFILE_ALIASES.generic;
+  return p[target]||MCO_CANDIDATES[target]||[];
+}
+function scoreProfile(profile){
+  let score=0,total=0;
+  for(const target of Object.keys(MCO_CANDIDATES)){
+    total++;
+    const arr=profileCandidates(profile,target);
+    if(arr.some(n=>importedMotion.bones[normalizeBoneName(n)])) score++;
+  }
+  return {score,total};
+}
+function detectRetargetProfile(){
+  if(importedMotion.type!=="fbx"){ $("profileBadge").textContent="NATIVE"; return "generic"; }
+  let best="generic",bestScore=-1;
+  for(const p of ["mco","unreal","mixamo","generic"]){
+    const s=scoreProfile(p).score;
+    if(s>bestScore){bestScore=s;best=p;}
+  }
+  $("retargetProfile").value=best;
+  $("profileBadge").textContent=best.toUpperCase();
+  $("profileBadge").className="pill "+(bestScore>=10?"ok":"warn");
+  status(`Retarget profile detected: ${best.toUpperCase()} (${bestScore} mapped joints).`);
+  return best;
+}
+$("detectProfile").onclick=detectRetargetProfile;
+
+function autoMapProfileBones(){
+  const requested=$("retargetProfile").value;
+  const profile=requested==="auto"?detectRetargetProfile():requested;
+  importedMotion.boneMap={};
+  let found=0,total=0;
+  for(const target of Object.keys(MCO_CANDIDATES)){
+    total++;
+    for(const n of profileCandidates(profile,target)){
+      const b=importedMotion.bones[normalizeBoneName(n)];
+      if(b){importedMotion.boneMap[target]=b;found++;break;}
+    }
+  }
+  $("mappingStatus").textContent=`${profile.toUpperCase()} mapping: ${found}/${total} motion joints found.`;
+  return found;
+}
+
+function detectTargetChains(){
+  let good=0;
+  const lines=[];
+  for(const [name,nodes] of Object.entries(RETARGET_CHAINS)){
+    const present=nodes.filter(n=>!!joint(n)).length;
+    const ok=present===nodes.length;
+    if(ok) good++;
+    lines.push(`${ok?"✓":"△"} ${name}: ${present}/${nodes.length}`);
+  }
+  $("chainStatus").innerHTML=lines.join("<br>");
+  status(`Target chains detected: ${good}/${Object.keys(RETARGET_CHAINS).length} complete.`);
+  return good;
+}
+$("detectChains").onclick=detectTargetChains;
+
+function projectSettings(){
+  const ids=["motionSource","projection","retargetProfile","rootMotion","mirrorMotion","correctFeet","enableFBIK",
+    "opRoot","opContacts","opFoot","opFBIK","opTwist","opSmooth","opControl","opSkin","useJointMesh",
+    "plantTilt","swingTilt","groundTol","contactVelocity","fbikFoot","fbikPelvis","fbikSpine",
+    "ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY"];
+  const o={};
+  for(const id of ids){
+    const el=$(id); if(!el) continue;
+    o[id]=(el.type==="checkbox")?el.checked:el.value;
+  }
+  return o;
+}
+function applyProjectSettings(o){
+  for(const [id,v] of Object.entries(o||{})){
+    const el=$(id); if(!el) continue;
+    if(el.type==="checkbox") el.checked=!!v; else el.value=v;
+    if(el.tagName==="INPUT"&&el.type==="range"){
+      const out=$(id+"V"); if(out) out.textContent=el.value;
+    }
+  }
+}
+$("saveProject").onclick=()=>{
+  const data={
+    format:"fatal-instinct-sprite-walker-project",version:17,
+    rig,settings:projectSettings(),library:animationLibrary,
+    source_name:sourceName
+  };
+  download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"fatal_instinct_project_v17.json");
+  status("V17 project saved.");
+};
+$("projectInput").onchange=async e=>{
+  const f=e.target.files[0];if(!f)return;
+  try{
+    const d=JSON.parse(await f.text());
+    if(d.format!=="fatal-instinct-sprite-walker-project"){status("Not a V17 project file.");return;}
+    snapshotState("load project");
+    rig=d.rig||rig;animationLibrary=d.library||[];applyProjectSettings(d.settings||{});
+    autoTraceCache.dirty=true;renderAnimationLibrary();detectTargetChains();draw();
+    status("V17 project loaded. Reload character PNG if needed.");
+  }catch(err){status("Could not load project.");}
+};
+
 function normalizeBoneName(s){
   return String(s||"").toLowerCase().replace(/[^a-z0-9]/g,"");
 }
@@ -666,16 +1091,10 @@ function findMappedBone(candidates){
   return null;
 }
 function autoMapMCOBones(){
-  importedMotion.boneMap={};
-  let found=0,total=0;
-  for(const [target,candidates] of Object.entries(MCO_CANDIDATES)){
-    total++;
-    const b=findMappedBone(candidates);
-    if(b){ importedMotion.boneMap[target]=b; found++; }
-  }
-  $("mappingStatus").textContent=`MCO mapping: ${found}/${total} required motion joints found.`;
-  if(found>=12) status("MCO skeleton mapped. Ready to preview or retarget.");
-  else status("Partial mapping found. Try another clip/model or projection.");
+  const found=autoMapProfileBones();
+  const total=Object.keys(MCO_CANDIDATES).length;
+  if(found>=12) status("Retarget skeleton mapped. Ready to preview.");
+  else status("Partial retarget mapping found. Check profile/projection.");
   return found;
 }
 $("autoMapMCO").onclick=autoMapMCOBones;
@@ -699,9 +1118,9 @@ function selectFBXClip(index){
   importedMotion.mixer.setTime(0);
   importedMotion.object.updateMatrixWorld(true);
   importedMotion.name=importedMotion.clip.name || "Imported FBX Motion";
-  autoMapMCOBones();
+  detectRetargetProfile();autoMapMCOBones();detectTargetChains();
   $("motionSource").value="imported";
-  status(`Loaded FBX clip: ${importedMotion.name} • ${importedMotion.clip.duration.toFixed(2)} sec`);
+  status(`Loaded FBX clip: ${importedMotion.name} • ${importedMotion.clip.duration.toFixed(2)} sec`);analyzeContacts();
 }
 
 $("clipSelect").onchange=()=>{
@@ -789,7 +1208,7 @@ function loadNativeMotion(d,name){
   const o=document.createElement("option");o.value="0";o.textContent=importedMotion.name;cs.appendChild(o);
   $("motionSource").value="imported";
   $("mappingStatus").textContent="Native motion: retarget-ready.";
-  status(`Loaded native motion: ${importedMotion.name}`);
+  status(`Loaded native motion: ${importedMotion.name}`);analyzeContacts();
 }
 
 $("animationInput").onchange=async e=>{
@@ -935,6 +1354,173 @@ function correctedImportedFootVector(side,sample,ref,ankle0,toe0,planted){
   return rotateVec(targetBase,delta);
 }
 
+
+function contactStateAt(i,side){
+  const s=importedRawSample(i);
+  if(!s) return false;
+  const toe=s[`${side}_toe`]||s[`${side}_ankle`];
+  if(!toe) return false;
+  const ground=importedFootGroundY();
+  if(ground===null) return false;
+  const scale=importedSourceScale()||1;
+  const hTol=scale*((+$("groundTol").value)/100);
+  const prev=importedRawSample((i+FRAME_COUNT-1)%FRAME_COUNT);
+  const next=importedRawSample((i+1)%FRAME_COUNT);
+  const pp=prev&&(prev[`${side}_toe`]||prev[`${side}_ankle`]);
+  const np=next&&(next[`${side}_toe`]||next[`${side}_ankle`]);
+  let speed=0;
+  if(pp&&np) speed=Math.hypot(np[0]-pp[0],np[1]-pp[1]);
+  const maxSpeed=scale*((+$("contactVelocity").value)/100);
+  return toe[1]>=ground-hTol && speed<=maxSpeed;
+}
+function analyzeContacts(){
+  const strip=$("contactStrip");strip.innerHTML="";
+  if(!importedMotion.type){$("contactBadge").textContent="NO MOTION";return [];}
+  const out=[];
+  for(let i=0;i<FRAME_COUNT;i++){
+    const l=contactStateAt(i,"left"),r=contactStateAt(i,"right");
+    out.push({left:l,right:r});
+    const c=document.createElement("div");
+    c.className="contactCell "+(l&&r?"both":l?"left":r?"right":"");
+    c.textContent=l&&r?"LR":l?"L":r?"R":"–";
+    strip.appendChild(c);
+  }
+  const total=out.filter(x=>x.left||x.right).length;
+  $("contactBadge").textContent=`${total}/8`;
+  $("contactBadge").className="pill "+(total>=4?"ok":"warn");
+  return out;
+}
+
+function clampLimbTwist(pose,orig){
+  for(const side of ["left","right"]){
+    const hip=pose[`${side}_hip`],knee=pose[`${side}_knee`],ankle=pose[`${side}_ankle`];
+    if(hip&&knee&&ankle){
+      // Keep knee on the same bend side as the original rig.
+      const sign0=Math.sign(crossZ(orig[`${side}_hip`],orig[`${side}_ankle`],orig[`${side}_knee`]))||1;
+      const sign=Math.sign(crossZ(hip,ankle,knee))||1;
+      if(sign!==sign0){
+        const mid=[(hip[0]+ankle[0])/2,(hip[1]+ankle[1])/2];
+        knee[0]=mid[0]+(mid[0]-knee[0]);
+        knee[1]=mid[1]+(mid[1]-knee[1]);
+      }
+    }
+  }
+  return pose;
+}
+
+function smoothPoseAt(i,pose){
+  if(!$("opSmooth").checked || importedMotion.type!=="fbx") return pose;
+  // Lightweight temporal smoothing: blend current pose toward adjacent retarget
+  // directions without recursively running the correction stack.
+  const prev=importedRawSample((i+FRAME_COUNT-1)%FRAME_COUNT);
+  const next=importedRawSample((i+1)%FRAME_COUNT);
+  const cur=importedRawSample(i);
+  if(!prev||!next||!cur) return pose;
+  // Only damp root vertical jitter here; limb detail remains intact.
+  const ref=importedReferenceSample();
+  if(cur.pelvis&&prev.pelvis&&next.pelvis&&ref?.pelvis){
+    const m=legMetrics(),scale=m.avgLeg/(importedSourceScale()||1);
+    const avgY=(prev.pelvis[1]+cur.pelvis[1]*2+next.pelvis[1])/4;
+    const targetY=joint("pelvis")[1]+(avgY-ref.pelvis[1])*scale;
+    pose.pelvis[1]=pose.pelvis[1]*0.45+targetY*0.55;
+  }
+  return pose;
+}
+
+function applyFullBodyIK(i,pose,orig){
+  if(!$("enableFBIK").checked || !$("opFBIK").checked) return pose;
+  const contacts=$("autoContacts").checked&&$("opContacts").checked ? {
+    left:contactStateAt(i,"left"),right:contactStateAt(i,"right")
+  } : {left:false,right:false};
+
+  const m=legMetrics();
+  const lock=(+$("fbikFoot").value)/100;
+  const weight=(+$("fbikPelvis").value)/100;
+  const spine=(+$("fbikSpine").value)/100;
+
+  let supports=[];
+  if(contacts.left) supports.push("left");
+  if(contacts.right) supports.push("right");
+  if(!supports.length) return pose;
+
+  // Pelvis shifts toward the support foot(s), like a simplified 2D FBIK solver.
+  let sx=0;
+  supports.forEach(side=>{sx+=orig[`${side}_ankle`][0];});
+  sx/=supports.length;
+  const desired=pose.pelvis[0]+(sx-pose.pelvis[0])*0.10*weight;
+  const dx=desired-pose.pelvis[0];
+  pose.pelvis[0]+=dx;
+
+  if(pose.neck) pose.neck[0]-=dx*spine;
+
+  for(const side of ["left","right"]){
+    const hip0=orig[`${side}_hip`],knee0=orig[`${side}_knee`],ankle0=orig[`${side}_ankle`],toe0=orig[`${side}_toe`];
+    if(!pose[`${side}_hip`]||!pose[`${side}_ankle`]||!pose[`${side}_toe`]) continue;
+
+    // Move hip by pelvis correction.
+    pose[`${side}_hip`][0]+=dx;
+
+    if(supports.includes(side)){
+      const footVec=sub(pose[`${side}_toe`],pose[`${side}_ankle`]);
+      const toeTarget=[
+        pose[`${side}_toe`][0]*(1-lock)+toe0[0]*lock,
+        pose[`${side}_toe`][1]*(1-lock)+toe0[1]*lock
+      ];
+      const ankleTarget=[toeTarget[0]-footVec[0],toeTarget[1]-footVec[1]];
+      const bend=Math.sign(crossZ(hip0,ankle0,knee0))||1;
+      const solved=twoBoneIK(pose[`${side}_hip`],knee0,ankle0,ankleTarget,bend);
+      pose[`${side}_knee`]=solved.knee;pose[`${side}_ankle`]=solved.ankle;
+      pose[`${side}_toe`]=[solved.ankle[0]+footVec[0],solved.ankle[1]+footVec[1]];
+    }else{
+      pose[`${side}_knee`][0]+=dx;pose[`${side}_ankle`][0]+=dx;pose[`${side}_toe`][0]+=dx;
+    }
+  }
+  return pose;
+}
+
+function applyControlRig(pose,orig){
+  if(!$("opControl").checked) return pose;
+  const m=legMetrics();if(!m)return pose;
+  const px=(+$("ctlPelvisX").value/100)*m.avgLeg;
+  const py=(+$("ctlPelvisY").value/100)*m.avgLeg;
+
+  if(px||py){
+    for(const k of ["pelvis","neck","left_shoulder","left_elbow","left_wrist","right_shoulder","right_elbow","right_wrist","left_hip","right_hip"]){
+      if(pose[k]){pose[k][0]+=px;pose[k][1]+=py;}
+    }
+  }
+
+  for(const side of ["left","right"]){
+    const x=(+$(side==="left"?"ctlLFootX":"ctlRFootX").value/100)*m.avgLeg;
+    const y=(+$(side==="left"?"ctlLFootY":"ctlRFootY").value/100)*m.avgLeg;
+    if(!x&&!y) continue;
+    const hip=pose[`${side}_hip`],ankle=pose[`${side}_ankle`],toe=pose[`${side}_toe`];
+    if(!hip||!ankle||!toe) continue;
+    const footVec=sub(toe,ankle);
+    const target=[ankle[0]+x,ankle[1]+y];
+    const bend=Math.sign(crossZ(orig[`${side}_hip`],orig[`${side}_ankle`],orig[`${side}_knee`]))||1;
+    const solved=twoBoneIK(hip,orig[`${side}_knee`],orig[`${side}_ankle`],target,bend);
+    pose[`${side}_knee`]=solved.knee;pose[`${side}_ankle`]=solved.ankle;
+    pose[`${side}_toe`]=[target[0]+footVec[0],target[1]+footVec[1]];
+  }
+  return pose;
+}
+
+function anyControlOffset(){
+  return ["ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY"].some(id=>+$((id)).value!==0);
+}
+function updateControlBadge(){
+  $("controlBadge").textContent=anyControlOffset()?"EDITED":"ZEROED";
+  $("controlBadge").className="pill "+(anyControlOffset()?"warn":"");
+}
+["ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY"].forEach(id=>$(id).addEventListener("input",updateControlBadge));
+$("resetControls").onclick=()=>{
+  ["ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY"].forEach(id=>{$(id).value=0;$(id+"V").textContent="0";});
+  updateControlBadge();status("Control Rig offsets reset.");
+};
+$("previewControls").onclick=()=>{currentTestModule=4;previewSelectedMotion();};
+
+
 function retargetImportedPose(i){
   const ready=requiredReadyForWalk();
   if(!ready.ok) return {error:ready.msg};
@@ -951,10 +1537,11 @@ function retargetImportedPose(i){
 
   const rootDX=(sample.pelvis[0]-ref.pelvis[0])*targetScale;
   const rootDY=(sample.pelvis[1]-ref.pelvis[1])*targetScale;
+  const useRootNorm=$("opRoot").checked;
   const pose={};
   pose.pelvis=[
-    orig.pelvis[0]+($("rootMotion").checked?rootDX:0),
-    orig.pelvis[1]+rootDY
+    orig.pelvis[0]+(useRootNorm&&$("rootMotion").checked?rootDX:0),
+    orig.pelvis[1]+(useRootNorm?rootDY:0)
   ];
 
   const torsoLen=length(orig.pelvis,orig.neck);
@@ -978,7 +1565,7 @@ function retargetImportedPose(i){
     const kneeGuess=[hip[0]+d1[0]*upper,hip[1]+d1[1]*upper];
     let ankleGuess=[kneeGuess[0]+d2[0]*lower,kneeGuess[1]+d2[1]*lower];
 
-    if($("correctFeet").checked && sample[`${side}_ankle`] && sample[`${side}_toe`] &&
+    if($("opFoot").checked && $("correctFeet").checked && sample[`${side}_ankle`] && sample[`${side}_toe`] &&
        ref[`${side}_ankle`] && ref[`${side}_toe`]){
 
       const planted=importedFootIsPlanted(i,side);
@@ -1047,7 +1634,17 @@ function retargetImportedPose(i){
   if(orig.tail_base) pose.tail_base=transformPoint(torsoM,orig.tail_base);
   if(orig.tail_tip) pose.tail_tip=transformPoint(torsoM,orig.tail_tip);
 
-  return {pose,torsoM,phaseName:importedMotion.name||"Imported Motion",metrics:m};
+  if($("opTwist").checked) clampLimbTwist(pose,orig);
+  smoothPoseAt(i,pose);
+  applyFullBodyIK(i,pose,orig);
+  applyControlRig(pose,orig);
+
+  // Rebuild torso matrix after root/control/FBIK correction so rigid parts follow.
+  const finalTorsoM=(pose.pelvis&&pose.neck)
+    ? matrixFromTwoPoints(orig.pelvis,orig.neck,pose.pelvis,pose.neck)
+    : torsoM;
+
+  return {pose,torsoM:finalTorsoM,phaseName:importedMotion.name||"Imported Motion",metrics:m};
 }
 
 function renderPoseFrame(pose,torsoM){
@@ -1126,24 +1723,139 @@ function normalizeMotionSamplesFromCurrentSource(){
   return samples;
 }
 
-$("saveAnimation").onclick=()=>{
+
+function currentMotionPackage(){
   const samples=normalizeMotionSamplesFromCurrentSource();
-  if(!samples){status("Nothing available to save as an animation.");return;}
-  const name = $("motionSource").value==="imported"
-    ? (importedMotion.name||"Imported Motion")
-    : "Fatal Instinct Authored Walk";
-  const data={
-    format:"fatal-instinct-motion",
-    version:1,
-    name,
-    frames:samples.length,
-    loop:true,
-    projection:$("projection").value,
-    samples
+  if(!samples)return null;
+  return {
+    format:"fatal-instinct-motion",version:2,
+    name:$("motionSource").value==="imported"?(importedMotion.name||"Imported Motion"):"Fatal Instinct Authored Walk",
+    frames:samples.length,loop:true,projection:$("projection").value,
+    profile:$("retargetProfile").value,contacts:analyzeContacts(),samples
   };
-  const safe=name.replace(/[^a-z0-9]+/gi,"_").replace(/^_+|_+$/g,"")||"motion";
+}
+function renderAnimationLibrary(){
+  const box=$("animationLibrary");box.innerHTML="";
+  $("libraryBadge").textContent=`${animationLibrary.length} CLIPS`;
+  animationLibrary.forEach((clip,i)=>{
+    const row=document.createElement("div");row.className="libraryItem";
+    const label=document.createElement("span");label.textContent=clip.name||`Clip ${i+1}`;
+    const b=document.createElement("button");b.textContent="Load";
+    b.onclick=()=>{loadNativeMotion(clip,clip.name);$("motionSource").value="imported";status(`Library motion loaded: ${clip.name}`);};
+    row.append(label,b);box.appendChild(row);
+  });
+  if(!animationLibrary.length) box.innerHTML='<div class="libraryItem"><span>No saved motions in this project.</span></div>';
+}
+$("addToLibrary").onclick=()=>{
+  const p=currentMotionPackage();if(!p){status("No motion available to add.");return;}
+  const base=p.name||"Motion";let name=base,n=2;
+  while(animationLibrary.some(x=>x.name===name)) name=`${base} ${n++}`;
+  p.name=name;animationLibrary.push(p);renderAnimationLibrary();status(`Added ${name} to animation library.`);
+};
+$("clearLibrary").onclick=()=>{animationLibrary=[];renderAnimationLibrary();status("Animation library cleared.");};
+
+$("batchInput").onchange=e=>{
+  batchFiles=[...(e.target.files||[])].filter(f=>f.name.toLowerCase().endsWith(".fbx"));
+  batchConverted=[];
+  $("batchBadge").textContent=`${batchFiles.length} FILES`;
+  $("batchStatus").textContent=batchFiles.length?`${batchFiles.length} FBX files queued. Press Export Batch Motions to convert.`:"Batch queue empty.";
+};
+async function convertFBXFileToNative(file){
+  const loader=new FBXLoader();
+  const obj=loader.parse(await file.arrayBuffer(),"");
+  if(!obj.animations?.length) throw new Error("No animation");
+  const clip=obj.animations[0],mixer=new THREE.AnimationMixer(obj),action=mixer.clipAction(clip);action.play();
+  const bones={};obj.traverse(o=>{if(o.isBone)bones[normalizeBoneName(o.name)]=o;});
+
+  // Temporarily swap importedMotion so existing mapping/sampling logic can be reused.
+  const prev=importedMotion;
+  importedMotion={type:"fbx",name:file.name,object:obj,mixer,clips:obj.animations,clip,action,bones,boneMap:{},native:null};
+  detectRetargetProfile();autoMapProfileBones();
+  const samples=normalizeMotionSamplesFromCurrentSource();
+  const contacts=analyzeContacts();
+  importedMotion=prev;
+
+  if(!samples) throw new Error("Could not normalize");
+  return {format:"fatal-instinct-motion",version:2,name:file.name.replace(/\.fbx$/i,""),frames:samples.length,loop:true,projection:$("projection").value,samples,contacts};
+}
+$("exportBatch").onclick=async()=>{
+  if(!batchFiles.length){status("Choose multiple FBX files using Batch FBX first.");return;}
+  if(!window.JSZip){status("JSZip unavailable. Check internet connection.");return;}
+  const z=new window.JSZip();batchConverted=[];
+  for(let i=0;i<batchFiles.length;i++){
+    const f=batchFiles[i];
+    $("batchStatus").textContent=`Converting ${i+1}/${batchFiles.length}: ${f.name}`;
+    try{
+      const p=await convertFBXFileToNative(f);
+      batchConverted.push(p);
+      z.file(`${p.name}.fi_motion.json`,JSON.stringify(p,null,2));
+    }catch(err){
+      z.file(`${f.name}.ERROR.txt`,String(err?.message||err));
+    }
+    await new Promise(r=>setTimeout(r,0));
+  }
+  const blob=await z.generateAsync({type:"blob"});
+  download(blob,"fatal_instinct_motion_batch_v17.zip");
+  $("batchStatus").textContent=`Batch complete: ${batchConverted.length}/${batchFiles.length} converted.`;
+  $("batchBadge").textContent=`${batchConverted.length} DONE`;
+  status("Batch motion package exported.");
+};
+renderAnimationLibrary();
+
+
+$("saveAnimation").onclick=()=>{
+  const data=currentMotionPackage();
+  if(!data){status("Nothing available to save as an animation.");return;}
+  const safe=(data.name||"motion").replace(/[^a-z0-9]+/gi,"_").replace(/^_+|_+$/g,"")||"motion";
   download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),`${safe}.fi_motion.json`);
-  status(`Saved reusable animation: ${name}`);
+  status(`Saved reusable animation: ${data.name}`);
+};
+
+
+function setModule(n,msg){
+  currentTestModule=n;
+  $("moduleBadge").textContent=`TEST ${n}`;
+  $("moduleBadge").className="pill warn";
+  $("moduleStatus").textContent=msg;
+}
+$("testRetarget").onclick=()=>{
+  setModule(1,"Retarget only: mapping/profile/chains + imported raw pose.");
+  $("opContacts").checked=false;$("opFoot").checked=false;$("opFBIK").checked=false;$("opTwist").checked=false;$("opSmooth").checked=false;$("opControl").checked=false;$("opSkin").checked=false;
+  detectRetargetProfile();autoMapProfileBones();detectTargetChains();previewSelectedMotion();
+};
+$("testContacts").onclick=()=>{
+  setModule(2,"Contact analysis only. Review L/R contact strip; animation continues without FBIK.");
+  $("opContacts").checked=true;$("opFoot").checked=false;$("opFBIK").checked=false;$("opTwist").checked=false;$("opSmooth").checked=false;$("opControl").checked=false;$("opSkin").checked=false;
+  analyzeContacts();previewSelectedMotion();
+};
+$("testFBIK").onclick=()=>{
+  setModule(3,"Full-Body IK: contacts + foot correction + weight transfer.");
+  $("opContacts").checked=true;$("opFoot").checked=true;$("opFBIK").checked=true;$("enableFBIK").checked=true;$("opTwist").checked=false;$("opSmooth").checked=false;$("opControl").checked=false;$("opSkin").checked=false;
+  previewSelectedMotion();
+};
+$("testControlRig").onclick=()=>{
+  setModule(4,"Control Rig: FBIK plus manual pelvis/foot target overrides.");
+  $("opContacts").checked=true;$("opFoot").checked=true;$("opFBIK").checked=true;$("opControl").checked=true;$("opSkin").checked=false;
+  previewSelectedMotion();
+};
+$("testSkinning").onclick=()=>{
+  setModule(5,"Skinning: all motion corrections + hybrid joint mesh.");
+  $("opContacts").checked=true;$("opFoot").checked=true;$("opFBIK").checked=true;$("opTwist").checked=true;$("opSmooth").checked=true;$("opControl").checked=true;$("opSkin").checked=true;$("useJointMesh").checked=true;
+  status("Skinning test enabled. Generate 8 Frames to inspect rendered joint deformation.");
+};
+$("testStack").onclick=()=>{
+  setModule(6,"Full correction stack enabled in production order.");
+  ["opRoot","opContacts","opFoot","opFBIK","opTwist","opSmooth","opControl","opSkin"].forEach(id=>$(id).checked=true);
+  $("enableFBIK").checked=true;$("useJointMesh").checked=true;
+  analyzeContacts();previewSelectedMotion();
+};
+$("testLibrary").onclick=()=>{
+  setModule(7,"Animation Library test: add current motion, then reload it from the library.");
+  renderAnimationLibrary();status("Use Add Current Motion, then Load it from the library list.");
+};
+$("testBatch").onclick=()=>{
+  setModule(8,"Batch processor test: choose 2–3 FBX files, then Export Batch Motions.");
+  status("Use Batch FBX at the top, select several FBX files, then Export Batch Motions.");
 };
 
 $("projection").onchange=()=>{
@@ -1185,23 +1897,55 @@ $("generate").onclick=()=>{
       frames.push(built.canvas);
     }
     renderFrames();draw(frames[0]);
-    status(`Generated ${FRAME_COUNT} frames from ${imported?(importedMotion.name||"imported motion"):"authored walk"}${imported&&$("correctFeet").checked?" • V15 foot correction ON":""}.`);
+    status(`Generated ${FRAME_COUNT} frames from ${imported?(importedMotion.name||"imported motion"):"authored walk"}${imported&&$("correctFeet").checked?" • V17 foot correction ON":""}.`);
   }else{
     const built=imported ? retargetImportedPose(0) : buildPose(0);
     if(!built.error) draw(null,built.pose);
     status("Skeleton motion is ready. Load/trace sprite body parts to render sprite frames.");
   }
 };
-$("export").onclick=()=>{if(!frames.length){status("Generate frames first.");return;}const s=document.createElement("canvas");s.width=frames[0].width*frames.length;s.height=frames[0].height;const g=s.getContext("2d");frames.forEach((f,i)=>g.drawImage(f,i*frames[0].width,0));s.toBlob(b=>{if(b){download(b,"walk_sheet_v15.png");status("V15 sprite sheet exported to Downloads.");}},"image/png");};
+$("export").onclick=()=>{if(!frames.length){status("Generate frames first.");return;}const s=document.createElement("canvas");s.width=frames[0].width*frames.length;s.height=frames[0].height;const g=s.getContext("2d");frames.forEach((f,i)=>g.drawImage(f,i*frames[0].width,0));s.toBlob(b=>{if(b){download(b,"walk_sheet_v17.png");status("V17 sprite sheet exported to Downloads.");}},"image/png");};
 $("clear").onclick=()=>{delete rig.parts[partSel.value];autoTraceCache.dirty=true;status(`${partSel.value} cleared.`);draw();};
 $("resetFrames").onclick=()=>{frames=[];strip.innerHTML="";draw();status("Generated frames cleared.");};
-$("showSprite").onchange=()=>draw();$("showBones").onchange=()=>draw();$("showAutoTrace").onchange=()=>draw();partSel.onchange=()=>draw();jointSel.onchange=()=>draw();
+$("showSprite").onchange=()=>draw();$("showBones").onchange=()=>draw();$("showAutoTrace").onchange=()=>{if($("showAutoTrace").checked&&source){generateAutoSegmentation(false);}draw();};partSel.onchange=()=>draw();jointSel.onchange=()=>draw();
+
+
+$("traceRegionSelect").addEventListener("change",()=>{
+  if(autoTraceCache.labels){
+    autoTraceCache.preview=buildStrongTracePreview(
+      autoTraceCache.labels,autoTraceCache.idByPart,
+      autoTraceCache.w,autoTraceCache.h
+    );
+    draw();
+  }
+});
+$("dimUnselected").addEventListener("change",()=>{
+  if(autoTraceCache.labels){
+    autoTraceCache.preview=buildStrongTracePreview(
+      autoTraceCache.labels,autoTraceCache.idByPart,
+      autoTraceCache.w,autoTraceCache.h
+    );
+    draw();
+  }
+});
+
+
+["contactVelocity","groundTol"].forEach(id=>$(id).addEventListener("input",()=>{if(importedMotion.type)analyzeContacts();}));
+$("autoContacts").addEventListener("change",()=>{if(importedMotion.type)analyzeContacts();});
+$("enableFBIK").addEventListener("change",()=>{$("fbikBadge").textContent=$("enableFBIK").checked?"ON":"OFF";});
+["opRoot","opContacts","opFoot","opFBIK","opTwist","opSmooth","opControl","opSkin"].forEach(id=>{
+  $(id).addEventListener("change",()=>{
+    const on=["opRoot","opContacts","opFoot","opFBIK","opTwist","opSmooth","opControl","opSkin"].filter(x=>$(x).checked).length;
+    $("stackBadge").textContent=`${on}/8 ACTIVE`;
+    $("stackBadge").className="pill "+(on===8?"ok":"warn");
+  });
+});
 
 ["alphaThreshold","traceDetail","autoOverlap"].forEach(id=>{
   $(id).addEventListener("input",()=>{autoTraceCache.dirty=true;});
 });
 
-resize();
+detectTargetChains();renderAnimationLibrary();updateControlBadge();resize();
 </script>
 </body>
 </html>
