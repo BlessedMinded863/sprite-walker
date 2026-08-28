@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V17.2</title>
+<title>Fatal Instinct Sprite Walker V18</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -37,6 +37,30 @@
 .contactCell{height:24px;border:1px solid var(--line);border-radius:5px;display:grid;place-items:center;font-size:9px;color:var(--muted)}
 .contactCell.left{background:#263b4d}.contactCell.right{background:#49343a}.contactCell.both{background:#3f3a29}
 
+
+.productionPanel{border:1px solid var(--line);border-radius:15px;padding:12px;margin:12px 0;background:#141924}
+.productionPanel h3{margin:0 0 9px;font-size:16px}
+.prodGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.prodGrid3{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.preflight{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.preflightItem{font-size:12px;padding:8px;border:1px solid var(--line);border-radius:9px;color:var(--muted)}
+.preflightItem.ok{color:#8ff0be;border-color:#285d48;background:#13231d}
+.preflightItem.warn{color:#ffd28a;border-color:#725a2d;background:#251f13}
+.roster{display:grid;gap:7px;margin-top:9px}
+.rosterRow{display:grid;grid-template-columns:32px 1.2fr 1fr;gap:7px;align-items:center}
+.rosterRow input[type="radio"]{width:22px;height:22px}
+.rosterRow input[type="text"]{width:100%;border:1px solid var(--line);background:#10141d;color:var(--text);border-radius:9px;padding:9px}
+.rosterRow select{padding:9px;font-size:12px}
+.progressBar{height:10px;border-radius:999px;background:#242b38;overflow:hidden;margin-top:8px}
+.progressFill{height:100%;background:var(--green);width:0%}
+.quickStatus{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5}
+.production-mode .advancedProductionHide{display:none!important}
+@media(max-width:700px){
+  .prodGrid3{grid-template-columns:1fr}
+  .rosterRow{grid-template-columns:28px 1fr}
+  .rosterRow select{grid-column:2}
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -51,7 +75,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V17.2</span></h1><div class="sub">Unified Animation Lab • Live Sprite Preview Fixed</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V18</span></h1><div class="sub">Production Sprint • 6-Character Workflow</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -67,6 +91,46 @@
 <button id="exportBatch">Export Batch Motions</button>
 <button id="undoBtn">Undo</button>
 <button id="redoBtn">Redo</button>
+<button id="productionDefaults">Production Defaults</button>
+<button id="quickProduction" class="primary">Build Production Walk</button>
+<button id="exportCharacterPack">Export Character Pack</button>
+</div>
+
+
+<div class="productionPanel">
+  <h3>Production Sprint Dashboard</h3>
+
+  <label class="title">Current Character Name</label>
+  <input id="characterName" type="text" placeholder="Character name" style="width:100%;border:1px solid var(--line);background:#10141d;color:var(--text);border-radius:10px;padding:11px;margin-top:5px">
+
+  <div class="switchRow" style="margin-top:9px">
+    <span>Production Mode — hide advanced test panels</span>
+    <input id="productionMode" type="checkbox">
+  </div>
+
+  <div class="prodGrid" style="margin-top:9px">
+    <button id="refreshPreflight">Refresh Preflight</button>
+    <button id="restoreAutosave">Restore Autosave</button>
+    <button id="saveRosterSlot">Save Current to Slot</button>
+    <button id="markRosterComplete">Mark Slot Complete</button>
+  </div>
+
+  <div id="preflight" class="preflight"></div>
+  <div id="quickStatus" class="quickStatus">Production preflight waiting for a character.</div>
+
+  <div class="moduleHead" style="margin-top:12px">
+    <b>6-Character Sprint</b><span id="sprintBadge" class="pill">0 / 6 COMPLETE</span>
+  </div>
+  <div class="progressBar"><div id="sprintProgress" class="progressFill"></div></div>
+
+  <div id="roster" class="roster">
+    <div class="rosterRow"><input type="radio" name="rosterSlot" value="0" checked><input class="rosterName" data-slot="0" type="text" placeholder="Player 1"><select class="rosterStage" data-slot="0"><option>Not Started</option><option>Rig Ready</option><option>Motion Ready</option><option>Frames Ready</option><option>Complete</option></select></div>
+    <div class="rosterRow"><input type="radio" name="rosterSlot" value="1"><input class="rosterName" data-slot="1" type="text" placeholder="Player 2"><select class="rosterStage" data-slot="1"><option>Not Started</option><option>Rig Ready</option><option>Motion Ready</option><option>Frames Ready</option><option>Complete</option></select></div>
+    <div class="rosterRow"><input type="radio" name="rosterSlot" value="2"><input class="rosterName" data-slot="2" type="text" placeholder="Player 3"><select class="rosterStage" data-slot="2"><option>Not Started</option><option>Rig Ready</option><option>Motion Ready</option><option>Frames Ready</option><option>Complete</option></select></div>
+    <div class="rosterRow"><input type="radio" name="rosterSlot" value="3"><input class="rosterName" data-slot="3" type="text" placeholder="Player 4"><select class="rosterStage" data-slot="3"><option>Not Started</option><option>Rig Ready</option><option>Motion Ready</option><option>Frames Ready</option><option>Complete</option></select></div>
+    <div class="rosterRow"><input type="radio" name="rosterSlot" value="4"><input class="rosterName" data-slot="4" type="text" placeholder="Player 5"><select class="rosterStage" data-slot="4"><option>Not Started</option><option>Rig Ready</option><option>Motion Ready</option><option>Frames Ready</option><option>Complete</option></select></div>
+    <div class="rosterRow"><input type="radio" name="rosterSlot" value="5"><input class="rosterName" data-slot="5" type="text" placeholder="Player 6"><select class="rosterStage" data-slot="5"><option>Not Started</option><option>Rig Ready</option><option>Motion Ready</option><option>Frames Ready</option><option>Complete</option></select></div>
+  </div>
 </div>
 
 <div class="workspace">
@@ -198,7 +262,7 @@
     <button id="testLibrary">7 • Library</button>
     <button id="testBatch">8 • Batch</button>
   </div>
-  <div id="moduleStatus" class="status">V17.2: live Preview Motion now renders the animated sprite pose, not the static source PNG.</div>
+  <div id="moduleStatus" class="status">V18 Production Sprint: validated animation engine + fast multi-character workflow.</div>
 </div>
 
 <div class="moduleBox">
@@ -314,6 +378,11 @@ PARTS.forEach(p=>{const o=document.createElement("option");o.value=p;o.textConte
 JOINTS.forEach(j=>{const o=document.createElement("option");o.value=j;o.textContent=j;jointSel.appendChild(o);});
 
 let source=null,sourceName="",rig={parts:{},joints:{}},mode="trace",tracePoints=[],drawing=false,draggingJoint=false,frames=[],timer=null;
+
+const PROD_AUTOSAVE_KEY="fatal_instinct_sprite_walker_v18_autosave";
+const PROD_ROSTER_KEY="fatal_instinct_sprite_walker_v18_roster";
+let rosterData=Array.from({length:6},(_,i)=>({name:"",stage:"Not Started",saved:null}));
+
 
 const FRAME_COUNT = 8;
 const MCO_CANDIDATES = {
@@ -480,8 +549,308 @@ $("seedRig").onclick=seedHumanoidRig;
 
 function pointFarthestFrom(points,p){let best=points[0],dist=-1;for(const q of points){const d=Math.hypot(q[0]-p[0],q[1]-p[1]);if(d>dist){dist=d;best=q;}}return[best[0],best[1]];}
 function inferJointsFromParts(){const p=rig.parts,j=rig.joints,ensure=(name,val)=>{if(!j[name]&&val) j[name]=val;};if(p.torso&&p.torso.pivot) ensure("pelvis",[...p.torso.pivot]);if(p.left_thigh&&p.left_thigh.pivot) ensure("left_hip",[...p.left_thigh.pivot]);if(p.left_shin&&p.left_shin.pivot) ensure("left_knee",[...p.left_shin.pivot]);if(p.left_foot&&p.left_foot.pivot) ensure("left_ankle",[...p.left_foot.pivot]);if(p.right_thigh&&p.right_thigh.pivot) ensure("right_hip",[...p.right_thigh.pivot]);if(p.right_shin&&p.right_shin.pivot) ensure("right_knee",[...p.right_shin.pivot]);if(p.right_foot&&p.right_foot.pivot) ensure("right_ankle",[...p.right_foot.pivot]);if(p.left_foot&&p.left_foot.poly&&j.left_ankle) ensure("left_toe",pointFarthestFrom(p.left_foot.poly,j.left_ankle));if(p.right_foot&&p.right_foot.poly&&j.right_ankle) ensure("right_toe",pointFarthestFrom(p.right_foot.poly,j.right_ankle));if(p.tail&&p.tail.pivot) ensure("tail_base",[...p.tail.pivot]);if(p.tail&&p.tail.poly&&j.tail_base) ensure("tail_tip",pointFarthestFrom(p.tail.poly,j.tail_base));if(!j.neck&&p.torso&&p.torso.poly){let minY=1e9,sumX=0,count=0;for(const q of p.torso.poly){if(q[1]<minY+10){if(q[1]<minY){minY=q[1];sumX=0;count=0;}sumX+=q[0];count++;}}if(count) j.neck=[sumX/count,minY+10];}if(!j.left_shoulder&&j.neck) j.left_shoulder=[j.neck[0]-24,j.neck[1]+12];if(!j.right_shoulder&&j.neck) j.right_shoulder=[j.neck[0]+24,j.neck[1]+12];}
+
+function safeFileName(s){
+  return (s||"character").trim().replace(/[^a-z0-9_-]+/gi,"_").replace(/^_+|_+$/g,"")||"character";
+}
+function selectedRosterSlot(){
+  const r=document.querySelector('input[name="rosterSlot"]:checked');
+  return r?Math.max(0,Math.min(5,+r.value||0)):0;
+}
+function rosterFromUI(){
+  document.querySelectorAll(".rosterName").forEach(el=>{
+    const i=+el.dataset.slot; rosterData[i].name=el.value.trim();
+  });
+  document.querySelectorAll(".rosterStage").forEach(el=>{
+    const i=+el.dataset.slot; rosterData[i].stage=el.value;
+  });
+}
+function rosterToUI(){
+  document.querySelectorAll(".rosterName").forEach(el=>{
+    const i=+el.dataset.slot; el.value=rosterData[i]?.name||"";
+  });
+  document.querySelectorAll(".rosterStage").forEach(el=>{
+    const i=+el.dataset.slot; el.value=rosterData[i]?.stage||"Not Started";
+  });
+  updateSprintProgress();
+}
+function persistRoster(){
+  rosterFromUI();
+  try{localStorage.setItem(PROD_ROSTER_KEY,JSON.stringify(rosterData));}catch(e){}
+  updateSprintProgress();
+}
+function loadRoster(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(PROD_ROSTER_KEY)||"null");
+    if(Array.isArray(saved)&&saved.length===6) rosterData=saved;
+  }catch(e){}
+  rosterToUI();
+}
+function updateSprintProgress(){
+  rosterFromUI();
+  const done=rosterData.filter(x=>x.stage==="Complete").length;
+  $("sprintBadge").textContent=`${done} / 6 COMPLETE`;
+  $("sprintBadge").className="pill "+(done===6?"ok":done?"warn":"");
+  $("sprintProgress").style.width=`${(done/6)*100}%`;
+}
+document.querySelectorAll(".rosterName,.rosterStage").forEach(el=>{
+  el.addEventListener("change",persistRoster);
+  el.addEventListener("input",()=>{if(el.classList.contains("rosterName"))persistRoster();});
+});
+document.querySelectorAll('input[name="rosterSlot"]').forEach(el=>{
+  el.addEventListener("change",()=>{
+    const i=selectedRosterSlot();
+    if(rosterData[i]?.name) $("characterName").value=rosterData[i].name;
+  });
+});
+
+function productionSnapshot(){
+  return {
+    format:"fatal-instinct-production-snapshot",
+    version:18,
+    character_name:$("characterName").value.trim(),
+    source_name:sourceName,
+    rig:JSON.parse(JSON.stringify(rig)),
+    settings:typeof projectSettings==="function"?projectSettings():{},
+    library:JSON.parse(JSON.stringify(animationLibrary||[])),
+    roster:JSON.parse(JSON.stringify(rosterData)),
+    saved_at:new Date().toISOString()
+  };
+}
+function saveAutosave(silent=true){
+  try{
+    localStorage.setItem(PROD_AUTOSAVE_KEY,JSON.stringify(productionSnapshot()));
+    if(!silent) status("Production autosave saved.");
+  }catch(e){
+    if(!silent) status("Autosave could not be stored in this browser.");
+  }
+}
+function restoreProductionSnapshot(d){
+  if(!d||d.format!=="fatal-instinct-production-snapshot") return false;
+  rig=d.rig||rig;
+  if(typeof applyProjectSettings==="function") applyProjectSettings(d.settings||{});
+  animationLibrary=d.library||animationLibrary;
+  if(Array.isArray(d.roster)&&d.roster.length===6){rosterData=d.roster;rosterToUI();}
+  $("characterName").value=d.character_name||"";
+  autoTraceCache.dirty=true;
+  inferJointsFromParts();
+  renderAnimationLibrary();
+  draw();
+  refreshProductionPreflight();
+  return true;
+}
+$("restoreAutosave").onclick=()=>{
+  try{
+    const d=JSON.parse(localStorage.getItem(PROD_AUTOSAVE_KEY)||"null");
+    if(restoreProductionSnapshot(d)){
+      status(`Autosave restored${d.source_name?` • reload image: ${d.source_name}`:""}.`);
+    }else status("No V18 autosave found.");
+  }catch(e){status("Could not restore autosave.");}
+};
+
+function productionChecks(){
+  const requiredCore=["pelvis","neck","left_shoulder","left_elbow","left_wrist","right_shoulder","right_elbow","right_wrist","left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe"];
+  const joints=requiredCore.filter(j=>!!rig.joints[j]).length;
+  const parts=PARTS.filter(p=>rig.parts[p]&&(rig.parts[p].poly||rig.parts[p].auto)).length;
+  const stackIds=["opRoot","opContacts","opFoot","opFBIK","opTwist","opSmooth","opControl","opSkin"];
+  const stack=stackIds.filter(id=>$(id)?.checked).length;
+  return [
+    {name:"Character image",ok:!!source,detail:source?sourceName:"Load PNG"},
+    {name:"Core skeleton",ok:joints===requiredCore.length,detail:`${joints}/${requiredCore.length} joints`},
+    {name:"Sprite binding",ok:parts>=12,detail:`${parts}/${PARTS.length} parts`},
+    {name:"Imported motion",ok:!!importedMotion.type,detail:importedMotion.name||"Load FBX/motion"},
+    {name:"Correction stack",ok:stack===8,detail:`${stack}/8 active`},
+    {name:"Generated frames",ok:frames.length===FRAME_COUNT,detail:`${frames.length}/${FRAME_COUNT} frames`}
+  ];
+}
+function refreshProductionPreflight(){
+  const checks=productionChecks();
+  const box=$("preflight");box.innerHTML="";
+  checks.forEach(c=>{
+    const d=document.createElement("div");
+    d.className="preflightItem "+(c.ok?"ok":"warn");
+    d.innerHTML=`<b>${c.ok?"✓":"△"} ${c.name}</b><br>${c.detail}`;
+    box.appendChild(d);
+  });
+  const passed=checks.filter(c=>c.ok).length;
+  $("quickStatus").textContent=`${passed}/${checks.length} production checks ready. ${passed===checks.length?"Character is pack-ready.":"Finish the highlighted items before final export."}`;
+  return passed;
+}
+$("refreshPreflight").onclick=refreshProductionPreflight;
+
+function resetControlRigToZero(){
+  ["ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY"].forEach(id=>{
+    if($(id)){ $(id).value=0; const out=$(id+"V"); if(out)out.textContent="0"; }
+  });
+  if(typeof updateControlBadge==="function") updateControlBadge();
+}
+function applyProductionDefaults(){
+  if($("projection")) $("projection").value="zy";
+  if($("rootMotion")) $("rootMotion").checked=false;
+  if($("mirrorMotion")) $("mirrorMotion").checked=false;
+  if($("correctFeet")) $("correctFeet").checked=true;
+  if($("autoContacts")) $("autoContacts").checked=true;
+  if($("enableFBIK")) $("enableFBIK").checked=true;
+  if($("useJointMesh")) $("useJointMesh").checked=true;
+  ["opRoot","opContacts","opFoot","opFBIK","opTwist","opSmooth","opControl","opSkin"].forEach(id=>{if($(id))$(id).checked=true;});
+  resetControlRigToZero();
+  if($("showSprite")) $("showSprite").checked=true;
+  if($("showBones")) $("showBones").checked=false;
+  if($("showAutoTrace")) $("showAutoTrace").checked=false;
+  if(importedMotion.type && $("motionSource")) $("motionSource").value="imported";
+  if(typeof analyzeContacts==="function"&&importedMotion.type) analyzeContacts();
+  refreshProductionPreflight();
+  saveAutosave();
+  status("Production defaults applied. Validated correction stack is ON.");
+}
+$("productionDefaults").onclick=applyProductionDefaults;
+
+function ensureAutoBoundForProduction(){
+  if(hasRenderableSpriteParts()) return true;
+  if(!source) return false;
+  const ready=requiredReadyForWalk();
+  if(!ready.ok) return false;
+  for(const name of autoTraceCandidateParts()){
+    rig.parts[name]=rig.parts[name]||{};
+    if(!rig.parts[name].poly) rig.parts[name].auto=true;
+  }
+  autoTraceCache.dirty=true;
+  return !!generateAutoSegmentation(true);
+}
+
+$("quickProduction").onclick=()=>{
+  applyProductionDefaults();
+  const ready=requiredReadyForWalk();
+  if(!source){status("Production build needs the character PNG first.");return;}
+  if(!ready.ok){status("Production build needs a fitted/loaded rig first.");return;}
+  if(!importedMotion.type){status("Production build needs an imported FBX or saved motion.");return;}
+  if(!ensureAutoBoundForProduction()){status("Could not bind sprite parts automatically. Check the rig.");return;}
+  $("showAutoTrace").checked=false;
+  $("showBones").checked=false;
+  $("showSprite").checked=true;
+  $("motionSource").value="imported";
+  $("generate").click();
+  setTimeout(()=>{
+    const i=selectedRosterSlot();
+    rosterFromUI();
+    const nm=$("characterName").value.trim();
+    if(nm) rosterData[i].name=nm;
+    if(frames.length===FRAME_COUNT) rosterData[i].stage="Frames Ready";
+    rosterToUI();persistRoster();saveAutosave();refreshProductionPreflight();
+  },80);
+};
+
+$("saveRosterSlot").onclick=()=>{
+  const i=selectedRosterSlot();
+  rosterFromUI();
+  const name=$("characterName").value.trim()||rosterData[i].name||`Player ${i+1}`;
+  rosterData[i].name=name;
+  rosterData[i].saved=productionSnapshot();
+  if(frames.length===FRAME_COUNT) rosterData[i].stage="Frames Ready";
+  else if(importedMotion.type) rosterData[i].stage="Motion Ready";
+  else if(Object.keys(rig.joints).length) rosterData[i].stage="Rig Ready";
+  rosterToUI();persistRoster();
+  status(`Saved ${name} to sprint slot ${i+1}.`);
+};
+$("markRosterComplete").onclick=()=>{
+  const i=selectedRosterSlot();rosterFromUI();
+  rosterData[i].name=$("characterName").value.trim()||rosterData[i].name||`Player ${i+1}`;
+  rosterData[i].stage="Complete";
+  rosterToUI();persistRoster();
+  status(`${rosterData[i].name} marked complete.`);
+};
+
+function canvasToArrayBuffer(canvas,type="image/png"){
+  return new Promise((resolve,reject)=>{
+    canvas.toBlob(async b=>{
+      if(!b){reject(new Error("Canvas export failed"));return;}
+      resolve(await b.arrayBuffer());
+    },type);
+  });
+}
+async function spriteSheetArrayBuffer(){
+  if(!frames.length) return null;
+  const s=document.createElement("canvas");
+  s.width=frames[0].width*frames.length;s.height=frames[0].height;
+  const g=s.getContext("2d");
+  frames.forEach((f,i)=>g.drawImage(f,i*frames[0].width,0));
+  return await canvasToArrayBuffer(s);
+}
+$("exportCharacterPack").onclick=async()=>{
+  if(!window.JSZip){status("Character Pack export needs JSZip. Check internet connection.");return;}
+  const name=$("characterName").value.trim()||`Player_${selectedRosterSlot()+1}`;
+  const safe=safeFileName(name);
+  const zip=new window.JSZip();
+
+  const manifest={
+    format:"fatal-instinct-character-pack",version:18,
+    character:name,source_name:sourceName,
+    created:new Date().toISOString(),
+    frame_count:frames.length,
+    motion:importedMotion.name||null,
+    production_checks:productionChecks()
+  };
+  zip.file(`${safe}/manifest.json`,JSON.stringify(manifest,null,2));
+  zip.file(`${safe}/rig/${safe}_rig.json`,JSON.stringify({
+    version:18,source_name:sourceName,
+    source_size:source?[source.width,source.height]:null,
+    parts:rig.parts,joints:rig.joints
+  },null,2));
+  zip.file(`${safe}/project/${safe}_project.json`,JSON.stringify({
+    format:"fatal-instinct-sprite-walker-project",version:18,
+    character_name:name,rig,settings:projectSettings(),library:animationLibrary,source_name:sourceName
+  },null,2));
+
+  try{
+    const motion=currentMotionPackage();
+    if(motion) zip.file(`${safe}/motion/${safe}_${safeFileName(motion.name)}.fi_motion.json`,JSON.stringify(motion,null,2));
+  }catch(e){}
+
+  if(frames.length){
+    const sheet=await spriteSheetArrayBuffer();
+    if(sheet) zip.file(`${safe}/sprites/${safe}_walk_sheet.png`,sheet);
+    for(let i=0;i<frames.length;i++){
+      const buf=await canvasToArrayBuffer(frames[i]);
+      zip.file(`${safe}/sprites/frames/${safe}_${String(i+1).padStart(2,"0")}.png`,buf);
+    }
+  }
+
+  zip.file(`${safe}/README.txt`,
+`Fatal Instinct V18 Character Pack
+Character: ${name}
+Source: ${sourceName||"not recorded"}
+Motion: ${importedMotion.name||"none"}
+Frames: ${frames.length}
+Includes rig, project settings, reusable motion (when available), sprite sheet, and individual PNG frames.
+`);
+
+  const blob=await zip.generateAsync({type:"blob"});
+  download(blob,`${safe}_Fatal_Instinct_Character_Pack.zip`);
+
+  const i=selectedRosterSlot();
+  rosterFromUI();rosterData[i].name=name;rosterData[i].stage="Complete";rosterData[i].saved=productionSnapshot();
+  rosterToUI();persistRoster();saveAutosave();refreshProductionPreflight();
+  status(`${name} production pack exported and marked complete.`);
+};
+
+function applyProductionMode(){
+  const on=$("productionMode").checked;
+  document.body.classList.toggle("production-mode",on);
+  // Hide advanced validated test panels, but leave library/batch/production tools visible.
+  ["moduleBadge","profileBadge","contactBadge","fbikBadge","controlBadge","stackBadge"].forEach(id=>{
+    const el=$(id); const box=el?.closest(".moduleBox"); if(box) box.classList.toggle("advancedProductionHide",on);
+  });
+}
+$("productionMode").onchange=applyProductionMode;
+
+function productionAutosaveTick(){
+  try{saveAutosave(true);}catch(e){}
+}
+setInterval(productionAutosaveTick,30000);
+window.addEventListener("beforeunload",()=>saveAutosave(true));
+
 function download(blob,name){const a=document.createElement("a"),u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);}
-$("saveRig").onclick=()=>{const data={version:17,source_name:sourceName,source_size:source?[source.width,source.height]:null,parts:rig.parts,joints:rig.joints};download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"fatal_instinct_rig_v17.json");status("V17 rig exported.");};
+$("saveRig").onclick=()=>{const data={version:17,source_name:sourceName,source_size:source?[source.width,source.height]:null,parts:rig.parts,joints:rig.joints};download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"fatal_instinct_rig_v18.json");status("V18 rig exported.");};
 $("rigInput").onchange=async e=>{const f=e.target.files[0];if(!f) return;try{const d=JSON.parse(await f.text());rig.parts=d.parts||{};rig.joints=d.joints||{};autoTraceCache.dirty=true;inferJointsFromParts();status(`Loaded rig: ${f.name} (V${d.version||"?"})`);draw();}catch(err){status("Could not read rig JSON.");}};
 
 function joint(name){return rig.joints[name]?[...rig.joints[name]]:null;}
@@ -2049,7 +2418,7 @@ $("generate").onclick=()=>{
     status("Skeleton motion is ready. Load/trace sprite body parts to render sprite frames.");
   }
 };
-$("export").onclick=()=>{if(!frames.length){status("Generate frames first.");return;}const s=document.createElement("canvas");s.width=frames[0].width*frames.length;s.height=frames[0].height;const g=s.getContext("2d");frames.forEach((f,i)=>g.drawImage(f,i*frames[0].width,0));s.toBlob(b=>{if(b){download(b,"walk_sheet_v17.png");status("V17 sprite sheet exported to Downloads.");}},"image/png");};
+$("export").onclick=()=>{if(!frames.length){status("Generate frames first.");return;}const s=document.createElement("canvas");s.width=frames[0].width*frames.length;s.height=frames[0].height;const g=s.getContext("2d");frames.forEach((f,i)=>g.drawImage(f,i*frames[0].width,0));s.toBlob(b=>{if(b){download(b,"walk_sheet_v18.png");status("V18 sprite sheet exported to Downloads.");}},"image/png");};
 $("clear").onclick=()=>{delete rig.parts[partSel.value];autoTraceCache.dirty=true;status(`${partSel.value} cleared.`);draw();};
 $("resetFrames").onclick=()=>{frames=[];strip.innerHTML="";draw();status("Generated frames cleared.");};
 $("showSprite").onchange=()=>draw();$("showBones").onchange=()=>draw();$("showAutoTrace").onchange=()=>{if($("showAutoTrace").checked&&source){generateAutoSegmentation(false);}draw();};partSel.onchange=()=>draw();jointSel.onchange=()=>draw();
@@ -2089,6 +2458,16 @@ $("enableFBIK").addEventListener("change",()=>{$("fbikBadge").textContent=$("ena
 ["alphaThreshold","traceDetail","autoOverlap"].forEach(id=>{
   $(id).addEventListener("input",()=>{autoTraceCache.dirty=true;});
 });
+
+
+loadRoster();
+refreshProductionPreflight();
+["imageInput","rigInput","animationInput","motionSource","clipSelect"].forEach(id=>{
+  const el=$(id); if(!el)return;
+  el.addEventListener("change",()=>setTimeout(()=>{refreshProductionPreflight();saveAutosave(true);},120));
+});
+$("characterName").addEventListener("input",()=>saveAutosave(true));
+$("generate").addEventListener("click",()=>setTimeout(()=>{refreshProductionPreflight();saveAutosave(true);},120));
 
 detectTargetChains();renderAnimationLibrary();updateControlBadge();resize();
 </script>
