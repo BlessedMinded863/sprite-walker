@@ -4,21 +4,33 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Animator V11.1</title>
+<title>Fatal Instinct Sprite Walker V12</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}.card .saveFrame{width:100%;padding:7px 8px;margin-top:6px;font-size:12px;border-radius:9px}.sectionTitle{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);font-weight:800;margin-top:14px}.danger{border-color:#7d3949}.mini{padding:8px 10px;font-size:13px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+  }
+}
+</script>
+
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Animator <span class="badge">V11.1</span></h1><div class="sub">Skeleton-First Walk + Idle + Combat Rig • Preview motion first, bind sprite second</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V12</span></h1><div class="sub">Skeleton-First + FBX Motion Retargeting • MCO Demo Pack Ready</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
 <button id="seedRig">Seed Humanoid Rig</button>
-<button id="swapLR">Swap L/R Rig Labels</button>
 <button id="saveRig">Save Rig</button>
 <label class="btn">Load Rig<input id="rigInput" type="file" accept=".json,application/json"></label>
+<label class="btn">Import Animation<input id="animationInput" type="file" accept=".fbx,.zip,.json,application/json,application/zip"></label>
+<button id="saveAnimation">Save Animation</button>
 </div>
 
 <div class="workspace">
@@ -28,136 +40,71 @@
 </div>
 
 <div class="panel">
-
-<label class="title">Animation</label>
-<select id="animationMode">
-  <option value="walk" selected>Walk — 8 Frames</option>
-  <option value="idle">Breathing Idle — 4 Frames</option>
-  <option value="punch">Straight Punch — 4 Frames</option>
-  <option value="slash">Claw Slash — 4 Frames</option>
-  <option value="kick">Front Kick — 4 Frames</option>
-</select>
-
-<div id="combatSelectors">
-  <label class="title" style="margin-top:10px">Character facing</label>
-  <select id="facingDirection">
-    <option value="right" selected>Faces Right →</option>
-    <option value="left">← Faces Left</option>
-  </select>
-
-  <label class="title" style="margin-top:10px">Attack limb</label>
-  <select id="attackLimb">
-    <option value="front" selected>Front Limb — Recommended</option>
-    <option value="rear">Rear Limb</option>
-    <option value="rig_right">Rig Right</option>
-    <option value="rig_left">Rig Left</option>
-  </select>
-</div>
-
-<div class="grid" style="margin-top:10px">
-  <button id="applyPreset" class="mini">Load Mode Preset</button>
-  <button id="validateRig" class="mini">Validate Rig</button>
-</div>
-
-<div class="sectionTitle">Rig / Binding</div>
 <label class="title">Body part</label><select id="part"></select>
 <label class="title" style="margin-top:10px">Joint</label><select id="joint"></select>
-<div class="modes"><button id="traceBtn" class="active">Trace Part</button><button id="jointBtn">Set Joint</button><button id="poseBtn">Pose Edit</button><button id="inspectBtn">Inspect</button></div>
-
+<div class="modes"><button id="traceBtn" class="active">Trace Part</button><button id="jointBtn">Set Joint</button><button id="inspectBtn">Inspect</button></div>
 <div class="help">
-<p><b>Skeleton-first:</b> preview Walk, Idle, Punch, Slash, or Kick on the bones before binding sprite art.</p>
-<p><b>Facing-aware combat:</b> Front/Rear limbs are detected from the current shoulder or hip positions, so traced left/right labels cannot silently reverse the attack.</p>
-<p><b>Rig repair:</b> if the art was outlined opposite the rig, use <b>Swap L/R Rig Labels</b> once instead of retracing.</p>
-<p><b>Compatibility:</b> V4–V10.2 rig JSON files remain loadable.</p>
+<p><b>New workflow:</b> the walk rig exists first. You can preview a stick/bone version before using any sprite art.</p>
+<p><b>Bind sprite second:</b> load Marius, load or trace body parts, align joints, then generate walk frames from the rig.</p>
+<p><b>Compatible:</b> V4–V9 rig JSON files can still be loaded. V12 can also import MCO FBX animations and reusable Fatal Instinct motion JSON.</p>
 </div>
 
-<div class="sectionTitle">Interactive Pose Editor</div>
-<div class="help">
-<p><b>Real-time posing:</b> switch to <b>Pose Edit</b>, then drag the bones directly on Marius. The sprite updates in real time.</p>
-<p><b>Best use:</b> manually build punch, slash, kick, and special-move frames instead of relying on presets. If you use Auto Segment first, the body pieces stay more intact while you pose.</p>
-</div>
-<div class="grid" style="margin-top:10px">
-  <button id="startPose" class="mini">Start Pose Editor</button>
-  <button id="resetPose" class="mini">Reset From Auto Frame</button>
-</div>
-<label class="title" style="margin-top:10px">Pose frame slot</label>
-<select id="poseFrameSlot"></select>
-<div class="grid" style="margin-top:10px">
-  <button id="savePoseSlot" class="mini">Save Pose To Slot</button>
-  <button id="loadPoseSlot" class="mini">Load Slot To Editor</button>
-  <button id="copyPrevPose" class="mini">Copy Previous Slot</button>
-  <button id="clearPoseSlots" class="mini">Clear Saved Poses</button>
-  <button id="previewPoseSlots" class="mini">Preview Saved Poses</button>
-  <button id="stopPosePreview" class="mini">Stop Pose Preview</button>
-</div>
-<div class="switchRow"><span>Onion skin previous slot</span><input id="showOnion" type="checkbox" checked></div>
-
-<div class="sectionTitle" style="margin-top:14px">Auto Segment / Keep Body Intact</div>
-<div class="help">
-<p><b>Auto Segment Parts</b> cuts the sprite into bone-bound body parts from the loaded image and current rig.</p>
-<p><b>Overlap pad</b> adds a small welded overlap so shoulders, hips, elbows, and knees stay visually closer together during movement.</p>
-<p><b>Best with transparent PNGs.</b> It can also try to separate a flat background from corner colors.</p>
-</div>
-<label class="title" style="margin-top:10px">Overlap / weld padding</label>
-<input id="autoPad" type="range" min="0" max="6" step="1" value="2"><div class="val" id="autoPadV">2</div>
-<div class="grid" style="margin-top:10px">
-  <button id="autoSegment" class="mini">Auto Segment Parts</button>
-  <button id="clearAutoMasks" class="mini">Clear Auto Masks</button>
+<div class="help" style="margin-top:10px">
+  <p><b>V12 Animation Import:</b> import a direct FBX, a Fatal Instinct motion JSON, or the full MCO demo ZIP.</p>
+  <p><b>MCO ZIP:</b> V12 automatically prefers <code>MOB1_Walk_F_IPC.fbx</code> — the in-place forward walk.</p>
 </div>
 
-<div id="walkControls" class="sliders">
-  <div class="slider"><label>Stride <span><b id="strideV">36</b>% leg</span></label><input id="stride" type="range" min="10" max="60" value="36"></div>
-  <div class="slider"><label>Step height <span><b id="stepV">20</b>% leg</span></label><input id="step" type="range" min="5" max="35" value="20"></div>
-  <div class="slider"><label>Body bob <span><b id="bobV">4</b>% leg</span></label><input id="bob" type="range" min="0" max="10" value="4"></div>
-  <div class="slider"><label>Torso lean <span><b id="leanV">3</b>°</span></label><input id="lean" type="range" min="0" max="12" value="3"></div>
-  <div class="slider"><label>Arm swing <span><b id="armV">12</b>°</span></label><input id="arm" type="range" min="0" max="30" value="12"></div>
-  <div class="slider"><label>Tail swing <span><b id="tailV">8</b>°</span></label><input id="tail" type="range" min="0" max="25" value="8"></div>
-</div>
+<label class="title" style="margin-top:12px">Motion Source</label>
+<select id="motionSource">
+  <option value="authored">Built-in Authored Walk</option>
+  <option value="imported">Imported Animation</option>
+</select>
 
-<div id="idleControls" class="sliders" style="display:none">
-  <div class="slider"><label>Breath lift <span><b id="breathV">3</b>% leg</span></label><input id="breath" type="range" min="0" max="8" value="3"></div>
-  <div class="slider"><label>Shoulder rise <span><b id="shoulderRiseV">2</b>% leg</span></label><input id="shoulderRise" type="range" min="0" max="6" value="2"></div>
-  <div class="slider"><label>Idle lean <span><b id="idleLeanV">2</b>°</span></label><input id="idleLean" type="range" min="0" max="8" value="2"></div>
-  <div class="slider"><label>Tail life <span><b id="idleTailV">5</b>°</span></label><input id="idleTail" type="range" min="0" max="18" value="5"></div>
-</div>
+<label class="title" style="margin-top:10px">Imported Clip</label>
+<select id="clipSelect"><option value="">No animation loaded</option></select>
 
-<div id="attackControls" class="sliders" style="display:none">
-  <div class="slider"><label>Wind-up <span><b id="windupV">48</b>°</span></label><input id="windup" type="range" min="0" max="75" value="48"></div>
-  <div class="slider"><label>Strike reach <span><b id="reachV">96</b>%</span></label><input id="reach" type="range" min="45" max="100" value="96"></div>
-  <div class="slider"><label>Strike angle <span><b id="strikeAngleV">0</b>°</span></label><input id="strikeAngle" type="range" min="-35" max="35" value="0"></div>
-  <div class="slider"><label>Torso twist <span><b id="twistV">16</b>°</span></label><input id="twist" type="range" min="0" max="26" value="16"></div>
-  <div class="slider"><label>Body lean <span><b id="attackLeanV">6</b>°</span></label><input id="attackLean" type="range" min="0" max="18" value="6"></div>
-  <div class="slider"><label>Hip drive <span><b id="hipDriveV">12</b>% leg</span></label><input id="hipDrive" type="range" min="0" max="20" value="12"></div>
-  <div class="slider"><label>Wrist / claw angle <span><b id="clawV">-18</b>°</span></label><input id="claw" type="range" min="-45" max="45" value="-18"></div>
-  <div class="slider"><label>Guard arm motion <span><b id="guardV">12</b>°</span></label><input id="guard" type="range" min="0" max="26" value="12"></div>
-</div>
+<label class="title" style="margin-top:10px">2D Projection</label>
+<select id="projection">
+  <option value="zy">Z / Y — side view (MCO recommended)</option>
+  <option value="xy">X / Y — alternate side plane</option>
+  <option value="xz">X / Z — alternate up axis</option>
+</select>
 
-<div id="kickControls" class="sliders" style="display:none">
-  <div class="slider"><label>Kick reach <span><b id="kickReachV">72</b>% leg</span></label><input id="kickReach" type="range" min="25" max="95" value="72"></div>
-  <div class="slider"><label>Kick height <span><b id="kickHeightV">32</b>% leg</span></label><input id="kickHeight" type="range" min="5" max="70" value="32"></div>
-  <div class="slider"><label>Knee chamber <span><b id="kickChamberV">55</b>%</span></label><input id="kickChamber" type="range" min="20" max="90" value="55"></div>
-  <div class="slider"><label>Counter-lean <span><b id="kickLeanV">8</b>°</span></label><input id="kickLean" type="range" min="0" max="20" value="8"></div>
-  <div class="slider"><label>Kick hip drive <span><b id="kickHipV">8</b>% leg</span></label><input id="kickHip" type="range" min="0" max="18" value="8"></div>
-  <div class="slider"><label>Foot angle <span><b id="kickFootV">-12</b>°</span></label><input id="kickFoot" type="range" min="-45" max="45" value="-12"></div>
-</div>
-
-<div class="switchRow"><span>Show sprite</span><input id="showSprite" type="checkbox" checked></div>
-<div class="switchRow"><span>Show skeleton</span><input id="showBones" type="checkbox" checked></div>
+<div class="switchRow"><span>Use root forward motion</span><input id="rootMotion" type="checkbox"></div>
+<div class="switchRow"><span>Mirror imported motion</span><input id="mirrorMotion" type="checkbox"></div>
 
 <div class="grid">
-<button id="previewRig">Preview Motion</button><button id="stopPreview">Stop</button>
+  <button id="autoMapMCO">Auto Map MCO Bones</button>
+  <button id="previewMotion">Preview Motion</button>
+</div>
+<div id="mappingStatus" class="status">MCO mapping: waiting for animation.</div>
+
+<div class="sliders">
+<div class="slider"><label>Stride <span><b id="strideV">36</b>% leg</span></label><input id="stride" type="range" min="10" max="60" value="36"></div>
+<div class="slider"><label>Step height <span><b id="stepV">20</b>% leg</span></label><input id="step" type="range" min="5" max="35" value="20"></div>
+<div class="slider"><label>Body bob <span><b id="bobV">4</b>% leg</span></label><input id="bob" type="range" min="0" max="10" value="4"></div>
+<div class="slider"><label>Torso lean <span><b id="leanV">3</b>°</span></label><input id="lean" type="range" min="0" max="12" value="3"></div>
+<div class="slider"><label>Arm swing <span><b id="armV">12</b>°</span></label><input id="arm" type="range" min="0" max="30" value="12"></div>
+<div class="slider"><label>Tail swing <span><b id="tailV">8</b>°</span></label><input id="tail" type="range" min="0" max="25" value="8"></div>
+</div>
+<div class="switchRow"><span>Show sprite</span><input id="showSprite" type="checkbox" checked></div>
+<div class="switchRow"><span>Show skeleton</span><input id="showBones" type="checkbox" checked></div>
+<div class="grid">
+<button id="previewRig">Preview Rig</button><button id="stopPreview">Stop</button>
 <button id="generate" class="primary">Generate 8 Frames</button><button id="export">Export Sprite Sheet</button>
 <button id="clear">Clear Selected Part</button><button id="resetFrames">Clear Frames</button>
 </div>
-<div id="status" class="status">V10 ready.</div>
-</div>
+<div id="status" class="status">Ready. FBX/ZIP import uses Three.js + JSZip from CDN.</div>
 </div>
 </div>
 
 <section class="frames"><h2>Generated Frames</h2><div id="strip" class="strip"></div></section>
 </main>
 
-<script>
+<script type="module">
+import * as THREE from "three";
+import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
+
 const PARTS=["torso","head","left_upper_arm","left_forearm","left_hand","right_upper_arm","right_forearm","right_hand","left_thigh","left_shin","left_foot","right_thigh","right_shin","right_foot","tail"];
 const JOINTS=["pelvis","neck","left_shoulder","left_elbow","left_wrist","right_shoulder","right_elbow","right_wrist","left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe","tail_base","tail_tip"];
 const PART_BIND={torso:["pelvis","neck"],head:["neck","neck"],left_upper_arm:["left_shoulder","left_elbow"],left_forearm:["left_elbow","left_wrist"],left_hand:["left_wrist","left_wrist"],right_upper_arm:["right_shoulder","right_elbow"],right_forearm:["right_elbow","right_wrist"],right_hand:["right_wrist","right_wrist"],left_thigh:["left_hip","left_knee"],left_shin:["left_knee","left_ankle"],left_foot:["left_ankle","left_toe"],right_thigh:["right_hip","right_knee"],right_shin:["right_knee","right_ankle"],right_foot:["right_ankle","right_toe"],tail:["tail_base","tail_tip"]};
@@ -173,220 +120,51 @@ const RIGHT_ARM=[+14,+10,+3,-10,-14,-10,-3,+10];
 const SHOULDER_COUNTER=[-0.30,-0.45,-0.55,-0.30,+0.30,+0.45,+0.55,+0.30];
 
 const $=id=>document.getElementById(id);
-const canvas=$("mainCanvas"),ctx=canvas.getContext("2d"),partSel=$("part"),jointSel=$("joint"),animationMode=$("animationMode"),facingSel=$("facingDirection"),attackLimbSel=$("attackLimb"),hint=$("hint"),statusEl=$("status"),strip=$("strip");
+const canvas=$("mainCanvas"),ctx=canvas.getContext("2d"),partSel=$("part"),jointSel=$("joint"),hint=$("hint"),statusEl=$("status"),strip=$("strip");
 PARTS.forEach(p=>{const o=document.createElement("option");o.value=p;o.textContent=p;partSel.appendChild(o);});
 JOINTS.forEach(j=>{const o=document.createElement("option");o.value=j;o.textContent=j;jointSel.appendChild(o);});
 
-let source=null,sourceName="",rig={parts:{},joints:{}},mode="trace",tracePoints=[],drawing=false,draggingJoint=false,frames=[],timer=null,editPose=null,poseSlots={},draggingPoseJoint=null,autoMaskCache={};
+let source=null,sourceName="",rig={parts:{},joints:{}},mode="trace",tracePoints=[],drawing=false,draggingJoint=false,frames=[],timer=null;
+
+const FRAME_COUNT = 8;
+const MCO_CANDIDATES = {
+  pelvis:["Hips","Pelvis"],
+  neck:["Neck","Spine2","Spine1"],
+  left_shoulder:["LeftArm","LeftShoulder"],
+  left_elbow:["LeftForeArm","LeftForearm"],
+  left_wrist:["LeftHand"],
+  right_shoulder:["RightArm","RightShoulder"],
+  right_elbow:["RightForeArm","RightForearm"],
+  right_wrist:["RightHand"],
+  left_hip:["LeftUpLeg","LeftThigh"],
+  left_knee:["LeftLeg","LeftCalf"],
+  left_ankle:["LeftFoot"],
+  left_toe:["LeftToeBase","LeftToe"],
+  right_hip:["RightUpLeg","RightThigh"],
+  right_knee:["RightLeg","RightCalf"],
+  right_ankle:["RightFoot"],
+  right_toe:["RightToeBase","RightToe"]
+};
+
+let importedMotion = {
+  type:null,              // "fbx" or "native"
+  name:"",
+  object:null,
+  mixer:null,
+  clips:[],
+  clip:null,
+  action:null,
+  bones:{},
+  boneMap:{},
+  native:null
+};
+
 
 function status(s){statusEl.textContent=s;}
 function bindSlider(id,out){const a=$(id),b=$(out);a.oninput=()=>b.textContent=a.value;}
-["stride","step","bob","lean","arm","tail","breath","shoulderRise","idleLean","idleTail","windup","reach","strikeAngle","twist","attackLean","hipDrive","claw","guard","kickReach","kickHeight","kickChamber","kickLean","kickHip","kickFoot","autoPad"].forEach(id=>{if($(id)&&$(id+"V")) bindSlider(id,id+"V");});
-function setMode(m){
-  mode=m;
-  $("traceBtn").classList.toggle("active",m==="trace");
-  $("jointBtn").classList.toggle("active",m==="joint");
-  $("poseBtn").classList.toggle("active",m==="pose");
-  $("inspectBtn").classList.toggle("active",m==="inspect");
-  status(
-    m==="trace"?"Trace around the selected body part.":
-    m==="joint"?"Tap or drag the selected joint.":
-    m==="pose"?"Pose Edit active — drag any visible bone directly on the character.":
-    "Inspect mode."
-  );
-  draw();
-}
-$("traceBtn").onclick=()=>setMode("trace");
-$("jointBtn").onclick=()=>setMode("joint");
-$("poseBtn").onclick=()=>{if(!editPose) resetPoseFromAuto(); setMode("pose");};
-$("inspectBtn").onclick=()=>setMode("inspect");
-
-const MODE_INFO={
-  walk:{frames:8,names:WALK_NAMES,label:"Walk",speed:130},
-  idle:{frames:4,names:["Neutral","Inhale","Exhale","Settle"],label:"Breathing Idle",speed:180},
-  punch:{frames:4,names:["Ready","Wind-up","Strike","Recovery"],label:"Straight Punch",speed:115},
-  slash:{frames:4,names:["Ready","High Wind-up","Slash / Contact","Follow-through"],label:"Claw Slash",speed:125},
-  kick:{frames:4,names:["Ready","Chamber","Extension","Recovery"],label:"Front Kick",speed:125}
-};
-
-function poseFrameCount(){return Math.max(4,modeInfo().frames);} 
-function poseSlotLabel(slot){const info=modeInfo();return info.names[Math.min(slot-1,info.frames-1)]||`Slot ${slot}`;}
-function rebuildPoseSlotMenu(){
-  const sel=$("poseFrameSlot");
-  const current=+(sel.value||1);
-  sel.innerHTML="";
-  const total=Math.max(8,modeInfo().frames);
-  for(let i=1;i<=total;i++){
-    const o=document.createElement("option");
-    o.value=String(i);
-    const extra=i<=modeInfo().frames?poseSlotLabel(i):`Extra ${i}`;
-    o.textContent=`${i} • ${extra}`;
-    sel.appendChild(o);
-  }
-  sel.value=String(Math.min(total,Math.max(1,current)));
-}
-function poseKey(slot=+( $("poseFrameSlot").value||1 )){return `${currentAnimation()}_${slot}`;}
-function clonePoseMap(src){
-  if(!src)return null;
-  const out={};
-  Object.entries(src).forEach(([k,v])=>{
-    if(Array.isArray(v)) out[k]=[v[0],v[1]];
-    else if(k==="__handAngles"&&v) out.__handAngles=JSON.parse(JSON.stringify(v));
-  });
-  return out;
-}
-function translatePose(pose,names,dx,dy){names.forEach(name=>{if(pose[name]) pose[name]=[pose[name][0]+dx,pose[name][1]+dy];});}
-function hasSpriteBinding(){return !!(source&&Object.keys(rig.parts).some(k=>rig.parts[k]&&rig.parts[k].poly));}
-function nearestPoseJoint(pt){
-  if(!editPose)return null;
-  let best=null,bestD=22;
-  JOINTS.forEach(name=>{
-    const j=editPose[name];
-    if(!j)return;
-    const d=Math.hypot(j[0]-pt.x,j[1]-pt.y);
-    if(d<bestD){bestD=d;best=name;}
-  });
-  return best;
-}
-function moveArmEnd(side,target){
-  if(!editPose)return;
-  const s=editPose[`${side}_shoulder`],e=editPose[`${side}_elbow`],w=editPose[`${side}_wrist`];
-  if(!(s&&e&&w)){editPose[`${side}_wrist`]=[target[0],target[1]];return;}
-  const bend=(crossZ(s,w,e)>=0?1:-1)||1;
-  const solve=twoBoneIK(s,e,w,target,bend);
-  editPose[`${side}_elbow`]=solve.knee;
-  editPose[`${side}_wrist`]=solve.ankle;
-}
-function moveLegEnd(side,target){
-  if(!editPose)return;
-  const h=editPose[`${side}_hip`],k=editPose[`${side}_knee`],a=editPose[`${side}_ankle`],t=editPose[`${side}_toe`];
-  if(!(h&&k&&a)){editPose[`${side}_ankle`]=[target[0],target[1]];return;}
-  const oldA=[...a];
-  const bend=(crossZ(h,a,k)>=0?1:-1)||1;
-  const solve=twoBoneIK(h,k,a,target,bend);
-  editPose[`${side}_knee`]=solve.knee;
-  editPose[`${side}_ankle`]=solve.ankle;
-  if(t){const dx=solve.ankle[0]-oldA[0],dy=solve.ankle[1]-oldA[1];editPose[`${side}_toe`]=[t[0]+dx,t[1]+dy];}
-}
-function movePoseJoint(name,pt){
-  if(!editPose)return;
-  const old=editPose[name]?[...editPose[name]]:[pt.x,pt.y];
-  const dx=pt.x-old[0],dy=pt.y-old[1];
-  if(name==="pelvis") return translatePose(editPose,JOINTS,dx,dy);
-  if(name==="neck") return translatePose(editPose,["neck","left_shoulder","left_elbow","left_wrist","right_shoulder","right_elbow","right_wrist"],dx,dy);
-  if(name==="left_shoulder") return translatePose(editPose,["left_shoulder","left_elbow","left_wrist"],dx,dy);
-  if(name==="right_shoulder") return translatePose(editPose,["right_shoulder","right_elbow","right_wrist"],dx,dy);
-  if(name==="left_elbow") return translatePose(editPose,["left_elbow","left_wrist"],dx,dy);
-  if(name==="right_elbow") return translatePose(editPose,["right_elbow","right_wrist"],dx,dy);
-  if(name==="left_wrist") return moveArmEnd("left",[pt.x,pt.y]);
-  if(name==="right_wrist") return moveArmEnd("right",[pt.x,pt.y]);
-  if(name==="left_hip") return translatePose(editPose,["left_hip","left_knee","left_ankle","left_toe"],dx,dy);
-  if(name==="right_hip") return translatePose(editPose,["right_hip","right_knee","right_ankle","right_toe"],dx,dy);
-  if(name==="left_knee") return translatePose(editPose,["left_knee","left_ankle","left_toe"],dx,dy);
-  if(name==="right_knee") return translatePose(editPose,["right_knee","right_ankle","right_toe"],dx,dy);
-  if(name==="left_ankle") return moveLegEnd("left",[pt.x,pt.y]);
-  if(name==="right_ankle") return moveLegEnd("right",[pt.x,pt.y]);
-  if(name==="tail_base") return translatePose(editPose,["tail_base","tail_tip"],dx,dy);
-  editPose[name]=[pt.x,pt.y];
-}
-function savedPose(slot=+( $("poseFrameSlot").value||1 )){return poseSlots[poseKey(slot)]||null;}
-function saveCurrentPoseSlot(slot=+( $("poseFrameSlot").value||1 )){
-  if(!editPose) resetPoseFromAuto();
-  poseSlots[poseKey(slot)]=clonePoseMap(editPose);
-  status(`Saved ${modeInfo().label} pose to slot ${slot} • ${poseSlotLabel(slot)}.`);
-}
-function loadPoseSlot(slot=+( $("poseFrameSlot").value||1 )){
-  const p=savedPose(slot);
-  if(!p){status(`Slot ${slot} is empty.`);return;}
-  editPose=clonePoseMap(p);
-  setMode("pose");
-  status(`Loaded slot ${slot} into Pose Edit.`);
-}
-function copyPrevPoseSlot(){
-  const slot=+( $("poseFrameSlot").value||1 );
-  if(slot<=1){status("No previous slot to copy.");return;}
-  const prev=savedPose(slot-1);
-  if(!prev){status(`Slot ${slot-1} is empty.`);return;}
-  poseSlots[poseKey(slot)]=clonePoseMap(prev);
-  editPose=clonePoseMap(prev);
-  setMode("pose");
-  status(`Copied slot ${slot-1} into slot ${slot}.`);
-}
-function clearSavedPoseSlots(){poseSlots={};status("Saved pose slots cleared.");draw();}
-function resetPoseFromAuto(slot=+( $("poseFrameSlot").value||1 )){
-  inferJointsFromParts();
-  const idx=Math.max(0,Math.min(modeInfo().frames-1,slot-1));
-  const built=buildAnimationPose(idx);
-  editPose=clonePoseMap(built.error?rig.joints:built.pose);
-  setMode("pose");
-  status(`Pose editor reset from ${modeInfo().label} frame ${idx+1} • ${poseSlotLabel(slot)}.`);
-}
-function previewSavedPoses(){
-  const info=modeInfo();
-  clearInterval(timer);
-  let i=1;
-  timer=setInterval(()=>{
-    const p=savedPose(i) || clonePoseMap(buildAnimationPose(Math.min(i-1,info.frames-1)).pose);
-    editPose=clonePoseMap(p);
-    draw();
-    status(`Previewing saved poses • Slot ${i} • ${poseSlotLabel(i)}`);
-    i=(i%info.frames)+1;
-  },info.speed);
-}
-
-const PRESETS={
-  walk:{stride:36,step:20,bob:4,lean:3,arm:12,tail:8},
-  idle:{breath:3,shoulderRise:2,idleLean:2,idleTail:5},
-  punch:{windup:44,reach:100,strikeAngle:-3,twist:24,attackLean:2,hipDrive:8,claw:-10,guard:18},
-  slash:{windup:62,reach:100,strikeAngle:8,twist:22,attackLean:3,hipDrive:7,claw:-30,guard:14},
-  kick:{kickReach:72,kickHeight:32,kickChamber:55,kickLean:8,kickHip:8,kickFoot:-12}
-};
-
-function currentAnimation(){return animationMode.value;}
-function modeInfo(){return MODE_INFO[currentAnimation()];}
-
-function setSliderValue(id,val){
-  const el=$(id),out=$(id+"V");
-  if(!el) return;
-  el.value=val;
-  if(out) out.textContent=val;
-}
-
-function applyModePreset(){
-  const p=PRESETS[currentAnimation()]||{};
-  Object.entries(p).forEach(([id,val])=>setSliderValue(id,val));
-  frames=[];
-  strip.innerHTML="";
-  draw();
-  if(currentAnimation()==="slash"){
-    status("Claw Slash preset loaded.");
-  }else if(currentAnimation()==="punch"){
-    status("Straight Punch preset loaded.");
-  }else{
-    status(`${modeInfo().label} preset loaded.`);
-  }
-}
-
-function updateAnimationUI(){
-  const m=currentAnimation();
-  $("walkControls").style.display=m==="walk"?"block":"none";
-  $("idleControls").style.display=m==="idle"?"block":"none";
-  $("attackControls").style.display=(m==="punch"||m==="slash")?"block":"none";
-  $("kickControls").style.display=m==="kick"?"block":"none";
-  $("combatSelectors").style.display=(m==="walk"||m==="idle")?"none":"block";
-  $("generate").textContent=`Generate ${MODE_INFO[m].frames} Frames`;
-  frames=[];
-  strip.innerHTML="";
-  if(timer){clearInterval(timer);timer=null;}
-  rebuildPoseSlotMenu();
-  draw();
-  status(`${MODE_INFO[m].label} mode ready.`);
-}
-animationMode.onchange=updateAnimationUI;
-facingSel.onchange=()=>{frames=[];strip.innerHTML="";draw();status(facingSel.value==="right"?"Facing Right →":"← Facing Left");};
-attackLimbSel.onchange=()=>{frames=[];strip.innerHTML="";draw();status(`${attackLimbSel.options[attackLimbSel.selectedIndex].text} selected.`);};
-$("applyPreset").onclick=applyModePreset;
-
+["stride","step","bob","lean","arm","tail"].forEach(id=>bindSlider(id,id+"V"));
+function setMode(m){mode=m;$("traceBtn").classList.toggle("active",m==="trace");$("jointBtn").classList.toggle("active",m==="joint");$("inspectBtn").classList.toggle("active",m==="inspect");status(m==="trace"?"Trace around the selected body part.":m==="joint"?"Tap or drag the selected joint.":"Inspect mode.");}
+$("traceBtn").onclick=()=>setMode("trace");$("jointBtn").onclick=()=>setMode("joint");$("inspectBtn").onclick=()=>setMode("inspect");
 
 function resize(){const r=canvas.getBoundingClientRect(),d=Math.max(1,window.devicePixelRatio||1);canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);ctx.setTransform(d,0,0,d,0,0);draw();}
 new ResizeObserver(resize).observe(canvas);window.addEventListener("resize",resize);
@@ -398,397 +176,26 @@ function drawBackground(){ctx.clearRect(0,0,canvas.clientWidth,canvas.clientHeig
 function drawPolygon(points,color,width=2,close=true){if(!points||points.length<2) return;ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();let p=toScreen(points[0][0],points[0][1]);ctx.moveTo(p.x,p.y);for(let i=1;i<points.length;i++){p=toScreen(points[i][0],points[i][1]);ctx.lineTo(p.x,p.y);}if(close) ctx.closePath();ctx.stroke();}
 function drawLine(a,b,color,width=2){if(!a||!b) return;const p=toScreen(a[0],a[1]),q=toScreen(b[0],b[1]);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();}
 function drawJoint(name,p,active=false){if(!p) return;const s=toScreen(p[0],p[1]);ctx.strokeStyle=active?"#ffdd4d":"#caa83c";ctx.lineWidth=2;ctx.beginPath();ctx.arc(s.x,s.y,5,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(s.x-8,s.y);ctx.lineTo(s.x+8,s.y);ctx.moveTo(s.x,s.y-8);ctx.lineTo(s.x,s.y+8);ctx.stroke();ctx.fillStyle="#fff";ctx.font="11px -apple-system";ctx.fillText(name,s.x+7,s.y-7);}
-function drawSkeleton(j,activeName=null){
-  [["pelvis","neck"],["left_shoulder","left_elbow"],["left_elbow","left_wrist"],["right_shoulder","right_elbow"],["right_elbow","right_wrist"],["left_hip","left_knee"],["left_knee","left_ankle"],["left_ankle","left_toe"],["right_hip","right_knee"],["right_knee","right_ankle"],["right_ankle","right_toe"],["tail_base","tail_tip"]].forEach(([a,b])=>drawLine(j[a],j[b],"#7fb5ff",3));
-  if(j.pelvis&&j.left_shoulder) drawLine(j.pelvis,j.left_shoulder,"#416fa8",2);
-  if(j.pelvis&&j.right_shoulder) drawLine(j.pelvis,j.right_shoulder,"#416fa8",2);
-  JOINTS.forEach(name=>{if(j[name]) drawJoint(name,j[name],name===(activeName||jointSel.value));});
-}
-function draw(frameCanvas=null,poseJoints=null){
-  drawBackground();
-  if(!source&&Object.keys(rig.joints).length===0){hint.style.display="grid";return;}
-  hint.style.display="none";
-  const {s,ox,oy}=view();
-  const poseMode=(mode==="pose"&&editPose);
-
-  if(frameCanvas){
-    ctx.imageSmoothingEnabled=false;
-    ctx.drawImage(frameCanvas,ox,oy,frameCanvas.width*s,frameCanvas.height*s);
-  }else if(poseMode&&hasSpriteBinding()&&$("showSprite").checked){
-    if($("showOnion").checked){
-      const prev=savedPose((+$("poseFrameSlot").value||1)-1);
-      if(prev){
-        const onion=buildSpriteCanvasFromPose(prev);
-        if(onion){ctx.save();ctx.globalAlpha=0.25;ctx.imageSmoothingEnabled=false;ctx.drawImage(onion,ox,oy,onion.width*s,onion.height*s);ctx.restore();}
-      }
-    }
-    const live=buildSpriteCanvasFromPose(editPose);
-    if(live){ctx.imageSmoothingEnabled=false;ctx.drawImage(live,ox,oy,live.width*s,live.height*s);}
-  }else if(source&&$("showSprite").checked){
-    ctx.imageSmoothingEnabled=false;
-    ctx.drawImage(source,ox,oy,source.width*s,source.height*s);
-  }
-
-  if(!frameCanvas&&!poseMode){
-    Object.entries(rig.parts).forEach(([name,data])=>{
-      if(data.poly){
-        drawPolygon(data.poly,name===partSel.value?"#62e7ad":"#3da778",name===partSel.value?3:1.2,true);
-      }else if(data.maskData && autoMaskCache[name]){
-        const m=autoMaskCache[name];
-        const p1=toScreen(0,0), p2=toScreen(m.width,m.height);
-        ctx.save();
-        ctx.globalAlpha = (name===partSel.value)?0.22:0.10;
-        ctx.drawImage(m,p1.x,p1.y,p2.x-p1.x,p2.y-p1.y);
-        ctx.restore();
-      }
-    });
-  }
-  if(tracePoints.length>1) drawPolygon(tracePoints,"#ff4d73",2,false);
-  if($("showBones").checked) drawSkeleton(poseMode?editPose:(poseJoints||rig.joints),poseMode?draggingPoseJoint:null);
-}
+function drawSkeleton(j){[["pelvis","neck"],["left_shoulder","left_elbow"],["left_elbow","left_wrist"],["right_shoulder","right_elbow"],["right_elbow","right_wrist"],["left_hip","left_knee"],["left_knee","left_ankle"],["left_ankle","left_toe"],["right_hip","right_knee"],["right_knee","right_ankle"],["right_ankle","right_toe"],["tail_base","tail_tip"]].forEach(([a,b])=>drawLine(j[a],j[b],"#7fb5ff",3));if(j.pelvis&&j.left_shoulder) drawLine(j.pelvis,j.left_shoulder,"#416fa8",2);if(j.pelvis&&j.right_shoulder) drawLine(j.pelvis,j.right_shoulder,"#416fa8",2);JOINTS.forEach(name=>{if(j[name]) drawJoint(name,j[name],name===jointSel.value);});}
+function draw(frameCanvas=null,poseJoints=null){drawBackground();if(!source&&Object.keys(rig.joints).length===0){hint.style.display="grid";return;}hint.style.display="none";const {s,ox,oy}=view();if(source&&!frameCanvas&&$("showSprite").checked){ctx.imageSmoothingEnabled=false;ctx.drawImage(source,ox,oy,source.width*s,source.height*s);}if(frameCanvas){ctx.imageSmoothingEnabled=false;ctx.drawImage(frameCanvas,ox,oy,frameCanvas.width*s,frameCanvas.height*s);}if(!frameCanvas){Object.entries(rig.parts).forEach(([name,data])=>{if(data.poly) drawPolygon(data.poly,name===partSel.value?"#62e7ad":"#3da778",name===partSel.value?3:1.2,true);});}if(tracePoints.length>1) drawPolygon(tracePoints,"#ff4d73",2,false);if($("showBones").checked) drawSkeleton(poseJoints||rig.joints);}
 
 function simplify(points,tol){if(points.length<3) return points;const out=[points[0]];let last=points[0];for(let i=1;i<points.length-1;i++){const p=points[i];if(Math.hypot(p[0]-last[0],p[1]-last[1])>=tol){out.push(p);last=p;}}out.push(points[points.length-1]);return out;}
 function pointDistance(a,b){return Math.hypot(a.x-b.x,a.y-b.y);}
-$("imageInput").onchange=e=>{const f=e.target.files[0];if(!f) return;const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{source=im;sourceName=f.name;URL.revokeObjectURL(u);preloadAutoMasks(()=>{status(`Loaded ${f.name} — ${im.width}×${im.height}`);draw();});};im.src=u;};
+$("imageInput").onchange=e=>{const f=e.target.files[0];if(!f) return;const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{source=im;sourceName=f.name;URL.revokeObjectURL(u);status(`Loaded ${f.name} — ${im.width}×${im.height}`);draw();};im.src=u;};
 
-canvas.addEventListener("pointerdown",e=>{
-  const p=toImg(e.clientX,e.clientY);
-  canvas.setPointerCapture(e.pointerId);
-  if(mode==="trace"){
-    if(!source){status("Load a character image first.");return;}
-    drawing=true;tracePoints=[[p.x,p.y]];draw();return;
-  }
-  if(mode==="joint"){
-    const cur=rig.joints[jointSel.value];
-    if(cur&&Math.hypot(cur[0]-p.x,cur[1]-p.y)<20) draggingJoint=true;
-    else{rig.joints[jointSel.value]=[p.x,p.y];draggingJoint=true;}
-    draw();return;
-  }
-  if(mode==="pose"){
-    if(!editPose) resetPoseFromAuto();
-    draggingPoseJoint=nearestPoseJoint(p) || jointSel.value;
-    if(!editPose[draggingPoseJoint]) editPose[draggingPoseJoint]=[p.x,p.y];
-    movePoseJoint(draggingPoseJoint,p);
-    draw();
-    return;
-  }
-});
-canvas.addEventListener("pointermove",e=>{
-  const p=toImg(e.clientX,e.clientY);
-  if(mode==="trace"&&drawing){
-    const last=tracePoints[tracePoints.length-1],cur={x:p.x,y:p.y};
-    if(!last||pointDistance({x:last[0],y:last[1]},cur)>2.2) tracePoints.push([p.x,p.y]);
-    draw();
-  }else if(mode==="joint"&&draggingJoint){
-    rig.joints[jointSel.value]=[p.x,p.y];draw();
-  }else if(mode==="pose"&&draggingPoseJoint){
-    movePoseJoint(draggingPoseJoint,p);draw();
-  }
-});
-canvas.addEventListener("pointerup",()=>{
-  if(mode==="trace"&&drawing){
-    drawing=false;
-    if(tracePoints.length>=8){
-      rig.parts[partSel.value]=rig.parts[partSel.value]||{};
-      rig.parts[partSel.value].poly=simplify(tracePoints,1.4);
-      status(`${partSel.value}: shape captured.`);
-    }else status("Trace was too short. Try again.");
-    tracePoints=[];draw();
-  }
-  draggingJoint=false;
-  draggingPoseJoint=null;
-});
-canvas.addEventListener("pointercancel",()=>{drawing=false;draggingJoint=false;draggingPoseJoint=null;tracePoints=[];draw();});
+canvas.addEventListener("pointerdown",e=>{const p=toImg(e.clientX,e.clientY);canvas.setPointerCapture(e.pointerId);if(mode==="trace"){if(!source){status("Load a character image first.");return;}drawing=true;tracePoints=[[p.x,p.y]];draw();return;}if(mode==="joint"){const cur=rig.joints[jointSel.value];if(cur&&Math.hypot(cur[0]-p.x,cur[1]-p.y)<20) draggingJoint=true;else{rig.joints[jointSel.value]=[p.x,p.y];draggingJoint=true;}draw();}});
+canvas.addEventListener("pointermove",e=>{const p=toImg(e.clientX,e.clientY);if(mode==="trace"&&drawing){const last=tracePoints[tracePoints.length-1],cur={x:p.x,y:p.y};if(!last||pointDistance({x:last[0],y:last[1]},cur)>2.2) tracePoints.push([p.x,p.y]);draw();}else if(mode==="joint"&&draggingJoint){rig.joints[jointSel.value]=[p.x,p.y];draw();}});
+canvas.addEventListener("pointerup",()=>{if(mode==="trace"&&drawing){drawing=false;if(tracePoints.length>=8){rig.parts[partSel.value]=rig.parts[partSel.value]||{};rig.parts[partSel.value].poly=simplify(tracePoints,1.4);status(`${partSel.value}: shape captured.`);}else status("Trace was too short. Try again.");tracePoints=[];draw();}draggingJoint=false;});
+canvas.addEventListener("pointercancel",()=>{drawing=false;draggingJoint=false;tracePoints=[];draw();});
 
 function seedHumanoidRig(){const {w,h}=sourceRect(),cx=w*0.50,pelvisY=h*0.54,neckY=h*0.25,hipDX=w*0.10,shoulderDX=w*0.15,kneeY=h*0.73,ankleY=h*0.92,toeY=h*0.96,armY=h*0.34,elbowY=h*0.52,wristY=h*0.69;rig.joints={pelvis:[cx,pelvisY],neck:[cx,neckY],left_shoulder:[cx-shoulderDX,armY],left_elbow:[cx-shoulderDX-22,elbowY],left_wrist:[cx-shoulderDX-28,wristY],right_shoulder:[cx+shoulderDX,armY],right_elbow:[cx+shoulderDX+22,elbowY],right_wrist:[cx+shoulderDX+28,wristY],left_hip:[cx-hipDX,pelvisY+8],left_knee:[cx-hipDX-6,kneeY],left_ankle:[cx-hipDX-10,ankleY],left_toe:[cx-hipDX+18,toeY],right_hip:[cx+hipDX,pelvisY+8],right_knee:[cx+hipDX+6,kneeY],right_ankle:[cx+hipDX+10,ankleY],right_toe:[cx+hipDX+36,toeY],tail_base:[cx-hipDX*1.3,pelvisY+10],tail_tip:[cx-w*0.22,pelvisY+30]};status("Seeded a basic humanoid walk rig. Adjust joints as needed, then Preview Rig.");draw();}
 $("seedRig").onclick=seedHumanoidRig;
 
 function pointFarthestFrom(points,p){let best=points[0],dist=-1;for(const q of points){const d=Math.hypot(q[0]-p[0],q[1]-p[1]);if(d>dist){dist=d;best=q;}}return[best[0],best[1]];}
-
-function hasBinding(name){const d=rig.parts[name];return !!(d&&(d.poly||d.maskData));}
-function hasAnyBindings(){return PARTS.some(name=>hasBinding(name));}
-
-function preloadAutoMasks(done=null){
-  autoMaskCache={};
-  const names=PARTS.filter(name=>rig.parts[name]&&rig.parts[name].maskData);
-  if(!names.length){if(done)done();return;}
-  let remaining=names.length;
-  names.forEach(name=>{
-    const img=new Image();
-    img.onload=()=>{
-      const c=document.createElement("canvas");
-      c.width=img.width;c.height=img.height;
-      c.getContext("2d").drawImage(img,0,0);
-      autoMaskCache[name]=c;
-      remaining--;
-      if(remaining===0&&done)done();
-    };
-    img.onerror=()=>{
-      remaining--;
-      if(remaining===0&&done)done();
-    };
-    img.src=rig.parts[name].maskData;
-  });
-}
-
-function averagePoint(a,b){return[(a[0]+b[0])/2,(a[1]+b[1])/2];}
-function distPointToSeg(px,py,a,b){
-  if(!a||!b) return 1e9;
-  const vx=b[0]-a[0],vy=b[1]-a[1],wx=px-a[0],wy=py-a[1];
-  const vv=vx*vx+vy*vy;
-  let t=vv?((wx*vx+wy*vy)/vv):0;
-  t=clamp(t,0,1);
-  const cx=a[0]+vx*t,cy=a[1]+vy*t;
-  return Math.hypot(px-cx,py-cy);
-}
-function distPointToCircle(px,py,c,r){
-  if(!c) return 1e9;
-  return Math.max(0,Math.hypot(px-c[0],py-c[1])-r);
-}
-function dilateMask(alpha,w,h,radius){
-  if(radius<=0) return alpha;
-  const src=alpha.slice();
-  const out=alpha.slice();
-  for(let y=0;y<h;y++){
-    for(let x=0;x<w;x++){
-      const i=y*w+x;
-      if(src[i]) continue;
-      let on=0;
-      for(let dy=-radius;dy<=radius&&!on;dy++){
-        const yy=y+dy;
-        if(yy<0||yy>=h) continue;
-        for(let dx=-radius;dx<=radius;dx++){
-          if(dx*dx+dy*dy>radius*radius) continue;
-          const xx=x+dx;
-          if(xx<0||xx>=w) continue;
-          if(src[yy*w+xx]){on=255;break;}
-        }
-      }
-      out[i]=on;
-    }
-  }
-  return out;
-}
-function maskCanvasToDataURL(alpha,w,h){
-  const c=document.createElement("canvas");
-  c.width=w;c.height=h;
-  const g=c.getContext("2d");
-  const id=g.createImageData(w,h);
-  for(let i=0;i<alpha.length;i++){
-    const a=alpha[i];
-    id.data[i*4+0]=255;
-    id.data[i*4+1]=255;
-    id.data[i*4+2]=255;
-    id.data[i*4+3]=a;
-  }
-  g.putImageData(id,0,0);
-  return {canvas:c,dataURL:c.toDataURL("image/png")};
-}
-function applyMaskToSource(maskCanvas){
-  if(!source||!maskCanvas) return null;
-  const c=document.createElement("canvas");
-  c.width=source.width;c.height=source.height;
-  const g=c.getContext("2d");
-  g.drawImage(source,0,0);
-  g.globalCompositeOperation="destination-in";
-  g.drawImage(maskCanvas,0,0);
-  return c;
-}
-function sourceForegroundInfo(){
-  const c=document.createElement("canvas");
-  c.width=source.width;c.height=source.height;
-  const g=c.getContext("2d");
-  g.drawImage(source,0,0);
-  const img=g.getImageData(0,0,c.width,c.height);
-  const d=img.data,w=c.width,h=c.height;
-  const corners=[
-    0,
-    (w-1)*4,
-    ((h-1)*w)*4,
-    ((h*w)-1)*4
-  ];
-  let bg=[0,0,0,0];
-  corners.forEach(i=>{
-    bg[0]+=d[i+0];bg[1]+=d[i+1];bg[2]+=d[i+2];bg[3]+=d[i+3];
-  });
-  bg=bg.map(v=>v/4);
-  const transparentLikely = bg[3] < 245;
-  return {img,w,h,bg,transparentLikely};
-}
-function isForegroundPixel(data,i,bg,transparentLikely){
-  const a=data[i+3];
-  if(a<16) return false;
-  if(transparentLikely) return true;
-  const dr=data[i+0]-bg[0],dg=data[i+1]-bg[1],db=data[i+2]-bg[2];
-  const dist=Math.sqrt(dr*dr+dg*dg+db*db);
-  return dist>28 || a<235;
-}
-function buildAutoPartSpecs(){
-  const pelvis=joint("pelvis"),neck=joint("neck");
-  if(!(pelvis&&neck)) return null;
-  const torsoLen=Math.max(20,length(pelvis,neck));
-  const shoulderWidth=(joint("left_shoulder")&&joint("right_shoulder"))?length(joint("left_shoulder"),joint("right_shoulder")):torsoLen*0.9;
-
-  const headCenter=[neck[0], neck[1]-torsoLen*0.55];
-  const headR=Math.max(12,torsoLen*0.34);
-
-  const mkSeg=(a,b,r,weight=1,penalty=null)=>({kind:"seg",a,b,r,weight,penalty});
-  const mkCircle=(c,r,weight=1,penalty=null)=>({kind:"circle",c,r,weight,penalty});
-
-  const specs={
-    torso: mkSeg(pelvis,neck,Math.max(14,shoulderWidth*0.34),0.85,(x,y)=>y<neck[1]-headR*0.35?6:0),
-    head: mkCircle(headCenter,headR,0.9,(x,y)=>y>neck[1]+4?8:0),
-
-    left_upper_arm: mkSeg(joint("left_shoulder"),joint("left_elbow"),Math.max(8,torsoLen*0.15),1.0),
-    left_forearm: mkSeg(joint("left_elbow"),joint("left_wrist"),Math.max(7,torsoLen*0.13),1.0),
-    left_hand: mkCircle(joint("left_wrist"),Math.max(6,torsoLen*0.12),1.0),
-
-    right_upper_arm: mkSeg(joint("right_shoulder"),joint("right_elbow"),Math.max(8,torsoLen*0.15),1.0),
-    right_forearm: mkSeg(joint("right_elbow"),joint("right_wrist"),Math.max(7,torsoLen*0.13),1.0),
-    right_hand: mkCircle(joint("right_wrist"),Math.max(6,torsoLen*0.12),1.0),
-
-    left_thigh: mkSeg(joint("left_hip"),joint("left_knee"),Math.max(10,torsoLen*0.16),1.0),
-    left_shin: mkSeg(joint("left_knee"),joint("left_ankle"),Math.max(8,torsoLen*0.14),1.0),
-    left_foot: mkSeg(joint("left_ankle"),joint("left_toe"),Math.max(7,torsoLen*0.11),0.95),
-
-    right_thigh: mkSeg(joint("right_hip"),joint("right_knee"),Math.max(10,torsoLen*0.16),1.0),
-    right_shin: mkSeg(joint("right_knee"),joint("right_ankle"),Math.max(8,torsoLen*0.14),1.0),
-    right_foot: mkSeg(joint("right_ankle"),joint("right_toe"),Math.max(7,torsoLen*0.11),0.95),
-  };
-  if(joint("tail_base")&&joint("tail_tip")) specs.tail=mkSeg(joint("tail_base"),joint("tail_tip"),Math.max(7,torsoLen*0.12),0.95);
-  return specs;
-}
-function scorePartPixel(spec,x,y){
-  if(!spec) return 1e9;
-  const base = spec.kind==="seg"
-    ? distPointToSeg(x,y,spec.a,spec.b)/Math.max(1,spec.r)
-    : distPointToCircle(x,y,spec.c,spec.r)/Math.max(1,spec.r);
-  return base*spec.weight + (spec.penalty?spec.penalty(x,y):0);
-}
-function autoSegmentParts(){
-  if(!source){status("Load a sprite image first.");return;}
-  inferJointsFromParts();
-  const specs=buildAutoPartSpecs();
-  if(!specs){status("Need at least pelvis + neck (and best results with full limb joints) before auto segmentation.");return;}
-
-  const {img,w,h,bg,transparentLikely}=sourceForegroundInfo();
-  const data=img.data;
-  const pad=+($("autoPad")?.value||2);
-
-  const masks={};
-  PARTS.forEach(name=>masks[name]=new Uint8Array(w*h));
-
-  for(let y=0;y<h;y++){
-    for(let x=0;x<w;x++){
-      const di=(y*w+x)*4;
-      if(!isForegroundPixel(data,di,bg,transparentLikely)) continue;
-
-      let bestName=null,bestScore=1e9;
-      for(const name of PARTS){
-        const s=scorePartPixel(specs[name],x,y);
-        if(s<bestScore){bestScore=s;bestName=name;}
-      }
-      if(bestName) masks[bestName][y*w+x]=255;
-    }
-  }
-
-  autoMaskCache={};
-  PARTS.forEach(name=>{
-    const alpha=dilateMask(masks[name],w,h,pad);
-    const made=maskCanvasToDataURL(alpha,w,h);
-    autoMaskCache[name]=made.canvas;
-    rig.parts[name]=rig.parts[name]||{};
-    rig.parts[name].maskData=made.dataURL;
-    if(!rig.parts[name].pivot){
-      const bind=PART_BIND[name];
-      if(bind&&joint(bind[0])) rig.parts[name].pivot=[...joint(bind[0])];
-    }
-  });
-
-  frames=[];
-  strip.innerHTML="";
-  draw();
-  status(`Auto segmented ${PARTS.length} body parts with overlap pad ${pad}. Pose Edit should now keep the body tighter.`);
-}
-function clearAutoMasksOnly(){
-  PARTS.forEach(name=>{
-    if(rig.parts[name]) delete rig.parts[name].maskData;
-  });
-  autoMaskCache={};
-  frames=[];
-  strip.innerHTML="";
-  draw();
-  status("Auto mask parts cleared.");
-}
 function inferJointsFromParts(){const p=rig.parts,j=rig.joints,ensure=(name,val)=>{if(!j[name]&&val) j[name]=val;};if(p.torso&&p.torso.pivot) ensure("pelvis",[...p.torso.pivot]);if(p.left_thigh&&p.left_thigh.pivot) ensure("left_hip",[...p.left_thigh.pivot]);if(p.left_shin&&p.left_shin.pivot) ensure("left_knee",[...p.left_shin.pivot]);if(p.left_foot&&p.left_foot.pivot) ensure("left_ankle",[...p.left_foot.pivot]);if(p.right_thigh&&p.right_thigh.pivot) ensure("right_hip",[...p.right_thigh.pivot]);if(p.right_shin&&p.right_shin.pivot) ensure("right_knee",[...p.right_shin.pivot]);if(p.right_foot&&p.right_foot.pivot) ensure("right_ankle",[...p.right_foot.pivot]);if(p.left_foot&&p.left_foot.poly&&j.left_ankle) ensure("left_toe",pointFarthestFrom(p.left_foot.poly,j.left_ankle));if(p.right_foot&&p.right_foot.poly&&j.right_ankle) ensure("right_toe",pointFarthestFrom(p.right_foot.poly,j.right_ankle));if(p.tail&&p.tail.pivot) ensure("tail_base",[...p.tail.pivot]);if(p.tail&&p.tail.poly&&j.tail_base) ensure("tail_tip",pointFarthestFrom(p.tail.poly,j.tail_base));if(!j.neck&&p.torso&&p.torso.poly){let minY=1e9,sumX=0,count=0;for(const q of p.torso.poly){if(q[1]<minY+10){if(q[1]<minY){minY=q[1];sumX=0;count=0;}sumX+=q[0];count++;}}if(count) j.neck=[sumX/count,minY+10];}if(!j.left_shoulder&&j.neck) j.left_shoulder=[j.neck[0]-24,j.neck[1]+12];if(!j.right_shoulder&&j.neck) j.right_shoulder=[j.neck[0]+24,j.neck[1]+12];}
 function download(blob,name){const a=document.createElement("a"),u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);}
-$("saveRig").onclick=()=>{
-  const settings={
-    animation:currentAnimation(),
-    facing:facingSel.value,
-    attack_limb:attackLimbSel.value
-  };
-  const sliderIds=["stride","step","bob","lean","arm","tail","breath","shoulderRise","idleLean","idleTail","windup","reach","strikeAngle","twist","attackLean","hipDrive","claw","guard","kickReach","kickHeight","kickChamber","kickLean","kickHip","kickFoot"];
-  settings.sliders={};
-  sliderIds.forEach(id=>{if($(id)) settings.sliders[id]=+$(id).value;});
-  const data={version:11.1,source_name:sourceName,source_size:source?[source.width,source.height]:null,parts:rig.parts,joints:rig.joints,settings,manualPoses:poseSlots};
-  download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"fatal_instinct_rig_v11_1.json");
-  status("V11.1 rig + animation settings + saved poses + auto masks exported.");
-};
-$("rigInput").onchange=async e=>{
-  const f=e.target.files[0];if(!f) return;
-  try{
-    const d=JSON.parse(await f.text());
-    rig.parts=d.parts||{};
-    rig.joints=d.joints||{};
-    inferJointsFromParts();
-    poseSlots=d.manualPoses||{};
-    preloadAutoMasks();
-    if(d.settings){
-      if(d.settings.animation && MODE_INFO[d.settings.animation]) animationMode.value=d.settings.animation;
-      if(d.settings.facing) facingSel.value=d.settings.facing;
-      if(d.settings.attack_limb) attackLimbSel.value=d.settings.attack_limb;
-      if(d.settings.sliders) Object.entries(d.settings.sliders).forEach(([id,val])=>{if($(id)) setSliderValue(id,val);});
-      updateAnimationUI();
-    }
-    status(`Loaded rig: ${f.name} (V${d.version||"?"})`);
-    draw();
-  }catch(err){status("Could not read rig JSON.");}
-};
-function swapObjectKeys(obj,a,b){
-  const av=obj[a],bv=obj[b];
-  if(bv===undefined) delete obj[a]; else obj[a]=bv;
-  if(av===undefined) delete obj[b]; else obj[b]=av;
-}
-function swapLeftRightRig(){
-  ["shoulder","elbow","wrist","hip","knee","ankle","toe"].forEach(base=>swapObjectKeys(rig.joints,`left_${base}`,`right_${base}`));
-  ["upper_arm","forearm","hand","thigh","shin","foot"].forEach(base=>swapObjectKeys(rig.parts,`left_${base}`,`right_${base}`));
-  frames=[];strip.innerHTML="";draw();
-  status("Left/right rig labels swapped. Preview the walk before saving.");
-}
-$("swapLR").onclick=swapLeftRightRig;
-
-function validateCurrentRig(){
-  inferJointsFromParts();
-  const mode=currentAnimation();
-  let need=[];
-  if(mode==="walk") need=["pelvis","neck","left_shoulder","right_shoulder","left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe"];
-  else if(mode==="idle") need=["pelvis","neck","left_shoulder","right_shoulder","left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe"];
-  else if(mode==="punch"||mode==="slash"){
-    const side=resolveAttackSide("arm");
-    need=["pelvis","neck",`${side}_shoulder`,`${side}_elbow`,`${side}_wrist`,"left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe"];
-  }else if(mode==="kick"){
-    const side=resolveAttackSide("leg");
-    const support=side==="left"?"right":"left";
-    need=["pelvis","neck",`${side}_hip`,`${side}_knee`,`${side}_ankle`,`${side}_toe`,`${support}_hip`,`${support}_knee`,`${support}_ankle`,`${support}_toe`];
-  }
-  const missing=need.filter(j=>!joint(j));
-  if(missing.length){status(`Rig incomplete for ${MODE_INFO[mode].label}: ${missing.join(", ")}`);return false;}
-  status(`Rig validated for ${MODE_INFO[mode].label}.`);
-  return true;
-}
-$("validateRig").onclick=validateCurrentRig;
-
+$("saveRig").onclick=()=>{const data={version:12,source_name:sourceName,source_size:source?[source.width,source.height]:null,parts:rig.parts,joints:rig.joints};download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"fatal_instinct_rig_v12.json");status("V12 rig exported.");};
+$("rigInput").onchange=async e=>{const f=e.target.files[0];if(!f) return;try{const d=JSON.parse(await f.text());rig.parts=d.parts||{};rig.joints=d.joints||{};inferJointsFromParts();status(`Loaded rig: ${f.name} (V${d.version||"?"})`);draw();}catch(err){status("Could not read rig JSON.");}};
 
 function joint(name){return rig.joints[name]?[...rig.joints[name]]:null;}
 function length(a,b){return Math.hypot(b[0]-a[0],b[1]-a[1]);}
@@ -808,7 +215,7 @@ function twoBoneIK(hip,knee0,ankle0,ankleTarget,bendSign){const l1=length(hip,kn
 function legMetrics(){const lh=joint("left_hip"),lk=joint("left_knee"),la=joint("left_ankle"),rh=joint("right_hip"),rk=joint("right_knee"),ra=joint("right_ankle");if(!lh||!lk||!la||!rh||!rk||!ra) return null;const leftUpper=length(lh,lk),leftLower=length(lk,la),rightUpper=length(rh,rk),rightLower=length(rk,ra),leftLeg=leftUpper+leftLower,rightLeg=rightUpper+rightLower,avgLeg=(leftLeg+rightLeg)/2,lt=joint("left_toe"),rt=joint("right_toe"),leftFoot=lt?length(la,lt):avgLeg*0.18,rightFoot=rt?length(ra,rt):avgLeg*0.18,avgFoot=(leftFoot+rightFoot)/2,pelvisWidth=length(lh,rh);return{leftUpper,leftLower,rightUpper,rightLower,leftLeg,rightLeg,avgLeg,leftFoot,rightFoot,avgFoot,pelvisWidth};}
 function scaledWalkValues(){const m=legMetrics();if(!m) return null;return{metrics:m,stridePx:m.avgLeg*(+$("stride").value/100),stepPx:m.avgLeg*(+$("step").value/100),bobPx:m.avgLeg*(+$("bob").value/100),pelvisShiftPx:m.pelvisWidth*0.08};}
 function requiredReadyForWalk(){const need=["pelvis","neck","left_shoulder","right_shoulder","left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe"];for(const j of need) if(!joint(j)) return{ok:false,msg:"Missing required joint: "+j};return{ok:true};}
-function buildWalkPose(i){
+function buildPose(i){
  const ready=requiredReadyForWalk(); if(!ready.ok) return{error:ready.msg};
  const scaled=scaledWalkValues(); if(!scaled) return{error:"Could not measure leg bones."};
  const {metrics,stridePx,stepPx,bobPx,pelvisShiftPx}=scaled;
@@ -847,480 +254,435 @@ function buildWalkPose(i){
  });
  return{pose,torsoM,phaseName:WALK_NAMES[i],metrics};
 }
+function partBounds(poly){let minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9;for(const p of poly){if(p[0]<minX)minX=p[0];if(p[1]<minY)minY=p[1];if(p[0]>maxX)maxX=p[0];if(p[1]>maxY)maxY=p[1];}return{minX:Math.floor(minX),minY:Math.floor(minY),maxX:Math.ceil(maxX),maxY:Math.ceil(maxY)};}
+function maskedPart(name){const data=rig.parts[name];if(!source||!data||!data.poly) return null;const c=document.createElement("canvas");c.width=source.width;c.height=source.height;const g=c.getContext("2d");g.save();g.beginPath();g.moveTo(data.poly[0][0],data.poly[0][1]);for(let i=1;i<data.poly.length;i++) g.lineTo(data.poly[i][0],data.poly[i][1]);g.closePath();g.clip();g.drawImage(source,0,0);g.restore();return c;}
+function thighCapCanvas(name){const data=rig.parts[name];if(!source||!data||!data.poly) return null;const b=partBounds(data.poly), bandH=Math.max(10,Math.min(18,b.maxY-b.minY));const c=document.createElement("canvas");c.width=source.width;c.height=source.height;const g=c.getContext("2d");g.drawImage(source,0,0);g.globalCompositeOperation="destination-in";g.beginPath();g.rect(b.minX-2,b.minY-2,(b.maxX-b.minX)+4,bandH+4);g.fill();g.globalCompositeOperation="destination-in";g.beginPath();g.moveTo(data.poly[0][0],data.poly[0][1]);for(let i=1;i<data.poly.length;i++) g.lineTo(data.poly[i][0],data.poly[i][1]);g.closePath();g.fill();return c;}
+function matrixForPart(name,pose,torsoM){const bind=PART_BIND[name];if(!bind) return torsoM||matrixIdentity();const [a,b]=bind,oa=joint(a),ob=joint(b),ta=pose[a],tb=pose[b];if(oa&&ob&&ta&&tb&&(oa[0]!==ob[0]||oa[1]!==ob[1])) return matrixFromTwoPoints(oa,ob,ta,tb);if(oa&&ta) return rigidFromPointAndAngle(oa,ta,0);return torsoM||matrixIdentity();}
+function buildFrameCanvas(i){if(!source) return null;const built=buildPose(i);if(built.error) return null;const {pose,torsoM}=built,masks={};PARTS.forEach(name=>{const m=maskedPart(name);if(m) masks[name]=m;});const seamCaps={left_thigh:thighCapCanvas("left_thigh"),right_thigh:thighCapCanvas("right_thigh")};const f=document.createElement("canvas");f.width=source.width;f.height=source.height;const g=f.getContext("2d");for(const name of ORDER){if(!masks[name]) continue;const M=matrixForPart(name,pose,torsoM);if((name==="left_thigh"||name==="right_thigh")&&seamCaps[name]){g.save();applyM(g,M);g.drawImage(seamCaps[name],0,-6);g.restore();}g.save();applyM(g,M);g.drawImage(masks[name],0,0);g.restore();}return{canvas:f,pose};}
 
-const IDLE_PHASES=[
-  {lift:0.00,shoulder:0.00,lean:0.00,tail:0.00},
-  {lift:1.00,shoulder:1.00,lean:-0.35,tail:0.45},
-  {lift:0.20,shoulder:0.15,lean:0.30,tail:-0.55},
-  {lift:0.55,shoulder:0.45,lean:0.00,tail:0.15}
-];
 
-function facingSign(){return facingSel.value==="left"?-1:+1;}
+function normalizeBoneName(s){
+  return String(s||"").toLowerCase().replace(/[^a-z0-9]/g,"");
+}
+function collectBones(root){
+  const out={};
+  root.traverse(o=>{
+    if(o.isBone){
+      out[normalizeBoneName(o.name)] = o;
+    }
+  });
+  return out;
+}
+function findMappedBone(candidates){
+  for(const n of candidates){
+    const b=importedMotion.bones[normalizeBoneName(n)];
+    if(b) return b;
+  }
+  return null;
+}
+function autoMapMCOBones(){
+  importedMotion.boneMap={};
+  let found=0,total=0;
+  for(const [target,candidates] of Object.entries(MCO_CANDIDATES)){
+    total++;
+    const b=findMappedBone(candidates);
+    if(b){ importedMotion.boneMap[target]=b; found++; }
+  }
+  $("mappingStatus").textContent=`MCO mapping: ${found}/${total} required motion joints found.`;
+  if(found>=12) status("MCO skeleton mapped. Ready to preview or retarget.");
+  else status("Partial mapping found. Try another clip/model or projection.");
+  return found;
+}
+$("autoMapMCO").onclick=autoMapMCOBones;
 
-function resolveAttackSide(kind="arm"){
-  const choice=attackLimbSel.value;
-  if(choice==="rig_right") return "right";
-  if(choice==="rig_left") return "left";
-
-  const a=kind==="leg" ? joint("left_hip") : joint("left_shoulder");
-  const b=kind==="leg" ? joint("right_hip") : joint("right_shoulder");
-  if(!a||!b) return "right";
-
-  const front=facingSign()>0 ? (a[0]>b[0]?"left":"right") : (a[0]<b[0]?"left":"right");
-  return choice==="rear" ? (front==="left"?"right":"left") : front;
+function projectVector3(v){
+  const mirror=$("mirrorMotion").checked ? -1 : 1;
+  const p=$("projection").value;
+  if(p==="xy") return [v.x*mirror, -v.y];
+  if(p==="xz") return [v.x*mirror, -v.z];
+  return [v.z*mirror, -v.y]; // MCO/Unreal-style side projection
 }
 
-function snapshotOrig(){
-  const orig={};
-  JOINTS.forEach(n=>{if(joint(n)) orig[n]=joint(n);});
-  return orig;
+function selectFBXClip(index){
+  if(!importedMotion.object || !importedMotion.clips.length) return;
+  const i=Math.max(0,Math.min(importedMotion.clips.length-1,index|0));
+  importedMotion.clip=importedMotion.clips[i];
+  if(importedMotion.mixer) importedMotion.mixer.stopAllAction();
+  importedMotion.mixer=new THREE.AnimationMixer(importedMotion.object);
+  importedMotion.action=importedMotion.mixer.clipAction(importedMotion.clip);
+  importedMotion.action.play();
+  importedMotion.mixer.setTime(0);
+  importedMotion.object.updateMatrixWorld(true);
+  importedMotion.name=importedMotion.clip.name || "Imported FBX Motion";
+  autoMapMCOBones();
+  $("motionSource").value="imported";
+  status(`Loaded FBX clip: ${importedMotion.name} • ${importedMotion.clip.duration.toFixed(2)} sec`);
 }
 
-function basePoseFromTorso(rotationDeg=0,dx=0,dy=0){
-  const orig=snapshotOrig(),pose={};
-  if(!orig.pelvis) return {error:"Missing pelvis."};
+$("clipSelect").onchange=()=>{
+  if(importedMotion.type==="fbx") selectFBXClip(+$("clipSelect").value);
+};
 
-  pose.pelvis=[orig.pelvis[0]+dx,orig.pelvis[1]+dy];
-  let torsoM=matrixIdentity();
+async function loadFBXArrayBuffer(buffer,name){
+  try{
+    status("Parsing FBX animation…");
+    const loader=new FBXLoader();
+    const obj=loader.parse(buffer,"");
+    if(!obj.animations || !obj.animations.length){
+      status("FBX loaded, but no animation clips were found.");
+      return;
+    }
+    importedMotion={
+      type:"fbx",
+      name:name||"FBX Motion",
+      object:obj,
+      mixer:null,
+      clips:obj.animations,
+      clip:null,
+      action:null,
+      bones:collectBones(obj),
+      boneMap:{},
+      native:null
+    };
+    const cs=$("clipSelect");
+    cs.innerHTML="";
+    obj.animations.forEach((clip,i)=>{
+      const o=document.createElement("option");
+      o.value=i;
+      o.textContent=`${clip.name||"Clip "+(i+1)} • ${clip.duration.toFixed(2)}s`;
+      cs.appendChild(o);
+    });
+    selectFBXClip(0);
+  }catch(err){
+    console.error(err);
+    status("Could not parse this FBX. Check internet connection and FBX compatibility.");
+  }
+}
 
-  if(orig.neck){
-    pose.neck=add(pose.pelvis,rotateVec(sub(orig.neck,orig.pelvis),rotationDeg));
-    torsoM=matrixFromTwoPoints(orig.pelvis,orig.neck,pose.pelvis,pose.neck);
+async function loadMCOZip(file){
+  if(!window.JSZip){
+    status("ZIP support did not load. Check internet connection.");
+    return;
+  }
+  status("Opening animation ZIP…");
+  const zip=await window.JSZip.loadAsync(file);
+  const files=Object.values(zip.files).filter(x=>!x.dir && /\.fbx$/i.test(x.name));
+  if(!files.length){
+    status("No FBX animations found inside this ZIP.");
+    return;
   }
 
-  ["left_shoulder","right_shoulder","left_hip","right_hip","tail_base"].forEach(n=>{
-    if(orig[n]) pose[n]=transformPoint(torsoM,orig[n]);
+  const priority = [
+    /(^|\/)MOB1_Walk_F_IPC\.fbx$/i,
+    /(^|\/)MOB1_Walk_F\.fbx$/i,
+    /walk.*ipc.*\.fbx$/i,
+    /walk.*\.fbx$/i
+  ];
+  let pick=null;
+  for(const re of priority){
+    pick=files.find(x=>re.test(x.name));
+    if(pick) break;
+  }
+  pick=pick || files[0];
+
+  status(`MCO ZIP: extracting ${pick.name.split("/").pop()}…`);
+  const buffer=await pick.async("arraybuffer");
+  await loadFBXArrayBuffer(buffer,pick.name);
+}
+
+function validateNativeMotion(d){
+  return d && d.format==="fatal-instinct-motion" && Array.isArray(d.samples) && d.samples.length>=2;
+}
+function loadNativeMotion(d,name){
+  if(!validateNativeMotion(d)){ status("This JSON is not a Fatal Instinct motion file."); return; }
+  importedMotion={
+    type:"native",name:d.name||name||"Fatal Instinct Motion",
+    object:null,mixer:null,clips:[],clip:null,action:null,bones:{},boneMap:{},native:d
+  };
+  const cs=$("clipSelect");
+  cs.innerHTML="";
+  const o=document.createElement("option");o.value="0";o.textContent=importedMotion.name;cs.appendChild(o);
+  $("motionSource").value="imported";
+  $("mappingStatus").textContent="Native motion: retarget-ready.";
+  status(`Loaded native motion: ${importedMotion.name}`);
+}
+
+$("animationInput").onchange=async e=>{
+  const file=e.target.files[0]; if(!file) return;
+  const low=file.name.toLowerCase();
+  try{
+    if(low.endsWith(".zip")){
+      await loadMCOZip(file);
+    }else if(low.endsWith(".fbx")){
+      await loadFBXArrayBuffer(await file.arrayBuffer(),file.name);
+    }else if(low.endsWith(".json")){
+      loadNativeMotion(JSON.parse(await file.text()),file.name);
+    }else{
+      status("Supported animation formats: FBX, ZIP, and Fatal Instinct motion JSON.");
+    }
+  }catch(err){
+    console.error(err);
+    status("Animation import failed.");
+  }
+};
+
+function sampleFBXRawAtTime(t){
+  if(importedMotion.type!=="fbx" || !importedMotion.mixer || !importedMotion.clip) return null;
+  importedMotion.mixer.setTime(Math.max(0,Math.min(importedMotion.clip.duration,t)));
+  importedMotion.object.updateMatrixWorld(true);
+
+  const out={};
+  const v=new THREE.Vector3();
+  for(const target of Object.keys(MCO_CANDIDATES)){
+    const b=importedMotion.boneMap[target];
+    if(!b) continue;
+    b.getWorldPosition(v);
+    out[target]=projectVector3(v);
+  }
+  return out;
+}
+
+function sourceLegLength3D(){
+  if(importedMotion.type!=="fbx") return 1;
+  importedMotion.mixer.setTime(0);
+  importedMotion.object.updateMatrixWorld(true);
+  const A=new THREE.Vector3(),B=new THREE.Vector3();
+  function dist(a,b){
+    const ba=importedMotion.boneMap[a], bb=importedMotion.boneMap[b];
+    if(!ba||!bb) return 0;
+    ba.getWorldPosition(A);bb.getWorldPosition(B);return A.distanceTo(B);
+  }
+  const l=dist("left_hip","left_knee")+dist("left_knee","left_ankle");
+  const r=dist("right_hip","right_knee")+dist("right_knee","right_ankle");
+  return (l&&r)?(l+r)/2:(l||r||1);
+}
+
+function nativeSampleAtIndex(i){
+  const d=importedMotion.native;
+  if(!d || !d.samples?.length) return null;
+  return d.samples[i % d.samples.length];
+}
+
+function importedRawSample(i){
+  if(importedMotion.type==="native") return nativeSampleAtIndex(i);
+  if(importedMotion.type==="fbx"){
+    const d=importedMotion.clip.duration || 1;
+    return sampleFBXRawAtTime((i/FRAME_COUNT)*d);
+  }
+  return null;
+}
+function importedReferenceSample(){
+  return importedRawSample(0);
+}
+function importedSourceScale(){
+  // Native samples are stored in "leg lengths", so their source scale is 1.
+  return importedMotion.type==="native" ? 1 : sourceLegLength3D();
+}
+
+function unitDir(a,b,fallback){
+  if(a&&b){
+    const dx=b[0]-a[0],dy=b[1]-a[1],d=Math.hypot(dx,dy);
+    if(d>1e-5) return [dx/d,dy/d];
+  }
+  const dx=fallback[1][0]-fallback[0][0],dy=fallback[1][1]-fallback[0][1],d=Math.hypot(dx,dy)||1;
+  return [dx/d,dy/d];
+}
+
+function retargetImportedPose(i){
+  const ready=requiredReadyForWalk();
+  if(!ready.ok) return {error:ready.msg};
+  if(!importedMotion.type) return {error:"Import an animation first."};
+
+  const sample=importedRawSample(i), ref=importedReferenceSample();
+  if(!sample||!ref||!sample.pelvis||!ref.pelvis) return {error:"Imported animation is missing pelvis motion."};
+
+  const m=legMetrics();
+  const sourceScale=importedSourceScale() || 1;
+  const targetScale=m.avgLeg/sourceScale;
+  const orig={};
+  JOINTS.forEach(n=>{ if(joint(n)) orig[n]=joint(n); });
+
+  const rootDX=(sample.pelvis[0]-ref.pelvis[0])*targetScale;
+  const rootDY=(sample.pelvis[1]-ref.pelvis[1])*targetScale;
+  const pose={};
+  pose.pelvis=[
+    orig.pelvis[0]+($("rootMotion").checked?rootDX:0),
+    orig.pelvis[1]+rootDY
+  ];
+
+  const torsoLen=length(orig.pelvis,orig.neck);
+  const torsoDir=unitDir(sample.pelvis,sample.neck,[orig.pelvis,orig.neck]);
+  pose.neck=[pose.pelvis[0]+torsoDir[0]*torsoLen,pose.pelvis[1]+torsoDir[1]*torsoLen];
+  const torsoM=matrixFromTwoPoints(orig.pelvis,orig.neck,pose.pelvis,pose.neck);
+
+  // Keep target anatomy spacing, but copy source limb directions/angles.
+  ["left","right"].forEach(side=>{
+    const hip0=orig[`${side}_hip`],knee0=orig[`${side}_knee`],ankle0=orig[`${side}_ankle`],toe0=orig[`${side}_toe`];
+    if(!hip0||!knee0||!ankle0||!toe0) return;
+    const hip=transformPoint(torsoM,hip0);
+    const upper=length(hip0,knee0),lower=length(knee0,ankle0),foot=length(ankle0,toe0);
+    const d1=unitDir(sample[`${side}_hip`],sample[`${side}_knee`],[hip0,knee0]);
+    const d2=unitDir(sample[`${side}_knee`],sample[`${side}_ankle`],[knee0,ankle0]);
+    const d3=unitDir(sample[`${side}_ankle`],sample[`${side}_toe`],[ankle0,toe0]);
+    pose[`${side}_hip`]=hip;
+    pose[`${side}_knee`]=[hip[0]+d1[0]*upper,hip[1]+d1[1]*upper];
+    pose[`${side}_ankle`]=[pose[`${side}_knee`][0]+d2[0]*lower,pose[`${side}_knee`][1]+d2[1]*lower];
+    pose[`${side}_toe`]=[pose[`${side}_ankle`][0]+d3[0]*foot,pose[`${side}_ankle`][1]+d3[1]*foot];
   });
 
-  return {orig,pose,torsoM};
-}
-
-function plantLeg(side,built){
-  const {orig,pose}=built;
-  const h0=orig[`${side}_hip`],k0=orig[`${side}_knee`],a0=orig[`${side}_ankle`],t0=orig[`${side}_toe`];
-  if(!h0||!k0||!a0||!t0||!pose[`${side}_hip`]) return;
-  const bend=Math.sign(crossZ(h0,a0,k0))||1;
-  const solve=twoBoneIK(pose[`${side}_hip`],k0,a0,a0,bend);
-  pose[`${side}_knee`]=solve.knee;
-  pose[`${side}_ankle`]=solve.ankle;
-  pose[`${side}_toe`]=[...t0];
-}
-
-function plantBothLegs(built){plantLeg("left",built);plantLeg("right",built);}
-
-function armPoseToTarget(side,built,target,handAngleDeg=0){
-  const {orig,pose}=built;
-  const s0=orig[`${side}_shoulder`],e0=orig[`${side}_elbow`],w0=orig[`${side}_wrist`];
-  if(!s0||!e0||!w0) return;
-  const shoulder=pose[`${side}_shoulder`];
-  const bend=Math.sign(crossZ(s0,w0,e0))||1;
-  const solve=twoBoneIK(shoulder,e0,w0,target,bend);
-  pose[`${side}_elbow`]=solve.knee;
-  pose[`${side}_wrist`]=solve.ankle;
-  pose.__handAngles=pose.__handAngles||{};
-  pose.__handAngles[side]=handAngleDeg*Math.PI/180;
-}
-
-function relaxArm(side,built,extraDeg=0){
-  const {orig,pose,torsoM}=built;
-  const s0=orig[`${side}_shoulder`],e0=orig[`${side}_elbow`],w0=orig[`${side}_wrist`];
-  if(!s0)return;
-  const shoulder=pose[`${side}_shoulder`]||transformPoint(torsoM,s0);
-  pose[`${side}_shoulder`]=shoulder;
-  if(e0){
-    pose[`${side}_elbow`]=add(shoulder,rotateVec(sub(e0,s0),extraDeg));
-    if(w0)pose[`${side}_wrist`]=add(pose[`${side}_elbow`],rotateVec(sub(w0,e0),extraDeg*0.65));
-  }
-}
-
-function buildIdlePose(i){
-  const m=legMetrics();if(!m)return{error:"Could not measure leg bones."};
-  const p=IDLE_PHASES[i];
-  const lift=(+$("breath").value/100)*m.avgLeg*p.lift;
-  const shoulderRise=(+$("shoulderRise").value/100)*m.avgLeg*p.shoulder;
-  const lean=+$("idleLean").value*p.lean;
-  const built=basePoseFromTorso(lean,0,-lift);
-  if(built.error)return built;
-
-  ["left_shoulder","right_shoulder"].forEach(n=>{if(built.pose[n])built.pose[n][1]-=shoulderRise;});
-  plantBothLegs(built);
-  relaxArm("left",built,-lean*0.25);
-  relaxArm("right",built,+lean*0.25);
-
-  const {orig,pose}=built;
-  if(orig.tail_base&&orig.tail_tip&&pose.tail_base){
-    pose.tail_tip=add(pose.tail_base,rotateVec(sub(orig.tail_tip,orig.tail_base),(+$("idleTail").value)*p.tail));
-  }
-  return{pose,torsoM:built.torsoM,phaseName:MODE_INFO.idle.names[i]};
-}
-
-function buildPunchOrSlashPose(i,isSlash){
-  const side=resolveAttackSide("arm");
-  const m=legMetrics();if(!m)return{error:"Could not measure leg bones."};
-  const dir=facingSign();
-
-  const s0=joint(`${side}_shoulder`),e0=joint(`${side}_elbow`),w0=joint(`${side}_wrist`);
-  if(!s0||!e0||!w0)return{error:`Missing ${side} shoulder/elbow/wrist.`};
-
-  const windup=+$("windup").value;
-  const reach=(+$("reach").value)/100;
-  const angle=+$("strikeAngle").value;
-  const twist=+$("twist").value;
-  const lean=+$("attackLean").value;
-  const hip=(+$("hipDrive").value/100)*m.avgLeg;
-  const claw=+$("claw").value;
-  const guard=+$("guard").value;
-
-  const punch=[
-    {root:0.00,torso:0.00,target:"ready",hand:0.00,guard:0.00,tail:0},
-    {root:-0.05,torso:-0.90,target:"wind",hand:-0.22,guard:+0.65,tail:-4},
-    {root:+0.18,torso:+1.18,target:"hit",hand:+1.00,guard:-1.00,tail:+8},
-    {root:+0.05,torso:+0.38,target:"recover",hand:+0.24,guard:-0.35,tail:+3}
-  ][i];
-
-  const slash=[
-    {root:0.00,torso:0.00,target:"ready",hand:0.00,guard:0.00,tail:0},
-    {root:-0.06,torso:-1.00,target:"high",hand:-0.58,guard:+0.55,tail:-6},
-    {root:+0.20,torso:+1.12,target:"cut",hand:+1.18,guard:-1.00,tail:+12},
-    {root:+0.08,torso:+0.46,target:"follow",hand:+0.62,guard:-0.30,tail:+6}
-  ][i];
-
-  const phase=isSlash?slash:punch;
-  const built=basePoseFromTorso(dir*phase.torso*(twist+lean*0.4),dir*phase.root*hip,0);
-  if(built.error)return built;
-  plantBothLegs(built);
-
-  const shoulder=built.pose[`${side}_shoulder`];
-  const armLen=length(s0,e0)+length(e0,w0);
-  let target=[...w0];
-
-  if(phase.target==="ready"){
-    target=transformPoint(built.torsoM,w0);
-  }else if(phase.target==="wind"){
-    // Compact cocked fist near/behind the shoulder.
-    // Keeps the elbow out without pulling the entire body backward.
-    target=[
-      shoulder[0]-dir*armLen*(0.10+windup/260),
-      shoulder[1]+armLen*0.12
-    ];
-  }else if(phase.target==="hit"){
-    // Full straight extension. Torso/hip rotation supplies the
-    // across-the-chest feeling instead of excessive body translation.
-    const ext=armLen*(0.92+0.12*reach),a=angle*Math.PI/180;
-    target=[
-      shoulder[0]+dir*Math.cos(a)*ext,
-      shoulder[1]+Math.sin(a)*ext
-    ];
-  }else if(phase.target==="recover"){
-    // Do not snap immediately back to ready; keep some extension
-    // so the strike has a visible recoil/recovery phase.
-    target=[
-      shoulder[0]+dir*armLen*0.48,
-      shoulder[1]+armLen*0.12
-    ];
-  }else if(phase.target==="high"){
-    // Stronger high/back claw chamber with less crouch.
-    target=[
-      shoulder[0]-dir*armLen*(0.24+windup/210),
-      shoulder[1]-armLen*0.46
-    ];
-  }else if(phase.target==="cut"){
-    // Longer cross-body slash: more horizontal travel, less downward collapse.
-    const ext=armLen*(0.84+0.22*reach),a=(angle+10)*Math.PI/180;
-    target=[
-      shoulder[0]+dir*Math.cos(a)*ext,
-      shoulder[1]+Math.sin(a)*ext + armLen*0.12
-    ];
-  }else if(phase.target==="follow"){
-    // Let the arm clearly pass through the target before recovering.
-    target=[
-      shoulder[0]+dir*armLen*0.56,
-      shoulder[1]+armLen*0.18
-    ];
-  }
-
-  armPoseToTarget(side,built,target,claw*phase.hand*dir);
-
-  const guardSide=side==="left"?"right":"left";
-
-  if(!isSlash){
-    const gs0=joint(`${guardSide}_shoulder`);
-    const ge0=joint(`${guardSide}_elbow`);
-    const gw0=joint(`${guardSide}_wrist`);
-
-    if(gs0&&ge0&&gw0){
-      const gs=built.pose[`${guardSide}_shoulder`];
-      const gArmLen=length(gs0,ge0)+length(ge0,gw0);
-
-      // Rear fist sits near the waist/ribs while the front fist fires.
-      const guardTarget=[
-        gs[0]-dir*gArmLen*(0.05+0.04*Math.abs(phase.guard)),
-        gs[1]+gArmLen*(0.48+0.08*Math.abs(phase.guard))
-      ];
-
-      armPoseToTarget(
-        guardSide,
-        built,
-        guardTarget,
-        -6*dir
-      );
-    }else{
-      relaxArm(guardSide,built,guard*phase.guard*dir);
+  ["left","right"].forEach(side=>{
+    const s0=orig[`${side}_shoulder`],e0=orig[`${side}_elbow`],w0=orig[`${side}_wrist`];
+    if(!s0) return;
+    const shoulder=transformPoint(torsoM,s0);
+    pose[`${side}_shoulder`]=shoulder;
+    if(e0){
+      const upper=length(s0,e0);
+      const d1=unitDir(sample[`${side}_shoulder`],sample[`${side}_elbow`],[s0,e0]);
+      pose[`${side}_elbow`]=[shoulder[0]+d1[0]*upper,shoulder[1]+d1[1]*upper];
+      if(w0){
+        const lower=length(e0,w0);
+        const d2=unitDir(sample[`${side}_elbow`],sample[`${side}_wrist`],[e0,w0]);
+        pose[`${side}_wrist`]=[pose[`${side}_elbow`][0]+d2[0]*lower,pose[`${side}_elbow`][1]+d2[1]*lower];
+      }
     }
-  }else{
-    relaxArm(guardSide,built,guard*phase.guard*dir);
-  }
+  });
 
-  const {orig,pose}=built;
-  if(orig.tail_base&&orig.tail_tip&&pose.tail_base){
-    pose.tail_tip=add(pose.tail_base,rotateVec(sub(orig.tail_tip,orig.tail_base),phase.tail*dir));
-  }
+  if(orig.tail_base) pose.tail_base=transformPoint(torsoM,orig.tail_base);
+  if(orig.tail_tip) pose.tail_tip=transformPoint(torsoM,orig.tail_tip);
 
-  return{pose,torsoM:built.torsoM,phaseName:(isSlash?MODE_INFO.slash.names:MODE_INFO.punch.names)[i]};
+  return {pose,torsoM,phaseName:importedMotion.name||"Imported Motion",metrics:m};
 }
 
-function buildKickPose(i){
-  const side=resolveAttackSide("leg"),support=side==="left"?"right":"left";
-  const m=legMetrics();if(!m)return{error:"Could not measure leg bones."};
-  const dir=facingSign();
-  const phase=[
-    {root:0.00,x:0.00,y:0.00,lean:0.00,foot:0.00},
-    {root:-0.12,x:0.10,y:0.72,lean:-0.45,foot:-0.35},
-    {root:+0.30,x:1.00,y:1.00,lean:-1.00,foot:+1.00},
-    {root:+0.08,x:0.26,y:0.34,lean:-0.25,foot:+0.20}
-  ][i];
-
-  const reach=(+$("kickReach").value/100)*m.avgLeg;
-  const height=(+$("kickHeight").value/100)*m.avgLeg;
-  const chamber=(+$("kickChamber").value)/100;
-  const lean=+$("kickLean").value;
-  const hip=(+$("kickHip").value/100)*m.avgLeg;
-  const footAng=+$("kickFoot").value;
-
-  const built=basePoseFromTorso(dir*phase.lean*lean,dir*phase.root*hip,0);
-  if(built.error)return built;
-  plantLeg(support,built);
-
-  const {orig,pose}=built;
-  const h0=orig[`${side}_hip`],k0=orig[`${side}_knee`],a0=orig[`${side}_ankle`],t0=orig[`${side}_toe`];
-  if(!h0||!k0||!a0||!t0)return{error:`Missing ${side} kick-leg joints.`};
-
-  let x=dir*phase.x*reach,y=-phase.y*height;
-  if(i===1){x*=chamber*0.45;y*=chamber;}
-
-  const toeTarget=[t0[0]+x,t0[1]+y];
-  const fv=rotateVec(footVector(a0,t0),footAng*phase.foot*dir);
-  const ankleTarget=[toeTarget[0]-fv[0],toeTarget[1]-fv[1]];
-  const bend=Math.sign(crossZ(h0,a0,k0))||1;
-  const solve=twoBoneIK(pose[`${side}_hip`],k0,a0,ankleTarget,bend);
-
-  pose[`${side}_knee`]=solve.knee;
-  pose[`${side}_ankle`]=solve.ankle;
-  pose[`${side}_toe`]=toeTarget;
-
-  relaxArm("left",built,+8*phase.lean*dir);
-  relaxArm("right",built,-8*phase.lean*dir);
-
-  return{pose,torsoM:built.torsoM,phaseName:MODE_INFO.kick.names[i]};
-}
-
-function buildAnimationPose(i){
-  const m=currentAnimation();
-  if(m==="walk")return buildWalkPose(i);
-  if(m==="idle")return buildIdlePose(i);
-  if(m==="punch")return buildPunchOrSlashPose(i,false);
-  if(m==="slash")return buildPunchOrSlashPose(i,true);
-  if(m==="kick")return buildKickPose(i);
-  return{error:"Unknown animation mode."};
-}
-
-function partBounds(poly){let minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9;for(const p of poly){if(p[0]<minX)minX=p[0];if(p[1]<minY)minY=p[1];if(p[0]>maxX)maxX=p[0];if(p[1]>maxY)maxY=p[1];}return{minX:Math.floor(minX),minY:Math.floor(minY),maxX:Math.ceil(maxX),maxY:Math.ceil(maxY)};}
-function maskedPart(name){
-  const data=rig.parts[name];
-  if(!source||!data) return null;
-  if(data.maskData && autoMaskCache[name]) return applyMaskToSource(autoMaskCache[name]);
-  if(!data.poly) return null;
-  const c=document.createElement("canvas");c.width=source.width;c.height=source.height;const g=c.getContext("2d");
-  g.save();g.beginPath();g.moveTo(data.poly[0][0],data.poly[0][1]);for(let i=1;i<data.poly.length;i++) g.lineTo(data.poly[i][0],data.poly[i][1]);g.closePath();g.clip();g.drawImage(source,0,0);g.restore();return c;
-}
-function thighCapCanvas(name){
-  const data=rig.parts[name];
-  if(!source||!data) return null;
-  if(data.maskData && autoMaskCache[name]){
-    const c=document.createElement("canvas");c.width=source.width;c.height=source.height;
-    const g=c.getContext("2d");
-    const m=autoMaskCache[name];
-    g.drawImage(source,0,0);
-    g.globalCompositeOperation="destination-in";
-    g.drawImage(m,0,0);
-    const img=g.getImageData(0,0,c.width,c.height);
-    let minX=1e9,minY=1e9,maxX=-1,maxY=-1;
-    for(let y=0;y<c.height;y++) for(let x=0;x<c.width;x++){
-      const a=img.data[(y*c.width+x)*4+3];
-      if(a){if(x<minX)minX=x;if(y<minY)minY=y;if(x>maxX)maxX=x;if(y>maxY)maxY=y;}
-    }
-    if(maxX<0) return null;
-    const bandH=Math.max(10,Math.min(18,maxY-minY));
-    const band=document.createElement("canvas");band.width=source.width;band.height=source.height;
-    const bg=band.getContext("2d");
-    bg.drawImage(c,0,0);
-    bg.globalCompositeOperation="destination-in";
-    bg.beginPath();bg.rect(minX-2,minY-2,(maxX-minX)+4,bandH+4);bg.fill();
-    return band;
-  }
-  if(!data.poly) return null;
-  const b=partBounds(data.poly), bandH=Math.max(10,Math.min(18,b.maxY-b.minY));const c=document.createElement("canvas");c.width=source.width;c.height=source.height;const g=c.getContext("2d");g.drawImage(source,0,0);g.globalCompositeOperation="destination-in";g.beginPath();g.rect(b.minX-2,b.minY-2,(b.maxX-b.minX)+4,bandH+4);g.fill();g.globalCompositeOperation="destination-in";g.beginPath();g.moveTo(data.poly[0][0],data.poly[0][1]);for(let i=1;i<data.poly.length;i++) g.lineTo(data.poly[i][0],data.poly[i][1]);g.closePath();g.fill();return c;
-}
-function matrixForPart(name,pose,torsoM){
-  const bind=PART_BIND[name];if(!bind)return torsoM||matrixIdentity();
-  const [a,b]=bind,oa=joint(a),ob=joint(b),ta=pose[a],tb=pose[b];
-  if((name==="left_hand"||name==="right_hand")&&oa&&ta){
-    const side=name.startsWith("left")?"left":"right";
-    const extra=pose.__handAngles?.[side]||0;
-    return rigidFromPointAndAngle(oa,ta,extra);
-  }
-  if(oa&&ob&&ta&&tb&&(oa[0]!==ob[0]||oa[1]!==ob[1]))return matrixFromTwoPoints(oa,ob,ta,tb);
-  if(oa&&ta)return rigidFromPointAndAngle(oa,ta,0);
-  return torsoM||matrixIdentity();
-}
-function buildFrameCanvas(i){
-  if(!source)return null;
-  const built=buildAnimationPose(i);
-  if(built.error)return null;
-  const {pose,torsoM}=built,masks={};
-  PARTS.forEach(name=>{const mm=maskedPart(name);if(mm)masks[name]=mm;});
+function renderPoseFrame(pose,torsoM){
+  if(!source) return null;
+  const masks={};
+  PARTS.forEach(name=>{const m=maskedPart(name);if(m) masks[name]=m;});
   const seamCaps={left_thigh:thighCapCanvas("left_thigh"),right_thigh:thighCapCanvas("right_thigh")};
   const f=document.createElement("canvas");f.width=source.width;f.height=source.height;
   const g=f.getContext("2d");
   for(const name of ORDER){
-    if(!masks[name])continue;
+    if(!masks[name]) continue;
     const M=matrixForPart(name,pose,torsoM);
     if((name==="left_thigh"||name==="right_thigh")&&seamCaps[name]){
       g.save();applyM(g,M);g.drawImage(seamCaps[name],0,-6);g.restore();
     }
     g.save();applyM(g,M);g.drawImage(masks[name],0,0);g.restore();
   }
-  return{canvas:f,pose};
-}
-function buildSpriteCanvasFromPose(pose){
-  if(!source||!pose) return null;
-  const masks={};
-  PARTS.forEach(name=>{const mm=maskedPart(name);if(mm)masks[name]=mm;});
-  const seamCaps={left_thigh:thighCapCanvas("left_thigh"),right_thigh:thighCapCanvas("right_thigh")};
-  const f=document.createElement("canvas");f.width=source.width;f.height=source.height;
-  const g=f.getContext("2d");
-  for(const name of ORDER){
-    if(!masks[name])continue;
-    const M=matrixForPart(name,pose,matrixIdentity());
-    if((name==="left_thigh"||name==="right_thigh")&&seamCaps[name]){g.save();applyM(g,M);g.drawImage(seamCaps[name],0,-6);g.restore();}
-    g.save();applyM(g,M);g.drawImage(masks[name],0,0);g.restore();
-  }
   return f;
 }
 
-$("previewRig").onclick=()=>{
-  inferJointsFromParts();
-  if(!validateCurrentRig())return;
+function buildImportedFrameCanvas(i){
+  const built=retargetImportedPose(i);
+  if(built.error) return null;
+  return {canvas:renderPoseFrame(built.pose,built.torsoM),pose:built.pose};
+}
+
+function previewSelectedMotion(){
+  const imported=$("motionSource").value==="imported";
+  if(imported && !importedMotion.type){ status("Import an animation first."); return; }
+  const ready=requiredReadyForWalk(); if(!ready.ok){status(ready.msg);return;}
   clearInterval(timer);
   let i=0;
-  const info=modeInfo();
   timer=setInterval(()=>{
-    const built=buildAnimationPose(i);
+    const built=imported ? retargetImportedPose(i) : buildPose(i);
     if(built.error){status(built.error);clearInterval(timer);return;}
     draw(null,built.pose);
-    status(`Previewing ${info.label} • Frame ${i+1} • ${info.names[i]}`);
-    i=(i+1)%info.frames;
-  },info.speed);
+    status(`${imported?"Imported":"Authored"} motion • Frame ${i+1}/${FRAME_COUNT} • ${built.phaseName}`);
+    i=(i+1)%FRAME_COUNT;
+  },130);
+}
+$("previewMotion").onclick=previewSelectedMotion;
+
+function normalizeMotionSamplesFromCurrentSource(){
+  if(importedMotion.type==="native") return importedMotion.native.samples;
+  if(importedMotion.type==="fbx"){
+    const sourceLeg=sourceLegLength3D()||1;
+    const raw0=sampleFBXRawAtTime(0);
+    if(!raw0?.pelvis) return null;
+    const root0=raw0.pelvis;
+    const samples=[];
+    for(let i=0;i<FRAME_COUNT;i++){
+      const raw=sampleFBXRawAtTime((i/FRAME_COUNT)*(importedMotion.clip.duration||1));
+      const s={};
+      for(const [k,p] of Object.entries(raw)){
+        s[k]=[(p[0]-root0[0])/sourceLeg,(p[1]-root0[1])/sourceLeg];
+      }
+      samples.push(s);
+    }
+    return samples;
+  }
+
+  // Save the built-in authored walk as a reusable normalized motion too.
+  const m=legMetrics(); if(!m) return null;
+  const root0=rig.joints.pelvis;
+  const samples=[];
+  for(let i=0;i<FRAME_COUNT;i++){
+    const b=buildPose(i); if(b.error) return null;
+    const s={};
+    for(const k of Object.keys(MCO_CANDIDATES)){
+      const p=b.pose[k];
+      if(p) s[k]=[(p[0]-root0[0])/m.avgLeg,(p[1]-root0[1])/m.avgLeg];
+    }
+    samples.push(s);
+  }
+  return samples;
+}
+
+$("saveAnimation").onclick=()=>{
+  const samples=normalizeMotionSamplesFromCurrentSource();
+  if(!samples){status("Nothing available to save as an animation.");return;}
+  const name = $("motionSource").value==="imported"
+    ? (importedMotion.name||"Imported Motion")
+    : "Fatal Instinct Authored Walk";
+  const data={
+    format:"fatal-instinct-motion",
+    version:1,
+    name,
+    frames:samples.length,
+    loop:true,
+    projection:$("projection").value,
+    samples
+  };
+  const safe=name.replace(/[^a-z0-9]+/gi,"_").replace(/^_+|_+$/g,"")||"motion";
+  download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),`${safe}.fi_motion.json`);
+  status(`Saved reusable animation: ${name}`);
 };
 
+$("projection").onchange=()=>{
+  if(importedMotion.type==="fbx") status(`Projection set to ${$("projection").value.toUpperCase()}. Preview motion to check the silhouette.`);
+};
+$("mirrorMotion").onchange=()=>draw();
+
+$("previewRig").onclick=()=>{const ready=requiredReadyForWalk();if(!ready.ok){status(ready.msg);return;}clearInterval(timer);let i=0;timer=setInterval(()=>{const built=buildPose(i);if(built.error){status(built.error);clearInterval(timer);return;}draw(null,built.pose);status(`Previewing rig • Frame ${i+1} • ${built.phaseName}`);i=(i+1)%8;},130);};
 $("stopPreview").onclick=()=>{clearInterval(timer);timer=null;draw();status("Preview stopped.");};
-
-function exportBaseName(){
-  return currentAnimation().replace("idle","idle_breath");
-}
-
-function renderFrames(){
-  strip.innerHTML="";
-  const info=modeInfo();
-  frames.forEach((f,i)=>{
-    const card=document.createElement("div");card.className="card";
-    const c=document.createElement("canvas");c.width=f.width;c.height=f.height;c.getContext("2d").drawImage(f,0,0);
-    const t=document.createElement("div");t.textContent=`Frame ${i+1} • ${info.names[i]}`;
-    const save=document.createElement("button");save.className="saveFrame";save.textContent="Save PNG";
-    save.onclick=()=>f.toBlob(b=>{if(b)download(b,`${exportBaseName()}_${String(i+1).padStart(2,"0")}.png`);},"image/png");
-    card.append(c,t,save);strip.appendChild(card);
-  });
-}
-
+function renderFrames(){strip.innerHTML="";frames.forEach((f,i)=>{const card=document.createElement("div");card.className="card";const c=document.createElement("canvas");c.width=f.width;c.height=f.height;c.getContext("2d").drawImage(f,0,0);const t=document.createElement("div");t.textContent=`Frame ${i+1} • ${WALK_NAMES[i]}`;card.append(c,t);strip.appendChild(card);});}
 $("generate").onclick=()=>{
   inferJointsFromParts();
-  if(!validateCurrentRig())return;
+  const ready=requiredReadyForWalk();
+  if(!ready.ok){status(ready.msg);return;}
+  const imported=$("motionSource").value==="imported";
+  if(imported && !importedMotion.type){status("Import an animation or switch Motion Source to Built-in Authored Walk.");return;}
+
   frames=[];
-  const info=modeInfo();
-  const useSaved=Array.from({length:info.frames},(_,i)=>savedPose(i+1)).some(Boolean);
-
-  if(useSaved){
-    if(source&&hasAnyBindings()){
-      for(let i=0;i<info.frames;i++){
-        const pose=savedPose(i+1) || clonePoseMap(buildAnimationPose(i).pose);
-        const c=buildSpriteCanvasFromPose(pose);
-        if(!c){status("Could not build manual pose frame.");return;}
-        frames.push(c);
-      }
-      renderFrames();
-      draw(frames[0]);
-      status(`Generated ${info.frames} ${info.label} frames from saved Pose Edit slots.`);
-    }else{
-      editPose=clonePoseMap(savedPose(1) || buildAnimationPose(0).pose);
-      setMode("pose");
-      status(`Saved skeleton poses are ready for ${info.label}. Bind traced or auto-segmented sprite parts to export artwork.`);
-    }
-    return;
-  }
-
-  if(source&&Object.keys(rig.parts).some(k=>rig.parts[k]&&rig.parts[k].poly)){
-    for(let i=0;i<info.frames;i++){
-      const built=buildFrameCanvas(i);
-      if(!built){status("Could not build frame. Check rig, traces, and joints.");return;}
+  const hasParts=source&&Object.keys(rig.parts).some(k=>rig.parts[k]&&rig.parts[k].poly);
+  if(hasParts){
+    for(let i=0;i<FRAME_COUNT;i++){
+      const built=imported ? buildImportedFrameCanvas(i) : buildFrameCanvas(i);
+      if(!built || !built.canvas){status("Could not build frame. Check rig, animation mapping, or source image.");return;}
       frames.push(built.canvas);
     }
-    renderFrames();
-    draw(frames[0]);
-    status(`Generated ${info.frames} ${info.label} sprite frames.`);
+    renderFrames();draw(frames[0]);
+    status(`Generated ${FRAME_COUNT} frames from ${imported?(importedMotion.name||"imported motion"):"authored walk"}.`);
   }else{
-    const built=buildAnimationPose(0);
-    if(!built.error)draw(null,built.pose);
-    status(`Skeleton motion is ready for ${info.label}. Bind traced or auto-segmented sprite parts to generate artwork.`);
+    const built=imported ? retargetImportedPose(0) : buildPose(0);
+    if(!built.error) draw(null,built.pose);
+    status("Skeleton motion is ready. Load/trace sprite body parts to render sprite frames.");
   }
 };
-
-$("export").onclick=()=>{
-  if(!frames.length){status("Generate sprite-bound frames first.");return;}
-  const s=document.createElement("canvas");
-  s.width=frames[0].width*frames.length;s.height=frames[0].height;
-  const g=s.getContext("2d");
-  frames.forEach((f,i)=>g.drawImage(f,i*frames[0].width,0));
-  const name=`${exportBaseName()}_sheet_v11_1.png`;
-  s.toBlob(b=>{if(b){download(b,name);status(`${modeInfo().label} sprite sheet exported.`);}},"image/png");
-};
-
+$("export").onclick=()=>{if(!frames.length){status("Generate frames first.");return;}const s=document.createElement("canvas");s.width=frames[0].width*frames.length;s.height=frames[0].height;const g=s.getContext("2d");frames.forEach((f,i)=>g.drawImage(f,i*frames[0].width,0));s.toBlob(b=>{if(b){download(b,"walk_sheet_v12.png");status("V12 sprite sheet exported to Downloads.");}},"image/png");};
 $("clear").onclick=()=>{delete rig.parts[partSel.value];status(`${partSel.value} cleared.`);draw();};
 $("resetFrames").onclick=()=>{frames=[];strip.innerHTML="";draw();status("Generated frames cleared.");};
 $("showSprite").onchange=()=>draw();$("showBones").onchange=()=>draw();partSel.onchange=()=>draw();jointSel.onchange=()=>draw();
-$("startPose").onclick=()=>{resetPoseFromAuto();};
-$("resetPose").onclick=()=>{resetPoseFromAuto();};
-$("savePoseSlot").onclick=()=>saveCurrentPoseSlot();
-$("loadPoseSlot").onclick=()=>loadPoseSlot();
-$("copyPrevPose").onclick=()=>copyPrevPoseSlot();
-$("clearPoseSlots").onclick=()=>clearSavedPoseSlots();
-$("previewPoseSlots").onclick=()=>previewSavedPoses();
-$("stopPosePreview").onclick=()=>{clearInterval(timer);timer=null;draw();status("Pose preview stopped.");};
-$("poseFrameSlot").onchange=()=>{if(mode==="pose"&&savedPose()) loadPoseSlot(); else draw();};
-$("autoSegment").onclick=()=>autoSegmentParts();
-$("clearAutoMasks").onclick=()=>clearAutoMasksOnly();
-rebuildPoseSlotMenu();
-
-updateAnimationUI();
 resize();
 </script>
 </body>
