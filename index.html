@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V17</title>
+<title>Fatal Instinct Sprite Walker V17.1</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -51,7 +51,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V17</span></h1><div class="sub">Unified Animation Lab • Retarget + FBIK + Control Rig + Skinning + Batch</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V17.1</span></h1><div class="sub">Unified Animation Lab • Control Rig Stabilization</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -198,7 +198,7 @@
     <button id="testLibrary">7 • Library</button>
     <button id="testBatch">8 • Batch</button>
   </div>
-  <div id="moduleStatus" class="status">Test modules independently after the full build is loaded.</div>
+  <div id="moduleStatus" class="status">V17.1: pelvis controls now preserve leg lengths and respect planted-foot IK.</div>
 </div>
 
 <div class="moduleBox">
@@ -1478,31 +1478,117 @@ function applyFullBodyIK(i,pose,orig){
   return pose;
 }
 
-function applyControlRig(pose,orig){
+function applyControlRig(pose,orig,i=0){
   if(!$("opControl").checked) return pose;
   const m=legMetrics();if(!m)return pose;
+
   const px=(+$("ctlPelvisX").value/100)*m.avgLeg;
   const py=(+$("ctlPelvisY").value/100)*m.avgLeg;
 
-  if(px||py){
-    for(const k of ["pelvis","neck","left_shoulder","left_elbow","left_wrist","right_shoulder","right_elbow","right_wrist","left_hip","right_hip"]){
-      if(pose[k]){pose[k][0]+=px;pose[k][1]+=py;}
+  // Preserve the incoming animated leg pose before moving the pelvis.
+  // Planted legs will IK back to their existing foot targets.
+  // Swing legs translate with the body, preserving their animated shape.
+  const before={};
+  for(const side of ["left","right"]){
+    before[side]={};
+    for(const j of ["hip","knee","ankle","toe"]){
+      const p=pose[`${side}_${j}`];
+      if(p) before[side][j]=[p[0],p[1]];
     }
   }
 
+  if(px||py){
+    // Move the root/upper-body Control Rig hierarchy.
+    for(const k of [
+      "pelvis","neck",
+      "left_shoulder","left_elbow","left_wrist",
+      "right_shoulder","right_elbow","right_wrist",
+      "left_hip","right_hip",
+      "tail_base","tail_tip"
+    ]){
+      if(pose[k]){pose[k][0]+=px;pose[k][1]+=py;}
+    }
+
+    // Re-solve the legs instead of stretching them.
+    for(const side of ["left","right"]){
+      const b=before[side];
+      const hip=pose[`${side}_hip`];
+      if(!hip||!b.knee||!b.ankle||!b.toe) continue;
+
+      const planted =
+        $("autoContacts").checked &&
+        $("opContacts").checked &&
+        importedMotion.type &&
+        contactStateAt(i,side);
+
+      if(planted){
+        // Keep the support foot in place while the pelvis moves.
+        const footVec=sub(b.toe,b.ankle);
+        const target=[b.ankle[0],b.ankle[1]];
+        const bend=Math.sign(
+          crossZ(orig[`${side}_hip`],orig[`${side}_ankle`],orig[`${side}_knee`])
+        )||1;
+
+        const solved=twoBoneIK(
+          hip,
+          orig[`${side}_knee`],
+          orig[`${side}_ankle`],
+          target,
+          bend
+        );
+
+        pose[`${side}_knee`]=solved.knee;
+        pose[`${side}_ankle`]=solved.ankle;
+        pose[`${side}_toe`]=[
+          solved.ankle[0]+footVec[0],
+          solved.ankle[1]+footVec[1]
+        ];
+      }else{
+        // Swing leg follows the pelvis as one coherent animated chain.
+        for(const j of ["knee","ankle","toe"]){
+          if(pose[`${side}_${j}`]){
+            pose[`${side}_${j}`][0]+=px;
+            pose[`${side}_${j}`][1]+=py;
+          }
+        }
+      }
+    }
+  }
+
+  // Independent anatomical left/right foot IK targets.
   for(const side of ["left","right"]){
     const x=(+$(side==="left"?"ctlLFootX":"ctlRFootX").value/100)*m.avgLeg;
     const y=(+$(side==="left"?"ctlLFootY":"ctlRFootY").value/100)*m.avgLeg;
     if(!x&&!y) continue;
-    const hip=pose[`${side}_hip`],ankle=pose[`${side}_ankle`],toe=pose[`${side}_toe`];
-    if(!hip||!ankle||!toe) continue;
+
+    const hip=pose[`${side}_hip`];
+    const knee=pose[`${side}_knee`];
+    const ankle=pose[`${side}_ankle`];
+    const toe=pose[`${side}_toe`];
+    if(!hip||!knee||!ankle||!toe) continue;
+
     const footVec=sub(toe,ankle);
     const target=[ankle[0]+x,ankle[1]+y];
-    const bend=Math.sign(crossZ(orig[`${side}_hip`],orig[`${side}_ankle`],orig[`${side}_knee`]))||1;
-    const solved=twoBoneIK(hip,orig[`${side}_knee`],orig[`${side}_ankle`],target,bend);
-    pose[`${side}_knee`]=solved.knee;pose[`${side}_ankle`]=solved.ankle;
-    pose[`${side}_toe`]=[target[0]+footVec[0],target[1]+footVec[1]];
+    const bend=Math.sign(
+      crossZ(orig[`${side}_hip`],orig[`${side}_ankle`],orig[`${side}_knee`])
+    )||1;
+
+    const solved=twoBoneIK(
+      hip,
+      orig[`${side}_knee`],
+      orig[`${side}_ankle`],
+      target,
+      bend
+    );
+
+    pose[`${side}_knee`]=solved.knee;
+    pose[`${side}_ankle`]=solved.ankle;
+    pose[`${side}_toe`]=[
+      solved.ankle[0]+footVec[0],
+      solved.ankle[1]+footVec[1]
+    ];
   }
+
   return pose;
 }
 
@@ -1637,7 +1723,7 @@ function retargetImportedPose(i){
   if($("opTwist").checked) clampLimbTwist(pose,orig);
   smoothPoseAt(i,pose);
   applyFullBodyIK(i,pose,orig);
-  applyControlRig(pose,orig);
+  applyControlRig(pose,orig,i);
 
   // Rebuild torso matrix after root/control/FBIK correction so rigid parts follow.
   const finalTorsoM=(pose.pelvis&&pose.neck)
