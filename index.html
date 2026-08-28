@@ -11,7 +11,7 @@
 </style>
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Animator <span class="badge">V10.1</span></h1><div class="sub">Skeleton-First Walk + Idle + Combat Rig • Preview motion first, bind sprite second</div></header>
+<header><h1>Fatal Instinct Sprite Animator <span class="badge">V11.1</span></h1><div class="sub">Skeleton-First Walk + Idle + Combat Rig • Preview motion first, bind sprite second</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -74,7 +74,7 @@
 <div class="sectionTitle">Interactive Pose Editor</div>
 <div class="help">
 <p><b>Real-time posing:</b> switch to <b>Pose Edit</b>, then drag the bones directly on Marius. The sprite updates in real time.</p>
-<p><b>Best use:</b> manually build punch, slash, kick, and special-move frames instead of relying on presets.</p>
+<p><b>Best use:</b> manually build punch, slash, kick, and special-move frames instead of relying on presets. If you use Auto Segment first, the body pieces stay more intact while you pose.</p>
 </div>
 <div class="grid" style="margin-top:10px">
   <button id="startPose" class="mini">Start Pose Editor</button>
@@ -91,6 +91,19 @@
   <button id="stopPosePreview" class="mini">Stop Pose Preview</button>
 </div>
 <div class="switchRow"><span>Onion skin previous slot</span><input id="showOnion" type="checkbox" checked></div>
+
+<div class="sectionTitle" style="margin-top:14px">Auto Segment / Keep Body Intact</div>
+<div class="help">
+<p><b>Auto Segment Parts</b> cuts the sprite into bone-bound body parts from the loaded image and current rig.</p>
+<p><b>Overlap pad</b> adds a small welded overlap so shoulders, hips, elbows, and knees stay visually closer together during movement.</p>
+<p><b>Best with transparent PNGs.</b> It can also try to separate a flat background from corner colors.</p>
+</div>
+<label class="title" style="margin-top:10px">Overlap / weld padding</label>
+<input id="autoPad" type="range" min="0" max="6" step="1" value="2"><div class="val" id="autoPadV">2</div>
+<div class="grid" style="margin-top:10px">
+  <button id="autoSegment" class="mini">Auto Segment Parts</button>
+  <button id="clearAutoMasks" class="mini">Clear Auto Masks</button>
+</div>
 
 <div id="walkControls" class="sliders">
   <div class="slider"><label>Stride <span><b id="strideV">36</b>% leg</span></label><input id="stride" type="range" min="10" max="60" value="36"></div>
@@ -164,11 +177,11 @@ const canvas=$("mainCanvas"),ctx=canvas.getContext("2d"),partSel=$("part"),joint
 PARTS.forEach(p=>{const o=document.createElement("option");o.value=p;o.textContent=p;partSel.appendChild(o);});
 JOINTS.forEach(j=>{const o=document.createElement("option");o.value=j;o.textContent=j;jointSel.appendChild(o);});
 
-let source=null,sourceName="",rig={parts:{},joints:{}},mode="trace",tracePoints=[],drawing=false,draggingJoint=false,frames=[],timer=null,editPose=null,poseSlots={},draggingPoseJoint=null;
+let source=null,sourceName="",rig={parts:{},joints:{}},mode="trace",tracePoints=[],drawing=false,draggingJoint=false,frames=[],timer=null,editPose=null,poseSlots={},draggingPoseJoint=null,autoMaskCache={};
 
 function status(s){statusEl.textContent=s;}
 function bindSlider(id,out){const a=$(id),b=$(out);a.oninput=()=>b.textContent=a.value;}
-["stride","step","bob","lean","arm","tail","breath","shoulderRise","idleLean","idleTail","windup","reach","strikeAngle","twist","attackLean","hipDrive","claw","guard","kickReach","kickHeight","kickChamber","kickLean","kickHip","kickFoot"].forEach(id=>bindSlider(id,id+"V"));
+["stride","step","bob","lean","arm","tail","breath","shoulderRise","idleLean","idleTail","windup","reach","strikeAngle","twist","attackLean","hipDrive","claw","guard","kickReach","kickHeight","kickChamber","kickLean","kickHip","kickFoot","autoPad"].forEach(id=>{if($(id)&&$(id+"V")) bindSlider(id,id+"V");});
 function setMode(m){
   mode=m;
   $("traceBtn").classList.toggle("active",m==="trace");
@@ -346,9 +359,9 @@ function applyModePreset(){
   strip.innerHTML="";
   draw();
   if(currentAnimation()==="slash"){
-    status("Claw Slash preset loaded (V10.1 locked arc).");
+    status("Claw Slash preset loaded.");
   }else if(currentAnimation()==="punch"){
-    status("Straight Punch preset loaded (V10.2 full-extension pass).");
+    status("Straight Punch preset loaded.");
   }else{
     status(`${modeInfo().label} preset loaded.`);
   }
@@ -417,7 +430,18 @@ function draw(frameCanvas=null,poseJoints=null){
   }
 
   if(!frameCanvas&&!poseMode){
-    Object.entries(rig.parts).forEach(([name,data])=>{if(data.poly) drawPolygon(data.poly,name===partSel.value?"#62e7ad":"#3da778",name===partSel.value?3:1.2,true);});
+    Object.entries(rig.parts).forEach(([name,data])=>{
+      if(data.poly){
+        drawPolygon(data.poly,name===partSel.value?"#62e7ad":"#3da778",name===partSel.value?3:1.2,true);
+      }else if(data.maskData && autoMaskCache[name]){
+        const m=autoMaskCache[name];
+        const p1=toScreen(0,0), p2=toScreen(m.width,m.height);
+        ctx.save();
+        ctx.globalAlpha = (name===partSel.value)?0.22:0.10;
+        ctx.drawImage(m,p1.x,p1.y,p2.x-p1.x,p2.y-p1.y);
+        ctx.restore();
+      }
+    });
   }
   if(tracePoints.length>1) drawPolygon(tracePoints,"#ff4d73",2,false);
   if($("showBones").checked) drawSkeleton(poseMode?editPose:(poseJoints||rig.joints),poseMode?draggingPoseJoint:null);
@@ -425,7 +449,7 @@ function draw(frameCanvas=null,poseJoints=null){
 
 function simplify(points,tol){if(points.length<3) return points;const out=[points[0]];let last=points[0];for(let i=1;i<points.length-1;i++){const p=points[i];if(Math.hypot(p[0]-last[0],p[1]-last[1])>=tol){out.push(p);last=p;}}out.push(points[points.length-1]);return out;}
 function pointDistance(a,b){return Math.hypot(a.x-b.x,a.y-b.y);}
-$("imageInput").onchange=e=>{const f=e.target.files[0];if(!f) return;const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{source=im;sourceName=f.name;URL.revokeObjectURL(u);status(`Loaded ${f.name} — ${im.width}×${im.height}`);draw();};im.src=u;};
+$("imageInput").onchange=e=>{const f=e.target.files[0];if(!f) return;const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{source=im;sourceName=f.name;URL.revokeObjectURL(u);preloadAutoMasks(()=>{status(`Loaded ${f.name} — ${im.width}×${im.height}`);draw();});};im.src=u;};
 
 canvas.addEventListener("pointerdown",e=>{
   const p=toImg(e.clientX,e.clientY);
@@ -480,6 +504,222 @@ function seedHumanoidRig(){const {w,h}=sourceRect(),cx=w*0.50,pelvisY=h*0.54,nec
 $("seedRig").onclick=seedHumanoidRig;
 
 function pointFarthestFrom(points,p){let best=points[0],dist=-1;for(const q of points){const d=Math.hypot(q[0]-p[0],q[1]-p[1]);if(d>dist){dist=d;best=q;}}return[best[0],best[1]];}
+
+function hasBinding(name){const d=rig.parts[name];return !!(d&&(d.poly||d.maskData));}
+function hasAnyBindings(){return PARTS.some(name=>hasBinding(name));}
+
+function preloadAutoMasks(done=null){
+  autoMaskCache={};
+  const names=PARTS.filter(name=>rig.parts[name]&&rig.parts[name].maskData);
+  if(!names.length){if(done)done();return;}
+  let remaining=names.length;
+  names.forEach(name=>{
+    const img=new Image();
+    img.onload=()=>{
+      const c=document.createElement("canvas");
+      c.width=img.width;c.height=img.height;
+      c.getContext("2d").drawImage(img,0,0);
+      autoMaskCache[name]=c;
+      remaining--;
+      if(remaining===0&&done)done();
+    };
+    img.onerror=()=>{
+      remaining--;
+      if(remaining===0&&done)done();
+    };
+    img.src=rig.parts[name].maskData;
+  });
+}
+
+function averagePoint(a,b){return[(a[0]+b[0])/2,(a[1]+b[1])/2];}
+function distPointToSeg(px,py,a,b){
+  if(!a||!b) return 1e9;
+  const vx=b[0]-a[0],vy=b[1]-a[1],wx=px-a[0],wy=py-a[1];
+  const vv=vx*vx+vy*vy;
+  let t=vv?((wx*vx+wy*vy)/vv):0;
+  t=clamp(t,0,1);
+  const cx=a[0]+vx*t,cy=a[1]+vy*t;
+  return Math.hypot(px-cx,py-cy);
+}
+function distPointToCircle(px,py,c,r){
+  if(!c) return 1e9;
+  return Math.max(0,Math.hypot(px-c[0],py-c[1])-r);
+}
+function dilateMask(alpha,w,h,radius){
+  if(radius<=0) return alpha;
+  const src=alpha.slice();
+  const out=alpha.slice();
+  for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+      const i=y*w+x;
+      if(src[i]) continue;
+      let on=0;
+      for(let dy=-radius;dy<=radius&&!on;dy++){
+        const yy=y+dy;
+        if(yy<0||yy>=h) continue;
+        for(let dx=-radius;dx<=radius;dx++){
+          if(dx*dx+dy*dy>radius*radius) continue;
+          const xx=x+dx;
+          if(xx<0||xx>=w) continue;
+          if(src[yy*w+xx]){on=255;break;}
+        }
+      }
+      out[i]=on;
+    }
+  }
+  return out;
+}
+function maskCanvasToDataURL(alpha,w,h){
+  const c=document.createElement("canvas");
+  c.width=w;c.height=h;
+  const g=c.getContext("2d");
+  const id=g.createImageData(w,h);
+  for(let i=0;i<alpha.length;i++){
+    const a=alpha[i];
+    id.data[i*4+0]=255;
+    id.data[i*4+1]=255;
+    id.data[i*4+2]=255;
+    id.data[i*4+3]=a;
+  }
+  g.putImageData(id,0,0);
+  return {canvas:c,dataURL:c.toDataURL("image/png")};
+}
+function applyMaskToSource(maskCanvas){
+  if(!source||!maskCanvas) return null;
+  const c=document.createElement("canvas");
+  c.width=source.width;c.height=source.height;
+  const g=c.getContext("2d");
+  g.drawImage(source,0,0);
+  g.globalCompositeOperation="destination-in";
+  g.drawImage(maskCanvas,0,0);
+  return c;
+}
+function sourceForegroundInfo(){
+  const c=document.createElement("canvas");
+  c.width=source.width;c.height=source.height;
+  const g=c.getContext("2d");
+  g.drawImage(source,0,0);
+  const img=g.getImageData(0,0,c.width,c.height);
+  const d=img.data,w=c.width,h=c.height;
+  const corners=[
+    0,
+    (w-1)*4,
+    ((h-1)*w)*4,
+    ((h*w)-1)*4
+  ];
+  let bg=[0,0,0,0];
+  corners.forEach(i=>{
+    bg[0]+=d[i+0];bg[1]+=d[i+1];bg[2]+=d[i+2];bg[3]+=d[i+3];
+  });
+  bg=bg.map(v=>v/4);
+  const transparentLikely = bg[3] < 245;
+  return {img,w,h,bg,transparentLikely};
+}
+function isForegroundPixel(data,i,bg,transparentLikely){
+  const a=data[i+3];
+  if(a<16) return false;
+  if(transparentLikely) return true;
+  const dr=data[i+0]-bg[0],dg=data[i+1]-bg[1],db=data[i+2]-bg[2];
+  const dist=Math.sqrt(dr*dr+dg*dg+db*db);
+  return dist>28 || a<235;
+}
+function buildAutoPartSpecs(){
+  const pelvis=joint("pelvis"),neck=joint("neck");
+  if(!(pelvis&&neck)) return null;
+  const torsoLen=Math.max(20,length(pelvis,neck));
+  const shoulderWidth=(joint("left_shoulder")&&joint("right_shoulder"))?length(joint("left_shoulder"),joint("right_shoulder")):torsoLen*0.9;
+
+  const headCenter=[neck[0], neck[1]-torsoLen*0.55];
+  const headR=Math.max(12,torsoLen*0.34);
+
+  const mkSeg=(a,b,r,weight=1,penalty=null)=>({kind:"seg",a,b,r,weight,penalty});
+  const mkCircle=(c,r,weight=1,penalty=null)=>({kind:"circle",c,r,weight,penalty});
+
+  const specs={
+    torso: mkSeg(pelvis,neck,Math.max(14,shoulderWidth*0.34),0.85,(x,y)=>y<neck[1]-headR*0.35?6:0),
+    head: mkCircle(headCenter,headR,0.9,(x,y)=>y>neck[1]+4?8:0),
+
+    left_upper_arm: mkSeg(joint("left_shoulder"),joint("left_elbow"),Math.max(8,torsoLen*0.15),1.0),
+    left_forearm: mkSeg(joint("left_elbow"),joint("left_wrist"),Math.max(7,torsoLen*0.13),1.0),
+    left_hand: mkCircle(joint("left_wrist"),Math.max(6,torsoLen*0.12),1.0),
+
+    right_upper_arm: mkSeg(joint("right_shoulder"),joint("right_elbow"),Math.max(8,torsoLen*0.15),1.0),
+    right_forearm: mkSeg(joint("right_elbow"),joint("right_wrist"),Math.max(7,torsoLen*0.13),1.0),
+    right_hand: mkCircle(joint("right_wrist"),Math.max(6,torsoLen*0.12),1.0),
+
+    left_thigh: mkSeg(joint("left_hip"),joint("left_knee"),Math.max(10,torsoLen*0.16),1.0),
+    left_shin: mkSeg(joint("left_knee"),joint("left_ankle"),Math.max(8,torsoLen*0.14),1.0),
+    left_foot: mkSeg(joint("left_ankle"),joint("left_toe"),Math.max(7,torsoLen*0.11),0.95),
+
+    right_thigh: mkSeg(joint("right_hip"),joint("right_knee"),Math.max(10,torsoLen*0.16),1.0),
+    right_shin: mkSeg(joint("right_knee"),joint("right_ankle"),Math.max(8,torsoLen*0.14),1.0),
+    right_foot: mkSeg(joint("right_ankle"),joint("right_toe"),Math.max(7,torsoLen*0.11),0.95),
+  };
+  if(joint("tail_base")&&joint("tail_tip")) specs.tail=mkSeg(joint("tail_base"),joint("tail_tip"),Math.max(7,torsoLen*0.12),0.95);
+  return specs;
+}
+function scorePartPixel(spec,x,y){
+  if(!spec) return 1e9;
+  const base = spec.kind==="seg"
+    ? distPointToSeg(x,y,spec.a,spec.b)/Math.max(1,spec.r)
+    : distPointToCircle(x,y,spec.c,spec.r)/Math.max(1,spec.r);
+  return base*spec.weight + (spec.penalty?spec.penalty(x,y):0);
+}
+function autoSegmentParts(){
+  if(!source){status("Load a sprite image first.");return;}
+  inferJointsFromParts();
+  const specs=buildAutoPartSpecs();
+  if(!specs){status("Need at least pelvis + neck (and best results with full limb joints) before auto segmentation.");return;}
+
+  const {img,w,h,bg,transparentLikely}=sourceForegroundInfo();
+  const data=img.data;
+  const pad=+($("autoPad")?.value||2);
+
+  const masks={};
+  PARTS.forEach(name=>masks[name]=new Uint8Array(w*h));
+
+  for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+      const di=(y*w+x)*4;
+      if(!isForegroundPixel(data,di,bg,transparentLikely)) continue;
+
+      let bestName=null,bestScore=1e9;
+      for(const name of PARTS){
+        const s=scorePartPixel(specs[name],x,y);
+        if(s<bestScore){bestScore=s;bestName=name;}
+      }
+      if(bestName) masks[bestName][y*w+x]=255;
+    }
+  }
+
+  autoMaskCache={};
+  PARTS.forEach(name=>{
+    const alpha=dilateMask(masks[name],w,h,pad);
+    const made=maskCanvasToDataURL(alpha,w,h);
+    autoMaskCache[name]=made.canvas;
+    rig.parts[name]=rig.parts[name]||{};
+    rig.parts[name].maskData=made.dataURL;
+    if(!rig.parts[name].pivot){
+      const bind=PART_BIND[name];
+      if(bind&&joint(bind[0])) rig.parts[name].pivot=[...joint(bind[0])];
+    }
+  });
+
+  frames=[];
+  strip.innerHTML="";
+  draw();
+  status(`Auto segmented ${PARTS.length} body parts with overlap pad ${pad}. Pose Edit should now keep the body tighter.`);
+}
+function clearAutoMasksOnly(){
+  PARTS.forEach(name=>{
+    if(rig.parts[name]) delete rig.parts[name].maskData;
+  });
+  autoMaskCache={};
+  frames=[];
+  strip.innerHTML="";
+  draw();
+  status("Auto mask parts cleared.");
+}
 function inferJointsFromParts(){const p=rig.parts,j=rig.joints,ensure=(name,val)=>{if(!j[name]&&val) j[name]=val;};if(p.torso&&p.torso.pivot) ensure("pelvis",[...p.torso.pivot]);if(p.left_thigh&&p.left_thigh.pivot) ensure("left_hip",[...p.left_thigh.pivot]);if(p.left_shin&&p.left_shin.pivot) ensure("left_knee",[...p.left_shin.pivot]);if(p.left_foot&&p.left_foot.pivot) ensure("left_ankle",[...p.left_foot.pivot]);if(p.right_thigh&&p.right_thigh.pivot) ensure("right_hip",[...p.right_thigh.pivot]);if(p.right_shin&&p.right_shin.pivot) ensure("right_knee",[...p.right_shin.pivot]);if(p.right_foot&&p.right_foot.pivot) ensure("right_ankle",[...p.right_foot.pivot]);if(p.left_foot&&p.left_foot.poly&&j.left_ankle) ensure("left_toe",pointFarthestFrom(p.left_foot.poly,j.left_ankle));if(p.right_foot&&p.right_foot.poly&&j.right_ankle) ensure("right_toe",pointFarthestFrom(p.right_foot.poly,j.right_ankle));if(p.tail&&p.tail.pivot) ensure("tail_base",[...p.tail.pivot]);if(p.tail&&p.tail.poly&&j.tail_base) ensure("tail_tip",pointFarthestFrom(p.tail.poly,j.tail_base));if(!j.neck&&p.torso&&p.torso.poly){let minY=1e9,sumX=0,count=0;for(const q of p.torso.poly){if(q[1]<minY+10){if(q[1]<minY){minY=q[1];sumX=0;count=0;}sumX+=q[0];count++;}}if(count) j.neck=[sumX/count,minY+10];}if(!j.left_shoulder&&j.neck) j.left_shoulder=[j.neck[0]-24,j.neck[1]+12];if(!j.right_shoulder&&j.neck) j.right_shoulder=[j.neck[0]+24,j.neck[1]+12];}
 function download(blob,name){const a=document.createElement("a"),u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);}
 $("saveRig").onclick=()=>{
@@ -491,9 +731,9 @@ $("saveRig").onclick=()=>{
   const sliderIds=["stride","step","bob","lean","arm","tail","breath","shoulderRise","idleLean","idleTail","windup","reach","strikeAngle","twist","attackLean","hipDrive","claw","guard","kickReach","kickHeight","kickChamber","kickLean","kickHip","kickFoot"];
   settings.sliders={};
   sliderIds.forEach(id=>{if($(id)) settings.sliders[id]=+$(id).value;});
-  const data={version:11,source_name:sourceName,source_size:source?[source.width,source.height]:null,parts:rig.parts,joints:rig.joints,settings,manualPoses:poseSlots};
-  download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"fatal_instinct_rig_v11.json");
-  status("V11 rig + animation settings + saved poses exported.");
+  const data={version:11.1,source_name:sourceName,source_size:source?[source.width,source.height]:null,parts:rig.parts,joints:rig.joints,settings,manualPoses:poseSlots};
+  download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"fatal_instinct_rig_v11_1.json");
+  status("V11.1 rig + animation settings + saved poses + auto masks exported.");
 };
 $("rigInput").onchange=async e=>{
   const f=e.target.files[0];if(!f) return;
@@ -503,6 +743,7 @@ $("rigInput").onchange=async e=>{
     rig.joints=d.joints||{};
     inferJointsFromParts();
     poseSlots=d.manualPoses||{};
+    preloadAutoMasks();
     if(d.settings){
       if(d.settings.animation && MODE_INFO[d.settings.animation]) animationMode.value=d.settings.animation;
       if(d.settings.facing) facingSel.value=d.settings.facing;
@@ -894,8 +1135,42 @@ function buildAnimationPose(i){
 }
 
 function partBounds(poly){let minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9;for(const p of poly){if(p[0]<minX)minX=p[0];if(p[1]<minY)minY=p[1];if(p[0]>maxX)maxX=p[0];if(p[1]>maxY)maxY=p[1];}return{minX:Math.floor(minX),minY:Math.floor(minY),maxX:Math.ceil(maxX),maxY:Math.ceil(maxY)};}
-function maskedPart(name){const data=rig.parts[name];if(!source||!data||!data.poly) return null;const c=document.createElement("canvas");c.width=source.width;c.height=source.height;const g=c.getContext("2d");g.save();g.beginPath();g.moveTo(data.poly[0][0],data.poly[0][1]);for(let i=1;i<data.poly.length;i++) g.lineTo(data.poly[i][0],data.poly[i][1]);g.closePath();g.clip();g.drawImage(source,0,0);g.restore();return c;}
-function thighCapCanvas(name){const data=rig.parts[name];if(!source||!data||!data.poly) return null;const b=partBounds(data.poly), bandH=Math.max(10,Math.min(18,b.maxY-b.minY));const c=document.createElement("canvas");c.width=source.width;c.height=source.height;const g=c.getContext("2d");g.drawImage(source,0,0);g.globalCompositeOperation="destination-in";g.beginPath();g.rect(b.minX-2,b.minY-2,(b.maxX-b.minX)+4,bandH+4);g.fill();g.globalCompositeOperation="destination-in";g.beginPath();g.moveTo(data.poly[0][0],data.poly[0][1]);for(let i=1;i<data.poly.length;i++) g.lineTo(data.poly[i][0],data.poly[i][1]);g.closePath();g.fill();return c;}
+function maskedPart(name){
+  const data=rig.parts[name];
+  if(!source||!data) return null;
+  if(data.maskData && autoMaskCache[name]) return applyMaskToSource(autoMaskCache[name]);
+  if(!data.poly) return null;
+  const c=document.createElement("canvas");c.width=source.width;c.height=source.height;const g=c.getContext("2d");
+  g.save();g.beginPath();g.moveTo(data.poly[0][0],data.poly[0][1]);for(let i=1;i<data.poly.length;i++) g.lineTo(data.poly[i][0],data.poly[i][1]);g.closePath();g.clip();g.drawImage(source,0,0);g.restore();return c;
+}
+function thighCapCanvas(name){
+  const data=rig.parts[name];
+  if(!source||!data) return null;
+  if(data.maskData && autoMaskCache[name]){
+    const c=document.createElement("canvas");c.width=source.width;c.height=source.height;
+    const g=c.getContext("2d");
+    const m=autoMaskCache[name];
+    g.drawImage(source,0,0);
+    g.globalCompositeOperation="destination-in";
+    g.drawImage(m,0,0);
+    const img=g.getImageData(0,0,c.width,c.height);
+    let minX=1e9,minY=1e9,maxX=-1,maxY=-1;
+    for(let y=0;y<c.height;y++) for(let x=0;x<c.width;x++){
+      const a=img.data[(y*c.width+x)*4+3];
+      if(a){if(x<minX)minX=x;if(y<minY)minY=y;if(x>maxX)maxX=x;if(y>maxY)maxY=y;}
+    }
+    if(maxX<0) return null;
+    const bandH=Math.max(10,Math.min(18,maxY-minY));
+    const band=document.createElement("canvas");band.width=source.width;band.height=source.height;
+    const bg=band.getContext("2d");
+    bg.drawImage(c,0,0);
+    bg.globalCompositeOperation="destination-in";
+    bg.beginPath();bg.rect(minX-2,minY-2,(maxX-minX)+4,bandH+4);bg.fill();
+    return band;
+  }
+  if(!data.poly) return null;
+  const b=partBounds(data.poly), bandH=Math.max(10,Math.min(18,b.maxY-b.minY));const c=document.createElement("canvas");c.width=source.width;c.height=source.height;const g=c.getContext("2d");g.drawImage(source,0,0);g.globalCompositeOperation="destination-in";g.beginPath();g.rect(b.minX-2,b.minY-2,(b.maxX-b.minX)+4,bandH+4);g.fill();g.globalCompositeOperation="destination-in";g.beginPath();g.moveTo(data.poly[0][0],data.poly[0][1]);for(let i=1;i<data.poly.length;i++) g.lineTo(data.poly[i][0],data.poly[i][1]);g.closePath();g.fill();return c;
+}
 function matrixForPart(name,pose,torsoM){
   const bind=PART_BIND[name];if(!bind)return torsoM||matrixIdentity();
   const [a,b]=bind,oa=joint(a),ob=joint(b),ta=pose[a],tb=pose[b];
@@ -985,7 +1260,7 @@ $("generate").onclick=()=>{
   const useSaved=Array.from({length:info.frames},(_,i)=>savedPose(i+1)).some(Boolean);
 
   if(useSaved){
-    if(source&&Object.keys(rig.parts).some(k=>rig.parts[k]&&rig.parts[k].poly)){
+    if(source&&hasAnyBindings()){
       for(let i=0;i<info.frames;i++){
         const pose=savedPose(i+1) || clonePoseMap(buildAnimationPose(i).pose);
         const c=buildSpriteCanvasFromPose(pose);
@@ -998,7 +1273,7 @@ $("generate").onclick=()=>{
     }else{
       editPose=clonePoseMap(savedPose(1) || buildAnimationPose(0).pose);
       setMode("pose");
-      status(`Saved skeleton poses are ready for ${info.label}. Bind traced sprite parts to export artwork.`);
+      status(`Saved skeleton poses are ready for ${info.label}. Bind traced or auto-segmented sprite parts to export artwork.`);
     }
     return;
   }
@@ -1015,7 +1290,7 @@ $("generate").onclick=()=>{
   }else{
     const built=buildAnimationPose(0);
     if(!built.error)draw(null,built.pose);
-    status(`Skeleton motion is ready for ${info.label}. Bind traced sprite parts to generate artwork.`);
+    status(`Skeleton motion is ready for ${info.label}. Bind traced or auto-segmented sprite parts to generate artwork.`);
   }
 };
 
@@ -1025,7 +1300,7 @@ $("export").onclick=()=>{
   s.width=frames[0].width*frames.length;s.height=frames[0].height;
   const g=s.getContext("2d");
   frames.forEach((f,i)=>g.drawImage(f,i*frames[0].width,0));
-  const name=`${exportBaseName()}_sheet_v11.png`;
+  const name=`${exportBaseName()}_sheet_v11_1.png`;
   s.toBlob(b=>{if(b){download(b,name);status(`${modeInfo().label} sprite sheet exported.`);}},"image/png");
 };
 
@@ -1041,6 +1316,8 @@ $("clearPoseSlots").onclick=()=>clearSavedPoseSlots();
 $("previewPoseSlots").onclick=()=>previewSavedPoses();
 $("stopPosePreview").onclick=()=>{clearInterval(timer);timer=null;draw();status("Pose preview stopped.");};
 $("poseFrameSlot").onchange=()=>{if(mode==="pose"&&savedPose()) loadPoseSlot(); else draw();};
+$("autoSegment").onclick=()=>autoSegmentParts();
+$("clearAutoMasks").onclick=()=>clearAutoMasksOnly();
 rebuildPoseSlotMenu();
 
 updateAnimationUI();
