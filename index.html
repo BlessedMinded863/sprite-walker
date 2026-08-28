@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Animator V10</title>
+<title>Fatal Instinct Sprite Animator V10.1.1</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}.card .saveFrame{width:100%;padding:7px 8px;margin-top:6px;font-size:12px;border-radius:9px}.sectionTitle{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);font-weight:800;margin-top:14px}.danger{border-color:#7d3949}.mini{padding:8px 10px;font-size:13px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
 </style>
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Animator <span class="badge">V10</span></h1><div class="sub">Skeleton-First Walk + Idle + Combat Rig • Preview motion first, bind sprite second</div></header>
+<header><h1>Fatal Instinct Sprite Animator <span class="badge">V10.1</span></h1><div class="sub">Skeleton-First Walk + Idle + Combat Rig • Preview motion first, bind sprite second</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -155,7 +155,7 @@ const MODE_INFO={
   walk:{frames:8,names:WALK_NAMES,label:"Walk",speed:130},
   idle:{frames:4,names:["Neutral","Inhale","Exhale","Settle"],label:"Breathing Idle",speed:180},
   punch:{frames:4,names:["Ready","Wind-up","Strike","Recovery"],label:"Straight Punch",speed:115},
-  slash:{frames:4,names:["Ready","High Wind-up","Slash / Contact","Follow-through"],label:"Claw Slash",speed:115},
+  slash:{frames:4,names:["Ready","High Wind-up","Slash / Contact","Follow-through"],label:"Claw Slash",speed:125},
   kick:{frames:4,names:["Ready","Chamber","Extension","Recovery"],label:"Front Kick",speed:125}
 };
 
@@ -163,7 +163,7 @@ const PRESETS={
   walk:{stride:36,step:20,bob:4,lean:3,arm:12,tail:8},
   idle:{breath:3,shoulderRise:2,idleLean:2,idleTail:5},
   punch:{windup:48,reach:100,strikeAngle:-2,twist:16,attackLean:6,hipDrive:12,claw:-12,guard:12},
-  slash:{windup:52,reach:92,strikeAngle:10,twist:18,attackLean:7,hipDrive:12,claw:-24,guard:10},
+  slash:{windup:62,reach:100,strikeAngle:8,twist:22,attackLean:3,hipDrive:7,claw:-30,guard:14},
   kick:{kickReach:72,kickHeight:32,kickChamber:55,kickLean:8,kickHip:8,kickFoot:-12}
 };
 
@@ -183,7 +183,7 @@ function applyModePreset(){
   frames=[];
   strip.innerHTML="";
   draw();
-  status(`${modeInfo().label} preset loaded.`);
+  status(currentAnimation()==="slash" ? "Claw Slash preset loaded (V10.1 stronger arc)." : `${modeInfo().label} preset loaded.`);
 }
 
 function updateAnimationUI(){
@@ -490,9 +490,9 @@ function buildPunchOrSlashPose(i,isSlash){
 
   const slash=[
     {root:0.00,torso:0.00,target:"ready",hand:0.00,guard:0.00,tail:0},
-    {root:-0.18,torso:-0.65,target:"high",hand:-0.45,guard:+0.45,tail:-4},
-    {root:+0.68,torso:+0.95,target:"cut",hand:+1.00,guard:-0.85,tail:+10},
-    {root:+0.28,torso:+0.30,target:"follow",hand:+0.35,guard:-0.20,tail:+4}
+    {root:-0.06,torso:-1.00,target:"high",hand:-0.58,guard:+0.55,tail:-6},
+    {root:+0.20,torso:+1.12,target:"cut",hand:+1.18,guard:-1.00,tail:+12},
+    {root:+0.08,torso:+0.46,target:"follow",hand:+0.62,guard:-0.30,tail:+6}
   ][i];
 
   const phase=isSlash?slash:punch;
@@ -514,11 +514,24 @@ function buildPunchOrSlashPose(i,isSlash){
   }else if(phase.target==="recover"){
     target=[shoulder[0]+dir*armLen*0.24,shoulder[1]+armLen*0.18];
   }else if(phase.target==="high"){
-    target=[shoulder[0]-dir*armLen*(0.14+windup/300),shoulder[1]-armLen*0.34];
+    // Stronger high/back claw chamber with less crouch.
+    target=[
+      shoulder[0]-dir*armLen*(0.24+windup/210),
+      shoulder[1]-armLen*0.46
+    ];
   }else if(phase.target==="cut"){
-    target=[shoulder[0]+dir*armLen*(0.64+0.20*reach),shoulder[1]+armLen*(0.32+Math.max(0,angle)/110)];
+    // Longer cross-body slash: more horizontal travel, less downward collapse.
+    const ext=armLen*(0.84+0.22*reach),a=(angle+10)*Math.PI/180;
+    target=[
+      shoulder[0]+dir*Math.cos(a)*ext,
+      shoulder[1]+Math.sin(a)*ext + armLen*0.12
+    ];
   }else if(phase.target==="follow"){
-    target=[shoulder[0]+dir*armLen*0.34,shoulder[1]+armLen*0.30];
+    // Let the arm clearly pass through the target before recovering.
+    target=[
+      shoulder[0]+dir*armLen*0.56,
+      shoulder[1]+armLen*0.18
+    ];
   }
 
   armPoseToTarget(side,built,target,claw*phase.hand*dir);
