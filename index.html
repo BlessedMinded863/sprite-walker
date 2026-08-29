@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V18</title>
+<title>Fatal Instinct Sprite Walker V18.1</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -61,6 +61,11 @@
   .rosterRow select{grid-column:2}
 }
 
+
+.clothPanel{border:1px solid var(--line);border-radius:13px;padding:11px;margin-top:12px;background:#151923}
+.clothRow{display:grid;grid-template-columns:1.1fr .9fr;gap:8px;align-items:center;margin-top:8px}
+.clothRow select{width:100%}
+.clothHint{font-size:12px;color:var(--muted);line-height:1.45;margin-top:7px}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -75,7 +80,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V18</span></h1><div class="sub">Production Sprint • 6-Character Workflow</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V18.1</span></h1><div class="sub">Production Sprint • Cloth/Secondary Motion Upgrade</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -332,6 +337,22 @@
   <div id="batchStatus" class="status">Batch queue empty.</div>
 </div>
 
+
+<div class="clothPanel">
+  <div class="moduleHead"><b>Secondary Layers / Cloth</b><span id="clothBadge" class="pill ok">AUTO</span></div>
+  <div class="switchRow"><span>Enable cloth stabilization</span><input id="enableCloth" type="checkbox" checked></div>
+
+  <div class="clothRow"><label>Baggy pants behavior</label><select id="pantsMode"><option value="soft" selected>Soft</option><option value="rigid">Rigid</option><option value="cloth">Cloth</option></select></div>
+  <div class="clothRow"><label>Front sash behavior</label><select id="sashMode"><option value="pelvis" selected>Pelvis Anchored</option><option value="soft">Soft</option><option value="rigid">Rigid</option></select></div>
+  <div class="clothRow"><label>Outer coat panels</label><select id="coatMode"><option value="pelvis_soft" selected>Pelvis + Soft Leg</option><option value="pelvis">Pelvis Anchored</option><option value="soft">Soft</option><option value="rigid">Rigid</option></select></div>
+  <div class="clothRow"><label>Long hair / dreadlocks</label><select id="hairMode"><option value="head_soft" selected>Head + Soft Torso</option><option value="head">Head Anchored</option><option value="soft">Soft</option><option value="rigid">Rigid</option></select></div>
+
+  <div class="slider"><label>Cloth follow <span><b id="clothFollowV">38</b>%</span></label><input id="clothFollow" type="range" min="0" max="100" value="38"></div>
+  <div class="slider"><label>Cloth damping <span><b id="clothDampingV">68</b>%</span></label><input id="clothDamping" type="range" min="0" max="95" value="68"></div>
+
+  <div class="grid"><button id="autoClothProfile">Auto Cloth Profile</button><button id="resetCloth">Reset Cloth</button></div>
+  <div class="clothHint">This layer leaves the validated skeleton/IK solver unchanged and only moderates how loose visual regions inherit bone motion.</div>
+</div>
 <div class="sliders">
 <div class="slider"><label>Stride <span><b id="strideV">36</b>% leg</span></label><input id="stride" type="range" min="10" max="60" value="36"></div>
 <div class="slider"><label>Step height <span><b id="stepV">20</b>% leg</span></label><input id="step" type="range" min="5" max="35" value="20"></div>
@@ -382,6 +403,7 @@ let source=null,sourceName="",rig={parts:{},joints:{}},mode="trace",tracePoints=
 const PROD_AUTOSAVE_KEY="fatal_instinct_sprite_walker_v18_autosave";
 const PROD_ROSTER_KEY="fatal_instinct_sprite_walker_v18_roster";
 let rosterData=Array.from({length:6},(_,i)=>({name:"",stage:"Not Started",saved:null}));
+let clothState={prevPose:null};
 
 
 const FRAME_COUNT = 8;
@@ -508,7 +530,7 @@ const JOINT_MESHES = [
 
 function status(s){statusEl.textContent=s;}
 function bindSlider(id,out){const a=$(id),b=$(out);a.oninput=()=>b.textContent=a.value;}
-["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY"].forEach(id=>bindSlider(id,id+"V"));
+["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping"].forEach(id=>bindSlider(id,id+"V"));
 function setMode(m){mode=m;$("traceBtn").classList.toggle("active",m==="trace");$("jointBtn").classList.toggle("active",m==="joint");$("inspectBtn").classList.toggle("active",m==="inspect");status(m==="trace"?"Trace around the selected body part.":m==="joint"?"Tap or drag the selected joint.":"Inspect mode.");}
 $("traceBtn").onclick=()=>setMode("trace");$("jointBtn").onclick=()=>setMode("joint");$("inspectBtn").onclick=()=>setMode("inspect");
 
@@ -692,6 +714,11 @@ function applyProductionDefaults(){
   if($("autoContacts")) $("autoContacts").checked=true;
   if($("enableFBIK")) $("enableFBIK").checked=true;
   if($("useJointMesh")) $("useJointMesh").checked=true;
+  if($("enableCloth")) $("enableCloth").checked=true;
+  if($("pantsMode")) $("pantsMode").value="soft";
+  if($("sashMode")) $("sashMode").value="pelvis";
+  if($("coatMode")) $("coatMode").value="pelvis_soft";
+  if($("hairMode")) $("hairMode").value="head_soft";
   ["opRoot","opContacts","opFoot","opFBIK","opTwist","opSmooth","opControl","opSkin"].forEach(id=>{if($(id))$(id).checked=true;});
   resetControlRigToZero();
   if($("showSprite")) $("showSprite").checked=true;
@@ -2101,6 +2128,85 @@ function retargetImportedPose(i){
 
   return {pose,torsoM:finalTorsoM,phaseName:importedMotion.name||"Imported Motion",metrics:m};
 }
+
+
+function lerpPoint2(a,b,t){ return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t]; }
+function clonePose2(p){ const o={}; for(const [k,v] of Object.entries(p||{})) o[k]=Array.isArray(v)?[v[0],v[1]]:v; return o; }
+function clothFollowFactor(){ return Math.max(0,Math.min(1,(+$("clothFollow").value||0)/100)); }
+
+function pelvisAnchoredVisualPose(pose,orig){
+  const out=clonePose2(orig);
+  if(pose.pelvis&&orig.pelvis){
+    const dx=pose.pelvis[0]-orig.pelvis[0], dy=pose.pelvis[1]-orig.pelvis[1];
+    for(const k of Object.keys(out)) out[k]=[out[k][0]+dx,out[k][1]+dy];
+  }
+  if(out.neck&&pose.neck) out.neck=lerpPoint2(out.neck,pose.neck,0.35);
+  return out;
+}
+
+function softLegVisualPose(pose,orig,side,f){
+  const out=clonePose2(pose);
+  for(const j of ["knee","ankle","toe"]){
+    const k=`${side}_${j}`;
+    if(orig[k]&&pose[k]) out[k]=lerpPoint2(orig[k],pose[k],f);
+  }
+  return out;
+}
+
+function visualPoseForPart(name,pose,orig){
+  if(!$("enableCloth")?.checked) return pose;
+  const f=clothFollowFactor();
+
+  if(["left_thigh","left_shin","left_foot"].includes(name)){
+    const mode=$("pantsMode").value;
+    if(mode==="rigid") return pose;
+    return softLegVisualPose(pose,orig,"left",mode==="cloth"?f*.72:f);
+  }
+  if(["right_thigh","right_shin","right_foot"].includes(name)){
+    const mode=$("pantsMode").value;
+    if(mode==="rigid") return pose;
+    return softLegVisualPose(pose,orig,"right",mode==="cloth"?f*.72:f);
+  }
+  if(name==="torso"){
+    const mode=$("coatMode").value;
+    if(mode==="pelvis"||mode==="pelvis_soft") return pelvisAnchoredVisualPose(pose,orig);
+    if(mode==="soft"){
+      const out=clonePose2(orig);
+      for(const k of ["pelvis","neck","left_shoulder","right_shoulder"]) if(out[k]&&pose[k]) out[k]=lerpPoint2(out[k],pose[k],f);
+      return out;
+    }
+  }
+  if(name==="head"){
+    const mode=$("hairMode").value;
+    if(mode==="head"||mode==="head_soft"){
+      const out=clonePose2(orig);
+      if(orig.neck&&pose.neck){
+        const dx=pose.neck[0]-orig.neck[0],dy=pose.neck[1]-orig.neck[1];
+        for(const k of Object.keys(out)) out[k]=[out[k][0]+dx,out[k][1]+dy];
+      }
+      return out;
+    }
+  }
+  return pose;
+}
+
+$("autoClothProfile").onclick=()=>{
+  $("enableCloth").checked=true;
+  $("pantsMode").value="soft";
+  $("sashMode").value="pelvis";
+  $("coatMode").value="pelvis_soft";
+  $("hairMode").value="head_soft";
+  $("clothFollow").value=38;$("clothFollowV").textContent="38";
+  $("clothDamping").value=68;$("clothDampingV").textContent="68";
+  $("clothBadge").textContent="PROFILED";
+  status("Auto Cloth Profile applied.");
+};
+$("resetCloth").onclick=()=>{
+  $("enableCloth").checked=false;
+  clothState.prevPose=null;
+  $("clothBadge").textContent="OFF";
+  status("Cloth stabilization disabled.");
+};
 
 function renderPoseFrame(pose,torsoM){
   if(!source) return null;
