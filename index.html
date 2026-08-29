@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V18.1</title>
+<title>Fatal Instinct Sprite Walker V18.2</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -66,6 +66,10 @@
 .clothRow{display:grid;grid-template-columns:1.1fr .9fr;gap:8px;align-items:center;margin-top:8px}
 .clothRow select{width:100%}
 .clothHint{font-size:12px;color:var(--muted);line-height:1.45;margin-top:7px}
+
+.preservePanel{border:1px solid var(--line);border-radius:13px;padding:11px;margin-top:12px;background:#151923}
+.preserveHint{font-size:12px;color:var(--muted);line-height:1.45;margin-top:8px}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -80,7 +84,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V18.1</span></h1><div class="sub">Production Sprint • Cloth/Secondary Motion Upgrade</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V18.2</span></h1><div class="sub">Production Sprint • Sprite Preservation Renderer</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -338,6 +342,21 @@
 </div>
 
 
+
+<div class="preservePanel">
+  <div class="moduleHead"><b>Sprite Preservation</b><span id="preserveBadge" class="pill ok">SAFE</span></div>
+
+  <div class="switchRow"><span>Preserve original sprite proportions</span><input id="preserveSprite" type="checkbox" checked></div>
+  <div class="switchRow"><span>Rigid torso / pelvis</span><input id="rigidTorso" type="checkbox" checked></div>
+  <div class="switchRow"><span>Protect accessories / long ribbons</span><input id="protectAccessories" type="checkbox" checked></div>
+  <div class="switchRow"><span>Safe joint mesh clipping</span><input id="safeMesh" type="checkbox" checked></div>
+
+  <div class="slider"><label>Maximum mesh stretch <span><b id="maxMeshStretchV">145</b>%</span></label><input id="maxMeshStretch" type="range" min="105" max="240" value="145"></div>
+  <div class="slider"><label>Joint deformation strength <span><b id="jointDeformV">55</b>%</span></label><input id="jointDeform" type="range" min="0" max="100" value="55"></div>
+
+  <div class="grid"><button id="spriteSafePreset">Sprite-Safe Preset</button><button id="fullDeformPreset">Full Deform</button></div>
+  <div class="preserveHint">Sprite-Safe keeps each traced body piece at its original size and uses localized joint mesh only to hide seams. This is the recommended mode for SNES-style fighters.</div>
+</div>
 <div class="clothPanel">
   <div class="moduleHead"><b>Secondary Layers / Cloth</b><span id="clothBadge" class="pill ok">AUTO</span></div>
   <div class="switchRow"><span>Enable cloth stabilization</span><input id="enableCloth" type="checkbox" checked></div>
@@ -530,7 +549,7 @@ const JOINT_MESHES = [
 
 function status(s){statusEl.textContent=s;}
 function bindSlider(id,out){const a=$(id),b=$(out);a.oninput=()=>b.textContent=a.value;}
-["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping"].forEach(id=>bindSlider(id,id+"V"));
+["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform"].forEach(id=>bindSlider(id,id+"V"));
 function setMode(m){mode=m;$("traceBtn").classList.toggle("active",m==="trace");$("jointBtn").classList.toggle("active",m==="joint");$("inspectBtn").classList.toggle("active",m==="inspect");status(m==="trace"?"Trace around the selected body part.":m==="joint"?"Tap or drag the selected joint.":"Inspect mode.");}
 $("traceBtn").onclick=()=>setMode("trace");$("jointBtn").onclick=()=>setMode("joint");$("inspectBtn").onclick=()=>setMode("inspect");
 
@@ -714,6 +733,13 @@ function applyProductionDefaults(){
   if($("autoContacts")) $("autoContacts").checked=true;
   if($("enableFBIK")) $("enableFBIK").checked=true;
   if($("useJointMesh")) $("useJointMesh").checked=true;
+  if($("preserveSprite")) $("preserveSprite").checked=true;
+  if($("rigidTorso")) $("rigidTorso").checked=true;
+  if($("protectAccessories")) $("protectAccessories").checked=true;
+  if($("safeMesh")) $("safeMesh").checked=true;
+  if($("maxMeshStretch")) $("maxMeshStretch").value=145;
+  if($("jointDeform")) $("jointDeform").value=55;
+  if($("meshRadius")) $("meshRadius").value=8;
   if($("enableCloth")) $("enableCloth").checked=true;
   if($("pantsMode")) $("pantsMode").value="soft";
   if($("sashMode")) $("sashMode").value="pelvis";
@@ -1222,7 +1248,7 @@ function autoTraceAndBind(){
     $("showBones").checked=false;
     $("showSprite").checked=true;
     $("traceRegionSelect").value="all";
-    status(`V17 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Segmentation preview turned ON automatically.`);
+    status(`V18.2 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Segmentation preview turned ON automatically.`);
     draw();
   }
 }
@@ -1260,36 +1286,77 @@ function affineFromTriangles(s0,s1,s2,d0,d1,d2){
   const f=(Y0*(x1*y2-x2*y1)+Y1*(x2*y0-x0*y2)+Y2*(x0*y1-x1*y0))/den;
   return{a,b,c,d,e,f};
 }
+function triArea(a,b,c){
+  return Math.abs((a[0]*(b[1]-c[1])+b[0]*(c[1]-a[1])+c[0]*(a[1]-b[1]))*.5);
+}
+function edgeLen(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1]);}
+function triangleStretchSafe(s0,s1,s2,d0,d1,d2){
+  if(!$("safeMesh")?.checked) return true;
+  const maxRatio=Math.max(1.05,(+$("maxMeshStretch").value||145)/100);
+  const s=[edgeLen(s0,s1),edgeLen(s1,s2),edgeLen(s2,s0)];
+  const d=[edgeLen(d0,d1),edgeLen(d1,d2),edgeLen(d2,d0)];
+  for(let i=0;i<3;i++){
+    if(s[i]<.25) return false;
+    const r=d[i]/s[i];
+    if(r>maxRatio || r<1/maxRatio) return false;
+  }
+  const sa=triArea(s0,s1,s2),da=triArea(d0,d1,d2);
+  if(sa<.25) return false;
+  const ar=da/sa;
+  return ar<=maxRatio*maxRatio && ar>=1/(maxRatio*maxRatio);
+}
 function drawTexturedTriangle(g,srcImg,s0,s1,s2,d0,d1,d2){
+  if(!triangleStretchSafe(s0,s1,s2,d0,d1,d2)) return false;
   const M=affineFromTriangles(s0,s1,s2,d0,d1,d2);
-  if(!M) return;
+  if(!M) return false;
   g.save();
   g.beginPath();g.moveTo(d0[0],d0[1]);g.lineTo(d1[0],d1[1]);g.lineTo(d2[0],d2[1]);g.closePath();g.clip();
   g.setTransform(M.a,M.b,M.c,M.d,M.e,M.f);
   g.drawImage(srcImg,0,0);
   g.restore();
+  return true;
 }
 function meshVertexDestination(p,joint0,childDir,radius,Mparent,Mchild){
   const rel=[p[0]-joint0[0],p[1]-joint0[1]];
   const along=rel[0]*childDir[0]+rel[1]*childDir[1];
-  const w=smoothstep01((along/radius+1)/2);
+  const base=smoothstep01((along/radius+1)/2);
+  const strength=Math.max(0,Math.min(1,(+$("jointDeform").value||55)/100));
+  // Reduce deformation around the middle rather than scaling whole parts.
+  const w=.5+(base-.5)*strength;
   const pp=transformPoint(Mparent,p), pc=transformPoint(Mchild,p);
   return blendPoint(pp,pc,w);
+}
+
+const jointMeshSourceCache={};
+function jointMeshMaskedSource(def){
+  if(!$("safeMesh")?.checked) return source;
+  const key=`${def.parent}|${def.child}|${autoTraceCache.dirty?"d":"c"}`;
+  if(jointMeshSourceCache[key]) return jointMeshSourceCache[key];
+  const a=maskedPart(def.parent),b=maskedPart(def.child);
+  if(!a&&!b) return source;
+  const c=document.createElement("canvas");c.width=source.width;c.height=source.height;
+  const gg=c.getContext("2d");
+  if(a) gg.drawImage(a,0,0);
+  if(b) gg.drawImage(b,0,0);
+  jointMeshSourceCache[key]=c;
+  return c;
 }
 function renderJointMesh(g,def,pose,torsoM){
   const j0=joint(def.joint), childEnd0=joint(def.childEnd);
   if(!j0||!childEnd0) return;
-  const Mparent=matrixForPart(def.parent,pose,torsoM);
-  const Mchild=matrixForPart(def.child,pose,torsoM);
+  const Mparent=preservedMatrixForPart(def.parent,pose,torsoM);
+  const Mchild=preservedMatrixForPart(def.child,pose,torsoM);
   if(!Mparent||!Mchild) return;
 
   const lm=legMetrics();
-  const radius=(lm?.avgLeg||120)*(+$("meshRadius").value/100);
+  const accessoryScale=$("protectAccessories")?.checked?0.78:1;
+  const radius=(lm?.avgLeg||120)*(+$("meshRadius").value/100)*accessoryScale;
   if(radius<2) return;
   const grid=Math.max(2,Math.round(+$("meshGrid").value||4));
   const childVec=sub(childEnd0,j0), cd=Math.hypot(childVec[0],childVec[1])||1;
   const childDir=[childVec[0]/cd,childVec[1]/cd];
   const step=(radius*2)/grid;
+  const meshSource=jointMeshMaskedSource(def);
 
   for(let iy=0;iy<grid;iy++){
     for(let ix=0;ix<grid;ix++){
@@ -1304,8 +1371,8 @@ function renderJointMesh(g,def,pose,torsoM){
       const d11=meshVertexDestination(s11,j0,childDir,radius,Mparent,Mchild);
       const d01=meshVertexDestination(s01,j0,childDir,radius,Mparent,Mchild);
 
-      drawTexturedTriangle(g,source,s00,s10,s11,d00,d10,d11);
-      drawTexturedTriangle(g,source,s00,s11,s01,d00,d11,d01);
+      drawTexturedTriangle(g,meshSource,s00,s10,s11,d00,d10,d11);
+      drawTexturedTriangle(g,meshSource,s00,s11,s01,d00,d11,d01);
     }
   }
 }
@@ -1330,7 +1397,41 @@ function maskedPart(name){
 }
 function thighCapCanvas(name){const data=rig.parts[name];if(!source||!data||!data.poly) return null;const b=partBounds(data.poly), bandH=Math.max(10,Math.min(18,b.maxY-b.minY));const c=document.createElement("canvas");c.width=source.width;c.height=source.height;const g=c.getContext("2d");g.drawImage(source,0,0);g.globalCompositeOperation="destination-in";g.beginPath();g.rect(b.minX-2,b.minY-2,(b.maxX-b.minX)+4,bandH+4);g.fill();g.globalCompositeOperation="destination-in";g.beginPath();g.moveTo(data.poly[0][0],data.poly[0][1]);for(let i=1;i<data.poly.length;i++) g.lineTo(data.poly[i][0],data.poly[i][1]);g.closePath();g.fill();return c;}
 function matrixForPart(name,pose,torsoM){const bind=PART_BIND[name];if(!bind) return torsoM||matrixIdentity();const [a,b]=bind,oa=joint(a),ob=joint(b),ta=pose[a],tb=pose[b];if(oa&&ob&&ta&&tb&&(oa[0]!==ob[0]||oa[1]!==ob[1])) return matrixFromTwoPoints(oa,ob,ta,tb);if(oa&&ta) return rigidFromPointAndAngle(oa,ta,0);return torsoM||matrixIdentity();}
-function buildFrameCanvas(i){if(!source) return null;const built=buildPose(i);if(built.error) return null;const {pose,torsoM}=built,masks={};PARTS.forEach(name=>{const m=maskedPart(name);if(m) masks[name]=m;});const seamCaps={left_thigh:thighCapCanvas("left_thigh"),right_thigh:thighCapCanvas("right_thigh")};const f=document.createElement("canvas");f.width=source.width;f.height=source.height;const g=f.getContext("2d");for(const name of ORDER){if(!masks[name]) continue;const M=matrixForPart(name,pose,torsoM);if((name==="left_thigh"||name==="right_thigh")&&seamCaps[name]){g.save();applyM(g,M);g.drawImage(seamCaps[name],0,-6);g.restore();}g.save();applyM(g,M);g.drawImage(masks[name],0,0);g.restore();}renderHybridJointMeshes(g,pose,torsoM);return{canvas:f,pose};}
+
+function rigidMatrixFromTwoPoints(oa,ob,ta,tb){
+  const a0=Math.atan2(ob[1]-oa[1],ob[0]-oa[0]);
+  const a1=Math.atan2(tb[1]-ta[1],tb[0]-ta[0]);
+  const ang=a1-a0;
+  const c=Math.cos(ang),s=Math.sin(ang);
+  // x' = c*x - s*y + e ; y' = s*x + c*y + f
+  const e=ta[0]-(c*oa[0]-s*oa[1]);
+  const f=ta[1]-(s*oa[0]+c*oa[1]);
+  return {a:c,b:s,c:-s,d:c,e,f};
+}
+function preservedTorsoMatrix(pose){
+  const op=joint("pelvis"),on=joint("neck"),tp=pose.pelvis,tn=pose.neck;
+  if(op&&on&&tp&&tn) return rigidMatrixFromTwoPoints(op,on,tp,tn);
+  if(op&&tp) return rigidFromPointAndAngle(op,tp,0);
+  return matrixIdentity();
+}
+function preservedMatrixForPart(name,pose,torsoM){
+  if(!$("preserveSprite")?.checked) return matrixForPart(name,pose,torsoM);
+
+  // The torso/pelvis is always rigid in sprite-safe mode.
+  if(name==="torso" && $("rigidTorso")?.checked) return preservedTorsoMatrix(pose);
+
+  const bind=PART_BIND[name];
+  if(!bind) return torsoM||matrixIdentity();
+  const [a,b]=bind,oa=joint(a),ob=joint(b),ta=pose[a],tb=pose[b];
+
+  if(oa&&ob&&ta&&tb&&(oa[0]!==ob[0]||oa[1]!==ob[1]))
+    return rigidMatrixFromTwoPoints(oa,ob,ta,tb);
+
+  if(oa&&ta) return rigidFromPointAndAngle(oa,ta,0);
+  return torsoM||matrixIdentity();
+}
+
+function buildFrameCanvas(i){if(!source) return null;const built=buildPose(i);if(built.error) return null;const {pose,torsoM}=built,masks={};PARTS.forEach(name=>{const m=maskedPart(name);if(m) masks[name]=m;});const seamCaps={left_thigh:thighCapCanvas("left_thigh"),right_thigh:thighCapCanvas("right_thigh")};const f=document.createElement("canvas");f.width=source.width;f.height=source.height;const g=f.getContext("2d");for(const name of ORDER){if(!masks[name]) continue;const M=preservedMatrixForPart(name,pose,torsoM);if((name==="left_thigh"||name==="right_thigh")&&seamCaps[name]){g.save();applyM(g,M);g.drawImage(seamCaps[name],0,-6);g.restore();}g.save();applyM(g,M);g.drawImage(masks[name],0,0);g.restore();}renderHybridJointMeshes(g,pose,torsoM);return{canvas:f,pose};}
 
 
 
@@ -2190,6 +2291,29 @@ function visualPoseForPart(name,pose,orig){
   return pose;
 }
 
+
+$("spriteSafePreset").onclick=()=>{
+  $("preserveSprite").checked=true;
+  $("rigidTorso").checked=true;
+  $("protectAccessories").checked=true;
+  $("safeMesh").checked=true;
+  $("maxMeshStretch").value=145;$("maxMeshStretchV").textContent="145";
+  $("jointDeform").value=55;$("jointDeformV").textContent="55";
+  $("meshRadius").value=8;$("meshRadiusV").textContent="8";
+  $("meshGrid").value=4;$("meshGridV").textContent="4";
+  $("preserveBadge").textContent="SAFE";
+  status("Sprite-Safe preset applied: rigid proportions + localized protected joint deformation.");
+};
+$("fullDeformPreset").onclick=()=>{
+  $("preserveSprite").checked=false;
+  $("rigidTorso").checked=false;
+  $("protectAccessories").checked=false;
+  $("safeMesh").checked=false;
+  $("jointDeform").value=100;$("jointDeformV").textContent="100";
+  $("preserveBadge").textContent="FULL";
+  status("Full deformation enabled. Use Sprite-Safe for production SNES sprites.");
+};
+
 $("autoClothProfile").onclick=()=>{
   $("enableCloth").checked=true;
   $("pantsMode").value="soft";
@@ -2217,7 +2341,7 @@ function renderPoseFrame(pose,torsoM){
   const g=f.getContext("2d");
   for(const name of ORDER){
     if(!masks[name]) continue;
-    const M=matrixForPart(name,pose,torsoM);
+    const M=preservedMatrixForPart(name,pose,torsoM);
     if((name==="left_thigh"||name==="right_thigh")&&seamCaps[name]){
       g.save();applyM(g,M);g.drawImage(seamCaps[name],0,-6);g.restore();
     }
