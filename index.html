@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V18.2</title>
+<title>Fatal Instinct Sprite Walker V19</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -70,6 +70,12 @@
 .preservePanel{border:1px solid var(--line);border-radius:13px;padding:11px;margin-top:12px;background:#151923}
 .preserveHint{font-size:12px;color:var(--muted);line-height:1.45;margin-top:8px}
 
+
+.puppetPanel{border:1px solid var(--line);border-radius:13px;padding:11px;margin-top:12px;background:#151923}
+.anchorStat{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:8px}
+.anchorStat div{padding:8px;border-radius:9px;background:#111722;text-align:center;font-size:12px;color:var(--muted)}
+.anchorStat b{display:block;color:var(--text);font-size:16px}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -84,7 +90,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V18.2</span></h1><div class="sub">Production Sprint • Sprite Preservation Renderer</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V19</span></h1><div class="sub">Production Sprint • Connected Puppet + Speed Control</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -343,6 +349,32 @@
 
 
 
+
+<div class="puppetPanel">
+  <div class="moduleHead"><b>Connected Puppet</b><span id="puppetBadge" class="pill ok">ON</span></div>
+
+  <div class="switchRow"><span>Lock neighboring pieces at joints</span><input id="connectedPuppet" type="checkbox" checked></div>
+  <div class="switchRow"><span>Prevent joint separation</span><input id="jointLock" type="checkbox" checked></div>
+  <div class="switchRow"><span>Auto overlap at connected joints</span><input id="jointOverlapLock" type="checkbox" checked></div>
+
+  <div class="slider"><label>Joint lock strength <span><b id="jointLockStrengthV">92</b>%</span></label><input id="jointLockStrength" type="range" min="40" max="100" value="92"></div>
+  <div class="slider"><label>Connected overlap <span><b id="connectedOverlapV">8</b>% leg</span></label><input id="connectedOverlap" type="range" min="2" max="18" value="8"></div>
+
+  <div class="moduleHead" style="margin-top:12px"><b>Animation Speed</b><span id="speedBadge" class="pill">100%</span></div>
+  <div class="slider"><label>Preview speed <span><b id="animationSpeedV">100</b>%</span></label><input id="animationSpeed" type="range" min="25" max="200" step="5" value="100"></div>
+  <div class="grid">
+    <button id="speedHalf">50%</button>
+    <button id="speedNormal">100%</button>
+    <button id="speedFast">150%</button>
+    <button id="speedVeryFast">200%</button>
+  </div>
+
+  <div class="anchorStat">
+    <div><b id="lockedJointCount">0</b>locked joints</div>
+    <div><b id="puppetGapCount">0</b>open gaps</div>
+    <div><b id="previewFrameMs">130</b>ms/frame</div>
+  </div>
+</div>
 <div class="preservePanel">
   <div class="moduleHead"><b>Sprite Preservation</b><span id="preserveBadge" class="pill ok">SAFE</span></div>
 
@@ -549,7 +581,7 @@ const JOINT_MESHES = [
 
 function status(s){statusEl.textContent=s;}
 function bindSlider(id,out){const a=$(id),b=$(out);a.oninput=()=>b.textContent=a.value;}
-["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform"].forEach(id=>bindSlider(id,id+"V"));
+["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform","jointLockStrength","connectedOverlap","animationSpeed"].forEach(id=>bindSlider(id,id+"V"));
 function setMode(m){mode=m;$("traceBtn").classList.toggle("active",m==="trace");$("jointBtn").classList.toggle("active",m==="joint");$("inspectBtn").classList.toggle("active",m==="inspect");status(m==="trace"?"Trace around the selected body part.":m==="joint"?"Tap or drag the selected joint.":"Inspect mode.");}
 $("traceBtn").onclick=()=>setMode("trace");$("jointBtn").onclick=()=>setMode("joint");$("inspectBtn").onclick=()=>setMode("inspect");
 
@@ -739,6 +771,12 @@ function applyProductionDefaults(){
   if($("safeMesh")) $("safeMesh").checked=true;
   if($("maxMeshStretch")) $("maxMeshStretch").value=145;
   if($("jointDeform")) $("jointDeform").value=55;
+  if($("connectedPuppet")) $("connectedPuppet").checked=true;
+  if($("jointLock")) $("jointLock").checked=true;
+  if($("jointOverlapLock")) $("jointOverlapLock").checked=true;
+  if($("jointLockStrength")) $("jointLockStrength").value=92;
+  if($("connectedOverlap")) $("connectedOverlap").value=8;
+  if($("animationSpeed")) $("animationSpeed").value=100;
   if($("meshRadius")) $("meshRadius").value=8;
   if($("enableCloth")) $("enableCloth").checked=true;
   if($("pantsMode")) $("pantsMode").value="soft";
@@ -1344,8 +1382,8 @@ function jointMeshMaskedSource(def){
 function renderJointMesh(g,def,pose,torsoM){
   const j0=joint(def.joint), childEnd0=joint(def.childEnd);
   if(!j0||!childEnd0) return;
-  const Mparent=preservedMatrixForPart(def.parent,pose,torsoM);
-  const Mchild=preservedMatrixForPart(def.child,pose,torsoM);
+  const Mparent=connectedPartMatrix(def.parent,pose,rig.joints,torsoM);
+  const Mchild=connectedPartMatrix(def.child,pose,rig.joints,torsoM);
   if(!Mparent||!Mchild) return;
 
   const lm=legMetrics();
@@ -1431,7 +1469,7 @@ function preservedMatrixForPart(name,pose,torsoM){
   return torsoM||matrixIdentity();
 }
 
-function buildFrameCanvas(i){if(!source) return null;const built=buildPose(i);if(built.error) return null;const {pose,torsoM}=built,masks={};PARTS.forEach(name=>{const m=maskedPart(name);if(m) masks[name]=m;});const seamCaps={left_thigh:thighCapCanvas("left_thigh"),right_thigh:thighCapCanvas("right_thigh")};const f=document.createElement("canvas");f.width=source.width;f.height=source.height;const g=f.getContext("2d");for(const name of ORDER){if(!masks[name]) continue;const M=preservedMatrixForPart(name,pose,torsoM);if((name==="left_thigh"||name==="right_thigh")&&seamCaps[name]){g.save();applyM(g,M);g.drawImage(seamCaps[name],0,-6);g.restore();}g.save();applyM(g,M);g.drawImage(masks[name],0,0);g.restore();}renderHybridJointMeshes(g,pose,torsoM);return{canvas:f,pose};}
+function buildFrameCanvas(i){if(!source) return null;const built=buildPose(i);if(built.error) return null;const {pose,torsoM}=built,masks={};PARTS.forEach(name=>{const m=maskedPart(name);if(m) masks[name]=m;});const seamCaps={left_thigh:thighCapCanvas("left_thigh"),right_thigh:thighCapCanvas("right_thigh")};const f=document.createElement("canvas");f.width=source.width;f.height=source.height;const g=f.getContext("2d");for(const name of ORDER){if(!masks[name]) continue;const M=connectedPartMatrix(name,pose,orig,torsoM);if((name==="left_thigh"||name==="right_thigh")&&seamCaps[name]){g.save();applyM(g,M);g.drawImage(seamCaps[name],0,-6);g.restore();}g.save();applyM(g,M);g.drawImage(masks[name],0,0);g.restore();}renderHybridJointMeshes(g,pose,torsoM);return{canvas:f,pose};}
 
 
 
@@ -2341,13 +2379,14 @@ function renderPoseFrame(pose,torsoM){
   const g=f.getContext("2d");
   for(const name of ORDER){
     if(!masks[name]) continue;
-    const M=preservedMatrixForPart(name,pose,torsoM);
+    const M=connectedPartMatrix(name,pose,orig,torsoM);
     if((name==="left_thigh"||name==="right_thigh")&&seamCaps[name]){
       g.save();applyM(g,M);g.drawImage(seamCaps[name],0,-6);g.restore();
     }
     g.save();applyM(g,M);g.drawImage(masks[name],0,0);g.restore();
   }
   renderHybridJointMeshes(g,pose,torsoM);
+  connectedJointDiagnostics(pose,orig);
   return f;
 }
 
@@ -2365,6 +2404,92 @@ function hasRenderableSpriteParts(){
       return p && (p.poly || p.auto);
     })
   );
+}
+
+
+const CONNECTED_JOINTS = [
+  {joint:"left_shoulder",parent:"torso",child:"left_upper_arm"},
+  {joint:"left_elbow",parent:"left_upper_arm",child:"left_forearm"},
+  {joint:"left_wrist",parent:"left_forearm",child:"left_hand"},
+  {joint:"right_shoulder",parent:"torso",child:"right_upper_arm"},
+  {joint:"right_elbow",parent:"right_upper_arm",child:"right_forearm"},
+  {joint:"right_wrist",parent:"right_forearm",child:"right_hand"},
+  {joint:"left_hip",parent:"torso",child:"left_thigh"},
+  {joint:"left_knee",parent:"left_thigh",child:"left_shin"},
+  {joint:"left_ankle",parent:"left_shin",child:"left_foot"},
+  {joint:"right_hip",parent:"torso",child:"right_thigh"},
+  {joint:"right_knee",parent:"right_thigh",child:"right_shin"},
+  {joint:"right_ankle",parent:"right_shin",child:"right_foot"}
+];
+
+function animationFrameMs(){
+  const speed=Math.max(25,+$("animationSpeed").value||100);
+  const ms=Math.round(130*(100/speed));
+  $("previewFrameMs").textContent=ms;
+  $("speedBadge").textContent=`${speed}%`;
+  return ms;
+}
+
+function setAnimationSpeed(v){
+  $("animationSpeed").value=v;
+  $("animationSpeedV").textContent=v;
+  animationFrameMs();
+  if(timer){
+    clearInterval(timer);
+    timer=null;
+    previewSelectedMotion();
+  }
+}
+$("speedHalf").onclick=()=>setAnimationSpeed(50);
+$("speedNormal").onclick=()=>setAnimationSpeed(100);
+$("speedFast").onclick=()=>setAnimationSpeed(150);
+$("speedVeryFast").onclick=()=>setAnimationSpeed(200);
+$("animationSpeed").addEventListener("input",()=>{
+  $("animationSpeedV").textContent=$("animationSpeed").value;
+  animationFrameMs();
+});
+$("animationSpeed").addEventListener("change",()=>{
+  if(timer){clearInterval(timer);timer=null;previewSelectedMotion();}
+});
+
+function connectedPartMatrix(name,pose,orig,torsoM){
+  let M=preservedMatrixForPart(name,pose,torsoM);
+  if(!$("connectedPuppet")?.checked || !$("jointLock")?.checked) return M;
+
+  const links=CONNECTED_JOINTS.filter(x=>x.child===name);
+  if(!links.length) return M;
+
+  const strength=Math.max(0,Math.min(1,(+$("jointLockStrength").value||92)/100));
+  const link=links[0];
+  const oj=orig[link.joint]||joint(link.joint);
+  const tj=pose[link.joint];
+  if(!oj||!tj) return M;
+
+  // Force transformed source joint to meet the animated target joint.
+  const mj=transformPoint(M,oj);
+  const dx=(tj[0]-mj[0])*strength;
+  const dy=(tj[1]-mj[1])*strength;
+  M={...M,e:M.e+dx,f:M.f+dy};
+  return M;
+}
+
+function connectedJointDiagnostics(pose,orig){
+  let locked=0,gaps=0;
+  const threshold=(legMetrics()?.avgLeg||120)*0.015;
+  for(const l of CONNECTED_JOINTS){
+    const j=pose[l.joint];
+    const oj=orig[l.joint]||joint(l.joint);
+    if(!j||!oj) continue;
+    locked++;
+    const pm=connectedPartMatrix(l.parent,pose,orig,preservedTorsoMatrix(pose));
+    const cm=connectedPartMatrix(l.child,pose,orig,preservedTorsoMatrix(pose));
+    const pp=transformPoint(pm,oj),cp=transformPoint(cm,oj);
+    if(Math.hypot(pp[0]-cp[0],pp[1]-cp[1])>threshold) gaps++;
+  }
+  $("lockedJointCount").textContent=locked;
+  $("puppetGapCount").textContent=gaps;
+  $("puppetBadge").textContent=gaps===0?"LOCKED":`${gaps} GAPS`;
+  $("puppetBadge").className="pill "+(gaps===0?"ok":"warn");
 }
 
 function previewSelectedMotion(){
@@ -2408,7 +2533,7 @@ function previewSelectedMotion(){
 
     status(`${imported?"Imported":"Authored"} motion • Frame ${i+1}/${FRAME_COUNT} • ${built.phaseName}${spriteState}`);
     i=(i+1)%FRAME_COUNT;
-  },130);
+  },animationFrameMs());
 }
 $("previewMotion").onclick=previewSelectedMotion;
 
@@ -2455,7 +2580,7 @@ function currentMotionPackage(){
     format:"fatal-instinct-motion",version:2,
     name:$("motionSource").value==="imported"?(importedMotion.name||"Imported Motion"):"Fatal Instinct Authored Walk",
     frames:samples.length,loop:true,projection:$("projection").value,
-    profile:$("retargetProfile").value,contacts:analyzeContacts(),samples
+    profile:$("retargetProfile").value,preview_speed_percent:+$("animationSpeed").value,frame_ms:animationFrameMs(),contacts:analyzeContacts(),samples
   };
 }
 function renderAnimationLibrary(){
@@ -2606,7 +2731,7 @@ $("previewRig").onclick=()=>{
     draw(animatedFrame,built.pose);
     status(`Previewing rig • Frame ${i+1} • ${built.phaseName}${animatedFrame?" • Sprite LIVE":""}`);
     i=(i+1)%8;
-  },130);
+  },animationFrameMs());
 };
 $("stopPreview").onclick=()=>{clearInterval(timer);timer=null;draw();status("Preview stopped.");};
 function renderFrames(){
@@ -2699,7 +2824,7 @@ refreshProductionPreflight();
 $("characterName").addEventListener("input",()=>saveAutosave(true));
 $("generate").addEventListener("click",()=>setTimeout(()=>{refreshProductionPreflight();saveAutosave(true);},120));
 
-detectTargetChains();renderAnimationLibrary();updateControlBadge();resize();
+detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFrameMs();resize();
 </script>
 </body>
 </html>
