@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V19</title>
+<title>Fatal Instinct Sprite Walker V20</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -76,6 +76,11 @@
 .anchorStat div{padding:8px;border-radius:9px;background:#111722;text-align:center;font-size:12px;color:var(--muted)}
 .anchorStat b{display:block;color:var(--text);font-size:16px}
 
+
+.constraintStats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:9px}
+.constraintStats div{background:#101722;border:1px solid var(--line);border-radius:9px;padding:7px;text-align:center;font-size:11px;color:var(--muted)}
+.constraintStats b{display:block;font-size:15px;color:var(--text);margin-bottom:2px}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -90,7 +95,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V19</span></h1><div class="sub">Production Sprint • Connected Puppet + Speed Control</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V20</span></h1><div class="sub">Production Sprint • Connected Puppet + Full-Body Constraint Solver</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -305,11 +310,28 @@
 </div>
 
 <div class="moduleBox">
-  <div class="moduleHead"><b>Full-Body IK</b><span id="fbikBadge" class="pill">ON</span></div>
+  <div class="moduleHead"><b>Full-Body IK + Constraint Solver</b><span id="fbikBadge" class="pill ok">V20 ACTIVE</span></div>
   <div class="switchRow"><span>Enable FBIK pass</span><input id="enableFBIK" type="checkbox" checked></div>
+  <div class="switchRow"><span>Enable V20 constraint solver</span><input id="enableConstraints" type="checkbox" checked></div>
+  <div class="switchRow"><span>Lock anatomical limb lengths</span><input id="lockLimbLengths" type="checkbox" checked></div>
+  <div class="switchRow"><span>Pin planted feet after solving</span><input id="pinPlantFeet" type="checkbox" checked></div>
   <div class="slider"><label>Foot lock <span><b id="fbikFootV">90</b>%</span></label><input id="fbikFoot" type="range" min="0" max="100" value="90"></div>
   <div class="slider"><label>Pelvis weight shift <span><b id="fbikPelvisV">55</b>%</span></label><input id="fbikPelvis" type="range" min="0" max="100" value="55"></div>
   <div class="slider"><label>Spine counterbalance <span><b id="fbikSpineV">35</b>%</span></label><input id="fbikSpine" type="range" min="0" max="100" value="35"></div>
+
+  <div style="height:1px;background:var(--line);margin:10px 0"></div>
+  <div class="slider"><label>Solver iterations <span><b id="constraintIterationsV">4</b></span></label><input id="constraintIterations" type="range" min="1" max="8" step="1" value="4"></div>
+  <div class="slider"><label>Limb length lock <span><b id="limbLengthLockV">100</b>%</span></label><input id="limbLengthLock" type="range" min="50" max="100" value="100"></div>
+  <div class="slider"><label>Planted foot pin <span><b id="plantPinV">96</b>%</span></label><input id="plantPin" type="range" min="50" max="100" value="96"></div>
+  <div class="slider"><label>Hip / shoulder anchor <span><b id="bodyAnchorV">92</b>%</span></label><input id="bodyAnchor" type="range" min="40" max="100" value="92"></div>
+  <div class="slider"><label>Spine stability <span><b id="spineStabilityV">72</b>%</span></label><input id="spineStability" type="range" min="0" max="100" value="72"></div>
+  <div class="slider"><label>Maximum reach <span><b id="maxReachV">98</b>%</span></label><input id="maxReach" type="range" min="85" max="100" value="98"></div>
+
+  <div class="constraintStats">
+    <div><b id="constraintError">0.0%</b>max length error</div>
+    <div><b id="constraintPins">0</b>feet pinned</div>
+    <div><b id="constraintPasses">4</b>solver passes</div>
+  </div>
 </div>
 
 <div class="moduleBox">
@@ -581,7 +603,7 @@ const JOINT_MESHES = [
 
 function status(s){statusEl.textContent=s;}
 function bindSlider(id,out){const a=$(id),b=$(out);a.oninput=()=>b.textContent=a.value;}
-["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform","jointLockStrength","connectedOverlap","animationSpeed"].forEach(id=>bindSlider(id,id+"V"));
+["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","constraintIterations","limbLengthLock","plantPin","bodyAnchor","spineStability","maxReach","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform","jointLockStrength","connectedOverlap","animationSpeed"].forEach(id=>bindSlider(id,id+"V"));
 function setMode(m){mode=m;$("traceBtn").classList.toggle("active",m==="trace");$("jointBtn").classList.toggle("active",m==="joint");$("inspectBtn").classList.toggle("active",m==="inspect");status(m==="trace"?"Trace around the selected body part.":m==="joint"?"Tap or drag the selected joint.":"Inspect mode.");}
 $("traceBtn").onclick=()=>setMode("trace");$("jointBtn").onclick=()=>setMode("joint");$("inspectBtn").onclick=()=>setMode("inspect");
 
@@ -777,6 +799,15 @@ function applyProductionDefaults(){
   if($("jointLockStrength")) $("jointLockStrength").value=92;
   if($("connectedOverlap")) $("connectedOverlap").value=8;
   if($("animationSpeed")) $("animationSpeed").value=100;
+  if($("enableConstraints")) $("enableConstraints").checked=true;
+  if($("lockLimbLengths")) $("lockLimbLengths").checked=true;
+  if($("pinPlantFeet")) $("pinPlantFeet").checked=true;
+  if($("constraintIterations")) $("constraintIterations").value=4;
+  if($("limbLengthLock")) $("limbLengthLock").value=100;
+  if($("plantPin")) $("plantPin").value=96;
+  if($("bodyAnchor")) $("bodyAnchor").value=92;
+  if($("spineStability")) $("spineStability").value=72;
+  if($("maxReach")) $("maxReach").value=98;
   if($("meshRadius")) $("meshRadius").value=8;
   if($("enableCloth")) $("enableCloth").checked=true;
   if($("pantsMode")) $("pantsMode").value="soft";
@@ -2013,6 +2044,219 @@ function applyFullBodyIK(i,pose,orig){
   return pose;
 }
 
+
+function v20BlendPoint(a,b,t){
+  if(!a) return b?[...b]:null;
+  if(!b) return [...a];
+  return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];
+}
+
+function v20ClampEndpoint(root,target,maxLen,minLen=0.001){
+  let dx=target[0]-root[0],dy=target[1]-root[1];
+  let d=Math.hypot(dx,dy);
+  if(d<0.0001) return [root[0]+minLen,root[1]];
+  const cd=clamp(d,minLen,maxLen);
+  const s=cd/d;
+  return [root[0]+dx*s,root[1]+dy*s];
+}
+
+function v20TwoBoneExact(root,mid0,end0,target,bendSign,maxReachRatio=0.98){
+  const l1=length(root,mid0), l2=length(mid0,end0);
+  const maxLen=Math.max(0.001,(l1+l2)*maxReachRatio);
+  const minLen=Math.max(0.001,Math.abs(l1-l2)+0.001);
+  const end=v20ClampEndpoint(root,target,maxLen,minLen);
+  const dx=end[0]-root[0],dy=end[1]-root[1];
+  const d=Math.max(0.001,Math.hypot(dx,dy));
+  const base=Math.atan2(dy,dx);
+  const cosA=clamp((l1*l1+d*d-l2*l2)/(2*l1*d),-1,1);
+  const a=Math.acos(cosA)*(bendSign||1);
+  const ang=base+a;
+  return {
+    mid:[root[0]+Math.cos(ang)*l1,root[1]+Math.sin(ang)*l1],
+    end
+  };
+}
+
+function v20EnforceSegment(a,b,targetLen,strength=1){
+  if(!a||!b||!targetLen) return;
+  const dx=b[0]-a[0],dy=b[1]-a[1];
+  const d=Math.hypot(dx,dy)||0.001;
+  const err=d-targetLen;
+  b[0]-=(dx/d)*err*strength;
+  b[1]-=(dy/d)*err*strength;
+}
+
+function v20TorsoAnchors(pose,orig){
+  if(!pose.pelvis||!pose.neck||!orig.pelvis||!orig.neck) return null;
+  const M=rigidMatrixFromTwoPoints(orig.pelvis,orig.neck,pose.pelvis,pose.neck);
+  const out={};
+  for(const k of ["left_shoulder","right_shoulder","left_hip","right_hip","tail_base"]){
+    if(orig[k]) out[k]=transformPoint(M,orig[k]);
+  }
+  return out;
+}
+
+function v20ConstraintLengthError(pose,orig){
+  const segs=[
+    ["left_shoulder","left_elbow"],["left_elbow","left_wrist"],
+    ["right_shoulder","right_elbow"],["right_elbow","right_wrist"],
+    ["left_hip","left_knee"],["left_knee","left_ankle"],
+    ["right_hip","right_knee"],["right_knee","right_ankle"],
+    ["pelvis","neck"]
+  ];
+  let worst=0;
+  for(const [a,b] of segs){
+    if(!pose[a]||!pose[b]||!orig[a]||!orig[b]) continue;
+    const base=length(orig[a],orig[b])||1;
+    worst=Math.max(worst,Math.abs(length(pose[a],pose[b])-base)/base);
+  }
+  return worst*100;
+}
+
+function applyFullBodyConstraintSolver(i,pose,orig){
+  if(!$("enableConstraints")?.checked) return pose;
+
+  const iterations=Math.max(1,Math.round(+$("constraintIterations").value||4));
+  const lengthStrength=(+$("limbLengthLock").value||100)/100;
+  const pinStrength=(+$("plantPin").value||96)/100;
+  const anchorStrength=(+$("bodyAnchor").value||92)/100;
+  const spineStrength=(+$("spineStability").value||72)/100;
+  const reachRatio=(+$("maxReach").value||98)/100;
+  const doLengths=$("lockLimbLengths")?.checked!==false;
+  const doPins=$("pinPlantFeet")?.checked!==false;
+
+  const planted={
+    left:$("autoContacts").checked&&$("opContacts").checked&&contactStateAt(i,"left"),
+    right:$("autoContacts").checked&&$("opContacts").checked&&contactStateAt(i,"right")
+  };
+
+  const footTargets={};
+  for(const side of ["left","right"]){
+    if(pose[`${side}_ankle`]&&pose[`${side}_toe`]){
+      footTargets[side]={
+        ankle:[...pose[`${side}_ankle`]],
+        toe:[...pose[`${side}_toe`]],
+        vec:sub(pose[`${side}_toe`],pose[`${side}_ankle`])
+      };
+    }
+  }
+
+  const wristTargets={};
+  for(const side of ["left","right"]){
+    if(pose[`${side}_wrist`]) wristTargets[side]=[...pose[`${side}_wrist`]];
+  }
+
+  const torsoLen=orig.pelvis&&orig.neck?length(orig.pelvis,orig.neck):0;
+
+  for(let pass=0;pass<iterations;pass++){
+    const passWeight=1/(pass+1);
+
+    // Spine length stabilization.
+    if(doLengths&&pose.pelvis&&pose.neck&&torsoLen){
+      const neckTarget=v20ClampEndpoint(pose.pelvis,pose.neck,torsoLen,torsoLen);
+      pose.neck=v20BlendPoint(pose.neck,neckTarget,spineStrength*Math.min(1,lengthStrength+0.15));
+    }
+
+    // Rigid torso anchors prevent shoulders and hips from separating.
+    const anchors=v20TorsoAnchors(pose,orig);
+    if(anchors){
+      for(const k of ["left_shoulder","right_shoulder","left_hip","right_hip"]){
+        if(pose[k]&&anchors[k]){
+          pose[k]=v20BlendPoint(pose[k],anchors[k],anchorStrength*0.35+anchorStrength*0.35*passWeight);
+        }
+      }
+      if(pose.tail_base&&anchors.tail_base){
+        pose.tail_base=v20BlendPoint(pose.tail_base,anchors.tail_base,anchorStrength*0.55);
+      }
+    }
+
+    // Legs.
+    for(const side of ["left","right"]){
+      const hip=pose[`${side}_hip`], knee=pose[`${side}_knee`],
+            ankle=pose[`${side}_ankle`], toe=pose[`${side}_toe`];
+      const hip0=orig[`${side}_hip`], knee0=orig[`${side}_knee`],
+            ankle0=orig[`${side}_ankle`], toe0=orig[`${side}_toe`];
+      if(!hip||!knee||!ankle||!toe||!hip0||!knee0||!ankle0||!toe0) continue;
+
+      let target=[...ankle];
+      if(planted[side]&&doPins&&footTargets[side]){
+        target=v20BlendPoint(ankle,footTargets[side].ankle,pinStrength);
+      }
+
+      const bend=Math.sign(crossZ(hip0,ankle0,knee0))||1;
+      const solved=v20TwoBoneExact(hip,knee0,ankle0,target,bend,reachRatio);
+      pose[`${side}_knee`]=v20BlendPoint(knee,solved.mid,lengthStrength);
+      pose[`${side}_ankle`]=v20BlendPoint(ankle,solved.end,lengthStrength);
+
+      const baseFootLen=length(ankle0,toe0);
+      let fv=footTargets[side]?.vec || sub(toe,ankle);
+      const fvl=Math.hypot(fv[0],fv[1])||1;
+      fv=[fv[0]/fvl*baseFootLen,fv[1]/fvl*baseFootLen];
+
+      let toeTarget=[pose[`${side}_ankle`][0]+fv[0],pose[`${side}_ankle`][1]+fv[1]];
+      if(planted[side]&&doPins&&footTargets[side]){
+        toeTarget=v20BlendPoint(toeTarget,footTargets[side].toe,pinStrength);
+      }
+      pose[`${side}_toe`]=v20BlendPoint(toe,toeTarget,Math.max(lengthStrength,planted[side]?pinStrength:0));
+    }
+
+    // Arms.
+    for(const side of ["left","right"]){
+      const shoulder=pose[`${side}_shoulder`], elbow=pose[`${side}_elbow`], wrist=pose[`${side}_wrist`];
+      const shoulder0=orig[`${side}_shoulder`], elbow0=orig[`${side}_elbow`], wrist0=orig[`${side}_wrist`];
+      if(!shoulder||!elbow||!wrist||!shoulder0||!elbow0||!wrist0) continue;
+
+      const target=wristTargets[side]||wrist;
+      const bend=Math.sign(crossZ(shoulder0,wrist0,elbow0))||1;
+      const solved=v20TwoBoneExact(shoulder,elbow0,wrist0,target,bend,reachRatio);
+      pose[`${side}_elbow`]=v20BlendPoint(elbow,solved.mid,lengthStrength);
+      pose[`${side}_wrist`]=v20BlendPoint(wrist,solved.end,lengthStrength);
+    }
+
+    // Residual length cleanup.
+    if(doLengths){
+      for(const side of ["left","right"]){
+        v20EnforceSegment(pose[`${side}_hip`],pose[`${side}_knee`],length(orig[`${side}_hip`],orig[`${side}_knee`]),lengthStrength);
+        v20EnforceSegment(pose[`${side}_knee`],pose[`${side}_ankle`],length(orig[`${side}_knee`],orig[`${side}_ankle`]),lengthStrength);
+        v20EnforceSegment(pose[`${side}_shoulder`],pose[`${side}_elbow`],length(orig[`${side}_shoulder`],orig[`${side}_elbow`]),lengthStrength);
+        v20EnforceSegment(pose[`${side}_elbow`],pose[`${side}_wrist`],length(orig[`${side}_elbow`],orig[`${side}_wrist`]),lengthStrength);
+      }
+    }
+
+    // Re-pin planted feet after cleanup.
+    if(doPins){
+      for(const side of ["left","right"]){
+        if(!planted[side]||!footTargets[side]) continue;
+        const hip=pose[`${side}_hip`], hip0=orig[`${side}_hip`],
+              knee0=orig[`${side}_knee`], ankle0=orig[`${side}_ankle`];
+        if(!hip||!hip0||!knee0||!ankle0) continue;
+
+        const target=v20BlendPoint(pose[`${side}_ankle`],footTargets[side].ankle,pinStrength);
+        const bend=Math.sign(crossZ(hip0,ankle0,knee0))||1;
+        const solved=v20TwoBoneExact(hip,knee0,ankle0,target,bend,reachRatio);
+        pose[`${side}_knee`]=solved.mid;
+        pose[`${side}_ankle`]=solved.end;
+        const vec=footTargets[side].vec;
+        pose[`${side}_toe`]=[
+          pose[`${side}_ankle`][0]+vec[0],
+          pose[`${side}_ankle`][1]+vec[1]
+        ];
+      }
+    }
+  }
+
+  clampLimbTwist(pose,orig);
+
+  const err=v20ConstraintLengthError(pose,orig);
+  $("constraintError").textContent=err.toFixed(1)+"%";
+  $("constraintPins").textContent=(planted.left?1:0)+(planted.right?1:0);
+  $("constraintPasses").textContent=iterations;
+  $("fbikBadge").textContent=err<=2.5?"V20 LOCKED":err<=6?"V20 SOLVING":"CHECK RIG";
+  $("fbikBadge").className="pill "+(err<=2.5?"ok":err<=6?"":"warn");
+
+  return pose;
+}
+
 function applyControlRig(pose,orig,i=0){
   if(!$("opControl").checked) return pose;
   const m=legMetrics();if(!m)return pose;
@@ -2259,6 +2503,7 @@ function retargetImportedPose(i){
   smoothPoseAt(i,pose);
   applyFullBodyIK(i,pose,orig);
   applyControlRig(pose,orig,i);
+  applyFullBodyConstraintSolver(i,pose,orig);
 
   // Rebuild torso matrix after root/control/FBIK correction so rigid parts follow.
   const finalTorsoM=(pose.pelvis&&pose.neck)
@@ -2580,7 +2825,7 @@ function currentMotionPackage(){
     format:"fatal-instinct-motion",version:2,
     name:$("motionSource").value==="imported"?(importedMotion.name||"Imported Motion"):"Fatal Instinct Authored Walk",
     frames:samples.length,loop:true,projection:$("projection").value,
-    profile:$("retargetProfile").value,preview_speed_percent:+$("animationSpeed").value,frame_ms:animationFrameMs(),contacts:analyzeContacts(),samples
+    profile:$("retargetProfile").value,preview_speed_percent:+$("animationSpeed").value,frame_ms:animationFrameMs(),constraint_solver:{enabled:$("enableConstraints").checked,iterations:+$("constraintIterations").value,limb_lock:+$("limbLengthLock").value,plant_pin:+$("plantPin").value,body_anchor:+$("bodyAnchor").value,spine_stability:+$("spineStability").value,max_reach:+$("maxReach").value},contacts:analyzeContacts(),samples
   };
 }
 function renderAnimationLibrary(){
@@ -2801,7 +3046,13 @@ $("dimUnselected").addEventListener("change",()=>{
 
 ["contactVelocity","groundTol"].forEach(id=>$(id).addEventListener("input",()=>{if(importedMotion.type)analyzeContacts();}));
 $("autoContacts").addEventListener("change",()=>{if(importedMotion.type)analyzeContacts();});
-$("enableFBIK").addEventListener("change",()=>{$("fbikBadge").textContent=$("enableFBIK").checked?"ON":"OFF";});
+$("enableFBIK").addEventListener("change",()=>{
+  $("fbikBadge").textContent=$("enableFBIK").checked?($("enableConstraints").checked?"V20 ACTIVE":"FBIK ON"):"OFF";
+});
+$("enableConstraints").addEventListener("change",()=>{
+  $("fbikBadge").textContent=$("enableConstraints").checked?"V20 ACTIVE":"FBIK ONLY";
+  $("fbikBadge").className="pill "+($("enableConstraints").checked?"ok":"");
+});
 ["opRoot","opContacts","opFoot","opFBIK","opTwist","opSmooth","opControl","opSkin"].forEach(id=>{
   $(id).addEventListener("change",()=>{
     const on=["opRoot","opContacts","opFoot","opFBIK","opTwist","opSmooth","opControl","opSkin"].filter(x=>$(x).checked).length;
