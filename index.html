@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V21.1</title>
+<title>Fatal Instinct Sprite Walker V21.2</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -104,7 +104,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V21.1</span></h1><div class="sub">Production Sprint • Neutral-Bind + Auto Weight Cleanup</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V21.2</span></h1><div class="sub">Production Sprint • Walk Normalizer</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -462,6 +462,30 @@
     <div><b id="cleanupMode">AUTO</b>cleanup</div>
   </div>
 </div>
+
+<div class="moduleBox">
+  <div class="moduleHead"><b>V21.2 Walk Normalizer</b><span id="walkNormBadge" class="pill ok">ACTIVE</span></div>
+
+  <div class="switchRow"><span>Enable walk normalization</span><input id="walkNormalize" type="checkbox" checked></div>
+  <div class="switchRow"><span>Prevent crouch-walk collapse</span><input id="preventCrouch" type="checkbox" checked></div>
+  <div class="switchRow"><span>Straighten planted leg</span><input id="straightPlantLeg" type="checkbox" checked></div>
+  <div class="switchRow"><span>Normalize stride to leg length</span><input id="normalizeStride" type="checkbox" checked></div>
+
+  <div class="slider"><label>Maximum pelvis drop <span><b id="maxPelvisDropV">5</b>% leg</span></label><input id="maxPelvisDrop" type="range" min="0" max="18" value="5"></div>
+  <div class="slider"><label>Maximum knee lift <span><b id="maxKneeLiftV">22</b>% leg</span></label><input id="maxKneeLift" type="range" min="8" max="45" value="22"></div>
+  <div class="slider"><label>Standing height floor <span><b id="standingHeightFloorV">93</b>%</span></label><input id="standingHeightFloor" type="range" min="80" max="100" value="93"></div>
+  <div class="slider"><label>Stride scale <span><b id="walkStrideScaleV">82</b>%</span></label><input id="walkStrideScale" type="range" min="50" max="120" value="82"></div>
+  <div class="slider"><label>Plant-leg straightness <span><b id="plantLegStraightV">88</b>%</span></label><input id="plantLegStraight" type="range" min="40" max="100" value="88"></div>
+  <div class="slider"><label>Pelvis smoothing <span><b id="pelvisSmoothV">70</b>%</span></label><input id="pelvisSmooth" type="range" min="0" max="100" value="70"></div>
+
+  <button id="arcadeWalkPresetBtn" class="primary">Apply Arcade Walk Preset</button>
+
+  <div class="skinStats">
+    <div><b id="normPelvisDrop">0%</b>pelvis drop</div>
+    <div><b id="normKneeLift">0%</b>knee lift</div>
+    <div><b id="normPlantStraight">0%</b>plant straight</div>
+  </div>
+</div>
 <div class="preservePanel">
   <div class="moduleHead"><b>Sprite Preservation</b><span id="preserveBadge" class="pill ok">SAFE</span></div>
 
@@ -668,7 +692,7 @@ const JOINT_MESHES = [
 
 function status(s){statusEl.textContent=s;}
 function bindSlider(id,out){const a=$(id),b=$(out);a.oninput=()=>b.textContent=a.value;}
-["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","constraintIterations","limbLengthLock","plantPin","bodyAnchor","spineStability","maxReach","skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform","jointLockStrength","connectedOverlap","animationSpeed"].forEach(id=>bindSlider(id,id+"V"));
+["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","constraintIterations","limbLengthLock","plantPin","bodyAnchor","spineStability","maxReach","skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform","jointLockStrength","connectedOverlap","animationSpeed"].forEach(id=>bindSlider(id,id+"V"));
 function setMode(m){mode=m;$("traceBtn").classList.toggle("active",m==="trace");$("jointBtn").classList.toggle("active",m==="joint");$("inspectBtn").classList.toggle("active",m==="inspect");status(m==="trace"?"Trace around the selected body part.":m==="joint"?"Tap or drag the selected joint.":"Inspect mode.");}
 $("traceBtn").onclick=()=>setMode("trace");$("jointBtn").onclick=()=>setMode("joint");$("inspectBtn").onclick=()=>setMode("inspect");
 
@@ -891,6 +915,16 @@ function applyProductionDefaults(){
   if($("protectPixelIslands")) $("protectPixelIslands").checked=true;
   if($("crossLimbReject")) $("crossLimbReject").value=88;
   if($("extremityRigidity")) $("extremityRigidity").value=94;
+  if($("walkNormalize")) $("walkNormalize").checked=true;
+  if($("preventCrouch")) $("preventCrouch").checked=true;
+  if($("straightPlantLeg")) $("straightPlantLeg").checked=true;
+  if($("normalizeStride")) $("normalizeStride").checked=true;
+  if($("maxPelvisDrop")) $("maxPelvisDrop").value=5;
+  if($("maxKneeLift")) $("maxKneeLift").value=22;
+  if($("standingHeightFloor")) $("standingHeightFloor").value=93;
+  if($("walkStrideScale")) $("walkStrideScale").value=82;
+  if($("plantLegStraight")) $("plantLegStraight").value=88;
+  if($("pelvisSmooth")) $("pelvisSmooth").value=70;
   v21SetSkinMode("hybrid");
   if($("meshRadius")) $("meshRadius").value=8;
   if($("enableCloth")) $("enableCloth").checked=true;
@@ -2466,6 +2500,171 @@ $("resetControls").onclick=()=>{
 $("previewControls").onclick=()=>{currentTestModule=4;previewSelectedMotion();};
 
 
+
+function v212Blend(a,b,t){ return a+(b-a)*clamp(t,0,1); }
+function v212PBlend(a,b,t){ return [v212Blend(a[0],b[0],t),v212Blend(a[1],b[1],t)]; }
+
+function v212ContactState(i){
+  try{
+    const c=analyzeContacts();
+    if(Array.isArray(c) && c[i]) return c[i];
+    if(c && Array.isArray(c.samples) && c.samples[i]) return c.samples[i];
+  }catch(e){}
+  return null;
+}
+
+function v212IsPlanted(i,side,pose,orig){
+  const c=v212ContactState(i);
+  if(c){
+    const keys=side==="left"
+      ? ["left","leftPlant","left_planted","left_contact","L","l"]
+      : ["right","rightPlant","right_planted","right_contact","R","r"];
+    for(const k of keys){
+      if(k in c) return !!c[k];
+    }
+  }
+  // Fallback: lower toe is probably support foot.
+  const lt=pose.left_toe||pose.left_ankle, rt=pose.right_toe||pose.right_ankle;
+  if(!lt||!rt) return false;
+  return side==="left" ? lt[1]>=rt[1]-2 : rt[1]>=lt[1]-2;
+}
+
+function v212StraightenLeg(pose,orig,side,strength){
+  const h=pose[`${side}_hip`],k=pose[`${side}_knee`],a=pose[`${side}_ankle`];
+  const h0=orig[`${side}_hip`],k0=orig[`${side}_knee`],a0=orig[`${side}_ankle`];
+  if(!h||!k||!a||!h0||!k0||!a0) return;
+
+  const L1=length(h0,k0), L2=length(k0,a0);
+  const dx=a[0]-h[0],dy=a[1]-h[1],d=Math.hypot(dx,dy)||1;
+  const ux=dx/d,uy=dy/d;
+  const targetK=[h[0]+ux*L1,h[1]+uy*L1];
+  pose[`${side}_knee`]=v212PBlend(k,targetK,strength);
+}
+
+function v212LimitKneeLift(pose,orig,side,maxLiftPx){
+  const h=pose[`${side}_hip`],k=pose[`${side}_knee`],h0=orig[`${side}_hip`],k0=orig[`${side}_knee`];
+  if(!h||!k||!h0||!k0) return 0;
+
+  const neutralRel=k0[1]-h0[1];
+  const currentRel=k[1]-h[1];
+  const minRel=neutralRel-maxLiftPx;
+  if(currentRel<minRel){
+    const correction=minRel-currentRel;
+    k[1]+=correction;
+    return correction;
+  }
+  return 0;
+}
+
+function v212NormalizeStride(pose,orig){
+  if(!$("normalizeStride")?.checked) return;
+  const scale=(+$("walkStrideScale").value||82)/100;
+  const pelvis=pose.pelvis, p0=orig.pelvis;
+  if(!pelvis||!p0) return;
+
+  for(const j of ["left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe"]){
+    const p=pose[j];
+    if(!p) continue;
+    // Only normalize horizontal travel around pelvis; preserve vertical articulation.
+    p[0]=pelvis[0]+(p[0]-pelvis[0])*scale;
+  }
+}
+
+function v212NormalizePelvis(pose,orig){
+  if(!pose.pelvis||!orig.pelvis) return 0;
+  const lm=legMetrics();
+  const leg=lm?.avgLeg||120;
+  const maxDrop=leg*(+$("maxPelvisDrop").value||5)/100;
+  const minHeight=(+$("standingHeightFloor").value||93)/100;
+
+  const neutralY=orig.pelvis[1];
+  const rawDrop=pose.pelvis[1]-neutralY;
+
+  let targetY=pose.pelvis[1];
+  if($("preventCrouch")?.checked){
+    targetY=Math.min(targetY,neutralY+maxDrop);
+  }
+
+  // Maintain minimum torso/leg standing height by limiting downward collapse.
+  const lHip=pose.left_hip, rHip=pose.right_hip, lAnk=pose.left_ankle, rAnk=pose.right_ankle;
+  const lHip0=orig.left_hip, rHip0=orig.right_hip, lAnk0=orig.left_ankle, rAnk0=orig.right_ankle;
+  if(lHip&&rHip&&lAnk&&rAnk&&lHip0&&rHip0&&lAnk0&&rAnk0){
+    const neutralH=(length(lHip0,lAnk0)+length(rHip0,rAnk0))/2;
+    const currH=(length(lHip,lAnk)+length(rHip,rAnk))/2;
+    if(currH<neutralH*minHeight){
+      targetY=Math.min(targetY,neutralY+maxDrop*.5);
+    }
+  }
+
+  const smooth=(+$("pelvisSmooth").value||70)/100;
+  pose.pelvis[1]=v212Blend(pose.pelvis[1],targetY,smooth);
+
+  const corrected=Math.max(0,rawDrop-(pose.pelvis[1]-neutralY));
+  return corrected;
+}
+
+function v212ApplyWalkNormalizer(i,pose,orig){
+  if(!$("walkNormalize")?.checked) return pose;
+
+  const lm=legMetrics();
+  const leg=lm?.avgLeg||120;
+  const maxLift=leg*(+$("maxKneeLift").value||22)/100;
+  const straight=(+$("plantLegStraight").value||88)/100;
+
+  const pelvisBefore=pose.pelvis?pose.pelvis[1]:0;
+  v212NormalizePelvis(pose,orig);
+  v212NormalizeStride(pose,orig);
+
+  let liftCorr=0, straightScore=0;
+  for(const side of ["left","right"]){
+    const planted=v212IsPlanted(i,side,pose,orig);
+    if(planted && $("straightPlantLeg")?.checked){
+      v212StraightenLeg(pose,orig,side,straight);
+      straightScore=Math.max(straightScore,straight);
+    }else{
+      liftCorr=Math.max(liftCorr,v212LimitKneeLift(pose,orig,side,maxLift));
+    }
+  }
+
+  // Re-run exact limb solve after normalization so lengths stay legal.
+  if($("enableConstraints")?.checked){
+    applyFullBodyConstraintSolver(i,pose,orig);
+  }
+  v21ApplyPoleTargets(pose,orig);
+
+  const dropPct=pose.pelvis&&orig.pelvis ? Math.max(0,(pose.pelvis[1]-orig.pelvis[1])/leg*100) : 0;
+  $("normPelvisDrop").textContent=dropPct.toFixed(1)+"%";
+  $("normKneeLift").textContent=(liftCorr/leg*100).toFixed(1)+"%";
+  $("normPlantStraight").textContent=Math.round(straightScore*100)+"%";
+  $("walkNormBadge").textContent="ACTIVE";
+  return pose;
+}
+
+function v212ArcadePreset(){
+  $("walkNormalize").checked=true;
+  $("preventCrouch").checked=true;
+  $("straightPlantLeg").checked=true;
+  $("normalizeStride").checked=true;
+
+  $("maxPelvisDrop").value=5;
+  $("maxKneeLift").value=22;
+  $("standingHeightFloor").value=93;
+  $("walkStrideScale").value=82;
+  $("plantLegStraight").value=88;
+  $("pelvisSmooth").value=70;
+
+  $("maxPelvisDropV").textContent=5;
+  $("maxKneeLiftV").textContent=22;
+  $("standingHeightFloorV").textContent=93;
+  $("walkStrideScaleV").textContent=82;
+  $("plantLegStraightV").textContent=88;
+  $("pelvisSmoothV").textContent=70;
+
+  $("walkNormBadge").textContent="ARCADE";
+  draw();
+}
+$("arcadeWalkPresetBtn").onclick=v212ArcadePreset;
+
 function retargetImportedPose(i){
   const ready=requiredReadyForWalk();
   if(!ready.ok) return {error:ready.msg};
@@ -2585,6 +2784,7 @@ function retargetImportedPose(i){
   applyControlRig(pose,orig,i);
   applyFullBodyConstraintSolver(i,pose,orig);
   v21ApplyPoleTargets(pose,orig);
+  v212ApplyWalkNormalizer(i,pose,orig);
 
   // Rebuild torso matrix after root/control/FBIK correction so rigid parts follow.
   const finalTorsoM=(pose.pelvis&&pose.neck)
@@ -3252,7 +3452,7 @@ function currentMotionPackage(){
     format:"fatal-instinct-motion",version:2,
     name:$("motionSource").value==="imported"?(importedMotion.name||"Imported Motion"):"Fatal Instinct Authored Walk",
     frames:samples.length,loop:true,projection:$("projection").value,
-    profile:$("retargetProfile").value,preview_speed_percent:+$("animationSpeed").value,frame_ms:animationFrameMs(),constraint_solver:{enabled:$("enableConstraints").checked,iterations:+$("constraintIterations").value,limb_lock:+$("limbLengthLock").value,plant_pin:+$("plantPin").value,body_anchor:+$("bodyAnchor").value,spine_stability:+$("spineStability").value,max_reach:+$("maxReach").value},weighted_skin:{enabled:$("enableWeightedSkin").checked,mode:$("skinRenderMode").value,blend_radius:+$("skinBlendRadius").value,influence:+$("boneInfluence").value,mesh_grid:+$("weightedMeshGrid").value,joint_blend:+$("weightJointBlend").value},pole_targets:{knees:$("poleKnees").checked,elbows:$("poleElbows").checked,strength:+$("poleStrength").value,distance:+$("poleDistance").value},contacts:analyzeContacts(),samples
+    profile:$("retargetProfile").value,preview_speed_percent:+$("animationSpeed").value,frame_ms:animationFrameMs(),constraint_solver:{enabled:$("enableConstraints").checked,iterations:+$("constraintIterations").value,limb_lock:+$("limbLengthLock").value,plant_pin:+$("plantPin").value,body_anchor:+$("bodyAnchor").value,spine_stability:+$("spineStability").value,max_reach:+$("maxReach").value},weighted_skin:{enabled:$("enableWeightedSkin").checked,mode:$("skinRenderMode").value,blend_radius:+$("skinBlendRadius").value,influence:+$("boneInfluence").value,mesh_grid:+$("weightedMeshGrid").value,joint_blend:+$("weightJointBlend").value},pole_targets:{knees:$("poleKnees").checked,elbows:$("poleElbows").checked,strength:+$("poleStrength").value,distance:+$("poleDistance").value},walk_normalizer:{enabled:$("walkNormalize").checked,max_pelvis_drop:+$("maxPelvisDrop").value,max_knee_lift:+$("maxKneeLift").value,height_floor:+$("standingHeightFloor").value,stride_scale:+$("walkStrideScale").value,plant_straight:+$("plantLegStraight").value,pelvis_smoothing:+$("pelvisSmooth").value},contacts:analyzeContacts(),samples
   };
 }
 function renderAnimationLibrary(){
@@ -3503,10 +3703,10 @@ $("characterName").addEventListener("input",()=>saveAutosave(true));
 $("generate").addEventListener("click",()=>setTimeout(()=>{refreshProductionPreflight();saveAutosave(true);},120));
 
 
-["enableWeightedSkin","showWeightMap","rigidCoreWeights","poleKnees","poleElbows","neutralBindMode","rejectCrossLimb","lockExtremities","protectPixelIslands"].forEach(id=>{
+["enableWeightedSkin","showWeightMap","rigidCoreWeights","poleKnees","poleElbows","neutralBindMode","rejectCrossLimb","lockExtremities","protectPixelIslands","walkNormalize","preventCrouch","straightPlantLeg","normalizeStride"].forEach(id=>{
   $(id)?.addEventListener("change",()=>draw());
 });
-["skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity"].forEach(id=>{
+["skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth"].forEach(id=>{
   $(id)?.addEventListener("input",()=>draw());
 });
 
