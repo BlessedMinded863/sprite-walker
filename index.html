@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V24.3</title>
+<title>Fatal Instinct Sprite Walker V25</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -122,6 +122,13 @@
 .aiControls{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
 .aiScore{font-size:24px;font-weight:800}
 
+
+.v25Panel{border:1px solid var(--line);border-radius:10px;padding:9px;background:#0b1119;margin-top:8px}
+.v25Grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.v25Stat{padding:7px;border:1px solid var(--line);border-radius:8px;background:#0d141e}
+.v25Stat b{font-size:16px;display:block}
+.v25Pass{color:#7ee787}.v25Warn{color:#f2cc60}.v25Fail{color:#ff7b72}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -136,7 +143,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V24.3</span></h1><div class="sub">Production Sprint • Auto Limb Repair Director</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V25</span></h1><div class="sub">Production Sprint • Adaptive Motion Intelligence</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -697,7 +704,7 @@
 </div>
 
 <div class="moduleBox">
-  <div class="moduleHead"><b>V24.3 AI Production Director</b><span id="aiDirectorBadge" class="pill ok">READY</span></div>
+  <div class="moduleHead"><b>V25 AI Production Director</b><span id="aiDirectorBadge" class="pill ok">READY</span></div>
   <div class="v23Card" style="margin-bottom:8px">
     <div class="moduleHead"><b>Persistent Upgrade Checkpoint</b><span id="checkpointBadge" class="pill ok">AUTO SAVE</span></div>
     <div class="v23Mini" id="checkpointText">Character, rig, controls, pipeline state and diagnostics are saved automatically.</div>
@@ -756,7 +763,50 @@
     <div class="slider"><label>Repair trigger <span><b id="limbRepairTriggerV">5</b>%</span></label><input id="limbRepairTrigger" type="range" min="2" max="20" value="5"></div>
     <div class="v23Row"><span>Last automatic repair</span><b id="lastLimbRepair">--</b></div>
   </div>
-  <div class="v23Card" style="margin-top:8px">
+  
+  <div class="v25Panel">
+    <div class="moduleHead"><b>V25 Adaptive Motion Intelligence</b><span id="v25Status" class="pill ok">READY</span></div>
+    <div class="v23Mini">Closed-loop locomotion correction: analyze → repair → re-solve → re-score → keep only improvements.</div>
+
+    <div class="switchRow"><span>Enable real-time self-correction</span><input id="v25Enabled" type="checkbox" checked></div>
+    <div class="switchRow"><span>Auto-revert corrections that score worse</span><input id="v25AutoRevert" type="checkbox" checked></div>
+    <div class="switchRow"><span>Preserve planted feet</span><input id="v25PreserveFeet" type="checkbox" checked></div>
+    <div class="switchRow"><span>Preserve character silhouette</span><input id="v25PreserveSilhouette" type="checkbox" checked></div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px">
+      <label class="v23Mini">Motion profile
+        <select id="v25Profile" style="width:100%;margin-top:4px">
+          <option value="fatal">Fatal Instinct</option>
+          <option value="technical">Technical / Snappy</option>
+          <option value="heavy">Heavy / Cinematic</option>
+          <option value="arcade">Arcade / Exaggerated</option>
+        </select>
+      </label>
+      <label class="v23Mini">Target quality
+        <input id="v25TargetQuality" type="number" min="70" max="100" value="92" style="width:100%;margin-top:4px">
+      </label>
+    </div>
+
+    <div class="slider"><label>Maximum correction passes <span><b id="v25MaxPassesV">12</b></span></label><input id="v25MaxPasses" type="range" min="1" max="20" value="12"></div>
+    <div class="slider"><label>Minimum improvement to continue <span><b id="v25MinImproveV">0.5</b>%</span></label><input id="v25MinImprove" type="range" min="0" max="3" value="0.5" step="0.1"></div>
+
+    <div class="v25Grid">
+      <div class="v25Stat"><span class="v23Mini">Current quality</span><b id="v25CurrentQuality">--</b></div>
+      <div class="v25Stat"><span class="v23Mini">Best quality</span><b id="v25BestQuality">--</b></div>
+      <div class="v25Stat"><span class="v23Mini">Correction pass</span><b id="v25PassCount">0 / 12</b></div>
+      <div class="v25Stat"><span class="v23Mini">Last improvement</span><b id="v25LastImprove">--</b></div>
+    </div>
+
+    <div class="aiControls">
+      <button id="v25RunBtn" class="primary">Run Self-Correction</button>
+      <button id="v25StopBtn">Stop</button>
+      <button id="v25RestoreBestBtn">Restore Best</button>
+    </div>
+
+    <div id="v25Report" class="aiLog">Adaptive Motion Intelligence ready.</div>
+  </div>
+
+<div class="v23Card" style="margin-top:8px">
     <h4>SNES Creation Validator</h4>
     <div class="switchRow"><span>4bpp palette optimization</span><input id="ai4bppOptimize" type="checkbox" checked></div>
     <div class="switchRow"><span>Duplicate tile reuse</span><input id="aiTileReuse" type="checkbox" checked></div>
@@ -971,7 +1021,7 @@ const JOINT_MESHES = [
 
 function status(s){statusEl.textContent=s;}
 function bindSlider(id,out){const a=$(id),b=$(out);a.oninput=()=>b.textContent=a.value;}
-["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","constraintIterations","limbLengthLock","plantPin","bodyAnchor","spineStability","maxReach","skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid","stateBlend","poseThreshold","correctiveStrength","montageStartup","montageActive","montageRecovery","motionStrideWarp","orientationWarp","blendSpeed","aiPassThreshold","limbRepairTrigger","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform","jointLockStrength","connectedOverlap","animationSpeed"].forEach(id=>bindSlider(id,id+"V"));
+["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","constraintIterations","limbLengthLock","plantPin","bodyAnchor","spineStability","maxReach","skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid","stateBlend","poseThreshold","correctiveStrength","montageStartup","montageActive","montageRecovery","motionStrideWarp","orientationWarp","blendSpeed","aiPassThreshold","limbRepairTrigger","v25MaxPasses","v25MinImprove","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform","jointLockStrength","connectedOverlap","animationSpeed"].forEach(id=>bindSlider(id,id+"V"));
 function setMode(m){mode=m;$("traceBtn").classList.toggle("active",m==="trace");$("jointBtn").classList.toggle("active",m==="joint");$("inspectBtn").classList.toggle("active",m==="inspect");status(m==="trace"?"Trace around the selected body part.":m==="joint"?"Tap or drag the selected joint.":"Inspect mode.");}
 $("traceBtn").onclick=()=>setMode("trace");$("jointBtn").onclick=()=>setMode("joint");$("inspectBtn").onclick=()=>setMode("inspect");
 
@@ -1315,6 +1365,14 @@ function applyProductionDefaults(){
   if($("aiCompression")) $("aiCompression").checked=true;
   if($("autoLimbRepair")) $("autoLimbRepair").checked=true;
   if($("limbRepairTrigger")) $("limbRepairTrigger").value=5;
+  if($("v25Enabled")) $("v25Enabled").checked=true;
+  if($("v25AutoRevert")) $("v25AutoRevert").checked=true;
+  if($("v25PreserveFeet")) $("v25PreserveFeet").checked=true;
+  if($("v25PreserveSilhouette")) $("v25PreserveSilhouette").checked=true;
+  if($("v25Profile")) $("v25Profile").value="fatal";
+  if($("v25TargetQuality")) $("v25TargetQuality").value=92;
+  if($("v25MaxPasses")) $("v25MaxPasses").value=12;
+  if($("v25MinImprove")) $("v25MinImprove").value=0.5;
   v22SetMode("unified_plus");
   v21SetSkinMode("hybrid");
   if($("meshRadius")) $("meshRadius").value=8;
@@ -3606,7 +3664,7 @@ function v242ApplyControls(values){
 function v242CheckpointPayload(){
   return {
     format:"fatal-instinct-v24-checkpoint",
-    version:"24.3",
+    version:"25",
     savedAt:new Date().toISOString(),
     sourceName,
     rig:JSON.parse(JSON.stringify(rig)),
@@ -3617,7 +3675,17 @@ function v242CheckpointPayload(){
       correctives:v23.correctives,universalMap:v23.universalMap,poseKeys:v23.poseKeys
     })):null,
     guided:{enabled:guidedJointMode,index:guidedJointIndex},
-    currentMode:mode
+    currentMode:mode,
+    v25Motion:{
+      bestScore:v25Motion.bestScore,
+      currentScore:v25Motion.currentScore,
+      pass:v25Motion.pass,
+      lastImprove:v25Motion.lastImprove,
+      history:v25Motion.history,
+      lastReport:v25Motion.lastReport,
+      bestCorrectives:v25Motion.bestCorrectives,
+      bestControls:v25Motion.bestControls
+    }
   };
 }
 function v242SaveCheckpoint(silent=true){
@@ -3664,6 +3732,14 @@ async function v242RestoreCheckpoint(){
     }
     if(d.guided){guidedJointMode=!!d.guided.enabled;guidedJointIndex=+d.guided.index||0;}
     if(d.currentMode)setMode(d.currentMode);
+    if(d.v25Motion){
+      v25Motion=Object.assign(v25Motion,d.v25Motion);
+      if(v25Motion.bestScore>=0){
+        $("v25BestQuality").textContent=v25Motion.bestScore+"%";
+        $("v25CurrentQuality").textContent=(v25Motion.currentScore>=0?v25Motion.currentScore:v25Motion.bestScore)+"%";
+        $("v25PassCount").textContent=`${v25Motion.pass||0} / ${+$("v25MaxPasses").value||12}`;
+      }
+    }
     autoTraceCache.dirty=true;
     const imageOK=await v242RestoreImage();
     v242RestoreDirectorUI();
@@ -3770,6 +3846,366 @@ function v24ResetStages(){
 }
 function v24ScoreClamp(v){return Math.max(0,Math.min(100,Math.round(v)));}
 
+
+
+let v25Motion={
+  running:false,
+  stopRequested:false,
+  pass:0,
+  bestScore:-1,
+  currentScore:-1,
+  bestCorrectives:null,
+  bestControls:null,
+  lastImprove:0,
+  history:[],
+  lastReport:null
+};
+
+const V25_PROFILES={
+  fatal:{
+    pelvisShift:0.22,torsoCounter:0.16,armSwing:0.20,passingNarrow:0.22,heelToe:0.18,
+    bob:0.12,poseReadability:1.0
+  },
+  technical:{
+    pelvisShift:0.16,torsoCounter:0.12,armSwing:0.14,passingNarrow:0.28,heelToe:0.22,
+    bob:0.08,poseReadability:1.10
+  },
+  heavy:{
+    pelvisShift:0.30,torsoCounter:0.20,armSwing:0.16,passingNarrow:0.16,heelToe:0.14,
+    bob:0.18,poseReadability:0.95
+  },
+  arcade:{
+    pelvisShift:0.24,torsoCounter:0.22,armSwing:0.28,passingNarrow:0.20,heelToe:0.24,
+    bob:0.14,poseReadability:1.18
+  }
+};
+
+function v25Profile(){
+  return V25_PROFILES[$("v25Profile")?.value||"fatal"]||V25_PROFILES.fatal;
+}
+
+function v25Log(msg){
+  const box=$("v25Report");if(!box)return;
+  box.textContent+=`\n${msg}`;box.scrollTop=box.scrollHeight;
+}
+
+function v25FramePhase(i){
+  // 8-frame walk: contact, down, passing, high, opposite contact, opposite down, opposite passing, opposite high
+  return i%8;
+}
+
+function v25ScoreMotion(){
+  const c=v24AnalyzeCurrentAnimation();
+  let quality=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity+c.attack)/5);
+
+  // Add locomotion-specific heuristics.
+  let torsoMotion=0, pelvisMotion=0, passWidthPenalty=0, footSlidePenalty=0, samples=0;
+  try{
+    const poses=[];
+    for(let i=0;i<8;i++){
+      const b=buildPose(i);
+      if(!b.error)poses.push(b.pose);
+    }
+    const orig=rig.joints;
+    const leg=legMetrics()?.avgLeg||120;
+    for(let i=1;i<poses.length;i++){
+      const a=poses[i-1],b=poses[i];
+      if(a.pelvis&&b.pelvis) pelvisMotion+=length(a.pelvis,b.pelvis)/leg*100;
+      if(a.neck&&b.neck) torsoMotion+=length(a.neck,b.neck)/leg*100;
+      samples++;
+    }
+    // Passing phases should not remain excessively wide.
+    [2,6].forEach(fi=>{
+      const p=poses[fi];if(!p)return;
+      if(p.left_ankle&&p.right_ankle&&orig.left_hip&&orig.right_hip){
+        const stance=length(p.left_ankle,p.right_ankle);
+        const hipW=length(orig.left_hip,orig.right_hip)||1;
+        if(stance>hipW*1.9) passWidthPenalty+=(stance/hipW-1.9)*8;
+      }
+    });
+    // Encourage some torso/pelvis participation.
+    const torsoAvg=samples?torsoMotion/samples:0;
+    const pelvisAvg=samples?pelvisMotion/samples:0;
+    if(torsoAvg<0.8) quality-=Math.min(7,(0.8-torsoAvg)*5);
+    if(pelvisAvg<0.7) quality-=Math.min(6,(0.7-pelvisAvg)*5);
+    quality-=passWidthPenalty;
+    quality-=footSlidePenalty;
+  }catch(e){}
+  return {
+    score:v24ScoreClamp(quality),
+    critic:c,
+    locomotion:{
+      torsoMotion:+torsoMotion.toFixed(2),
+      pelvisMotion:+pelvisMotion.toFixed(2),
+      passWidthPenalty:+passWidthPenalty.toFixed(2),
+      footSlidePenalty:+footSlidePenalty.toFixed(2)
+    }
+  };
+}
+
+function v25SnapshotMotionState(){
+  return {
+    correctives:JSON.parse(JSON.stringify(v23.correctives||[])),
+    controls:v242CaptureControls()
+  };
+}
+
+function v25RestoreMotionState(snap){
+  if(!snap)return;
+  if(snap.correctives)v23.correctives=JSON.parse(JSON.stringify(snap.correctives));
+  if(snap.controls)v242ApplyControls(snap.controls);
+  draw();
+}
+
+function v25GetPoseForCorrection(i){
+  try{
+    const b=buildPose(i,true);
+    return b&&!b.error?b.pose:null;
+  }catch(e){return null;}
+}
+
+function v25CapturePoseCorrective(frame, pose, label){
+  if(!pose)return false;
+  const joints={};
+  for(const j of JOINTS){
+    if(pose[j]&&rig.joints[j]){
+      joints[j]=[
+        +(pose[j][0]-rig.joints[j][0]).toFixed(3),
+        +(pose[j][1]-rig.joints[j][1]).toFixed(3)
+      ];
+    }
+  }
+  v23.correctives=v23.correctives||[];
+  const existing=v23.correctives.find(x=>x.frame===frame&&x.source==="v25");
+  const item={frame,joints,label,source:"v25",strength:1};
+  if(existing)Object.assign(existing,item);else v23.correctives.push(item);
+  return true;
+}
+
+function v25ApplyPelvisWeightTransfer(i,pose,profile){
+  if(!pose?.pelvis)return;
+  const phase=v25FramePhase(i);
+  const leg=legMetrics()?.avgLeg||120;
+  const dir = phase<4 ? -1 : 1;
+  const amount=leg*profile.pelvisShift*0.06;
+  pose.pelvis[0]+=dir*amount;
+  if(pose.neck)pose.neck[0]-=dir*amount*profile.torsoCounter;
+  if(pose.left_shoulder)pose.left_shoulder[0]-=dir*amount*profile.torsoCounter;
+  if(pose.right_shoulder)pose.right_shoulder[0]-=dir*amount*profile.torsoCounter;
+}
+
+function v25ApplyArmCounterSwing(i,pose,profile){
+  const phase=v25FramePhase(i),leg=legMetrics()?.avgLeg||120;
+  const s=(phase<4?1:-1)*leg*profile.armSwing*0.05;
+  if(pose.left_wrist)pose.left_wrist[0]+=s;
+  if(pose.left_elbow)pose.left_elbow[0]+=s*0.55;
+  if(pose.right_wrist)pose.right_wrist[0]-=s;
+  if(pose.right_elbow)pose.right_elbow[0]-=s*0.55;
+}
+
+function v25NarrowPassingPhase(i,pose,profile){
+  const phase=v25FramePhase(i);
+  if(phase!==2&&phase!==6)return;
+  if(!pose.left_ankle||!pose.right_ankle||!pose.pelvis)return;
+  const cx=pose.pelvis[0];
+  const amount=profile.passingNarrow;
+  pose.left_ankle[0]+=(cx-pose.left_ankle[0])*amount;
+  pose.right_ankle[0]+=(cx-pose.right_ankle[0])*amount;
+  if(pose.left_toe)pose.left_toe[0]+=(cx-pose.left_toe[0])*amount*0.75;
+  if(pose.right_toe)pose.right_toe[0]+=(cx-pose.right_toe[0])*amount*0.75;
+}
+
+function v25ApplyHeelToe(i,pose,profile){
+  const phase=v25FramePhase(i),leg=legMetrics()?.avgLeg||120;
+  const dy=leg*profile.heelToe*0.035;
+  if(phase===0||phase===4){
+    const side=phase===0?"left":"right";
+    if(pose[`${side}_toe`])pose[`${side}_toe`][1]+=dy;
+  }else if(phase===3||phase===7){
+    const side=phase===3?"left":"right";
+    if(pose[`${side}_toe`])pose[`${side}_toe`][1]-=dy*0.7;
+  }
+}
+
+function v25ApplyBodyBob(i,pose,profile){
+  if(!pose.pelvis)return;
+  const phase=v25FramePhase(i),leg=legMetrics()?.avgLeg||120;
+  const wave=[0,1,0,-0.35,0,1,0,-0.35][phase]||0;
+  const dy=leg*profile.bob*0.03*wave;
+  for(const j of ["pelvis","neck","left_shoulder","right_shoulder","left_hip","right_hip"]){
+    if(pose[j])pose[j][1]+=dy;
+  }
+}
+
+function v25GenerateCorrectivePass(passNum){
+  const profile=v25Profile();
+  const reports=[];
+  for(let i=0;i<8;i++){
+    const pose=v25GetPoseForCorrection(i);
+    if(!pose)continue;
+    v25ApplyPelvisWeightTransfer(i,pose,profile);
+    v25ApplyArmCounterSwing(i,pose,profile);
+    v25NarrowPassingPhase(i,pose,profile);
+    v25ApplyHeelToe(i,pose,profile);
+    v25ApplyBodyBob(i,pose,profile);
+
+    // Re-run exact leg legality after locomotion edits.
+    const orig=rig.joints;
+    const r=v243RepairPose(i,pose,orig,true);
+    v25CapturePoseCorrective(i,pose,`V25 adaptive pass ${passNum}`);
+    reports.push({frame:i+1,repair:r});
+  }
+  return reports;
+}
+
+async function v25RunSelfCorrection(){
+  if(v25Motion.running||!$("v25Enabled")?.checked)return;
+  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;
+  $("v25Status").textContent="RUNNING";
+  $("v25Report").textContent="Adaptive Motion Intelligence started.";
+
+  const target=+$("v25TargetQuality").value||92;
+  const maxPasses=+$("v25MaxPasses").value||12;
+  const minImprove=+$("v25MinImprove").value||0.5;
+
+  let base=v25ScoreMotion();
+  v25Motion.currentScore=base.score;
+  v25Motion.bestScore=base.score;
+  v25Motion.bestCorrectives=JSON.parse(JSON.stringify(v23.correctives||[]));
+  v25Motion.bestControls=v242CaptureControls();
+  v25Motion.history=[{pass:0,score:base.score,locomotion:base.locomotion}];
+
+  $("v25CurrentQuality").textContent=base.score+"%";
+  $("v25BestQuality").textContent=base.score+"%";
+  $("v25PassCount").textContent=`0 / ${maxPasses}`;
+  v25Log(`Baseline quality: ${base.score}%. Target: ${target}%.`);
+
+  if(base.score>=target){
+    $("v25Status").textContent="PASS";
+    v25Log("Motion already meets target quality.");
+    v25Motion.running=false;v25FinalizeReport("pass");
+    v242SaveCheckpoint(true);return;
+  }
+
+  for(let p=1;p<=maxPasses;p++){
+    if(v25Motion.stopRequested)break;
+    v25Motion.pass=p;
+    $("v25PassCount").textContent=`${p} / ${maxPasses}`;
+
+    const before=v25SnapshotMotionState();
+    v25GenerateCorrectivePass(p);
+    await new Promise(r=>setTimeout(r,55));
+
+    const scored=v25ScoreMotion();
+    const improve=scored.score-v25Motion.currentScore;
+    v25Motion.lastImprove=improve;
+    $("v25CurrentQuality").textContent=scored.score+"%";
+    $("v25LastImprove").textContent=(improve>=0?"+":"")+improve.toFixed(1)+"%";
+
+    if(scored.score>v25Motion.bestScore){
+      v25Motion.bestScore=scored.score;
+      v25Motion.bestCorrectives=JSON.parse(JSON.stringify(v23.correctives||[]));
+      v25Motion.bestControls=v242CaptureControls();
+      $("v25BestQuality").textContent=scored.score+"%";
+    }
+
+    if(improve<0 && $("v25AutoRevert")?.checked){
+      v25RestoreMotionState(before);
+      v25Log(`Pass ${p}: ${scored.score}% (${improve.toFixed(1)}). Reverted — motion became worse.`);
+    }else{
+      v25Motion.currentScore=scored.score;
+      v25Log(`Pass ${p}: ${scored.score}% (${improve>=0?"+":""}${improve.toFixed(1)}).`);
+    }
+
+    v25Motion.history.push({pass:p,score:scored.score,improve,locomotion:scored.locomotion});
+    v242SaveCheckpoint(true);
+
+    if(v25Motion.bestScore>=target){
+      $("v25Status").textContent="PASS";
+      v25Log(`Target reached at pass ${p}: ${v25Motion.bestScore}%.`);
+      v25Motion.running=false;v25RestoreBest();v25FinalizeReport("pass");return;
+    }
+
+    if(p>=2 && Math.abs(improve)<minImprove){
+      $("v25Status").textContent="STOPPED";
+      v25Log(`Stopped: improvement ${Math.abs(improve).toFixed(1)}% is below ${minImprove}%.`);
+      v25Motion.running=false;v25RestoreBest();v25FinalizeReport("plateau");return;
+    }
+  }
+
+  v25Motion.running=false;
+  if(v25Motion.stopRequested){
+    $("v25Status").textContent="STOPPED";
+    v25Log("Stopped by user.");
+    v25FinalizeReport("manual");
+  }else{
+    $("v25Status").textContent=v25Motion.bestScore>=target?"PASS":"NEEDS REVIEW";
+    v25RestoreBest();
+    v25FinalizeReport(v25Motion.bestScore>=target?"pass":"maxpasses");
+  }
+}
+
+function v25Stop(){
+  v25Motion.stopRequested=true;
+  v25Log("Stop requested. Finishing current correction pass.");
+}
+
+function v25RestoreBest(){
+  if(v25Motion.bestCorrectives)v23.correctives=JSON.parse(JSON.stringify(v25Motion.bestCorrectives));
+  if(v25Motion.bestControls)v242ApplyControls(v25Motion.bestControls);
+  draw();
+  if(v25Motion.bestScore>=0){
+    $("v25CurrentQuality").textContent=v25Motion.bestScore+"%";
+    $("v25BestQuality").textContent=v25Motion.bestScore+"%";
+  }
+  v242SaveCheckpoint(true);
+}
+
+function v25FindRemainingDefect(){
+  const s=v25ScoreMotion();
+  const c=s.critic;
+  const ranked=[
+    ["limb consistency",c.limb],
+    ["balance / grounding",c.balance],
+    ["silhouette readability",c.silhouette],
+    ["sprite integrity",c.integrity],
+    ["attack readability",c.attack]
+  ].sort((a,b)=>a[1]-b[1]);
+  const worst=ranked[0];
+  let detail=`${worst[0]} ${worst[1]}%`;
+  if(worst[0]==="limb consistency"&&c.worstFrame){
+    detail+=` — ${c.worstLimb}, frame ${c.worstFrame}, ${c.worstError}% error`;
+  }
+  return detail;
+}
+
+function v25FinalizeReport(reason){
+  const defect=v25FindRemainingDefect();
+  const target=+$("v25TargetQuality").value||92;
+  const report={
+    reason,
+    bestScore:v25Motion.bestScore,
+    target,
+    passes:v25Motion.pass,
+    remainingDefect:defect,
+    history:v25Motion.history
+  };
+  v25Motion.lastReport=report;
+
+  if(v25Motion.bestScore>=target){
+    v25Log(`FINAL: PASS ${v25Motion.bestScore}% after ${v25Motion.pass} pass(es).`);
+    v25Log("Recommendation: preview visually, then Final Approval.");
+  }else{
+    v25Log(`FINAL: ${v25Motion.bestScore}% / ${target}% target after ${v25Motion.pass} pass(es).`);
+    v25Log(`Remaining defect: ${defect}.`);
+    v25Log("Recommendation: send this report for a targeted engine upgrade or controlled bypass.");
+  }
+  v242SaveCheckpoint(true);
+}
+
+$("v25RunBtn").onclick=v25RunSelfCorrection;
+$("v25StopBtn").onclick=v25Stop;
+$("v25RestoreBestBtn").onclick=v25RestoreBest;
 
 const V243_ROOT_SHIFT_JOINTS=[
   "pelvis","neck","left_shoulder","right_shoulder",
@@ -4022,22 +4458,17 @@ function v24RunNormalize(){
 function v24RunCritic(){
   v24StageState("critic","run","Inspecting animation...");
   let c=v24AnalyzeCurrentAnimation();
-
-  // If the only major problem is an isolated limb outlier, allow the repair
-  // system to correct the pose and immediately re-run Stage 7.
   const threshold=+$("aiPassThreshold").value;
   let score=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity+c.attack)/5);
-  let repaired=false;
 
+  // V24.3 isolated limb repair remains the first safety pass.
+  let repaired=false;
   if(score<threshold && $("aiAutoCorrect")?.checked && $("autoLimbRepair")?.checked && c.limb<82){
     const before=c;
-    // Rendering/buildPose now applies the exact repair. Re-evaluate all frames.
     c=v24AnalyzeCurrentAnimation();
     score=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity+c.attack)/5);
     repaired=c.limb>before.limb;
-    if(repaired){
-      v24Log(`Auto Limb Repair: limb score ${before.limb}% → ${c.limb}%. Re-ran Stage 7 automatically.`);
-    }
+    if(repaired)v24Log(`Auto Limb Repair: limb score ${before.limb}% → ${c.limb}%.`);
   }
 
   $("criticBalance").textContent=c.balance+"%";$("criticLimbs").textContent=c.limb+"%";
@@ -4046,7 +4477,19 @@ function v24RunCritic(){
   $("criticWorstError").textContent=c.worstFrame?`${c.worstError}% (avg ${c.avgLimbError}%)`:"--";
 
   const detail=c.worstFrame?`worst ${c.worstLimb} F${c.worstFrame}: ${c.worstError}%`:"no limb error";
-  const repairMsg=repaired?" • auto-repaired and rechecked":"";
+  const repairMsg=repaired?" • auto-limb-repaired":"";
+
+  // Stage 7 can pass its geometric critic while V25 still evaluates locomotion quality.
+  if(score>=threshold && $("v25Enabled")?.checked){
+    const q=v25ScoreMotion();
+    $("v25CurrentQuality").textContent=q.score+"%";
+    if(v25Motion.bestScore<0)$("v25BestQuality").textContent=q.score+"%";
+    const target=+$("v25TargetQuality").value||92;
+    if(q.score<target){
+      return {pass:false,score:q.score,msg:`Geometry passed, locomotion quality ${q.score}% < ${target}% target. Run V25 Self-Correction.`,details:c,needsV25:true};
+    }
+  }
+
   return {pass:score>=threshold,score,msg:`Critic score ${score}% • ${detail}${repairMsg}`,details:c,autoRepair:repaired};
 }
 function v24RunCleanup(){
@@ -4126,6 +4569,15 @@ function v24Snapshot(){return {
     enabled:!!$("autoLimbRepair")?.checked,
     trigger:+$("limbRepairTrigger")?.value||5,
     last:window.__v243LastRepair||null
+  },
+  adaptive_motion_intelligence:{
+    enabled:!!$("v25Enabled")?.checked,
+    profile:$("v25Profile")?.value||"fatal",
+    target:+$("v25TargetQuality")?.value||92,
+    maxPasses:+$("v25MaxPasses")?.value||12,
+    minImprove:+$("v25MinImprove")?.value||0.5,
+    bestScore:v25Motion.bestScore,
+    lastReport:v25Motion.lastReport
   }
 };}
 
@@ -5164,7 +5616,7 @@ $("characterName").addEventListener("input",()=>saveAutosave(true));
 $("generate").addEventListener("click",()=>setTimeout(()=>{refreshProductionPreflight();saveAutosave(true);},120));
 
 
-["enableWeightedSkin","showWeightMap","rigidCoreWeights","poleKnees","poleElbows","neutralBindMode","rejectCrossLimb","lockExtremities","protectPixelIslands","walkNormalize","preventCrouch","straightPlantLeg","normalizeStride","enableUnifiedMesh","alphaUnifiedMask","unifiedIslands","sealJointGaps","unifiedAccessories","showUnifiedMesh","animGraphEnabled","poseSearchEnabled","ctlHeadAim","ctlWeaponTarget","ctlPoseMirror","constraintCopyPos","constraintCopyRot","constraintParent","constraintAim","correctivePoseEnabled","spriteSwapEnabled","montageEnabled","motionWarpEnabled","blendTreeEnabled","universalSkeletonEnabled","aiDirectorEnabled","aiStopOnFail","aiAutoCorrect","aiAllowBypass","aiRequireApproval","ai4bppOptimize","aiTileReuse","aiVramCheck","aiOamCheck","aiCompression","autoLimbRepair"].forEach(id=>{
+["enableWeightedSkin","showWeightMap","rigidCoreWeights","poleKnees","poleElbows","neutralBindMode","rejectCrossLimb","lockExtremities","protectPixelIslands","walkNormalize","preventCrouch","straightPlantLeg","normalizeStride","enableUnifiedMesh","alphaUnifiedMask","unifiedIslands","sealJointGaps","unifiedAccessories","showUnifiedMesh","animGraphEnabled","poseSearchEnabled","ctlHeadAim","ctlWeaponTarget","ctlPoseMirror","constraintCopyPos","constraintCopyRot","constraintParent","constraintAim","correctivePoseEnabled","spriteSwapEnabled","montageEnabled","motionWarpEnabled","blendTreeEnabled","universalSkeletonEnabled","aiDirectorEnabled","aiStopOnFail","aiAutoCorrect","aiAllowBypass","aiRequireApproval","ai4bppOptimize","aiTileReuse","aiVramCheck","aiOamCheck","aiCompression","autoLimbRepair","v25Enabled","v25AutoRevert","v25PreserveFeet","v25PreserveSilhouette"].forEach(id=>{
   $(id)?.addEventListener("change",()=>draw());
 });
 ["skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid","stateBlend","poseThreshold","correctiveStrength","montageStartup","montageActive","montageRecovery","motionStrideWarp","orientationWarp","aiPassThreshold"].forEach(id=>{
