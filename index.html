@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V24</title>
+<title>Fatal Instinct Sprite Walker V24.1</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -136,7 +136,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V24</span></h1><div class="sub">Production Sprint • AI Production Director</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V24.1</span></h1><div class="sub">Production Sprint • Guided Production Director</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -204,6 +204,23 @@
 <label class="title">Body part</label><select id="part"></select>
 <label class="title" style="margin-top:10px">Joint</label><select id="joint"></select>
 <div class="modes"><button id="traceBtn" class="active">Trace Part</button><button id="jointBtn">Set Joint</button><button id="inspectBtn">Inspect</button></div>
+<div class="moduleBox" style="margin-top:10px">
+  <div class="moduleHead"><b>Guided Joint Setup</b><span id="guidedJointBadge" class="pill">OFF</span></div>
+  <div class="v23Mini">Start at the neck. Each time you place/release a joint, Sprite Walker automatically selects the next joint.</div>
+  <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-top:8px">
+    <div>
+      <div class="v23Mini">Current joint</div>
+      <b id="guidedJointCurrent">Neck</b>
+      <div class="v23Mini" id="guidedJointProgress">0 / 16 required joints</div>
+    </div>
+    <button id="guidedJointStart" class="primary">Start Guided Joints</button>
+  </div>
+  <div class="aiControls">
+    <button id="guidedJointBack">Previous Joint</button>
+    <button id="guidedJointSkip">Skip Joint</button>
+    <button id="guidedJointFinish">Next Production Step</button>
+  </div>
+</div>
 <div class="help">
 <p><b>New workflow:</b> the walk rig exists first. You can preview a stick/bone version before using any sprite art.</p>
 <p><b>Bind sprite second:</b> load Marius, load or trace body parts, align joints, then generate walk frames from the rig.</p>
@@ -697,16 +714,16 @@
     <button id="aiRunPipelineBtn" class="primary">Run Full AI Pipeline</button>
   </div>
   <div class="aiDirectorGrid">
-    <div id="aiStageRig" class="aiStage"><b>1. Universal Rig</b><span>Waiting</span></div>
-    <div id="aiStageMesh" class="aiStage"><b>2. Unified Mesh</b><span>Waiting</span></div>
+    <div id="aiStageRig" class="aiStage"><b>1. Map FI Skeleton</b><span>Waiting</span></div>
+    <div id="aiStageMesh" class="aiStage"><b>2. Build Unified Mesh</b><span>Waiting</span></div>
     <div id="aiStageWeights" class="aiStage"><b>3. Weight Cleanup</b><span>Waiting</span></div>
-    <div id="aiStageMotion" class="aiStage"><b>4. Motion Retrieval</b><span>Waiting</span></div>
-    <div id="aiStageRetarget" class="aiStage"><b>5. Retarget + IK</b><span>Waiting</span></div>
-    <div id="aiStageNormalize" class="aiStage"><b>6. Motion Normalize</b><span>Waiting</span></div>
-    <div id="aiStageCritic" class="aiStage"><b>7. Animation Critic</b><span>Waiting</span></div>
-    <div id="aiStageCleanup" class="aiStage"><b>8. Sprite Cleanup</b><span>Waiting</span></div>
-    <div id="aiStageCombat" class="aiStage"><b>9. Combat Data</b><span>Waiting</span></div>
-    <div id="aiStageSnes" class="aiStage"><b>10. SNES Validator</b><span>Waiting</span></div>
+    <div id="aiStageMotion" class="aiStage"><b>4. Apply Motion / Pose Search</b><span>Waiting</span></div>
+    <div id="aiStageRetarget" class="aiStage"><b>5. Solver + Pole Targets</b><span>Waiting</span></div>
+    <div id="aiStageNormalize" class="aiStage"><b>6. Arcade Walk Normalize</b><span>Waiting</span></div>
+    <div id="aiStageCritic" class="aiStage"><b>7. Preview + Animation Critic</b><span>Waiting</span></div>
+    <div id="aiStageCleanup" class="aiStage"><b>8. Corrective Pose / Cleanup</b><span>Waiting</span></div>
+    <div id="aiStageCombat" class="aiStage"><b>9. Combat Montage + Events</b><span>Waiting</span></div>
+    <div id="aiStageSnes" class="aiStage"><b>10. SNES Validation</b><span>Waiting</span></div>
   </div>
   <div style="display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;margin-top:10px">
     <div><div class="v23Mini">Overall Score</div><div id="aiOverallScore" class="aiScore">--</div></div>
@@ -945,6 +962,70 @@ function bindSlider(id,out){const a=$(id),b=$(out);a.oninput=()=>b.textContent=a
 function setMode(m){mode=m;$("traceBtn").classList.toggle("active",m==="trace");$("jointBtn").classList.toggle("active",m==="joint");$("inspectBtn").classList.toggle("active",m==="inspect");status(m==="trace"?"Trace around the selected body part.":m==="joint"?"Tap or drag the selected joint.":"Inspect mode.");}
 $("traceBtn").onclick=()=>setMode("trace");$("jointBtn").onclick=()=>setMode("joint");$("inspectBtn").onclick=()=>setMode("inspect");
 
+const GUIDED_JOINT_ORDER=[
+  "neck","pelvis",
+  "left_shoulder","left_elbow","left_wrist",
+  "right_shoulder","right_elbow","right_wrist",
+  "left_hip","left_knee","left_ankle","left_toe",
+  "right_hip","right_knee","right_ankle","right_toe"
+];
+let guidedJointMode=false,guidedJointIndex=0;
+
+function guidedJointPretty(name){
+  return name.split("_").map(s=>s.charAt(0).toUpperCase()+s.slice(1)).join(" ");
+}
+function guidedJointRefresh(){
+  const name=GUIDED_JOINT_ORDER[guidedJointIndex]||GUIDED_JOINT_ORDER[0];
+  $("guidedJointCurrent").textContent=guidedJointPretty(name);
+  $("guidedJointProgress").textContent=`${Math.min(guidedJointIndex,GUIDED_JOINT_ORDER.length)} / ${GUIDED_JOINT_ORDER.length} required joints`;
+  $("guidedJointBadge").textContent=guidedJointMode?"ACTIVE":"OFF";
+  jointSel.value=name;
+  if(guidedJointMode) status(`Guided joints: place ${guidedJointPretty(name)}.`);
+  draw();
+}
+function guidedJointStart(){
+  guidedJointMode=true;
+  guidedJointIndex=0;
+  setMode("joint");
+  guidedJointRefresh();
+}
+function guidedJointAdvance(){
+  if(!guidedJointMode)return;
+  if(guidedJointIndex<GUIDED_JOINT_ORDER.length-1){
+    guidedJointIndex++;
+    guidedJointRefresh();
+  }else{
+    guidedJointIndex=GUIDED_JOINT_ORDER.length;
+    $("guidedJointCurrent").textContent="Required joints complete";
+    $("guidedJointProgress").textContent=`${GUIDED_JOINT_ORDER.length} / ${GUIDED_JOINT_ORDER.length} required joints`;
+    $("guidedJointBadge").textContent="READY";
+    status("Guided joint setup complete. Review joints or tap Next Production Step.");
+    draw();
+  }
+}
+function guidedJointBack(){
+  if(!guidedJointMode)return;
+  guidedJointIndex=Math.max(0,Math.min(GUIDED_JOINT_ORDER.length-1,guidedJointIndex-1));
+  guidedJointRefresh();
+}
+function guidedJointSkip(){
+  if(!guidedJointMode)return;
+  const n=GUIDED_JOINT_ORDER[guidedJointIndex];
+  status(`Skipped ${guidedJointPretty(n)}. You can return with Previous Joint.`);
+  guidedJointAdvance();
+}
+function guidedJointFinish(){
+  guidedJointMode=false;
+  $("guidedJointBadge").textContent="DONE";
+  setMode("inspect");
+  status("Joint-setting step complete. Next: Map FI Skeleton.");
+}
+$("guidedJointStart").onclick=guidedJointStart;
+$("guidedJointBack").onclick=guidedJointBack;
+$("guidedJointSkip").onclick=guidedJointSkip;
+$("guidedJointFinish").onclick=guidedJointFinish;
+
+
 function resize(){const r=canvas.getBoundingClientRect(),d=Math.max(1,window.devicePixelRatio||1);canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);ctx.setTransform(d,0,0,d,0,0);draw();}
 new ResizeObserver(resize).observe(canvas);window.addEventListener("resize",resize);
 function sourceRect(){return source?{w:source.width,h:source.height}:{w:420,h:520};}
@@ -974,8 +1055,14 @@ $("imageInput").onchange=e=>{const f=e.target.files[0];if(!f) return;const u=URL
 
 canvas.addEventListener("pointerdown",e=>{const p=toImg(e.clientX,e.clientY);canvas.setPointerCapture(e.pointerId);if(mode==="trace"){if(!source){status("Load a character image first.");return;}drawing=true;tracePoints=[[p.x,p.y]];draw();return;}if(mode==="joint"){const cur=rig.joints[jointSel.value];if(cur&&Math.hypot(cur[0]-p.x,cur[1]-p.y)<20) draggingJoint=true;else{rig.joints[jointSel.value]=[p.x,p.y];draggingJoint=true;autoTraceCache.dirty=true;}draw();}});
 canvas.addEventListener("pointermove",e=>{const p=toImg(e.clientX,e.clientY);if(mode==="trace"&&drawing){const last=tracePoints[tracePoints.length-1],cur={x:p.x,y:p.y};if(!last||pointDistance({x:last[0],y:last[1]},cur)>2.2) tracePoints.push([p.x,p.y]);draw();}else if(mode==="joint"&&draggingJoint){rig.joints[jointSel.value]=[p.x,p.y];autoTraceCache.dirty=true;draw();}});
-canvas.addEventListener("pointerup",()=>{if(mode==="trace"&&drawing){drawing=false;if(tracePoints.length>=8){rig.parts[partSel.value]=rig.parts[partSel.value]||{};rig.parts[partSel.value].poly=simplify(tracePoints,1.4);rig.parts[partSel.value].auto=false;autoTraceCache.dirty=true;status(`${partSel.value}: manual shape captured.`);}else status("Trace was too short. Try again.");tracePoints=[];draw();}draggingJoint=false;});
+canvas.addEventListener("pointerup",()=>{const completedJoint=(mode==="joint"&&draggingJoint);if(mode==="trace"&&drawing){drawing=false;if(tracePoints.length>=8){rig.parts[partSel.value]=rig.parts[partSel.value]||{};rig.parts[partSel.value].poly=simplify(tracePoints,1.4);rig.parts[partSel.value].auto=false;autoTraceCache.dirty=true;status(`${partSel.value}: manual shape captured.`);}else status("Trace was too short. Try again.");tracePoints=[];draw();}draggingJoint=false;if(completedJoint&&guidedJointMode)guidedJointAdvance();});
 canvas.addEventListener("pointercancel",()=>{drawing=false;draggingJoint=false;tracePoints=[];draw();});
+
+jointSel.addEventListener("change",()=>{
+  if(!guidedJointMode)return;
+  const i=GUIDED_JOINT_ORDER.indexOf(jointSel.value);
+  if(i>=0){guidedJointIndex=i;guidedJointRefresh();}
+});
 
 function seedHumanoidRig(){const {w,h}=sourceRect(),cx=w*0.50,pelvisY=h*0.54,neckY=h*0.25,hipDX=w*0.10,shoulderDX=w*0.15,kneeY=h*0.73,ankleY=h*0.92,toeY=h*0.96,armY=h*0.34,elbowY=h*0.52,wristY=h*0.69;rig.joints={pelvis:[cx,pelvisY],neck:[cx,neckY],left_shoulder:[cx-shoulderDX,armY],left_elbow:[cx-shoulderDX-22,elbowY],left_wrist:[cx-shoulderDX-28,wristY],right_shoulder:[cx+shoulderDX,armY],right_elbow:[cx+shoulderDX+22,elbowY],right_wrist:[cx+shoulderDX+28,wristY],left_hip:[cx-hipDX,pelvisY+8],left_knee:[cx-hipDX-6,kneeY],left_ankle:[cx-hipDX-10,ankleY],left_toe:[cx-hipDX+18,toeY],right_hip:[cx+hipDX,pelvisY+8],right_knee:[cx+hipDX+6,kneeY],right_ankle:[cx+hipDX+10,ankleY],right_toe:[cx+hipDX+36,toeY],tail_base:[cx-hipDX*1.3,pelvisY+10],tail_tip:[cx-w*0.22,pelvisY+30]};autoTraceCache.dirty=true;status("Seeded a basic humanoid walk rig. Adjust joints as needed, then Auto Trace & Bind.");draw();}
 $("seedRig").onclick=seedHumanoidRig;
@@ -3439,9 +3526,9 @@ function v21RenderWeightOverlay(g,pose,orig,torsoM){
 let v24Director={running:false,currentStage:null,failedStage:null,results:{},approved:false,bypasses:[],lastAction:null};
 
 const V24_STAGES=[
-["rig","aiStageRig","Universal Rig"],["mesh","aiStageMesh","Unified Mesh"],["weights","aiStageWeights","Weight Cleanup"],
-["motion","aiStageMotion","Motion Retrieval"],["retarget","aiStageRetarget","Retarget + IK"],["normalize","aiStageNormalize","Motion Normalize"],
-["critic","aiStageCritic","Animation Critic"],["cleanup","aiStageCleanup","Sprite Cleanup"],["combat","aiStageCombat","Combat Data"],["snes","aiStageSnes","SNES Validator"]
+["rig","aiStageRig","Map FI Skeleton"],["mesh","aiStageMesh","Build Unified Mesh"],["weights","aiStageWeights","Weight Cleanup"],
+["motion","aiStageMotion","Apply Motion / Pose Search"],["retarget","aiStageRetarget","Solver + Pole Targets"],["normalize","aiStageNormalize","Arcade Walk Normalize"],
+["critic","aiStageCritic","Preview + Animation Critic"],["cleanup","aiStageCleanup","Corrective Pose / Cleanup"],["combat","aiStageCombat","Combat Montage + Events"],["snes","aiStageSnes","SNES Validation"]
 ];
 
 function v24Log(msg){
@@ -3502,24 +3589,39 @@ function v24RunWeights(){
   return {pass:true,score:94,msg:"Cross-limb weights filtered"};
 }
 function v24RunMotion(){
-  v24StageState("motion","run","Searching pose library...");
+  v24StageState("motion","run","Indexing poses + selecting motion...");
   v23IndexPoseLibrary(); const count=v23.poseIndex.length; const action=$("aiRequestedAction").value;
   if(action==="Walk Forward")v23SetState("Walk Forward"); else if(action==="Walk Back")v23SetState("Walk Back"); else if(action==="Idle")v23SetState("Idle");
   else if(action.includes("Punch"))v23SetState("Punch"); else if(action.includes("Kick"))v23SetState("Kick");
+  if($("blendSpeed")) $("blendSpeed").value=50;
+  if($("animationSpeed")) $("animationSpeed").value=50;
   const score=count>=6?95:count*12;
-  return {pass:count>=4,score,msg:`${count} poses indexed for ${action}`};
+  return {pass:count>=4,score,msg:`${count} poses indexed; ${action} selected; blend/playback 50%`};
 }
 function v24RunRetarget(){
-  v24StageState("retarget","run","Solving IK...");
+  v24StageState("retarget","run","Applying solver + pole targets...");
+  if($("enableV20Solver")) $("enableV20Solver").checked=true;
+  if($("lockLimbLengths")) $("lockLimbLengths").checked=true;
+  if($("pinPlantedFeet")) $("pinPlantedFeet").checked=true;
+  if($("constraintIterations")) $("constraintIterations").value=4;
+  if($("limbLengthLock")) $("limbLengthLock").value=100;
+  if($("plantPin")) $("plantPin").value=96;
+  if($("bodyAnchor")) $("bodyAnchor").value=92;
+  if($("spineStability")) $("spineStability").value=72;
+  if($("maxReach")) $("maxReach").value=98;
+  if($("kneePoles")) $("kneePoles").checked=true;
+  if($("elbowPoles")) $("elbowPoles").checked=true;
   let good=0;try{for(let i=0;i<8;i++){const b=buildPose(i);if(!b.error)good++;}}catch(e){}
-  const score=v24ScoreClamp(good/8*100); return {pass:good>=6,score,msg:`${good}/8 poses solved`};
+  const score=v24ScoreClamp(good/8*100);
+  return {pass:good>=6,score,msg:`Solver defaults + poles active; ${good}/8 poses solved`};
 }
 function v24RunNormalize(){
-  v24StageState("normalize","run","Normalizing motion...");
+  v24StageState("normalize","run","Applying Arcade Walk preset...");
+  try{ if(typeof v212ApplyArcadeWalkPreset==="function") v212ApplyArcadeWalkPreset(); }catch(e){}
   if($("walkNormalize"))$("walkNormalize").checked=true;
   if($("preventCrouch"))$("preventCrouch").checked=true;
   if($("straightPlantLeg"))$("straightPlantLeg").checked=true;
-  return {pass:true,score:94,msg:"Walk/pose normalization active"};
+  return {pass:true,score:94,msg:"Arcade Walk normalization active"};
 }
 function v24RunCritic(){
   v24StageState("critic","run","Inspecting animation...");
@@ -3593,7 +3695,15 @@ function v24FinalApproval(){
   if(v24Director.failedStage){v24Log("Approval blocked: unresolved failed stage.");$("aiDecision").textContent="Resolve or bypass the failed stage first.";return;}
   v24Director.approved=true;$("aiDirectorBadge").textContent="APPROVED";$("aiDecision").textContent="Final approval recorded. Animation is production-ready.";v24Log("FINAL APPROVAL recorded.");
 }
-function v24Snapshot(){return {action:v24Director.lastAction,approved:v24Director.approved,results:v24Director.results,bypasses:v24Director.bypasses,threshold:+$("aiPassThreshold").value};}
+function v24Snapshot(){return {
+  version:"24.1",
+  action:v24Director.lastAction,
+  approved:v24Director.approved,
+  results:v24Director.results,
+  bypasses:v24Director.bypasses,
+  threshold:+$("aiPassThreshold").value,
+  guided_joint_order:[...GUIDED_JOINT_ORDER]
+};}
 
 $("aiRunPipelineBtn").onclick=()=>v24RunPipeline();$("aiRetryBtn").onclick=v24RetryFailed;$("aiBypassBtn").onclick=v24ApplyBypass;$("aiApproveBtn").onclick=v24FinalApproval;
 
