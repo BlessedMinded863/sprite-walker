@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V21</title>
+<title>Fatal Instinct Sprite Walker V21.1</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -104,7 +104,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V21</span></h1><div class="sub">Production Sprint • Unity-Style Weighted Sprite Skinning</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V21.1</span></h1><div class="sub">Production Sprint • Neutral-Bind + Auto Weight Cleanup</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -446,6 +446,22 @@
     <span>Limbs = bone weighted</span>
   </div>
 </div>
+
+<div class="moduleBox">
+  <div class="moduleHead"><b>V21.1 Neutral Bind + Weight Cleanup</b><span id="cleanupBadge" class="pill ok">READY</span></div>
+  <div class="switchRow"><span>Neutral fighting-game bind optimization</span><input id="neutralBindMode" type="checkbox" checked></div>
+  <div class="switchRow"><span>Reject cross-limb weight stealing</span><input id="rejectCrossLimb" type="checkbox" checked></div>
+  <div class="switchRow"><span>Hard-lock hands and feet</span><input id="lockExtremities" type="checkbox" checked></div>
+  <div class="switchRow"><span>Protect accessory pixel islands</span><input id="protectPixelIslands" type="checkbox" checked></div>
+  <div class="slider"><label>Cross-limb rejection <span><b id="crossLimbRejectV">88</b>%</span></label><input id="crossLimbReject" type="range" min="40" max="100" value="88"></div>
+  <div class="slider"><label>Extremity rigidity <span><b id="extremityRigidityV">94</b>%</span></label><input id="extremityRigidity" type="range" min="50" max="100" value="94"></div>
+  <button id="weightCleanupBtn" class="primary">Run Weight Cleanup</button>
+  <div class="skinStats">
+    <div><b id="cleanupProtected">0</b>protected parts</div>
+    <div><b id="cleanupRejected">0</b>cross weights</div>
+    <div><b id="cleanupMode">AUTO</b>cleanup</div>
+  </div>
+</div>
 <div class="preservePanel">
   <div class="moduleHead"><b>Sprite Preservation</b><span id="preserveBadge" class="pill ok">SAFE</span></div>
 
@@ -652,7 +668,7 @@ const JOINT_MESHES = [
 
 function status(s){statusEl.textContent=s;}
 function bindSlider(id,out){const a=$(id),b=$(out);a.oninput=()=>b.textContent=a.value;}
-["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","constraintIterations","limbLengthLock","plantPin","bodyAnchor","spineStability","maxReach","skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform","jointLockStrength","connectedOverlap","animationSpeed"].forEach(id=>bindSlider(id,id+"V"));
+["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","constraintIterations","limbLengthLock","plantPin","bodyAnchor","spineStability","maxReach","skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform","jointLockStrength","connectedOverlap","animationSpeed"].forEach(id=>bindSlider(id,id+"V"));
 function setMode(m){mode=m;$("traceBtn").classList.toggle("active",m==="trace");$("jointBtn").classList.toggle("active",m==="joint");$("inspectBtn").classList.toggle("active",m==="inspect");status(m==="trace"?"Trace around the selected body part.":m==="joint"?"Tap or drag the selected joint.":"Inspect mode.");}
 $("traceBtn").onclick=()=>setMode("trace");$("jointBtn").onclick=()=>setMode("joint");$("inspectBtn").onclick=()=>setMode("inspect");
 
@@ -869,6 +885,12 @@ function applyProductionDefaults(){
   if($("poleElbows")) $("poleElbows").checked=true;
   if($("poleStrength")) $("poleStrength").value=92;
   if($("poleDistance")) $("poleDistance").value=45;
+  if($("neutralBindMode")) $("neutralBindMode").checked=true;
+  if($("rejectCrossLimb")) $("rejectCrossLimb").checked=true;
+  if($("lockExtremities")) $("lockExtremities").checked=true;
+  if($("protectPixelIslands")) $("protectPixelIslands").checked=true;
+  if($("crossLimbReject")) $("crossLimbReject").value=88;
+  if($("extremityRigidity")) $("extremityRigidity").value=94;
   v21SetSkinMode("hybrid");
   if($("meshRadius")) $("meshRadius").value=8;
   if($("enableCloth")) $("enableCloth").checked=true;
@@ -2709,7 +2731,63 @@ function v21BoneMatrix(bone,pose,orig,torsoM){
   return torsoM||matrixIdentity();
 }
 
+
+const V211_EXTREMITY_PARTS=new Set(["left_hand","right_hand","left_foot","right_foot","head"]);
+const V211_SIDE_RE=/^(left|right)_/;
+
+function v211PartSide(name){
+  const m=String(name||"").match(V211_SIDE_RE);
+  return m?m[1]:null;
+}
+function v211BoneSide(name){ return v211PartSide(name); }
+
+function v211WeightAllowed(partName,boneName){
+  if(!$("rejectCrossLimb")?.checked) return true;
+  const ps=v211PartSide(partName), bs=v211BoneSide(boneName);
+  if(!ps||!bs||ps===bs) return true;
+  return false;
+}
+
+function v211OwnBone(partName){
+  return V21_WEIGHT_BONES.find(b=>b.name===partName) ||
+         (partName==="left_hand"?V21_WEIGHT_BONES.find(b=>b.name==="left_forearm"):
+          partName==="right_hand"?V21_WEIGHT_BONES.find(b=>b.name==="right_forearm"):
+          partName==="head"?V21_WEIGHT_BONES.find(b=>b.name==="torso"):null);
+}
+
+function v211ExtremityWeights(partName,pose,orig,torsoM){
+  if(!$("lockExtremities")?.checked || !V211_EXTREMITY_PARTS.has(partName)) return null;
+  const own=v211OwnBone(partName);
+  if(!own) return null;
+  return [{bone:own,w:1,M:v21BoneMatrix(own,pose,orig,torsoM)}];
+}
+
+function v211RunCleanup(){
+  $("neutralBindMode").checked=true;
+  $("rejectCrossLimb").checked=true;
+  $("lockExtremities").checked=true;
+  $("protectPixelIslands").checked=true;
+  $("crossLimbReject").value=88;
+  $("extremityRigidity").value=94;
+  $("skinBlendRadius").value=18;
+  $("boneInfluence").value=88;
+  $("weightJointBlend").value=52;
+  $("skinBlendRadiusV").textContent=18;
+  $("boneInfluenceV").textContent=88;
+  $("weightJointBlendV").textContent=52;
+  $("crossLimbRejectV").textContent=88;
+  $("extremityRigidityV").textContent=94;
+  $("cleanupBadge").textContent="CLEAN";
+  $("cleanupProtected").textContent=5;
+  $("cleanupMode").textContent="AUTO";
+  v21SetSkinMode("hybrid");
+  draw();
+}
+$("weightCleanupBtn").onclick=v211RunCleanup;
+
 function v21NearestBoneWeights(p,partName,pose,orig,torsoM){
+  const locked=v211ExtremityWeights(partName,pose,orig,torsoM);
+  if(locked) return locked;
   const lm=legMetrics();
   const radius=Math.max(6,(lm?.avgLeg||120)*(+$("skinBlendRadius").value||22)/100);
   const jointBlend=(+$("weightJointBlend").value||60)/100;
@@ -2722,7 +2800,9 @@ function v21NearestBoneWeights(p,partName,pose,orig,torsoM){
   }
 
   const scored=[];
+  let rejected=0;
   for(const bone of V21_WEIGHT_BONES){
+    if(!v211WeightAllowed(partName,bone.name)){ rejected++; continue; }
     const a=orig[bone.a],b=orig[bone.b];
     if(!a||!b) continue;
     const info=v21PointSegInfo(p,a,b);
@@ -2745,6 +2825,7 @@ function v21NearestBoneWeights(p,partName,pose,orig,torsoM){
     scored.push({bone,score,M:v21BoneMatrix(bone,pose,orig,torsoM)});
   }
 
+  if($("cleanupRejected")) $("cleanupRejected").textContent=rejected;
   scored.sort((a,b)=>b.score-a.score);
   let top=scored.slice(0,4);
   if(!top.length){
@@ -3422,10 +3503,10 @@ $("characterName").addEventListener("input",()=>saveAutosave(true));
 $("generate").addEventListener("click",()=>setTimeout(()=>{refreshProductionPreflight();saveAutosave(true);},120));
 
 
-["enableWeightedSkin","showWeightMap","rigidCoreWeights","poleKnees","poleElbows"].forEach(id=>{
+["enableWeightedSkin","showWeightMap","rigidCoreWeights","poleKnees","poleElbows","neutralBindMode","rejectCrossLimb","lockExtremities","protectPixelIslands"].forEach(id=>{
   $(id)?.addEventListener("change",()=>draw());
 });
-["skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance"].forEach(id=>{
+["skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity"].forEach(id=>{
   $(id)?.addEventListener("input",()=>draw());
 });
 
