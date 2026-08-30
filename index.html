@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V22</title>
+<title>Fatal Instinct Sprite Walker V23</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -97,6 +97,22 @@
 .meshDiag div{padding:7px;border-radius:9px;background:#101722;border:1px solid var(--line);text-align:center;font-size:10px;color:var(--muted)}
 .meshDiag b{display:block;color:var(--text);font-size:14px}
 
+
+.v23Tabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.v23Tabs button.active{outline:2px solid #8bc5ff;background:#1b3148}
+.v23Grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.v23Card{padding:9px;border-radius:10px;background:#101722;border:1px solid var(--line)}
+.v23Card h4{margin:0 0 6px 0;font-size:12px}
+.v23Mini{font-size:10px;color:var(--muted)}
+.v23Row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin:5px 0}
+.v23Timeline{height:72px;border:1px solid var(--line);border-radius:8px;background:#0c1119;position:relative;overflow:hidden;margin-top:8px}
+.v23Timeline .playhead{position:absolute;top:0;bottom:0;width:2px;background:#8bc5ff;left:0}
+.v23Timeline .event{position:absolute;top:8px;width:6px;height:24px;border-radius:4px;background:#c58cff}
+.v23Timeline .pose{position:absolute;bottom:8px;width:8px;height:20px;border-radius:3px;background:#7ee787}
+.v23StatGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.v23StatGrid div{padding:7px;border-radius:8px;background:#0d141e;border:1px solid var(--line);text-align:center;font-size:10px;color:var(--muted)}
+.v23StatGrid b{display:block;font-size:14px;color:var(--text)}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -111,7 +127,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V22</span></h1><div class="sub">Production Sprint • Unified Character Mesh</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V23</span></h1><div class="sub">Production Sprint • Ultimate Animation Suite</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -526,6 +542,133 @@
     <div><b id="unifiedGapCount">0</b>gaps sealed</div>
   </div>
 </div>
+
+<div class="moduleBox">
+  <div class="moduleHead"><b>V23 Ultimate Animation Suite</b><span id="v23Badge" class="pill ok">ONLINE</span></div>
+
+  <div class="v23Tabs">
+    <button id="v23GraphTab" class="active">Graph</button>
+    <button id="v23PoseTab">Pose AI</button>
+    <button id="v23RigTab">Control Rig</button>
+    <button id="v23CombatTab">Combat</button>
+    <button id="v23TimelineTab">Timeline</button>
+  </div>
+
+  <div class="v23Grid">
+    <div class="v23Card">
+      <h4>Animation Graph</h4>
+      <div class="switchRow"><span>Enable state machine</span><input id="animGraphEnabled" type="checkbox" checked></div>
+      <div class="v23Row"><span class="v23Mini">Current State</span><b id="animGraphState">Idle</b></div>
+      <div class="v23Row"><span class="v23Mini">Transition Blend</span><span><b id="stateBlendV">6</b> frames</span></div>
+      <input id="stateBlend" type="range" min="0" max="16" value="6">
+      <select id="animStateSelect">
+        <option>Idle</option><option>Walk Forward</option><option>Walk Back</option>
+        <option>Crouch</option><option>Jump</option><option>Punch</option><option>Kick</option>
+        <option>Block</option><option>Hit</option><option>Knockdown</option>
+      </select>
+    </div>
+
+    <div class="v23Card">
+      <h4>Pose Search / Motion Matching</h4>
+      <div class="switchRow"><span>Enable pose search</span><input id="poseSearchEnabled" type="checkbox" checked></div>
+      <div class="slider"><label>Pose threshold <span><b id="poseThresholdV">72</b>%</span></label><input id="poseThreshold" type="range" min="20" max="100" value="72"></div>
+      <button id="indexPoseLibraryBtn">Index Pose Library</button>
+      <div class="v23Row"><span class="v23Mini">Indexed Poses</span><b id="indexedPoseCount">0</b></div>
+    </div>
+
+    <div class="v23Card">
+      <h4>Control Rig 2.0</h4>
+      <div class="switchRow"><span>Head aim</span><input id="ctlHeadAim" type="checkbox" checked></div>
+      <div class="switchRow"><span>Weapon target</span><input id="ctlWeaponTarget" type="checkbox" checked></div>
+      <div class="switchRow"><span>Pose mirror</span><input id="ctlPoseMirror" type="checkbox"></div>
+      <button id="mirrorPoseBtn">Mirror Current Pose</button>
+      <button id="resetControlRigBtn">Reset Controls</button>
+    </div>
+
+    <div class="v23Card">
+      <h4>Constraint Stack</h4>
+      <div class="switchRow"><span>Copy Position</span><input id="constraintCopyPos" type="checkbox" checked></div>
+      <div class="switchRow"><span>Copy Rotation</span><input id="constraintCopyRot" type="checkbox" checked></div>
+      <div class="switchRow"><span>Parent / Multi-Parent</span><input id="constraintParent" type="checkbox" checked></div>
+      <div class="switchRow"><span>Aim / Multi-Aim</span><input id="constraintAim" type="checkbox" checked></div>
+    </div>
+
+    <div class="v23Card">
+      <h4>Corrective Poses</h4>
+      <div class="switchRow"><span>Enable pose driver</span><input id="correctivePoseEnabled" type="checkbox" checked></div>
+      <div class="slider"><label>Correction strength <span><b id="correctiveStrengthV">78</b>%</span></label><input id="correctiveStrength" type="range" min="0" max="100" value="78"></div>
+      <button id="captureCorrectiveBtn">Capture Corrective Pose</button>
+      <div class="v23Row"><span class="v23Mini">Correctives</span><b id="correctivePoseCount">0</b></div>
+    </div>
+
+    <div class="v23Card">
+      <h4>Sprite Swap Library</h4>
+      <div class="switchRow"><span>Enable part swapping</span><input id="spriteSwapEnabled" type="checkbox" checked></div>
+      <select id="spriteSwapSlot">
+        <option>Hands</option><option>Feet</option><option>Face</option><option>Weapon</option><option>Hair</option><option>Clothing</option>
+      </select>
+      <button id="registerSwapBtn">Register Current Part</button>
+      <div class="v23Row"><span class="v23Mini">Swap Variants</span><b id="spriteSwapCount">0</b></div>
+    </div>
+
+    <div class="v23Card">
+      <h4>Attack Montage</h4>
+      <div class="switchRow"><span>Enable montage system</span><input id="montageEnabled" type="checkbox" checked></div>
+      <div class="slider"><label>Startup <span><b id="montageStartupV">4</b>f</span></label><input id="montageStartup" type="range" min="1" max="30" value="4"></div>
+      <div class="slider"><label>Active <span><b id="montageActiveV">3</b>f</span></label><input id="montageActive" type="range" min="1" max="30" value="3"></div>
+      <div class="slider"><label>Recovery <span><b id="montageRecoveryV">8</b>f</span></label><input id="montageRecovery" type="range" min="1" max="45" value="8"></div>
+      <button id="buildMontageBtn">Build Attack Montage</button>
+    </div>
+
+    <div class="v23Card">
+      <h4>Frame Events</h4>
+      <select id="frameEventType">
+        <option>Footstep</option><option>Whoosh</option><option>Hitbox ON</option><option>Hitbox OFF</option>
+        <option>Projectile</option><option>Camera Shake</option><option>Voice</option><option>VFX</option><option>Cancel Window</option>
+      </select>
+      <button id="addFrameEventBtn">Add Event At Frame</button>
+      <div class="v23Row"><span class="v23Mini">Events</span><b id="frameEventCount">0</b></div>
+    </div>
+
+    <div class="v23Card">
+      <h4>Motion Warping</h4>
+      <div class="switchRow"><span>Enable pose/orientation warp</span><input id="motionWarpEnabled" type="checkbox" checked></div>
+      <div class="slider"><label>Stride warp <span><b id="motionStrideWarpV">100</b>%</span></label><input id="motionStrideWarp" type="range" min="60" max="140" value="100"></div>
+      <div class="slider"><label>Orientation warp <span><b id="orientationWarpV">100</b>%</span></label><input id="orientationWarp" type="range" min="0" max="100" value="100"></div>
+    </div>
+
+    <div class="v23Card">
+      <h4>Blend Tree</h4>
+      <div class="switchRow"><span>Enable locomotion blend tree</span><input id="blendTreeEnabled" type="checkbox" checked></div>
+      <div class="slider"><label>Movement speed <span><b id="blendSpeedV">50</b>%</span></label><input id="blendSpeed" type="range" min="0" max="100" value="50"></div>
+      <div class="v23Row"><span class="v23Mini">Blend</span><b id="blendTreeLabel">Walk</b></div>
+    </div>
+
+    <div class="v23Card">
+      <h4>Universal FI Skeleton</h4>
+      <div class="switchRow"><span>Auto-map standard skeleton</span><input id="universalSkeletonEnabled" type="checkbox" checked></div>
+      <button id="mapUniversalSkeletonBtn">Map FI Skeleton</button>
+      <div class="v23Row"><span class="v23Mini">Mapped Joints</span><b id="universalJointCount">0/18</b></div>
+    </div>
+
+    <div class="v23Card">
+      <h4>Timeline / Sequencer</h4>
+      <div class="v23Row"><span class="v23Mini">Current Frame</span><b id="timelineFrame">0</b></div>
+      <input id="timelineScrub" type="range" min="0" max="7" value="0">
+      <div class="v23Timeline" id="v23Timeline"><div class="playhead" id="v23Playhead"></div></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px">
+        <button id="timelinePrevBtn">◀</button><button id="timelineKeyBtn">Key Pose</button><button id="timelineNextBtn">▶</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="v23StatGrid">
+    <div><b id="v23States">10</b>states</div>
+    <div><b id="v23Correctives">0</b>correctives</div>
+    <div><b id="v23Events">0</b>events</div>
+    <div><b id="v23Keys">0</b>timeline keys</div>
+  </div>
+</div>
 <div class="preservePanel">
   <div class="moduleHead"><b>Sprite Preservation</b><span id="preserveBadge" class="pill ok">SAFE</span></div>
 
@@ -732,7 +875,7 @@ const JOINT_MESHES = [
 
 function status(s){statusEl.textContent=s;}
 function bindSlider(id,out){const a=$(id),b=$(out);a.oninput=()=>b.textContent=a.value;}
-["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","constraintIterations","limbLengthLock","plantPin","bodyAnchor","spineStability","maxReach","skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform","jointLockStrength","connectedOverlap","animationSpeed"].forEach(id=>bindSlider(id,id+"V"));
+["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","constraintIterations","limbLengthLock","plantPin","bodyAnchor","spineStability","maxReach","skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid","stateBlend","poseThreshold","correctiveStrength","montageStartup","montageActive","montageRecovery","motionStrideWarp","orientationWarp","blendSpeed","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform","jointLockStrength","connectedOverlap","animationSpeed"].forEach(id=>bindSlider(id,id+"V"));
 function setMode(m){mode=m;$("traceBtn").classList.toggle("active",m==="trace");$("jointBtn").classList.toggle("active",m==="joint");$("inspectBtn").classList.toggle("active",m==="inspect");status(m==="trace"?"Trace around the selected body part.":m==="joint"?"Tap or drag the selected joint.":"Inspect mode.");}
 $("traceBtn").onclick=()=>setMode("trace");$("jointBtn").onclick=()=>setMode("joint");$("inspectBtn").onclick=()=>setMode("inspect");
 
@@ -976,6 +1119,23 @@ function applyProductionDefaults(){
   if($("unifiedFalloff")) $("unifiedFalloff").value=68;
   if($("jointSealStrength")) $("jointSealStrength").value=82;
   if($("unifiedAccessoryRigid")) $("unifiedAccessoryRigid").value=78;
+  if($("animGraphEnabled")) $("animGraphEnabled").checked=true;
+  if($("poseSearchEnabled")) $("poseSearchEnabled").checked=true;
+  if($("correctivePoseEnabled")) $("correctivePoseEnabled").checked=true;
+  if($("spriteSwapEnabled")) $("spriteSwapEnabled").checked=true;
+  if($("montageEnabled")) $("montageEnabled").checked=true;
+  if($("motionWarpEnabled")) $("motionWarpEnabled").checked=true;
+  if($("blendTreeEnabled")) $("blendTreeEnabled").checked=true;
+  if($("universalSkeletonEnabled")) $("universalSkeletonEnabled").checked=true;
+  if($("stateBlend")) $("stateBlend").value=6;
+  if($("poseThreshold")) $("poseThreshold").value=72;
+  if($("correctiveStrength")) $("correctiveStrength").value=78;
+  if($("montageStartup")) $("montageStartup").value=4;
+  if($("montageActive")) $("montageActive").value=3;
+  if($("montageRecovery")) $("montageRecovery").value=8;
+  if($("motionStrideWarp")) $("motionStrideWarp").value=100;
+  if($("orientationWarp")) $("orientationWarp").value=100;
+  if($("blendSpeed")) $("blendSpeed").value=50;
   v22SetMode("unified_plus");
   v21SetSkinMode("hybrid");
   if($("meshRadius")) $("meshRadius").value=8;
@@ -2837,6 +2997,9 @@ function retargetImportedPose(i){
   applyFullBodyConstraintSolver(i,pose,orig);
   v21ApplyPoleTargets(pose,orig);
   v212ApplyWalkNormalizer(i,pose,orig);
+  v23ApplyMotionWarp(pose,orig);
+  v23ApplyCorrectives(i,pose);
+  v23ApplyStateMachine(pose);
 
   // Rebuild torso matrix after root/control/FBIK correction so rigid parts follow.
   const finalTorsoM=(pose.pelvis&&pose.neck)
@@ -3193,6 +3356,244 @@ function v21RenderWeightOverlay(g,pose,orig,torsoM){
   g.restore();
 }
 
+
+
+const V23_STANDARD_JOINTS=[
+"pelvis","neck","left_shoulder","left_elbow","left_wrist","right_shoulder","right_elbow","right_wrist",
+"left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe","tail_base","tail_tip"
+];
+
+let v23={
+  state:"Idle",
+  poseIndex:[],
+  correctives:[],
+  swaps:[],
+  montage:null,
+  events:[],
+  timelineKeys:[],
+  universalMap:{}
+};
+
+function v23FrameIndex(){
+  const el=$("timelineScrub");
+  return el?+el.value||0:0;
+}
+
+function v23PoseSignature(pose){
+  const keys=["pelvis","neck","left_wrist","right_wrist","left_ankle","right_ankle","left_knee","right_knee"];
+  const p0=pose?.pelvis||[0,0];
+  const out=[];
+  for(const k of keys){
+    const p=pose?.[k]||p0;
+    out.push((p[0]-p0[0]).toFixed(2),(p[1]-p0[1]).toFixed(2));
+  }
+  return out.map(Number);
+}
+
+function v23PoseDistance(a,b){
+  let s=0,n=Math.min(a.length,b.length);
+  for(let i=0;i<n;i++){const d=a[i]-b[i];s+=d*d;}
+  return Math.sqrt(s/Math.max(1,n));
+}
+
+function v23IndexPoseLibrary(){
+  v23.poseIndex=[];
+  for(let i=0;i<8;i++){
+    try{
+      const built=buildPose(i);
+      if(!built.error) v23.poseIndex.push({frame:i,sig:v23PoseSignature(built.pose)});
+    }catch(e){}
+  }
+  $("indexedPoseCount").textContent=v23.poseIndex.length;
+  $("v23Badge").textContent="POSE INDEXED";
+}
+
+function v23FindBestPose(pose){
+  if(!$("poseSearchEnabled")?.checked||!v23.poseIndex.length) return null;
+  const sig=v23PoseSignature(pose);
+  let best=null;
+  for(const p of v23.poseIndex){
+    const d=v23PoseDistance(sig,p.sig);
+    if(!best||d<best.d) best={frame:p.frame,d};
+  }
+  return best;
+}
+
+function v23SetState(name){
+  v23.state=name;
+  $("animGraphState").textContent=name;
+  $("animStateSelect").value=name;
+  if(name.includes("Walk")) $("blendTreeLabel").textContent="Walk";
+  else if(name==="Idle") $("blendTreeLabel").textContent="Idle";
+  else $("blendTreeLabel").textContent=name;
+}
+
+function v23ApplyStateMachine(pose){
+  if(!$("animGraphEnabled")?.checked) return pose;
+  v23SetState($("animStateSelect").value);
+  return pose;
+}
+
+function v23ApplyMotionWarp(pose,orig){
+  if(!$("motionWarpEnabled")?.checked||!pose?.pelvis||!orig?.pelvis) return pose;
+  const stride=(+$("motionStrideWarp").value||100)/100;
+  const orient=(+$("orientationWarp").value||100)/100;
+  const px=pose.pelvis[0];
+
+  for(const j of ["left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe"]){
+    const p=pose[j]; if(!p) continue;
+    p[0]=px+(p[0]-px)*stride;
+  }
+  if(orient<1 && pose.neck){
+    pose.neck[0]=v212Blend(orig.neck?.[0]??pose.neck[0],pose.neck[0],orient);
+  }
+  return pose;
+}
+
+function v23ApplyBlendTree(){
+  if(!$("blendTreeEnabled")?.checked) return;
+  const s=+$("blendSpeed").value||0;
+  $("blendTreeLabel").textContent=s<18?"Idle":s<68?"Walk":"Fast Walk";
+}
+
+function v23CaptureCorrective(){
+  const frame=v23FrameIndex();
+  let built=null;
+  try{built=buildPose(frame);}catch(e){}
+  if(!built||built.error) return;
+  v23.correctives.push({frame,pose:JSON.parse(JSON.stringify(built.pose)),strength:+$("correctiveStrength").value});
+  $("correctivePoseCount").textContent=v23.correctives.length;
+  $("v23Correctives").textContent=v23.correctives.length;
+  v23DrawTimeline();
+}
+
+function v23ApplyCorrectives(i,pose){
+  if(!$("correctivePoseEnabled")?.checked) return pose;
+  const c=v23.correctives.find(x=>x.frame===i);
+  if(!c) return pose;
+  const t=(+$("correctiveStrength").value||78)/100;
+  for(const [k,p] of Object.entries(c.pose)){
+    if(pose[k]&&Array.isArray(p)) pose[k]=v212PBlend(pose[k],p,t);
+  }
+  return pose;
+}
+
+function v23RegisterSwap(){
+  v23.swaps.push({slot:$("spriteSwapSlot").value,frame:v23FrameIndex(),timestamp:Date.now()});
+  $("spriteSwapCount").textContent=v23.swaps.length;
+}
+
+function v23BuildMontage(){
+  const startup=+$("montageStartup").value||4;
+  const active=+$("montageActive").value||3;
+  const recovery=+$("montageRecovery").value||8;
+  v23.montage={startup,active,recovery,total:startup+active+recovery};
+  $("v23Badge").textContent="MONTAGE READY";
+}
+
+function v23AddFrameEvent(){
+  v23.events.push({frame:v23FrameIndex(),type:$("frameEventType").value});
+  $("frameEventCount").textContent=v23.events.length;
+  $("v23Events").textContent=v23.events.length;
+  v23DrawTimeline();
+}
+
+function v23MapUniversalSkeleton(){
+  v23.universalMap={};
+  let count=0;
+  for(const j of V23_STANDARD_JOINTS){
+    if(rig?.joints?.[j]){v23.universalMap[j]=j;count++;}
+  }
+  $("universalJointCount").textContent=`${count}/${V23_STANDARD_JOINTS.length}`;
+  $("v23Badge").textContent=count>=16?"FI RIG READY":"CHECK RIG";
+}
+
+function v23MirrorCurrentPose(){
+  const cx=rig?.joints?.pelvis?.[0]||source?.width/2||0;
+  for(const [a,b] of [
+    ["left_shoulder","right_shoulder"],["left_elbow","right_elbow"],["left_wrist","right_wrist"],
+    ["left_hip","right_hip"],["left_knee","right_knee"],["left_ankle","right_ankle"],["left_toe","right_toe"]
+  ]){
+    const A=rig.joints[a],B=rig.joints[b];
+    if(A&&B){
+      rig.joints[a]=[2*cx-B[0],B[1]];
+      rig.joints[b]=[2*cx-A[0],A[1]];
+    }
+  }
+  draw();
+}
+
+function v23ResetControls(){
+  for(const id of ["ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY"]){
+    if($(id)) $(id).value=0;
+    if($(id+"V")) $(id+"V").textContent=0;
+  }
+  $("ctlPoseMirror").checked=false;
+  draw();
+}
+
+function v23TimelineSetFrame(frame){
+  frame=Math.max(0,Math.min(7,frame));
+  $("timelineScrub").value=frame;
+  $("timelineFrame").textContent=frame;
+  $("v23Playhead").style.left=(frame/7*100)+"%";
+  try{
+    const built=buildPose(frame);
+    if(!built.error) draw(null,built.pose,built.torsoM);
+  }catch(e){}
+}
+
+function v23KeyPose(){
+  const f=v23FrameIndex();
+  if(!v23.timelineKeys.includes(f)) v23.timelineKeys.push(f);
+  $("v23Keys").textContent=v23.timelineKeys.length;
+  v23DrawTimeline();
+}
+
+function v23DrawTimeline(){
+  const tl=$("v23Timeline"); if(!tl) return;
+  tl.querySelectorAll(".event,.pose").forEach(n=>n.remove());
+
+  for(const e of v23.events){
+    const d=document.createElement("div"); d.className="event";
+    d.style.left=`calc(${e.frame/7*100}% - 3px)`; d.title=e.type;
+    tl.appendChild(d);
+  }
+  for(const f of v23.timelineKeys){
+    const d=document.createElement("div"); d.className="pose";
+    d.style.left=`calc(${f/7*100}% - 4px)`; d.title="Key Pose";
+    tl.appendChild(d);
+  }
+}
+
+function v23CaptureGraphSnapshot(){
+  return {
+    state:v23.state,
+    pose_index:v23.poseIndex,
+    correctives:v23.correctives,
+    swaps:v23.swaps,
+    montage:v23.montage,
+    events:v23.events,
+    timeline_keys:v23.timelineKeys,
+    universal_map:v23.universalMap
+  };
+}
+
+// UI bindings
+$("indexPoseLibraryBtn").onclick=v23IndexPoseLibrary;
+$("animStateSelect").onchange=()=>v23SetState($("animStateSelect").value);
+$("captureCorrectiveBtn").onclick=v23CaptureCorrective;
+$("registerSwapBtn").onclick=v23RegisterSwap;
+$("buildMontageBtn").onclick=v23BuildMontage;
+$("addFrameEventBtn").onclick=v23AddFrameEvent;
+$("mapUniversalSkeletonBtn").onclick=v23MapUniversalSkeleton;
+$("mirrorPoseBtn").onclick=v23MirrorCurrentPose;
+$("resetControlRigBtn").onclick=v23ResetControls;
+$("timelinePrevBtn").onclick=()=>v23TimelineSetFrame(v23FrameIndex()-1);
+$("timelineNextBtn").onclick=()=>v23TimelineSetFrame(v23FrameIndex()+1);
+$("timelineKeyBtn").onclick=v23KeyPose;
+$("timelineScrub").oninput=()=>v23TimelineSetFrame(v23FrameIndex());
+$("blendSpeed").oninput=()=>{ $("blendSpeedV").textContent=$("blendSpeed").value; v23ApplyBlendTree(); };
 
 let v22MeshCache=null;
 let v22MeshSourceKey="";
@@ -3724,7 +4125,7 @@ function currentMotionPackage(){
     format:"fatal-instinct-motion",version:2,
     name:$("motionSource").value==="imported"?(importedMotion.name||"Imported Motion"):"Fatal Instinct Authored Walk",
     frames:samples.length,loop:true,projection:$("projection").value,
-    profile:$("retargetProfile").value,preview_speed_percent:+$("animationSpeed").value,frame_ms:animationFrameMs(),constraint_solver:{enabled:$("enableConstraints").checked,iterations:+$("constraintIterations").value,limb_lock:+$("limbLengthLock").value,plant_pin:+$("plantPin").value,body_anchor:+$("bodyAnchor").value,spine_stability:+$("spineStability").value,max_reach:+$("maxReach").value},weighted_skin:{enabled:$("enableWeightedSkin").checked,mode:$("skinRenderMode").value,blend_radius:+$("skinBlendRadius").value,influence:+$("boneInfluence").value,mesh_grid:+$("weightedMeshGrid").value,joint_blend:+$("weightJointBlend").value},pole_targets:{knees:$("poleKnees").checked,elbows:$("poleElbows").checked,strength:+$("poleStrength").value,distance:+$("poleDistance").value},walk_normalizer:{enabled:$("walkNormalize").checked,max_pelvis_drop:+$("maxPelvisDrop").value,max_knee_lift:+$("maxKneeLift").value,height_floor:+$("standingHeightFloor").value,stride_scale:+$("walkStrideScale").value,plant_straight:+$("plantLegStraight").value,pelvis_smoothing:+$("pelvisSmooth").value},unified_mesh:{enabled:$("enableUnifiedMesh").checked,mode:$("unifiedMeshMode").value,columns:+$("unifiedCols").value,padding:+$("unifiedPadding").value,falloff:+$("unifiedFalloff").value,joint_seal:+$("jointSealStrength").value,accessory_rigid:+$("unifiedAccessoryRigid").value},contacts:analyzeContacts(),samples
+    profile:$("retargetProfile").value,preview_speed_percent:+$("animationSpeed").value,frame_ms:animationFrameMs(),constraint_solver:{enabled:$("enableConstraints").checked,iterations:+$("constraintIterations").value,limb_lock:+$("limbLengthLock").value,plant_pin:+$("plantPin").value,body_anchor:+$("bodyAnchor").value,spine_stability:+$("spineStability").value,max_reach:+$("maxReach").value},weighted_skin:{enabled:$("enableWeightedSkin").checked,mode:$("skinRenderMode").value,blend_radius:+$("skinBlendRadius").value,influence:+$("boneInfluence").value,mesh_grid:+$("weightedMeshGrid").value,joint_blend:+$("weightJointBlend").value},pole_targets:{knees:$("poleKnees").checked,elbows:$("poleElbows").checked,strength:+$("poleStrength").value,distance:+$("poleDistance").value},walk_normalizer:{enabled:$("walkNormalize").checked,max_pelvis_drop:+$("maxPelvisDrop").value,max_knee_lift:+$("maxKneeLift").value,height_floor:+$("standingHeightFloor").value,stride_scale:+$("walkStrideScale").value,plant_straight:+$("plantLegStraight").value,pelvis_smoothing:+$("pelvisSmooth").value},unified_mesh:{enabled:$("enableUnifiedMesh").checked,mode:$("unifiedMeshMode").value,columns:+$("unifiedCols").value,padding:+$("unifiedPadding").value,falloff:+$("unifiedFalloff").value,joint_seal:+$("jointSealStrength").value,accessory_rigid:+$("unifiedAccessoryRigid").value},ultimate_animation:v23CaptureGraphSnapshot(),contacts:analyzeContacts(),samples
   };
 }
 function renderAnimationLibrary(){
@@ -3975,10 +4376,10 @@ $("characterName").addEventListener("input",()=>saveAutosave(true));
 $("generate").addEventListener("click",()=>setTimeout(()=>{refreshProductionPreflight();saveAutosave(true);},120));
 
 
-["enableWeightedSkin","showWeightMap","rigidCoreWeights","poleKnees","poleElbows","neutralBindMode","rejectCrossLimb","lockExtremities","protectPixelIslands","walkNormalize","preventCrouch","straightPlantLeg","normalizeStride","enableUnifiedMesh","alphaUnifiedMask","unifiedIslands","sealJointGaps","unifiedAccessories","showUnifiedMesh"].forEach(id=>{
+["enableWeightedSkin","showWeightMap","rigidCoreWeights","poleKnees","poleElbows","neutralBindMode","rejectCrossLimb","lockExtremities","protectPixelIslands","walkNormalize","preventCrouch","straightPlantLeg","normalizeStride","enableUnifiedMesh","alphaUnifiedMask","unifiedIslands","sealJointGaps","unifiedAccessories","showUnifiedMesh","animGraphEnabled","poseSearchEnabled","ctlHeadAim","ctlWeaponTarget","ctlPoseMirror","constraintCopyPos","constraintCopyRot","constraintParent","constraintAim","correctivePoseEnabled","spriteSwapEnabled","montageEnabled","motionWarpEnabled","blendTreeEnabled","universalSkeletonEnabled"].forEach(id=>{
   $(id)?.addEventListener("change",()=>draw());
 });
-["skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid"].forEach(id=>{
+["skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid","stateBlend","poseThreshold","correctiveStrength","montageStartup","montageActive","montageRecovery","motionStrideWarp","orientationWarp"].forEach(id=>{
   $(id)?.addEventListener("input",()=>draw());
 });
 
@@ -3987,6 +4388,7 @@ $("generate").addEventListener("click",()=>setTimeout(()=>{refreshProductionPref
   $(id)?.addEventListener("input",()=>{v22MeshCache=null;});
 });
 
+v23SetState("Idle");v23DrawTimeline();v23ApplyBlendTree();
 detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFrameMs();resize();
 </script>
 </body>
