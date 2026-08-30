@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V21.2</title>
+<title>Fatal Instinct Sprite Walker V22</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -90,6 +90,13 @@
 .skinStats div{padding:7px;border-radius:9px;background:#101722;border:1px solid var(--line);text-align:center;font-size:11px;color:var(--muted)}
 .skinStats b{display:block;color:var(--text);font-size:15px}
 
+
+.unifiedGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0}
+.unifiedGrid button.active{outline:2px solid #8bc5ff;background:#1b3148}
+.meshDiag{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.meshDiag div{padding:7px;border-radius:9px;background:#101722;border:1px solid var(--line);text-align:center;font-size:10px;color:var(--muted)}
+.meshDiag b{display:block;color:var(--text);font-size:14px}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -104,7 +111,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V21.2</span></h1><div class="sub">Production Sprint • Walk Normalizer</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V22</span></h1><div class="sub">Production Sprint • Unified Character Mesh</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -486,6 +493,39 @@
     <div><b id="normPlantStraight">0%</b>plant straight</div>
   </div>
 </div>
+
+<div class="moduleBox">
+  <div class="moduleHead"><b>V22 Unified Character Mesh</b><span id="unifiedMeshBadge" class="pill ok">ACTIVE</span></div>
+
+  <div class="unifiedGrid">
+    <button id="unifiedOffBtn">Legacy</button>
+    <button id="unifiedSkinBtn">Unified</button>
+    <button id="unifiedHybridBtn" class="active">Unified+</button>
+  </div>
+  <input id="unifiedMeshMode" type="hidden" value="unified_plus">
+
+  <div class="switchRow"><span>Enable unified character surface</span><input id="enableUnifiedMesh" type="checkbox" checked></div>
+  <div class="switchRow"><span>Use alpha silhouette as mesh mask</span><input id="alphaUnifiedMask" type="checkbox" checked></div>
+  <div class="switchRow"><span>Preserve connected pixel islands</span><input id="unifiedIslands" type="checkbox" checked></div>
+  <div class="switchRow"><span>Seal joint gaps automatically</span><input id="sealJointGaps" type="checkbox" checked></div>
+  <div class="switchRow"><span>Accessory follow layer</span><input id="unifiedAccessories" type="checkbox" checked></div>
+  <div class="switchRow"><span>Show unified mesh debug</span><input id="showUnifiedMesh" type="checkbox"></div>
+
+  <div class="slider"><label>Unified mesh columns <span><b id="unifiedColsV">24</b></span></label><input id="unifiedCols" type="range" min="10" max="48" value="24"></div>
+  <div class="slider"><label>Silhouette padding <span><b id="unifiedPaddingV">3</b> px</span></label><input id="unifiedPadding" type="range" min="0" max="10" value="3"></div>
+  <div class="slider"><label>Weight falloff <span><b id="unifiedFalloffV">68</b>%</span></label><input id="unifiedFalloff" type="range" min="20" max="100" value="68"></div>
+  <div class="slider"><label>Joint seal strength <span><b id="jointSealStrengthV">82</b>%</span></label><input id="jointSealStrength" type="range" min="0" max="100" value="82"></div>
+  <div class="slider"><label>Accessory rigidity <span><b id="unifiedAccessoryRigidV">78</b>%</span></label><input id="unifiedAccessoryRigid" type="range" min="20" max="100" value="78"></div>
+
+  <button id="buildUnifiedMeshBtn" class="primary">Build Unified Mesh</button>
+
+  <div class="meshDiag">
+    <div><b id="unifiedVertexCount">0</b>vertices</div>
+    <div><b id="unifiedTriangleCount">0</b>triangles</div>
+    <div><b id="unifiedVisibleCells">0</b>visible cells</div>
+    <div><b id="unifiedGapCount">0</b>gaps sealed</div>
+  </div>
+</div>
 <div class="preservePanel">
   <div class="moduleHead"><b>Sprite Preservation</b><span id="preserveBadge" class="pill ok">SAFE</span></div>
 
@@ -692,7 +732,7 @@ const JOINT_MESHES = [
 
 function status(s){statusEl.textContent=s;}
 function bindSlider(id,out){const a=$(id),b=$(out);a.oninput=()=>b.textContent=a.value;}
-["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","constraintIterations","limbLengthLock","plantPin","bodyAnchor","spineStability","maxReach","skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform","jointLockStrength","connectedOverlap","animationSpeed"].forEach(id=>bindSlider(id,id+"V"));
+["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","constraintIterations","limbLengthLock","plantPin","bodyAnchor","spineStability","maxReach","skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform","jointLockStrength","connectedOverlap","animationSpeed"].forEach(id=>bindSlider(id,id+"V"));
 function setMode(m){mode=m;$("traceBtn").classList.toggle("active",m==="trace");$("jointBtn").classList.toggle("active",m==="joint");$("inspectBtn").classList.toggle("active",m==="inspect");status(m==="trace"?"Trace around the selected body part.":m==="joint"?"Tap or drag the selected joint.":"Inspect mode.");}
 $("traceBtn").onclick=()=>setMode("trace");$("jointBtn").onclick=()=>setMode("joint");$("inspectBtn").onclick=()=>setMode("inspect");
 
@@ -925,6 +965,18 @@ function applyProductionDefaults(){
   if($("walkStrideScale")) $("walkStrideScale").value=82;
   if($("plantLegStraight")) $("plantLegStraight").value=88;
   if($("pelvisSmooth")) $("pelvisSmooth").value=70;
+  if($("enableUnifiedMesh")) $("enableUnifiedMesh").checked=true;
+  if($("alphaUnifiedMask")) $("alphaUnifiedMask").checked=true;
+  if($("unifiedIslands")) $("unifiedIslands").checked=true;
+  if($("sealJointGaps")) $("sealJointGaps").checked=true;
+  if($("unifiedAccessories")) $("unifiedAccessories").checked=true;
+  if($("showUnifiedMesh")) $("showUnifiedMesh").checked=false;
+  if($("unifiedCols")) $("unifiedCols").value=24;
+  if($("unifiedPadding")) $("unifiedPadding").value=3;
+  if($("unifiedFalloff")) $("unifiedFalloff").value=68;
+  if($("jointSealStrength")) $("jointSealStrength").value=82;
+  if($("unifiedAccessoryRigid")) $("unifiedAccessoryRigid").value=78;
+  v22SetMode("unified_plus");
   v21SetSkinMode("hybrid");
   if($("meshRadius")) $("meshRadius").value=8;
   if($("enableCloth")) $("enableCloth").checked=true;
@@ -3141,8 +3193,228 @@ function v21RenderWeightOverlay(g,pose,orig,torsoM){
   g.restore();
 }
 
+
+let v22MeshCache=null;
+let v22MeshSourceKey="";
+let v22GapCount=0;
+
+function v22SourceKey(){
+  if(!source) return "";
+  return [source.width,source.height,$("unifiedCols")?.value,$("unifiedPadding")?.value].join(":");
+}
+
+function v22AlphaAt(x,y){
+  if(!source) return 0;
+  const c=v22AlphaAt._c||(v22AlphaAt._c=document.createElement("canvas"));
+  if(c.width!==source.width||c.height!==source.height){
+    c.width=source.width;c.height=source.height;
+    const cg=c.getContext("2d",{willReadFrequently:true});
+    cg.clearRect(0,0,c.width,c.height);
+    cg.drawImage(source,0,0);
+    v22AlphaAt._img=cg.getImageData(0,0,c.width,c.height);
+  }
+  const ix=Math.max(0,Math.min(source.width-1,Math.round(x)));
+  const iy=Math.max(0,Math.min(source.height-1,Math.round(y)));
+  return v22AlphaAt._img.data[(iy*source.width+ix)*4+3];
+}
+
+function v22CellVisible(cx,cy,hw,hh){
+  if(!$("alphaUnifiedMask")?.checked) return true;
+  const pad=+$("unifiedPadding").value||0;
+  const pts=[
+    [cx,cy],[cx-hw,cy-hh],[cx+hw,cy-hh],[cx+hw,cy+hh],[cx-hw,cy+hh],
+    [cx-pad,cy],[cx+pad,cy],[cx,cy-pad],[cx,cy+pad]
+  ];
+  return pts.some(p=>v22AlphaAt(p[0],p[1])>8);
+}
+
+function v22UnifiedWeights(p,pose,orig,torsoM){
+  // Start from the V21 weighted-bone logic, but operate on the whole surface.
+  const lm=legMetrics();
+  const radius=Math.max(8,(lm?.avgLeg||120)*(+$("skinBlendRadius").value||18)/100);
+  const falloff=(+$("unifiedFalloff").value||68)/100;
+  const scores=[];
+
+  for(const bone of V21_WEIGHT_BONES){
+    const a=orig[bone.a],b=orig[bone.b];
+    if(!a||!b) continue;
+    const info=v21PointSegInfo(p,a,b);
+    const n=Math.max(0,1-info.d/radius);
+    if(n<=0) continue;
+
+    // stronger local ownership but still permit smooth whole-surface blending
+    let score=Math.pow(n,1.2+2.3*(1-falloff));
+    const endpoint=1-Math.min(info.t,1-info.t)*2;
+    score*=1+endpoint*0.35;
+    if(bone.name==="torso") score*=1.15;
+    scores.push({bone,score,M:v21BoneMatrix(bone,pose,orig,torsoM)});
+  }
+
+  if(!scores.length){
+    const bone=V21_WEIGHT_BONES.find(b=>b.name==="torso")||V21_WEIGHT_BONES[0];
+    return [{bone,w:1,M:v21BoneMatrix(bone,pose,orig,torsoM)}];
+  }
+
+  scores.sort((a,b)=>b.score-a.score);
+  let top=scores.slice(0,4);
+  const total=top.reduce((s,x)=>s+x.score,0)||1;
+  top=top.map(x=>({...x,w:x.score/total}));
+  return top;
+}
+
+function v22Point(p,pose,orig,torsoM){
+  const ws=v22UnifiedWeights(p,pose,orig,torsoM);
+  let x=0,y=0;
+  for(const w of ws){
+    const q=transformPoint(w.M,p);
+    x+=q[0]*w.w;y+=q[1]*w.w;
+  }
+  return [x,y];
+}
+
+function v22BuildUnifiedMesh(){
+  if(!source) return null;
+  const cols=Math.max(10,Math.round(+$("unifiedCols").value||24));
+  const rows=Math.max(8,Math.round(cols*source.height/source.width));
+  const sx=source.width/cols, sy=source.height/rows;
+  const vertices=[];
+  const cells=[];
+
+  for(let y=0;y<=rows;y++){
+    for(let x=0;x<=cols;x++){
+      vertices.push([x*sx,y*sy]);
+    }
+  }
+  const id=(x,y)=>y*(cols+1)+x;
+
+  let visible=0;
+  for(let y=0;y<rows;y++){
+    for(let x=0;x<cols;x++){
+      const x0=x*sx,y0=y*sy,x1=(x+1)*sx,y1=(y+1)*sy;
+      const cx=(x0+x1)/2,cy=(y0+y1)/2;
+      const vis=v22CellVisible(cx,cy,sx/2,sy/2);
+      if(vis) visible++;
+      cells.push({x,y,vis,v:[id(x,y),id(x+1,y),id(x+1,y+1),id(x,y+1)]});
+    }
+  }
+
+  v22MeshCache={cols,rows,sx,sy,vertices,cells,visible};
+  v22MeshSourceKey=v22SourceKey();
+  $("unifiedVertexCount").textContent=vertices.length;
+  $("unifiedTriangleCount").textContent=visible*2;
+  $("unifiedVisibleCells").textContent=visible;
+  $("unifiedMeshBadge").textContent="BUILT";
+  return v22MeshCache;
+}
+
+function v22EnsureMesh(){
+  if(!v22MeshCache||v22MeshSourceKey!==v22SourceKey()) return v22BuildUnifiedMesh();
+  return v22MeshCache;
+}
+
+function v22SealPoint(p,pose,orig,torsoM){
+  if(!$("sealJointGaps")?.checked) return v22Point(p,pose,orig,torsoM);
+  const raw=v22Point(p,pose,orig,torsoM);
+  const strength=(+$("jointSealStrength").value||82)/100;
+  const lm=legMetrics();
+  const jointR=(lm?.avgLeg||120)*0.075;
+
+  // Pull vertices near joints toward the weighted transformed joint position.
+  let best=null,bestD=1e9;
+  for(const name of ["left_shoulder","left_elbow","left_wrist","right_shoulder","right_elbow","right_wrist",
+                     "left_hip","left_knee","left_ankle","right_hip","right_knee","right_ankle","pelvis","neck"]){
+    const o=orig[name],t=pose[name];
+    if(!o||!t) continue;
+    const d=length(p,o);
+    if(d<bestD){bestD=d;best={o,t};}
+  }
+  if(best&&bestD<jointR){
+    const k=(1-bestD/jointR)*strength;
+    v22GapCount++;
+    return v212PBlend(raw,best.t,k);
+  }
+  return raw;
+}
+
+function v22RenderUnified(g,pose,orig,torsoM){
+  const mesh=v22EnsureMesh();
+  if(!mesh) return false;
+  v22GapCount=0;
+
+  const transformed=new Array(mesh.vertices.length);
+  for(let i=0;i<mesh.vertices.length;i++){
+    transformed[i]=v22SealPoint(mesh.vertices[i],pose,orig,torsoM);
+  }
+
+  for(const cell of mesh.cells){
+    if(!cell.vis) continue;
+    const [a,b,c,d]=cell.v;
+    const sA=mesh.vertices[a],sB=mesh.vertices[b],sC=mesh.vertices[c],sD=mesh.vertices[d];
+    const dA=transformed[a],dB=transformed[b],dC=transformed[c],dD=transformed[d];
+
+    if(typeof triangleStretchSafe==="function"){
+      if(triangleStretchSafe(sA,sB,sC,dA,dB,dC)) drawTexturedTriangle(g,source,sA,sB,sC,dA,dB,dC);
+      if(triangleStretchSafe(sA,sC,sD,dA,dC,dD)) drawTexturedTriangle(g,source,sA,sC,sD,dA,dC,dD);
+    }else{
+      drawTexturedTriangle(g,source,sA,sB,sC,dA,dB,dC);
+      drawTexturedTriangle(g,source,sA,sC,sD,dA,dC,dD);
+    }
+  }
+
+  $("unifiedGapCount").textContent=v22GapCount;
+  if($("showUnifiedMesh")?.checked) v22DrawMeshDebug(g,mesh,transformed);
+  return true;
+}
+
+function v22DrawMeshDebug(g,mesh,transformed){
+  g.save();
+  g.globalAlpha=.45;
+  g.lineWidth=1;
+  g.strokeStyle="rgba(120,210,255,.9)";
+  for(const cell of mesh.cells){
+    if(!cell.vis) continue;
+    const [a,b,c,d]=cell.v;
+    const pts=[transformed[a],transformed[b],transformed[c],transformed[d]];
+    g.beginPath();
+    g.moveTo(pts[0][0],pts[0][1]);
+    for(let i=1;i<pts.length;i++) g.lineTo(pts[i][0],pts[i][1]);
+    g.closePath();
+    g.stroke();
+  }
+  g.restore();
+}
+
+function v22SetMode(mode){
+  $("unifiedMeshMode").value=mode;
+  for(const [id,m] of [["unifiedOffBtn","legacy"],["unifiedSkinBtn","unified"],["unifiedHybridBtn","unified_plus"]]){
+    $(id).classList.toggle("active",mode===m);
+  }
+  $("enableUnifiedMesh").checked=mode!=="legacy";
+  $("unifiedMeshBadge").textContent=mode==="legacy"?"LEGACY":(mode==="unified"?"UNIFIED":"UNIFIED+");
+  draw();
+}
+$("unifiedOffBtn").onclick=()=>v22SetMode("legacy");
+$("unifiedSkinBtn").onclick=()=>v22SetMode("unified");
+$("unifiedHybridBtn").onclick=()=>v22SetMode("unified_plus");
+$("buildUnifiedMeshBtn").onclick=()=>{v22MeshCache=null;v22BuildUnifiedMesh();draw();};
+
 function v21RenderSprite(g,pose,orig,torsoM){
   v21MeshStats.vertices=0;v21MeshStats.triangles=0;
+
+  // V22 primary renderer: deform the original sprite as one continuous surface.
+  const unifiedMode=$("unifiedMeshMode")?.value||"unified_plus";
+  if($("enableUnifiedMesh")?.checked && unifiedMode!=="legacy"){
+    const ok=v22RenderUnified(g,pose,orig,torsoM);
+    if(ok){
+      if(unifiedMode==="unified_plus"){
+        // Keep small seam-finishing meshes and cloth/accessory logic after unified skin.
+        renderHybridJointMeshes(g,pose,torsoM);
+      }
+      v21RenderWeightOverlay(g,pose,orig,torsoM);
+      return;
+    }
+  }
+
   const mode=$("skinRenderMode")?.value||"hybrid";
   const weighted=$("enableWeightedSkin")?.checked && mode!=="rigid";
 
@@ -3452,7 +3724,7 @@ function currentMotionPackage(){
     format:"fatal-instinct-motion",version:2,
     name:$("motionSource").value==="imported"?(importedMotion.name||"Imported Motion"):"Fatal Instinct Authored Walk",
     frames:samples.length,loop:true,projection:$("projection").value,
-    profile:$("retargetProfile").value,preview_speed_percent:+$("animationSpeed").value,frame_ms:animationFrameMs(),constraint_solver:{enabled:$("enableConstraints").checked,iterations:+$("constraintIterations").value,limb_lock:+$("limbLengthLock").value,plant_pin:+$("plantPin").value,body_anchor:+$("bodyAnchor").value,spine_stability:+$("spineStability").value,max_reach:+$("maxReach").value},weighted_skin:{enabled:$("enableWeightedSkin").checked,mode:$("skinRenderMode").value,blend_radius:+$("skinBlendRadius").value,influence:+$("boneInfluence").value,mesh_grid:+$("weightedMeshGrid").value,joint_blend:+$("weightJointBlend").value},pole_targets:{knees:$("poleKnees").checked,elbows:$("poleElbows").checked,strength:+$("poleStrength").value,distance:+$("poleDistance").value},walk_normalizer:{enabled:$("walkNormalize").checked,max_pelvis_drop:+$("maxPelvisDrop").value,max_knee_lift:+$("maxKneeLift").value,height_floor:+$("standingHeightFloor").value,stride_scale:+$("walkStrideScale").value,plant_straight:+$("plantLegStraight").value,pelvis_smoothing:+$("pelvisSmooth").value},contacts:analyzeContacts(),samples
+    profile:$("retargetProfile").value,preview_speed_percent:+$("animationSpeed").value,frame_ms:animationFrameMs(),constraint_solver:{enabled:$("enableConstraints").checked,iterations:+$("constraintIterations").value,limb_lock:+$("limbLengthLock").value,plant_pin:+$("plantPin").value,body_anchor:+$("bodyAnchor").value,spine_stability:+$("spineStability").value,max_reach:+$("maxReach").value},weighted_skin:{enabled:$("enableWeightedSkin").checked,mode:$("skinRenderMode").value,blend_radius:+$("skinBlendRadius").value,influence:+$("boneInfluence").value,mesh_grid:+$("weightedMeshGrid").value,joint_blend:+$("weightJointBlend").value},pole_targets:{knees:$("poleKnees").checked,elbows:$("poleElbows").checked,strength:+$("poleStrength").value,distance:+$("poleDistance").value},walk_normalizer:{enabled:$("walkNormalize").checked,max_pelvis_drop:+$("maxPelvisDrop").value,max_knee_lift:+$("maxKneeLift").value,height_floor:+$("standingHeightFloor").value,stride_scale:+$("walkStrideScale").value,plant_straight:+$("plantLegStraight").value,pelvis_smoothing:+$("pelvisSmooth").value},unified_mesh:{enabled:$("enableUnifiedMesh").checked,mode:$("unifiedMeshMode").value,columns:+$("unifiedCols").value,padding:+$("unifiedPadding").value,falloff:+$("unifiedFalloff").value,joint_seal:+$("jointSealStrength").value,accessory_rigid:+$("unifiedAccessoryRigid").value},contacts:analyzeContacts(),samples
   };
 }
 function renderAnimationLibrary(){
@@ -3703,11 +3975,16 @@ $("characterName").addEventListener("input",()=>saveAutosave(true));
 $("generate").addEventListener("click",()=>setTimeout(()=>{refreshProductionPreflight();saveAutosave(true);},120));
 
 
-["enableWeightedSkin","showWeightMap","rigidCoreWeights","poleKnees","poleElbows","neutralBindMode","rejectCrossLimb","lockExtremities","protectPixelIslands","walkNormalize","preventCrouch","straightPlantLeg","normalizeStride"].forEach(id=>{
+["enableWeightedSkin","showWeightMap","rigidCoreWeights","poleKnees","poleElbows","neutralBindMode","rejectCrossLimb","lockExtremities","protectPixelIslands","walkNormalize","preventCrouch","straightPlantLeg","normalizeStride","enableUnifiedMesh","alphaUnifiedMask","unifiedIslands","sealJointGaps","unifiedAccessories","showUnifiedMesh"].forEach(id=>{
   $(id)?.addEventListener("change",()=>draw());
 });
-["skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth"].forEach(id=>{
+["skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid"].forEach(id=>{
   $(id)?.addEventListener("input",()=>draw());
+});
+
+
+["unifiedCols","unifiedPadding"].forEach(id=>{
+  $(id)?.addEventListener("input",()=>{v22MeshCache=null;});
 });
 
 detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFrameMs();resize();
