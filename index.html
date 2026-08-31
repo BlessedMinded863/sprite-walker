@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V25.6.2</title>
+<title>Fatal Instinct Sprite Walker V25.6.3</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -137,7 +137,7 @@ setTimeout(()=>{
   if($("v25CurrentQuality"))$("v25CurrentQuality").textContent="--";
   if($("v25BestQuality"))$("v25BestQuality").textContent="--";
   if($("v25PassCount"))$("v25PassCount").textContent="0 / 12";
-  if($("v25Report"))$("v25Report").textContent="Safe Boot ready. Final foot lock armed; motion solver is idle.";
+  if($("v25Report"))$("v25Report").textContent="Safe Boot ready. Final-pose grounding critic armed; motion solver is idle.";
 },50);
 
 </script>
@@ -152,7 +152,7 @@ setTimeout(()=>{
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V25.6.2</span></h1><div class="sub">Production Sprint • Final Foot-Lock Patch</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V25.6.3</span></h1><div class="sub">Production Sprint • Final-Pose Grounding Critic</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -713,7 +713,7 @@ setTimeout(()=>{
 </div>
 
 <div class="moduleBox">
-  <div class="moduleHead"><b>V25.6.2 AI Production Director</b><span id="aiDirectorBadge" class="pill ok">READY</span></div>
+  <div class="moduleHead"><b>V25.6.3 AI Production Director</b><span id="aiDirectorBadge" class="pill ok">READY</span></div>
   <div class="v23Card" style="margin-bottom:8px">
     <div class="moduleHead"><b>Persistent Upgrade Checkpoint</b><span id="checkpointBadge" class="pill ok">AUTO SAVE</span></div>
     <div class="v23Card" style="margin-top:7px">
@@ -782,7 +782,7 @@ setTimeout(()=>{
   </div>
   
   <div class="v25Panel">
-    <div class="moduleHead"><b>V25.6.2 Protected Motion Channels — Final Foot Lock</b><span id="v25Status" class="pill ok">READY</span></div>
+    <div class="moduleHead"><b>V25.6.3 Final-Pose Grounding Critic</b><span id="v25Status" class="pill ok">READY</span></div>
     <div class="v23Mini">Closed-loop locomotion correction: analyze → repair → re-solve → re-score → keep only improvements.</div>
 
     <div class="switchRow"><span>Enable real-time self-correction</span><input id="v25Enabled" type="checkbox" checked></div>
@@ -848,6 +848,8 @@ setTimeout(()=>{
       <div class="v25Stat"><span class="v23Mini">Last protected rollback</span><b id="v256RollbackStatus">--</b></div>
       <div class="v25Stat"><span class="v23Mini">Final foot lock</span><b id="v2562FootLockStatus">READY</b></div>
       <div class="v25Stat"><span class="v23Mini">Post-solve foot drift</span><b id="v2562FootDrift">--</b></div>
+      <div class="v25Stat"><span class="v23Mini">Grounding critic source</span><b id="v2563CriticSource">FINAL POSE</b></div>
+      <div class="v25Stat"><span class="v23Mini">Final-pose plant samples</span><b id="v2563FinalPlantSamples">--</b></div>
     </div>
 
     <div class="v25Grid">
@@ -3825,7 +3827,7 @@ function v242ApplyControls(values){
 function v242CheckpointPayload(){
   return {
     format:"fatal-instinct-v24-checkpoint",
-    version:"25.6.2",
+    version:"25.6.3",
     savedAt:new Date().toISOString(),
     sourceName,
     rig:JSON.parse(JSON.stringify(rig)),
@@ -4616,6 +4618,72 @@ function v25FramePhase(i){
   return i%8;
 }
 
+
+function v2563FinalPoseSamples(){
+  const poses=[];
+  for(let i=0;i<8;i++){
+    try{
+      const b=buildPose(i);
+      if(!b||b.error||!b.pose)continue;
+      // buildPose already applies final-pose correction and absolute foot lock.
+      poses.push({frame:i,pose:b.pose});
+    }catch(e){}
+  }
+  return poses;
+}
+
+function v2563MeasureGrounding(){
+  const samples=v2563FinalPoseSamples();
+  let drifts=[],plantCount=0;
+
+  const groups=[
+    {side:"left",frames:[0,1,2,3]},
+    {side:"right",frames:[4,5,6,7]}
+  ];
+
+  for(const g of groups){
+    const key=`${g.side}_ankle`;
+    const toeKey=`${g.side}_toe`;
+    let anchor=null;
+
+    for(const fi of g.frames){
+      const s=samples.find(x=>x.frame===fi);
+      if(!s||!s.pose[key])continue;
+
+      const p=s.pose[key];
+      if(!anchor)anchor=[p[0],p[1]];
+      else{
+        drifts.push(Math.hypot(p[0]-anchor[0],p[1]-anchor[1]));
+        plantCount++;
+      }
+
+      // Toe sample is included as a second contact consistency check when available.
+      if(s.pose[toeKey]){
+        const tp=s.pose[toeKey];
+        const saved=v255PersistentContact?.[g.side]?.toe;
+        if(saved){
+          drifts.push(Math.hypot(tp[0]-saved[0],tp[1]-saved[1]));
+          plantCount++;
+        }
+      }
+    }
+  }
+
+  const avg=drifts.length?drifts.reduce((a,b)=>a+b,0)/drifts.length:0;
+  const tol=Math.max(.25,(+$("v2562GroundTol")?.value)||1);
+  const maxDrift=drifts.length?Math.max(...drifts):0;
+
+  // Full score at or below tolerance, smoothly falling to zero at 4x tolerance.
+  const normalized=Math.max(0,Math.min(1,1-(avg-tol)/(tol*3)));
+  const score=Math.round(normalized*100);
+
+  if($("v2563CriticSource"))$("v2563CriticSource").textContent="FINAL POSE";
+  if($("v2563FinalPlantSamples"))$("v2563FinalPlantSamples").textContent=
+    `${plantCount} (avg ${avg.toFixed(2)} px / max ${maxDrift.toFixed(2)} px)`;
+
+  return {score,avg,maxDrift,samples:plantCount};
+}
+
 function v25ScoreMotion(){
   const c=v24AnalyzeCurrentAnimation(),poses=[];
   try{for(let i=0;i<8;i++){const b=buildPose(i);if(!b.error)poses.push(b.pose);}}catch(e){}
@@ -4674,7 +4742,14 @@ function v25ScoreMotion(){
   }
   const locScore=v24ScoreClamp(metric.weight*.18+metric.torso*.14+metric.arms*.13+metric.stride*.15+metric.feet*.18+metric.heeltoe*.10+metric.continuity*.12);
   const geometry=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity)/4);
-  return {score:v24ScoreClamp(locScore*.82+geometry*.18),locScore,geometry,critic:c,metrics:metric,plantSamples,slideAvg:+slideAvg.toFixed(2)};
+  
+  const v2563Ground=v2563MeasureGrounding();
+  if(typeof metrics!=="undefined"&&metrics){
+    metrics.feet=v2563Ground.score;
+    metrics.footSlide=v2563Ground.avg;
+    metrics.plantSamples=v2563Ground.samples;
+  }
+return {score:v24ScoreClamp(locScore*.82+geometry*.18),locScore,geometry,critic:c,metrics:metric,plantSamples,slideAvg:+slideAvg.toFixed(2)};
 }
 
 function v251UpdateDiagnostics(s){
@@ -5287,6 +5362,10 @@ function v24Snapshot(){return {
     enabled:!!$("autoLimbRepair")?.checked,
     trigger:+$("limbRepairTrigger")?.value||5,
     last:window.__v243LastRepair||null
+  },
+  grounding_critic:{
+    source:"final_pose_after_absolute_lock",
+    version:"25.6.3"
   },
   final_foot_lock:{
     enabled:!!$("v2562FinalFootLock")?.checked,
