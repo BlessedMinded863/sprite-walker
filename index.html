@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V25.6.1</title>
+<title>Fatal Instinct Sprite Walker V25.6.2</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -137,7 +137,7 @@ setTimeout(()=>{
   if($("v25CurrentQuality"))$("v25CurrentQuality").textContent="--";
   if($("v25BestQuality"))$("v25BestQuality").textContent="--";
   if($("v25PassCount"))$("v25PassCount").textContent="0 / 12";
-  if($("v25Report"))$("v25Report").textContent="Safe Boot ready. Motion solver is idle.";
+  if($("v25Report"))$("v25Report").textContent="Safe Boot ready. Final foot lock armed; motion solver is idle.";
 },50);
 
 </script>
@@ -152,7 +152,7 @@ setTimeout(()=>{
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V25.6.1</span></h1><div class="sub">Production Sprint • Safe Boot Recovery</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V25.6.2</span></h1><div class="sub">Production Sprint • Final Foot-Lock Patch</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -713,7 +713,7 @@ setTimeout(()=>{
 </div>
 
 <div class="moduleBox">
-  <div class="moduleHead"><b>V25.6.1 AI Production Director</b><span id="aiDirectorBadge" class="pill ok">READY</span></div>
+  <div class="moduleHead"><b>V25.6.2 AI Production Director</b><span id="aiDirectorBadge" class="pill ok">READY</span></div>
   <div class="v23Card" style="margin-bottom:8px">
     <div class="moduleHead"><b>Persistent Upgrade Checkpoint</b><span id="checkpointBadge" class="pill ok">AUTO SAVE</span></div>
     <div class="v23Card" style="margin-top:7px">
@@ -782,7 +782,7 @@ setTimeout(()=>{
   </div>
   
   <div class="v25Panel">
-    <div class="moduleHead"><b>V25.6.1 Protected Motion Channels — Safe Boot</b><span id="v25Status" class="pill ok">READY</span></div>
+    <div class="moduleHead"><b>V25.6.2 Protected Motion Channels — Final Foot Lock</b><span id="v25Status" class="pill ok">READY</span></div>
     <div class="v23Mini">Closed-loop locomotion correction: analyze → repair → re-solve → re-score → keep only improvements.</div>
 
     <div class="switchRow"><span>Enable real-time self-correction</span><input id="v25Enabled" type="checkbox" checked></div>
@@ -800,6 +800,9 @@ setTimeout(()=>{
     <div class="switchRow"><span>Protect solved arm / heel-to-toe / continuity channels</span><input id="v255ProtectSolved" type="checkbox" checked></div>
     <div class="switchRow"><span>Hard-protect all solved channels</span><input id="v256HardProtect" type="checkbox" checked></div>
     <div class="switchRow"><span>Reject corrections that damage locked metrics</span><input id="v256RejectDamage" type="checkbox" checked></div>
+    <div class="switchRow"><span>Final absolute support-foot lock</span><input id="v2562FinalFootLock" type="checkbox" checked></div>
+    <div class="switchRow"><span>Re-lock toe with planted foot</span><input id="v2562ToeRelock" type="checkbox" checked></div>
+    <div class="slider"><label>Ground lock tolerance <span><b id="v2562GroundTolV">1.0</b> px</span></label><input id="v2562GroundTol" type="range" min="0" max="3" step=".25" value="1"></div>
     <div class="slider"><label>Allowed locked-metric drop <span><b id="v256AllowedDropV">1</b>%</span></label><input id="v256AllowedDrop" type="range" min="0" max="5" value="1"></div>
     <div class="slider"><label>Body compensation strength <span><b id="v255BodyCompV">88</b>%</span></label><input id="v255BodyComp" type="range" min="50" max="100" value="88"></div>
     <div class="slider"><label>Passing stance target <span><b id="v254PassingTargetV">125</b>% hip width</span></label><input id="v254PassingTarget" type="range" min="95" max="170" value="125"></div>
@@ -843,6 +846,8 @@ setTimeout(()=>{
       <div class="v25Stat"><span class="v23Mini">Correction priority</span><b id="v255Priority">Feet → Weight → Stride → Torso</b></div>
       <div class="v25Stat"><span class="v23Mini">Protected-channel status</span><b id="v256ProtectionStatus">READY</b></div>
       <div class="v25Stat"><span class="v23Mini">Last protected rollback</span><b id="v256RollbackStatus">--</b></div>
+      <div class="v25Stat"><span class="v23Mini">Final foot lock</span><b id="v2562FootLockStatus">READY</b></div>
+      <div class="v25Stat"><span class="v23Mini">Post-solve foot drift</span><b id="v2562FootDrift">--</b></div>
     </div>
 
     <div class="v25Grid">
@@ -1076,7 +1081,7 @@ const JOINT_MESHES = [
 
 function status(s){statusEl.textContent=s;}
 function bindSlider(id,out){const a=$(id),b=$(out);a.oninput=()=>b.textContent=a.value;}
-["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","constraintIterations","limbLengthLock","plantPin","bodyAnchor","spineStability","maxReach","skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid","stateBlend","poseThreshold","correctiveStrength","montageStartup","montageActive","montageRecovery","motionStrideWarp","orientationWarp","blendSpeed","aiPassThreshold","limbRepairTrigger","v25MaxPasses","v25MinImprove","v253FootLockStrength","v253ArmOpposition","v254PassingTarget","v254WeightTarget","v255BodyComp","v256AllowedDrop","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform","jointLockStrength","connectedOverlap","animationSpeed"].forEach(id=>bindSlider(id,id+"V"));
+["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","constraintIterations","limbLengthLock","plantPin","bodyAnchor","spineStability","maxReach","skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid","stateBlend","poseThreshold","correctiveStrength","montageStartup","montageActive","montageRecovery","motionStrideWarp","orientationWarp","blendSpeed","aiPassThreshold","limbRepairTrigger","v25MaxPasses","v25MinImprove","v253FootLockStrength","v253ArmOpposition","v254PassingTarget","v254WeightTarget","v255BodyComp","v256AllowedDrop","v2562GroundTol","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform","jointLockStrength","connectedOverlap","animationSpeed"].forEach(id=>bindSlider(id,id+"V"));
 function setMode(m){mode=m;$("traceBtn").classList.toggle("active",m==="trace");$("jointBtn").classList.toggle("active",m==="joint");$("inspectBtn").classList.toggle("active",m==="inspect");status(m==="trace"?"Trace around the selected body part.":m==="joint"?"Tap or drag the selected joint.":"Inspect mode.");}
 $("traceBtn").onclick=()=>setMode("trace");$("jointBtn").onclick=()=>setMode("joint");$("inspectBtn").onclick=()=>setMode("inspect");
 
@@ -1441,6 +1446,9 @@ function applyProductionDefaults(){
   if($("v256HardProtect")) $("v256HardProtect").checked=true;
   if($("v256RejectDamage")) $("v256RejectDamage").checked=true;
   if($("v256AllowedDrop")) $("v256AllowedDrop").value=1;
+  if($("v2562FinalFootLock")) $("v2562FinalFootLock").checked=true;
+  if($("v2562ToeRelock")) $("v2562ToeRelock").checked=true;
+  if($("v2562GroundTol")) $("v2562GroundTol").value=1;
   if($("v25Profile")) $("v25Profile").value="fatal";
   if($("v25TargetQuality")) $("v25TargetQuality").value=92;
   if($("v25MaxPasses")) $("v25MaxPasses").value=12;
@@ -1677,6 +1685,7 @@ function buildPose(i,skipAutoRepair=false){
    }
  }
  v252ApplyFinalPoseLayer(i,pose);
+ v2562ApplyFinalFootLock(i,pose);
  return{pose,torsoM,phaseName:WALK_NAMES[i],metrics};
 }
 
@@ -3816,7 +3825,7 @@ function v242ApplyControls(values){
 function v242CheckpointPayload(){
   return {
     format:"fatal-instinct-v24-checkpoint",
-    version:"25.6.1",
+    version:"25.6.2",
     savedAt:new Date().toISOString(),
     sourceName,
     rig:JSON.parse(JSON.stringify(rig)),
@@ -3993,6 +4002,39 @@ function v24ScoreClamp(v){return Math.max(0,Math.min(100,Math.round(v)));}
 
 
 
+
+let v2562LastFootDrift=0;
+
+function v2562SupportSide(frame){return frame<4?"left":"right";}
+function v2562SupportKeys(frame){
+  const side=v2562SupportSide(frame);
+  return {side,ankle:`${side}_ankle`,toe:`${side}_toe`};
+}
+function v2562CaptureSupportAnchor(frame,pose){
+  const k=v2562SupportKeys(frame);
+  const a=pose[k.ankle]||rig.joints[k.ankle];
+  const t=pose[k.toe]||rig.joints[k.toe];
+  return {side:k.side,ankle:a?[a[0],a[1]]:null,toe:t?[t[0],t[1]]:null};
+}
+function v2562ApplyFinalFootLock(frame,pose,anchor=null){
+  if(!$("v2562FinalFootLock")?.checked)return pose;
+  const k=v2562SupportKeys(frame);
+  const saved=v255PersistentContact?.[k.side]||null;
+  const a=anchor?.ankle||saved?.ankle||null;
+  const t=anchor?.toe||saved?.toe||null;
+  let drift=0;
+  if(a&&pose[k.ankle]){
+    drift=Math.hypot(pose[k.ankle][0]-a[0],pose[k.ankle][1]-a[1]);
+    pose[k.ankle]=[a[0],a[1]];
+  }
+  if($("v2562ToeRelock")?.checked&&t&&pose[k.toe])pose[k.toe]=[t[0],t[1]];
+  v2562LastFootDrift=drift;
+  if($("v2562FootDrift"))$("v2562FootDrift").textContent=drift.toFixed(2)+" px";
+  const tol=(+$("v2562GroundTol")?.value)||1;
+  if($("v2562FootLockStatus"))$("v2562FootLockStatus").textContent=drift<=tol?"LOCKED":"RE-LOCKED";
+  return pose;
+}
+
 let v256ProtectedSnapshot=null;
 
 const V256_CHANNEL_JOINTS={
@@ -4060,6 +4102,7 @@ function v256ValidateProtectedCandidate(beforeState,beforeScore,afterScore,targe
 }
 
 function v256HierarchicalSolve(frame,pose,targetKey){
+  const v2562Anchor=v2562CaptureSupportAnchor(frame,pose);
   // 1) Feet/contact are immutable first.
   v255ApplyPersistentContact(frame,pose);
 
@@ -4084,6 +4127,8 @@ function v256HierarchicalSolve(frame,pose,targetKey){
 
   // 5) Finally restore all solved protected channels.
   v256RestoreProtectedJoints(frame,pose);
+
+  v2562ApplyFinalFootLock(frame,pose,v2562Anchor);
 }
 
 let v255ContactLocks={
@@ -4121,6 +4166,8 @@ function v255ApplyPersistentContact(frame,pose){
   if(a&&cfg.ankle){a[0]=cfg.ankle[0];a[1]=cfg.ankle[1];}
   if(t&&cfg.toe){t[0]=cfg.toe[0];t[1]=cfg.toe[1];}
   if($("v255ContactStatus"))$("v255ContactStatus").textContent=`${side} F${v255SupportInterval(side)[0]+1}-${v255SupportInterval(side)[3]+1} locked`;
+
+  v2562ApplyFinalFootLock(frame,pose);
 }
 
 function v255BodyCompensate(frame,pose){
@@ -4510,6 +4557,7 @@ function v252ResolvePose(frame,pose){
   }catch(e){}
 }
 function v252ApplyFinalPoseLayer(frame,pose){
+  const v2562Anchor=v2562CaptureSupportAnchor(frame,pose);
   if(!$("v252FinalPoseEnabled")?.checked)return;
   const applied=v252ApplyStoredFinalCorrection(frame,pose);
   if(applied){
@@ -4517,6 +4565,8 @@ function v252ApplyFinalPoseLayer(frame,pose){
     v256HierarchicalSolve(frame,pose,"all");
     if($("v252FinalPoseStatus"))$("v252FinalPoseStatus").textContent="ACTIVE";
   }
+
+  v2562ApplyFinalFootLock(frame,pose,v2562Anchor);
 }
 
 let v25Motion={
@@ -5237,6 +5287,12 @@ function v24Snapshot(){return {
     enabled:!!$("autoLimbRepair")?.checked,
     trigger:+$("limbRepairTrigger")?.value||5,
     last:window.__v243LastRepair||null
+  },
+  final_foot_lock:{
+    enabled:!!$("v2562FinalFootLock")?.checked,
+    toeRelock:!!$("v2562ToeRelock")?.checked,
+    tolerancePx:+$("v2562GroundTol")?.value||1,
+    lastDriftPx:v2562LastFootDrift
   },
   protected_motion_channels:{
     hardProtect:!!$("v256HardProtect")?.checked,
@@ -6315,7 +6371,7 @@ $("characterName").addEventListener("input",()=>saveAutosave(true));
 $("generate").addEventListener("click",()=>setTimeout(()=>{refreshProductionPreflight();saveAutosave(true);},120));
 
 
-["enableWeightedSkin","showWeightMap","rigidCoreWeights","poleKnees","poleElbows","neutralBindMode","rejectCrossLimb","lockExtremities","protectPixelIslands","walkNormalize","preventCrouch","straightPlantLeg","normalizeStride","enableUnifiedMesh","alphaUnifiedMask","unifiedIslands","sealJointGaps","unifiedAccessories","showUnifiedMesh","animGraphEnabled","poseSearchEnabled","ctlHeadAim","ctlWeaponTarget","ctlPoseMirror","constraintCopyPos","constraintCopyRot","constraintParent","constraintAim","correctivePoseEnabled","spriteSwapEnabled","montageEnabled","motionWarpEnabled","blendTreeEnabled","universalSkeletonEnabled","aiDirectorEnabled","aiStopOnFail","aiAutoCorrect","aiAllowBypass","aiRequireApproval","ai4bppOptimize","aiTileReuse","aiVramCheck","aiOamCheck","aiCompression","autoLimbRepair","v25Enabled","v25AutoRevert","v25PreserveFeet","v25PreserveSilhouette","v252FinalPoseEnabled","v252ResolveAfter","v253PhaseLock","v253FootWorldLock","v253RotateTargets","v254FreezeSolved","v254SupportSolve","v255PersistentContact","v255ProtectSolved","v256HardProtect","v256RejectDamage"].forEach(id=>{
+["enableWeightedSkin","showWeightMap","rigidCoreWeights","poleKnees","poleElbows","neutralBindMode","rejectCrossLimb","lockExtremities","protectPixelIslands","walkNormalize","preventCrouch","straightPlantLeg","normalizeStride","enableUnifiedMesh","alphaUnifiedMask","unifiedIslands","sealJointGaps","unifiedAccessories","showUnifiedMesh","animGraphEnabled","poseSearchEnabled","ctlHeadAim","ctlWeaponTarget","ctlPoseMirror","constraintCopyPos","constraintCopyRot","constraintParent","constraintAim","correctivePoseEnabled","spriteSwapEnabled","montageEnabled","motionWarpEnabled","blendTreeEnabled","universalSkeletonEnabled","aiDirectorEnabled","aiStopOnFail","aiAutoCorrect","aiAllowBypass","aiRequireApproval","ai4bppOptimize","aiTileReuse","aiVramCheck","aiOamCheck","aiCompression","autoLimbRepair","v25Enabled","v25AutoRevert","v25PreserveFeet","v25PreserveSilhouette","v252FinalPoseEnabled","v252ResolveAfter","v253PhaseLock","v253FootWorldLock","v253RotateTargets","v254FreezeSolved","v254SupportSolve","v255PersistentContact","v255ProtectSolved","v256HardProtect","v256RejectDamage","v2562FinalFootLock","v2562ToeRelock"].forEach(id=>{
   $(id)?.addEventListener("change",()=>draw());
 });
 ["skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid","stateBlend","poseThreshold","correctiveStrength","montageStartup","montageActive","montageRecovery","motionStrideWarp","orientationWarp","aiPassThreshold"].forEach(id=>{
