@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V25.5</title>
+<title>Fatal Instinct Sprite Walker V25.6</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -143,7 +143,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V25.5</span></h1><div class="sub">Production Sprint • Persistent Contact Solver</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V25.6</span></h1><div class="sub">Production Sprint • Protected Motion Channels</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -704,7 +704,7 @@
 </div>
 
 <div class="moduleBox">
-  <div class="moduleHead"><b>V25.5 AI Production Director</b><span id="aiDirectorBadge" class="pill ok">READY</span></div>
+  <div class="moduleHead"><b>V25.6 AI Production Director</b><span id="aiDirectorBadge" class="pill ok">READY</span></div>
   <div class="v23Card" style="margin-bottom:8px">
     <div class="moduleHead"><b>Persistent Upgrade Checkpoint</b><span id="checkpointBadge" class="pill ok">AUTO SAVE</span></div>
     <div class="v23Mini" id="checkpointText">Character, rig, controls, pipeline state and diagnostics are saved automatically.</div>
@@ -765,7 +765,7 @@
   </div>
   
   <div class="v25Panel">
-    <div class="moduleHead"><b>V25.5 Persistent Contact + Body Compensation Solver</b><span id="v25Status" class="pill ok">READY</span></div>
+    <div class="moduleHead"><b>V25.6 Protected Motion Channels + Hierarchical Body Solver</b><span id="v25Status" class="pill ok">READY</span></div>
     <div class="v23Mini">Closed-loop locomotion correction: analyze → repair → re-solve → re-score → keep only improvements.</div>
 
     <div class="switchRow"><span>Enable real-time self-correction</span><input id="v25Enabled" type="checkbox" checked></div>
@@ -781,6 +781,9 @@
     <div class="switchRow"><span>Optimize pelvis around locked support foot</span><input id="v254SupportSolve" type="checkbox" checked></div>
     <div class="switchRow"><span>Persistent contact lock across support interval</span><input id="v255PersistentContact" type="checkbox" checked></div>
     <div class="switchRow"><span>Protect solved arm / heel-to-toe / continuity channels</span><input id="v255ProtectSolved" type="checkbox" checked></div>
+    <div class="switchRow"><span>Hard-protect all solved channels</span><input id="v256HardProtect" type="checkbox" checked></div>
+    <div class="switchRow"><span>Reject corrections that damage locked metrics</span><input id="v256RejectDamage" type="checkbox" checked></div>
+    <div class="slider"><label>Allowed locked-metric drop <span><b id="v256AllowedDropV">1</b>%</span></label><input id="v256AllowedDrop" type="range" min="0" max="5" value="1"></div>
     <div class="slider"><label>Body compensation strength <span><b id="v255BodyCompV">88</b>%</span></label><input id="v255BodyComp" type="range" min="50" max="100" value="88"></div>
     <div class="slider"><label>Passing stance target <span><b id="v254PassingTargetV">125</b>% hip width</span></label><input id="v254PassingTarget" type="range" min="95" max="170" value="125"></div>
     <div class="slider"><label>Weight-transfer target <span><b id="v254WeightTargetV">5</b>% leg</span></label><input id="v254WeightTarget" type="range" min="2" max="10" value="5"></div>
@@ -821,6 +824,8 @@
       <div class="v25Stat"><span class="v23Mini">Support solve</span><b id="v254SupportSolveStatus">--</b></div>
       <div class="v25Stat"><span class="v23Mini">Persistent contact</span><b id="v255ContactStatus">--</b></div>
       <div class="v25Stat"><span class="v23Mini">Correction priority</span><b id="v255Priority">Feet → Weight → Stride → Torso</b></div>
+      <div class="v25Stat"><span class="v23Mini">Protected-channel status</span><b id="v256ProtectionStatus">READY</b></div>
+      <div class="v25Stat"><span class="v23Mini">Last protected rollback</span><b id="v256RollbackStatus">--</b></div>
     </div>
 
     <div class="v25Grid">
@@ -1054,7 +1059,7 @@ const JOINT_MESHES = [
 
 function status(s){statusEl.textContent=s;}
 function bindSlider(id,out){const a=$(id),b=$(out);a.oninput=()=>b.textContent=a.value;}
-["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","constraintIterations","limbLengthLock","plantPin","bodyAnchor","spineStability","maxReach","skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid","stateBlend","poseThreshold","correctiveStrength","montageStartup","montageActive","montageRecovery","motionStrideWarp","orientationWarp","blendSpeed","aiPassThreshold","limbRepairTrigger","v25MaxPasses","v25MinImprove","v253FootLockStrength","v253ArmOpposition","v254PassingTarget","v254WeightTarget","v255BodyComp","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform","jointLockStrength","connectedOverlap","animationSpeed"].forEach(id=>bindSlider(id,id+"V"));
+["stride","step","bob","lean","arm","tail","plantTilt","swingTilt","groundTol","alphaThreshold","traceDetail","autoOverlap","meshRadius","meshGrid","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","constraintIterations","limbLengthLock","plantPin","bodyAnchor","spineStability","maxReach","skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid","stateBlend","poseThreshold","correctiveStrength","montageStartup","montageActive","montageRecovery","motionStrideWarp","orientationWarp","blendSpeed","aiPassThreshold","limbRepairTrigger","v25MaxPasses","v25MinImprove","v253FootLockStrength","v253ArmOpposition","v254PassingTarget","v254WeightTarget","v255BodyComp","v256AllowedDrop","ctlPelvisX","ctlPelvisY","ctlLFootX","ctlLFootY","ctlRFootX","ctlRFootY","clothFollow","clothDamping","maxMeshStretch","jointDeform","jointLockStrength","connectedOverlap","animationSpeed"].forEach(id=>bindSlider(id,id+"V"));
 function setMode(m){mode=m;$("traceBtn").classList.toggle("active",m==="trace");$("jointBtn").classList.toggle("active",m==="joint");$("inspectBtn").classList.toggle("active",m==="inspect");status(m==="trace"?"Trace around the selected body part.":m==="joint"?"Tap or drag the selected joint.":"Inspect mode.");}
 $("traceBtn").onclick=()=>setMode("trace");$("jointBtn").onclick=()=>setMode("joint");$("inspectBtn").onclick=()=>setMode("inspect");
 
@@ -1416,6 +1421,9 @@ function applyProductionDefaults(){
   if($("v255PersistentContact")) $("v255PersistentContact").checked=true;
   if($("v255ProtectSolved")) $("v255ProtectSolved").checked=true;
   if($("v255BodyComp")) $("v255BodyComp").value=88;
+  if($("v256HardProtect")) $("v256HardProtect").checked=true;
+  if($("v256RejectDamage")) $("v256RejectDamage").checked=true;
+  if($("v256AllowedDrop")) $("v256AllowedDrop").value=1;
   if($("v25Profile")) $("v25Profile").value="fatal";
   if($("v25TargetQuality")) $("v25TargetQuality").value=92;
   if($("v25MaxPasses")) $("v25MaxPasses").value=12;
@@ -3712,7 +3720,7 @@ function v242ApplyControls(values){
 function v242CheckpointPayload(){
   return {
     format:"fatal-instinct-v24-checkpoint",
-    version:"25.5",
+    version:"25.6",
     savedAt:new Date().toISOString(),
     sourceName,
     rig:JSON.parse(JSON.stringify(rig)),
@@ -3901,6 +3909,100 @@ function v24ScoreClamp(v){return Math.max(0,Math.min(100,Math.round(v)));}
 
 
 
+
+
+let v256ProtectedSnapshot=null;
+
+const V256_CHANNEL_JOINTS={
+  feet:["left_ankle","left_toe","right_ankle","right_toe"],
+  arms:["left_elbow","left_wrist","right_elbow","right_wrist"],
+  heeltoe:["left_ankle","left_toe","right_ankle","right_toe"],
+  torso:["neck","left_shoulder","right_shoulder"],
+  weight:["pelvis","left_hip","right_hip"],
+  stride:["left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe"],
+  continuity:["pelvis","neck"]
+};
+
+function v256CaptureProtectedSnapshot(){
+  const snap={metrics:{},poses:{}};
+  const score=v25ScoreMotion();
+  snap.metrics=JSON.parse(JSON.stringify(score.metrics||{}));
+  for(let i=0;i<8;i++){
+    const b=buildPose(i); if(b.error)continue;
+    snap.poses[i]={};
+    for(const [channel,locked] of Object.entries(v254LockedMetrics||{})){
+      if(!locked)continue;
+      for(const j of V256_CHANNEL_JOINTS[channel]||[]){
+        if(b.pose[j])snap.poses[i][j]=[b.pose[j][0],b.pose[j][1]];
+      }
+    }
+  }
+  v256ProtectedSnapshot=snap;
+  if($("v256ProtectionStatus"))$("v256ProtectionStatus").textContent="SNAPSHOT ACTIVE";
+  return snap;
+}
+
+function v256RestoreProtectedJoints(frame,pose){
+  if(!$("v256HardProtect")?.checked||!v256ProtectedSnapshot)return;
+  const saved=v256ProtectedSnapshot.poses?.[frame]; if(!saved)return;
+  for(const [j,p] of Object.entries(saved)){
+    if(pose[j]){pose[j][0]=p[0];pose[j][1]=p[1];}
+  }
+}
+
+function v256LockedDamage(beforeMetrics,afterMetrics){
+  const allowed=+$("v256AllowedDrop")?.value||1;
+  const damage=[];
+  for(const [k,locked] of Object.entries(v254LockedMetrics||{})){
+    if(!locked)continue;
+    const b=beforeMetrics?.[k],a=afterMetrics?.[k];
+    if(Number.isFinite(b)&&Number.isFinite(a)&&a < b-allowed){
+      damage.push({key:k,before:b,after:a,drop:b-a});
+    }
+  }
+  return damage;
+}
+
+function v256ValidateProtectedCandidate(beforeState,beforeScore,afterScore,targetKey){
+  if(!$("v256RejectDamage")?.checked)return {ok:true,damage:[]};
+  const damage=v256LockedDamage(beforeScore.metrics,afterScore.metrics);
+  if(damage.length){
+    v25RestoreMotionState(beforeState);
+    if($("v256RollbackStatus"))$("v256RollbackStatus").textContent=
+      damage.map(d=>`${d.key} -${d.drop.toFixed(1)}%`).join(", ");
+    v25Log(`Protected rollback: rejected ${targetKey} correction because ${damage.map(d=>`${d.key} ${d.before}%→${d.after}%`).join("; ")}.`);
+    return {ok:false,damage};
+  }
+  if($("v256RollbackStatus"))$("v256RollbackStatus").textContent="None";
+  return {ok:true,damage:[]};
+}
+
+function v256HierarchicalSolve(frame,pose,targetKey){
+  // 1) Feet/contact are immutable first.
+  v255ApplyPersistentContact(frame,pose);
+
+  // 2) Pelvis / weight.
+  if(targetKey==="weight"||targetKey==="all")v255BodyCompensate(frame,pose);
+
+  // 3) Legs / stride.
+  if(targetKey==="stride"||targetKey==="all")v254OptimizePassingStride(frame,pose);
+
+  // 4) Torso.
+  if((targetKey==="torso"||targetKey==="all")&&!v254LockedMetrics.torso){
+    const ph=v253Phase(frame),leg=legMetrics()?.avgLeg||120;
+    const amount=ph.pelvis*leg*.012;
+    for(const j of ["neck","left_shoulder","right_shoulder"]){
+      if(pose[j])pose[j][0]-=amount;
+    }
+  }
+
+  // Solve legality while foot contact is pinned.
+  v252ResolvePose(frame,pose);
+  v255ApplyPersistentContact(frame,pose);
+
+  // 5) Finally restore all solved protected channels.
+  v256RestoreProtectedJoints(frame,pose);
+}
 
 let v255ContactLocks={
   left:{ankle:null,toe:null,startFrame:0},
@@ -4329,9 +4431,8 @@ function v252ApplyFinalPoseLayer(frame,pose){
   if(!$("v252FinalPoseEnabled")?.checked)return;
   const applied=v252ApplyStoredFinalCorrection(frame,pose);
   if(applied){
-    v253ApplyPhaseLockedGait(frame,pose,"all");
-    v254ApplyGroundedOptimizer(frame,pose,"all");
-    v255ApplyPersistentSolver(frame,pose,"all");
+    v255ApplyPersistentContact(frame,pose);
+    v256HierarchicalSolve(frame,pose,"all");
     if($("v252FinalPoseStatus"))$("v252FinalPoseStatus").textContent="ACTIVE";
   }
 }
@@ -4563,16 +4664,20 @@ function v25GenerateCorrectivePass(passNum,targetKey){
     const pose=v25GetPoseForCorrection(i);if(!pose)continue;
     const before=v252ClonePose(pose);
 
-    // Only run the systems needed for the active target.
-    if(targetKey==="arms"&&!v254LockedMetrics.arms)v253ApplyArmOpposition(i,pose);
-    if(targetKey==="heeltoe"&&!v254LockedMetrics.heeltoe)v253ApplySwingFoot(i,pose);
-    if(targetKey==="feet"||targetKey==="weight"||targetKey==="stride"||targetKey==="torso"){
-      v255ApplyPersistentSolver(i,pose,targetKey);
+    if(targetKey==="feet"){
+      v255ApplyPersistentContact(i,pose);
+      v255BodyCompensate(i,pose);
+    }else if(targetKey==="weight"||targetKey==="stride"||targetKey==="torso"){
+      v256HierarchicalSolve(i,pose,targetKey);
+    }else if(targetKey==="arms"&&!v254LockedMetrics.arms){
+      v253ApplyArmOpposition(i,pose);
+    }else if(targetKey==="heeltoe"&&!v254LockedMetrics.heeltoe){
+      v253ApplySwingFoot(i,pose);
     }
 
     v243RepairPose(i,pose,rig.joints,true);
     v255ApplyPersistentContact(i,pose);
-    v255ProtectSolvedChannels(before,pose);
+    v256RestoreProtectedJoints(i,pose);
     v252StoreFinalCorrection(i,pose);
     reports.push({frame:i+1,target:targetKey,phase:v253Phase(i).name,support:v253Phase(i).support});
   }
@@ -4582,18 +4687,18 @@ function v25GenerateCorrectivePass(passNum,targetKey){
 
 async function v25RunSelfCorrection(){
   if(v25Motion.running||!$("v25Enabled")?.checked)return;
-  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V25.5 persistent-contact correction started.";
+  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V25.6 protected-channel correction started.";
   const target=+$("v25TargetQuality").value||92,maxPasses=+$("v25MaxPasses").value||12,minImprove=+$("v25MinImprove").value||.5;
   let base=v25ScoreMotion();v251UpdateDiagnostics(base);v25Motion.currentScore=base.score;v25Motion.bestScore=base.score;
   v25Motion.bestCorrectives=JSON.parse(JSON.stringify(v23.correctives||[]));v25Motion.bestFinalCorrections=JSON.parse(JSON.stringify(v252FinalCorrections||{}));v25Motion.bestControls=v242CaptureControls();v25Motion.history=[{pass:0,score:base.score,metrics:base.metrics}];
   $("v25CurrentQuality").textContent=base.score+"%";$("v25BestQuality").textContent=base.score+"%";$("v25PassCount").textContent=`0 / ${maxPasses}`;
   v25Log(`Baseline: ${base.score}% (locomotion ${base.locScore}%, geometry ${base.geometry}%). Target: ${target}%.`);
   if(base.score>=target){$("v25Status").textContent="PASS";v25Motion.running=false;v25FinalizeReport("pass");v242SaveCheckpoint(true);return;}
-  let noChange=0;v253TargetFailures={};v254LockedMetrics={};v254FreezeSolvedMetrics(base);
+  let noChange=0;v253TargetFailures={};v254LockedMetrics={};v254FreezeSolvedMetrics(base);v256CaptureProtectedSnapshot();
   for(let p=1;p<=maxPasses;p++){
     if(v25Motion.stopRequested)break;v25Motion.pass=p;$("v25PassCount").textContent=`${p} / ${maxPasses}`;
     const current=v25ScoreMotion(),weak=v255PriorityTarget(current);$("v251Target").textContent=`${weak.label} ${Math.round(weak.val)}%`;
-    const before=v25SnapshotMotionState(),fp0=v251PoseFingerprint();v25GenerateCorrectivePass(p,weak.key);await new Promise(r=>setTimeout(r,60));
+    const before=v25SnapshotMotionState(),beforeScore=v25ScoreMotion(),fp0=v251PoseFingerprint();v25GenerateCorrectivePass(p,weak.key);await new Promise(r=>setTimeout(r,60));
     const changed=Math.abs(v251PoseFingerprint()-fp0)>.0005;
     if(!changed){
       v25RestoreMotionState(before);noChange++;v253TargetFailures[weak.key]=(v253TargetFailures[weak.key]||0)+1;
@@ -4601,9 +4706,15 @@ async function v25RunSelfCorrection(){
       if(noChange>=4){$("v25Status").textContent="NEEDS UPGRADE";v25Motion.running=false;v25RestoreBest();v25FinalizeReport("no-feedback");return;}
       continue;
     }
-    const scored=v25ScoreMotion();v251UpdateDiagnostics(scored);const improve=scored.score-v25Motion.currentScore;v25Motion.lastImprove=improve;
+    const scored=v25ScoreMotion();v251UpdateDiagnostics(scored);
+    const protectedCheck=v256ValidateProtectedCandidate(before,beforeScore,scored,weak.key);
+    if(!protectedCheck.ok){
+      v253TargetFailures[weak.key]=(v253TargetFailures[weak.key]||0)+1;
+      continue;
+    }
+    const improve=scored.score-v25Motion.currentScore;v25Motion.lastImprove=improve;
     $("v25CurrentQuality").textContent=scored.score+"%";$("v25LastImprove").textContent=(improve>=0?"+":"")+improve.toFixed(1)+"%";
-    if(scored.score>v25Motion.bestScore){v25Motion.bestScore=scored.score;v25Motion.bestCorrectives=JSON.parse(JSON.stringify(v23.correctives||[]));v25Motion.bestFinalCorrections=JSON.parse(JSON.stringify(v252FinalCorrections||{}));v25Motion.bestControls=v242CaptureControls();$("v25BestQuality").textContent=scored.score+"%";}
+    if(scored.score>v25Motion.bestScore){v25Motion.bestScore=scored.score;v25Motion.bestCorrectives=JSON.parse(JSON.stringify(v23.correctives||[]));v25Motion.bestFinalCorrections=JSON.parse(JSON.stringify(v252FinalCorrections||{}));v25Motion.bestControls=v242CaptureControls();$("v25BestQuality").textContent=scored.score+"%";v254FreezeSolvedMetrics(scored);v256CaptureProtectedSnapshot();}
     if(improve<0&&$("v25AutoRevert")?.checked){
       v25RestoreMotionState(before);
       v253TargetFailures[weak.key]=(v253TargetFailures[weak.key]||0)+1;
@@ -4961,7 +5072,7 @@ function v24RunCritic(){
     if(v25Motion.bestScore<0)$("v25BestQuality").textContent=q.score+"%";
     const target=+$("v25TargetQuality").value||92;
     if(q.score<target){
-      return {pass:false,score:q.score,msg:`Geometry passed, locomotion quality ${q.score}% < ${target}% target. Run V25.5 Self-Correction.`,details:c,needsV25:true};
+      return {pass:false,score:q.score,msg:`Geometry passed, locomotion quality ${q.score}% < ${target}% target. Run V25.6 Self-Correction.`,details:c,needsV25:true};
     }
   }
 
@@ -5044,6 +5155,12 @@ function v24Snapshot(){return {
     enabled:!!$("autoLimbRepair")?.checked,
     trigger:+$("limbRepairTrigger")?.value||5,
     last:window.__v243LastRepair||null
+  },
+  protected_motion_channels:{
+    hardProtect:!!$("v256HardProtect")?.checked,
+    rejectDamage:!!$("v256RejectDamage")?.checked,
+    allowedDrop:+$("v256AllowedDrop")?.value||1,
+    hierarchy:["feet","weight","stride","torso","protected-arms"]
   },
   persistent_contact_solver:{
     enabled:!!$("v255PersistentContact")?.checked,
@@ -6111,7 +6228,7 @@ $("characterName").addEventListener("input",()=>saveAutosave(true));
 $("generate").addEventListener("click",()=>setTimeout(()=>{refreshProductionPreflight();saveAutosave(true);},120));
 
 
-["enableWeightedSkin","showWeightMap","rigidCoreWeights","poleKnees","poleElbows","neutralBindMode","rejectCrossLimb","lockExtremities","protectPixelIslands","walkNormalize","preventCrouch","straightPlantLeg","normalizeStride","enableUnifiedMesh","alphaUnifiedMask","unifiedIslands","sealJointGaps","unifiedAccessories","showUnifiedMesh","animGraphEnabled","poseSearchEnabled","ctlHeadAim","ctlWeaponTarget","ctlPoseMirror","constraintCopyPos","constraintCopyRot","constraintParent","constraintAim","correctivePoseEnabled","spriteSwapEnabled","montageEnabled","motionWarpEnabled","blendTreeEnabled","universalSkeletonEnabled","aiDirectorEnabled","aiStopOnFail","aiAutoCorrect","aiAllowBypass","aiRequireApproval","ai4bppOptimize","aiTileReuse","aiVramCheck","aiOamCheck","aiCompression","autoLimbRepair","v25Enabled","v25AutoRevert","v25PreserveFeet","v25PreserveSilhouette","v252FinalPoseEnabled","v252ResolveAfter","v253PhaseLock","v253FootWorldLock","v253RotateTargets","v254FreezeSolved","v254SupportSolve","v255PersistentContact","v255ProtectSolved"].forEach(id=>{
+["enableWeightedSkin","showWeightMap","rigidCoreWeights","poleKnees","poleElbows","neutralBindMode","rejectCrossLimb","lockExtremities","protectPixelIslands","walkNormalize","preventCrouch","straightPlantLeg","normalizeStride","enableUnifiedMesh","alphaUnifiedMask","unifiedIslands","sealJointGaps","unifiedAccessories","showUnifiedMesh","animGraphEnabled","poseSearchEnabled","ctlHeadAim","ctlWeaponTarget","ctlPoseMirror","constraintCopyPos","constraintCopyRot","constraintParent","constraintAim","correctivePoseEnabled","spriteSwapEnabled","montageEnabled","motionWarpEnabled","blendTreeEnabled","universalSkeletonEnabled","aiDirectorEnabled","aiStopOnFail","aiAutoCorrect","aiAllowBypass","aiRequireApproval","ai4bppOptimize","aiTileReuse","aiVramCheck","aiOamCheck","aiCompression","autoLimbRepair","v25Enabled","v25AutoRevert","v25PreserveFeet","v25PreserveSilhouette","v252FinalPoseEnabled","v252ResolveAfter","v253PhaseLock","v253FootWorldLock","v253RotateTargets","v254FreezeSolved","v254SupportSolve","v255PersistentContact","v255ProtectSolved","v256HardProtect","v256RejectDamage"].forEach(id=>{
   $(id)?.addEventListener("change",()=>draw());
 });
 ["skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid","stateBlend","poseThreshold","correctiveStrength","montageStartup","montageActive","montageRecovery","motionStrideWarp","orientationWarp","aiPassThreshold"].forEach(id=>{
