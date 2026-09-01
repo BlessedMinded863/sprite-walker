@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V25.7.0 - Rig Approval Gate + C++ Motion Core</title>
+<title>Fatal Instinct Sprite Walker V25.7.1 - Rig Approval Gate + C++ Motion Core</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -148,16 +148,7 @@
 
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
-setTimeout(()=>{
-  if($("safeBootBadge"))$("safeBootBadge").textContent="ACTIVE";
-  if($("v25CurrentQuality"))$("v25CurrentQuality").textContent="--";
-  if($("v25BestQuality"))$("v25BestQuality").textContent="--";
-  if($("v25PassCount"))$("v25PassCount").textContent="0 / 12";
-  if($("v25Report"))$("v25Report").textContent="Safe Boot ready. Final-pose grounding critic armed; motion solver is idle.";
-},50);
-
-</script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script type="importmap">
 {
   "imports": {
@@ -169,7 +160,7 @@ setTimeout(()=>{
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V25.7.0</span></h1><div class="sub">Production Sprint • Master Sprite Auto-Rig • Rig Approval Gate • C++ Motion Core</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V25.7.1</span></h1><div class="sub">Production Sprint • 12-Fighter Roster • Rig Approval Gate • C++ Motion Core • Audit Fix</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -206,6 +197,14 @@ setTimeout(()=>{
     <div class="fiGateSub" id="fiGateBannerText">Load a master sprite. V25.7 will auto-rig it, then stop for your approval.</div>
   </div>
   <span class="fiGateStage" id="fiGateStageBadge">WAITING</span>
+</div>
+
+<div class="fiGateBanner" id="fiAuditBanner">
+  <div>
+    <b>V25.7.1 Engine Audit</b>
+    <div class="fiGateSub" id="fiAuditText">Checking production systems…</div>
+  </div>
+  <span class="fiGateStage" id="fiAuditBadge">CHECKING</span>
 </div>
 
 <div class="fiAutopilotHandoff" id="fiAutopilotHandoff">
@@ -286,7 +285,7 @@ setTimeout(()=>{
   <div id="quickStatus" class="quickStatus">Production preflight waiting for a character.</div>
 
   <div class="moduleHead" style="margin-top:12px">
-    <b>6-Character Sprint</b><span id="sprintBadge" class="pill">0 / 6 COMPLETE</span>
+    <b>12-Character Sprint</b><span id="sprintBadge" class="pill">0 / 12 COMPLETE</span>
   </div>
   <div class="progressBar"><div id="sprintProgress" class="progressFill"></div></div>
 
@@ -297,6 +296,12 @@ setTimeout(()=>{
     <div class="rosterRow"><input type="radio" name="rosterSlot" value="3"><input class="rosterName" data-slot="3" type="text" placeholder="Player 4"><select class="rosterStage" data-slot="3"><option>Not Started</option><option>Rig Ready</option><option>Motion Ready</option><option>Frames Ready</option><option>Complete</option></select></div>
     <div class="rosterRow"><input type="radio" name="rosterSlot" value="4"><input class="rosterName" data-slot="4" type="text" placeholder="Player 5"><select class="rosterStage" data-slot="4"><option>Not Started</option><option>Rig Ready</option><option>Motion Ready</option><option>Frames Ready</option><option>Complete</option></select></div>
     <div class="rosterRow"><input type="radio" name="rosterSlot" value="5"><input class="rosterName" data-slot="5" type="text" placeholder="Player 6"><select class="rosterStage" data-slot="5"><option>Not Started</option><option>Rig Ready</option><option>Motion Ready</option><option>Frames Ready</option><option>Complete</option></select></div>
+    <div class="rosterRow"><input type="radio" name="rosterSlot" value="6"><input class="rosterName" data-slot="6" type="text" placeholder="Player 7"><select class="rosterStage" data-slot="6"><option>Not Started</option><option>Rig Ready</option><option>Motion Ready</option><option>Frames Ready</option><option>Complete</option></select></div>
+    <div class="rosterRow"><input type="radio" name="rosterSlot" value="7"><input class="rosterName" data-slot="7" type="text" placeholder="Player 8"><select class="rosterStage" data-slot="7"><option>Not Started</option><option>Rig Ready</option><option>Motion Ready</option><option>Frames Ready</option><option>Complete</option></select></div>
+    <div class="rosterRow"><input type="radio" name="rosterSlot" value="8"><input class="rosterName" data-slot="8" type="text" placeholder="Player 9"><select class="rosterStage" data-slot="8"><option>Not Started</option><option>Rig Ready</option><option>Motion Ready</option><option>Frames Ready</option><option>Complete</option></select></div>
+    <div class="rosterRow"><input type="radio" name="rosterSlot" value="9"><input class="rosterName" data-slot="9" type="text" placeholder="Player 10"><select class="rosterStage" data-slot="9"><option>Not Started</option><option>Rig Ready</option><option>Motion Ready</option><option>Frames Ready</option><option>Complete</option></select></div>
+    <div class="rosterRow"><input type="radio" name="rosterSlot" value="10"><input class="rosterName" data-slot="10" type="text" placeholder="Player 11"><select class="rosterStage" data-slot="10"><option>Not Started</option><option>Rig Ready</option><option>Motion Ready</option><option>Frames Ready</option><option>Complete</option></select></div>
+    <div class="rosterRow"><input type="radio" name="rosterSlot" value="11"><input class="rosterName" data-slot="11" type="text" placeholder="Player 12"><select class="rosterStage" data-slot="11"><option>Not Started</option><option>Rig Ready</option><option>Motion Ready</option><option>Frames Ready</option><option>Complete</option></select></div>
   </div>
 </div>
 
@@ -1045,7 +1050,7 @@ let source=null,sourceName="",rig={parts:{},joints:{}},mode="trace",tracePoints=
 
 const PROD_AUTOSAVE_KEY="fatal_instinct_sprite_walker_v18_autosave";
 const PROD_ROSTER_KEY="fatal_instinct_sprite_walker_v18_roster";
-let rosterData=Array.from({length:6},(_,i)=>({name:"",stage:"Not Started",saved:null}));
+let rosterData=Array.from({length:12},(_,i)=>({name:"",stage:"Not Started",saved:null}));
 let clothState={prevPose:null};
 
 
@@ -1290,7 +1295,7 @@ function safeFileName(s){
 }
 function selectedRosterSlot(){
   const r=document.querySelector('input[name="rosterSlot"]:checked');
-  return r?Math.max(0,Math.min(5,+r.value||0)):0;
+  return r?Math.max(0,Math.min(11,+r.value||0)):0;
 }
 function rosterFromUI(){
   document.querySelectorAll(".rosterName").forEach(el=>{
@@ -1317,16 +1322,16 @@ function persistRoster(){
 function loadRoster(){
   try{
     const saved=JSON.parse(localStorage.getItem(PROD_ROSTER_KEY)||"null");
-    if(Array.isArray(saved)&&saved.length===6) rosterData=saved;
+    if(Array.isArray(saved)) rosterData=Array.from({length:12},(_,i)=>saved[i]||{name:"",stage:"Not Started",saved:null});
   }catch(e){}
   rosterToUI();
 }
 function updateSprintProgress(){
   rosterFromUI();
   const done=rosterData.filter(x=>x.stage==="Complete").length;
-  $("sprintBadge").textContent=`${done} / 6 COMPLETE`;
-  $("sprintBadge").className="pill "+(done===6?"ok":done?"warn":"");
-  $("sprintProgress").style.width=`${(done/6)*100}%`;
+  $("sprintBadge").textContent=`${done} / 12 COMPLETE`;
+  $("sprintBadge").className="pill "+(done===12?"ok":done?"warn":"");
+  $("sprintProgress").style.width=`${(done/12)*100}%`;
 }
 document.querySelectorAll(".rosterName,.rosterStage").forEach(el=>{
   el.addEventListener("change",persistRoster);
@@ -1365,7 +1370,7 @@ function restoreProductionSnapshot(d){
   rig=d.rig||rig;
   if(typeof applyProjectSettings==="function") applyProjectSettings(d.settings||{});
   animationLibrary=d.library||animationLibrary;
-  if(Array.isArray(d.roster)&&d.roster.length===6){rosterData=d.roster;rosterToUI();}
+  if(Array.isArray(d.roster)){rosterData=Array.from({length:12},(_,i)=>d.roster[i]||{name:"",stage:"Not Started",saved:null});rosterToUI();}
   $("characterName").value=d.character_name||"";
   autoTraceCache.dirty=true;
   inferJointsFromParts();
@@ -6554,13 +6559,44 @@ $("generate").addEventListener("click",()=>setTimeout(()=>{refreshProductionPref
 
 v23SetState("Idle");v23DrawTimeline();v23ApplyBlendTree();
 detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFrameMs();resize();
+
+/* V25.7.1 controlled cross-script API */
+window.FISpriteWalkerAPI={
+  getSource:()=>source,
+  getSourceName:()=>sourceName,
+  getRig:()=>rig,
+  getCanvas:()=>canvas,
+  seedHumanoidRig,
+  setMode,
+  draw,
+  status,
+  saveCheckpoint:(silent=true)=>v242SaveCheckpoint(silent),
+  autoTraceAndBind,
+  mapUniversalSkeleton:v23MapUniversalSkeleton,
+  refreshProductionPreflight,
+  currentMotionPackage,
+  loadNativeMotion,
+  saveAutosave
+};
+
+setTimeout(()=>{
+  if($("safeBootBadge"))$("safeBootBadge").textContent="ACTIVE";
+  if($("v25CurrentQuality"))$("v25CurrentQuality").textContent="--";
+  if($("v25BestQuality"))$("v25BestQuality").textContent="--";
+  if($("v25PassCount"))$("v25PassCount").textContent="0 / 12";
+  if($("v25Report"))$("v25Report").textContent=
+    "V25.7.1 audit build ready. Production bridges initialized.";
+},50);
+
+document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
 </script>
 
 
 <script>
 /* ============================================================
-   FATAL INSTINCT V25.7.0
+   FATAL INSTINCT V25.7.1
    MASTER SPRITE AUTO-RIG + HUMAN APPROVAL GATE
+   MODULE-SAFE PRODUCTION FIX
    ============================================================ */
 (()=>{
   const BASE_JOINTS=[
@@ -6574,34 +6610,53 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
   const gate={state:"waiting",approved:false,lastSource:"",score:0,warnings:[]};
   let alphaCanvas=null,alphaCtx=null,alphaSource=null;
 
-  function el(id){return document.getElementById(id);}
-  function pretty(name){return name.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());}
-  function anatomy(){return el("fiRigAnatomy")?.value||"no-tail";}
-  function requiredJoints(){return anatomy()==="tail"?[...BASE_JOINTS,...TAIL_JOINTS]:BASE_JOINTS;}
+  const el=id=>document.getElementById(id);
+  const api=()=>window.FISpriteWalkerAPI||null;
+  const getSource=()=>api()?.getSource?.()||null;
+  const getRig=()=>api()?.getRig?.()||null;
+  const getSourceName=()=>api()?.getSourceName?.()||"";
+  const anatomy=()=>el("fiRigAnatomy")?.value||"no-tail";
+  const requiredJoints=()=>anatomy()==="tail"?[...BASE_JOINTS,...TAIL_JOINTS]:BASE_JOINTS;
+  const pretty=name=>name.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
 
-  function setGateStage(stage,text){
+  const appStatus=msg=>{try{api()?.status?.(msg);}catch(e){}};
+  const appDraw=()=>{try{api()?.draw?.();}catch(e){}};
+  const appMode=mode=>{try{api()?.setMode?.(mode);}catch(e){}};
+  const saveCheckpoint=()=>{try{api()?.saveCheckpoint?.(true);}catch(e){}};
+
+  function setGateStage(stage,msg){
     gate.state=stage;
-    const badge=el("fiGateStageBadge");
-    if(badge){badge.textContent=stage.toUpperCase();badge.className="fiGateStage "+(stage==="review"?"review":stage==="approved"?"approved":stage==="fixing"?"fix":"");}
-    if(text&&el("fiGateBannerText"))el("fiGateBannerText").textContent=text;
+    const b=el("fiGateStageBadge");
+    if(b){
+      b.textContent=stage.toUpperCase();
+      b.className="fiGateStage "+(
+        stage==="review"?"review":
+        stage==="approved"?"approved":
+        stage==="fixing"?"fix":""
+      );
+    }
+    if(msg&&el("fiGateBannerText"))el("fiGateBannerText").textContent=msg;
   }
 
   function buildAlphaSampler(){
-    if(!source)return false;
-    if(alphaSource===source&&alphaCtx)return true;
+    const src=getSource();
+    if(!src)return false;
+    if(alphaSource===src&&alphaCtx)return true;
     alphaCanvas=document.createElement("canvas");
-    alphaCanvas.width=source.width;alphaCanvas.height=source.height;
+    alphaCanvas.width=src.width;alphaCanvas.height=src.height;
     alphaCtx=alphaCanvas.getContext("2d",{willReadFrequently:true});
-    alphaCtx.clearRect(0,0,source.width,source.height);alphaCtx.drawImage(source,0,0);
-    alphaSource=source;
+    alphaCtx.clearRect(0,0,src.width,src.height);
+    alphaCtx.drawImage(src,0,0);
+    alphaSource=src;
     return true;
   }
 
   function jointTouchesSprite(p){
-    if(!source||!p||!buildAlphaSampler())return false;
-    const r=Math.max(3,Math.round(Math.min(source.width,source.height)*0.012));
+    const src=getSource();
+    if(!src||!p||!buildAlphaSampler())return false;
+    const r=Math.max(3,Math.round(Math.min(src.width,src.height)*.012));
     const x0=Math.max(0,Math.round(p[0]-r)),y0=Math.max(0,Math.round(p[1]-r));
-    const x1=Math.min(source.width-1,Math.round(p[0]+r)),y1=Math.min(source.height-1,Math.round(p[1]+r));
+    const x1=Math.min(src.width-1,Math.round(p[0]+r)),y1=Math.min(src.height-1,Math.round(p[1]+r));
     try{
       const d=alphaCtx.getImageData(x0,y0,Math.max(1,x1-x0+1),Math.max(1,y1-y0+1)).data;
       for(let i=3;i<d.length;i+=4)if(d[i]>28)return true;
@@ -6609,15 +6664,23 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
     return false;
   }
 
-  function inBounds(p){return !!(source&&p&&p[0]>=0&&p[0]<=source.width&&p[1]>=0&&p[1]<=source.height);}
-  function validOrder(a,b,c){return a&&b&&c&&a[1]<b[1]&&b[1]<c[1]+Math.max(4,source.height*.025);}
+  function inBounds(p){
+    const src=getSource();
+    return !!(src&&p&&p[0]>=0&&p[0]<=src.width&&p[1]>=0&&p[1]<=src.height);
+  }
+  function validOrder(a,b,c){
+    const src=getSource();
+    return !!(src&&a&&b&&c&&a[1]<b[1]&&b[1]<c[1]+Math.max(4,src.height*.025));
+  }
 
   function analyzeRig(){
-    if(!source)return {score:0,warnings:["Load a master sprite first."],states:{}};
+    const src=getSource(),r=getRig();
+    if(!src||!r)return {score:0,warnings:["Load a master sprite first."],states:{}};
+
     const names=requiredJoints(),states={},warnings=[];
     let complete=0,bounds=0,touch=0;
     for(const name of names){
-      const p=rig.joints[name];
+      const p=r.joints[name];
       if(p)complete++;
       const inside=inBounds(p);if(inside)bounds++;
       const opaque=inside&&jointTouchesSprite(p);if(opaque)touch++;
@@ -6627,9 +6690,9 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
       else if(!opaque)warnings.push(`${pretty(name)} may be off the visible body — inspect it.`);
     }
 
-    const j=rig.joints,h=source.height;
-    let structure=0,structureChecks=0;
-    const check=(ok,msg)=>{structureChecks++;if(ok)structure++;else warnings.push(msg);};
+    const j=r.joints,h=src.height;
+    let structure=0,checks=0;
+    const check=(ok,msg)=>{checks++;if(ok)structure++;else warnings.push(msg);};
     check(j.neck&&j.pelvis&&j.neck[1]<j.pelvis[1],"Neck should remain above the pelvis.");
     check(validOrder(j.left_hip,j.left_knee,j.left_ankle),"Left hip → knee → ankle order needs review.");
     check(validOrder(j.right_hip,j.right_knee,j.right_ankle),"Right hip → knee → ankle order needs review.");
@@ -6638,11 +6701,12 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
     check(j.left_hip&&j.right_hip&&Math.abs(j.left_hip[1]-j.right_hip[1])<h*.09,"Hip heights are unusually uneven.");
     check(j.left_shoulder&&j.right_shoulder&&Math.abs(j.left_shoulder[1]-j.right_shoulder[1])<h*.09,"Shoulder heights are unusually uneven.");
 
-    const completeness=complete/names.length;
-    const boundScore=bounds/names.length;
-    const touchScore=touch/names.length;
-    const structureScore=structureChecks?structure/structureChecks:0;
-    const score=Math.round(100*(completeness*.38+boundScore*.17+touchScore*.25+structureScore*.20));
+    const score=Math.round(100*(
+      (complete/names.length)*.38+
+      (bounds/names.length)*.17+
+      (touch/names.length)*.25+
+      (checks?structure/checks:0)*.20
+    ));
     if(score>=90)warnings.unshift("Rig geometry looks production-ready. Final visual approval is still required.");
     else if(score>=75)warnings.unshift("Rig is usable, but inspect the warning joints before approval.");
     else warnings.unshift("Rig needs review before automation continues.");
@@ -6650,90 +6714,117 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
   }
 
   function parkTail(){
-    if(!rig?.joints?.pelvis)return;
-    const p=rig.joints.pelvis;
-    rig.joints.tail_base=[p[0]-2,p[1]+2];
-    rig.joints.tail_tip=[p[0]-4,p[1]+5];
+    const r=getRig();
+    if(!r?.joints?.pelvis)return;
+    const p=r.joints.pelvis;
+    r.joints.tail_base=[p[0]-2,p[1]+2];
+    r.joints.tail_tip=[p[0]-4,p[1]+5];
   }
 
   function refreshReview(){
-    const result=analyzeRig();gate.score=result.score;gate.warnings=result.warnings;
+    const r=getRig();
+    const result=analyzeRig();
+    gate.score=result.score;gate.warnings=result.warnings;
+
     if(el("fiRigConfidence")){
       el("fiRigConfidence").textContent=result.score+"%";
       el("fiRigConfidence").style.color=result.score>=88?"#62e7ad":result.score>=72?"#f2cc60":"#ff7b72";
     }
-    const box=el("fiJointReview");if(box){box.innerHTML="";for(const name of requiredJoints()){
-      const row=document.createElement("div"),state=result.states[name]||"bad",p=rig.joints[name];row.className="fiJointCheck "+state;
-      row.innerHTML=`<span><i class="dot"></i>${pretty(name)}</span><small>${!p?"MISSING":state==="ok"?"OK":state==="bad"?"CHECK":"REVIEW"}</small>`;
-      box.appendChild(row);
-    }}
+
+    const box=el("fiJointReview");
+    if(box&&r){
+      box.innerHTML="";
+      for(const name of requiredJoints()){
+        const row=document.createElement("div");
+        const state=result.states[name]||"bad",p=r.joints[name];
+        row.className="fiJointCheck "+state;
+        row.innerHTML=`<span><i class="dot"></i>${pretty(name)}</span><small>${!p?"MISSING":state==="ok"?"OK":state==="bad"?"CHECK":"REVIEW"}</small>`;
+        box.appendChild(row);
+      }
+    }
     if(el("fiRigWarnings"))el("fiRigWarnings").innerHTML="<b>Review:</b><br>"+result.warnings.slice(0,9).map(x=>"• "+x).join("<br>");
     if(el("fiRigFixScore"))el("fiRigFixScore").textContent=`Current confidence ${result.score}%. Drag joints, then tap Review.`;
     return result;
   }
 
-  function openGate(){refreshReview();el("fiRigGateOverlay")?.classList.add("open");el("fiRigFixDock")?.classList.remove("open");setGateStage("review","Auto-Rig complete. Review the skeleton before production continues.");}
+  function openGate(){
+    if(!getSource()){appStatus("Load a master sprite first.");return;}
+    refreshReview();
+    el("fiRigGateOverlay")?.classList.add("open");
+    el("fiRigFixDock")?.classList.remove("open");
+    setGateStage("review","Auto-Rig complete. Review the skeleton before production continues.");
+  }
   function closeGate(){el("fiRigGateOverlay")?.classList.remove("open");}
 
   function autoRig(){
-    if(!source){if(typeof status==="function")status("Load a master sprite first.");return;}
-    rig.parts={};rig.joints={};
+    const a=api(),src=getSource(),r=getRig();
+    if(!a||!src||!r){appStatus("Load a master sprite first.");return;}
+    r.parts={};r.joints={};
     alphaSource=null;alphaCtx=null;alphaCanvas=null;
-    seedHumanoidRig();
+    a.seedHumanoidRig();
     if(anatomy()==="no-tail")parkTail();
     gate.approved=false;
     if(el("showBones"))el("showBones").checked=true;
     if(el("showSprite"))el("showSprite").checked=true;
-    if(typeof setMode==="function")setMode("joint");
-    if(typeof draw==="function")draw();
-    if(typeof v242SaveCheckpoint==="function")try{v242SaveCheckpoint(true);}catch(e){}
-    openGate();
-    if(typeof status==="function")status("V25.7 Auto-Rig complete. Approval Gate is waiting for you.");
+    appMode("joint");appDraw();saveCheckpoint();openGate();
+    appStatus("V25.7.1 Auto-Rig complete. Rig Approval Gate is ready.");
   }
 
   function fixRig(){
-    closeGate();setGateStage("fixing","Rig Fix Mode: drag any incorrect joints, then Review or Approve.");
+    closeGate();
+    setGateStage("fixing","Rig Fix Mode: drag any incorrect joints, then Review or Approve.");
     el("fiRigFixDock")?.classList.add("open");
-    if(typeof setMode==="function")setMode("joint");
+    appMode("joint");
     if(el("showBones"))el("showBones").checked=true;
-    if(typeof draw==="function")draw();
-    if(typeof status==="function")status("Rig Fix Mode active. Select a joint and drag it into place.");
+    appDraw();
+    appStatus("Rig Fix Mode active. Select a joint and drag it into place.");
   }
 
-  function approveRig(fromDock=false){
+  function approveRig(){
+    const a=api(),r=getRig();
+    if(!a||!r){appStatus("Sprite Walker engine is not ready.");return;}
     const result=refreshReview();
-    if(result.score<68){
-      const go=window.confirm(`Rig confidence is ${result.score}%. Approve anyway and continue?`);
-      if(!go){openGate();return;}
+    if(result.score<68&&!window.confirm(`Rig confidence is ${result.score}%. Approve anyway and continue?`)){
+      openGate();return;
     }
     if(anatomy()==="no-tail")parkTail();
     gate.approved=true;
     closeGate();el("fiRigFixDock")?.classList.remove("open");
     setGateStage("approved",`Rig approved at ${result.score}% confidence. Automation may continue.`);
-    try{localStorage.setItem("fatal_instinct_v257_rig_approval",JSON.stringify({source:sourceName,score:result.score,anatomy:anatomy(),time:Date.now(),joints:rig.joints}));}catch(e){}
-    if(typeof v242SaveCheckpoint==="function")try{v242SaveCheckpoint(true);}catch(e){}
+    try{
+      localStorage.setItem("fatal_instinct_v257_rig_approval",JSON.stringify({
+        source:getSourceName(),score:result.score,anatomy:anatomy(),time:Date.now(),joints:r.joints
+      }));
+    }catch(e){}
+    saveCheckpoint();
 
     if(el("fiRigApprovalBehavior")?.value==="continue"){
       let separated=false;
-      try{if(typeof autoTraceAndBind==="function"){autoTraceAndBind();separated=true;}}catch(e){console.error(e);}
-      try{if(typeof v23MapUniversalSkeleton==="function")v23MapUniversalSkeleton();}catch(e){}
+      try{a.autoTraceAndBind();separated=true;}catch(e){console.error(e);}
+      try{a.mapUniversalSkeleton();}catch(e){}
       el("fiAutopilotHandoff")?.classList.add("open");
       if(el("fiAutopilotHandoffText"))el("fiAutopilotHandoffText").textContent=separated?
-        "Rig locked. Auto Trace & Bind has started body-part separation. The next gate is motion generation/correction; this approved rig will be preserved.":
+        "Rig locked. Auto Trace & Bind completed body-part separation. Next: motion generation/correction.":
         "Rig locked. The next automation stage is ready; body-part separation may still need to run.";
-      if(typeof refreshProductionPreflight==="function")try{refreshProductionPreflight();}catch(e){}
-      if(typeof status==="function")status("Rig APPROVED. Body-part separation started. Ready for the next automation stage.");
+      try{a.refreshProductionPreflight();}catch(e){}
+      appStatus("Rig APPROVED. Body-part separation completed. Ready for motion production.");
     }else{
-      if(typeof status==="function")status("Rig APPROVED and held. Press Auto Trace & Bind when you want to continue.");
+      appStatus("Rig APPROVED and held. Press Auto Trace & Bind when you want to continue.");
     }
   }
 
   function waitForLoadedMaster(fileName){
     let tries=0;
     const tick=()=>{
-      if(source&&sourceName===fileName){gate.lastSource=fileName;autoRig();return;}
-      if(++tries<60)setTimeout(tick,100);
-      else if(typeof status==="function")status("Master sprite loaded, but Auto-Rig could not start automatically. Press Re-run Auto-Rig.");
+      const a=api();
+      if(a?.getSource?.()&&a?.getSourceName?.()===fileName){
+        gate.lastSource=fileName;autoRig();return;
+      }
+      if(++tries<80)setTimeout(tick,100);
+      else{
+        setGateStage("waiting","Master sprite loaded, but Auto-Rig did not start. Tap Seed Humanoid Rig.");
+        appStatus("Auto-Rig startup timed out. Tap Seed Humanoid Rig.");
+      }
     };
     setTimeout(tick,60);
   }
@@ -6743,179 +6834,145 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
   });
   el("fiRigFix")?.addEventListener("click",fixRig);
   el("fiRigRerun")?.addEventListener("click",autoRig);
-  el("fiRigApprove")?.addEventListener("click",()=>approveRig(false));
-  el("fiRigApproveDock")?.addEventListener("click",()=>approveRig(true));
+  el("fiRigApprove")?.addEventListener("click",approveRig);
+  el("fiRigApproveDock")?.addEventListener("click",approveRig);
   el("fiRigReview")?.addEventListener("click",openGate);
-  el("fiRigAnatomy")?.addEventListener("change",()=>{if(anatomy()==="no-tail")parkTail();refreshReview();if(typeof draw==="function")draw();});
-  el("fiRigShowBones")?.addEventListener("change",()=>{if(el("showBones"))el("showBones").checked=el("fiRigShowBones").checked;if(typeof draw==="function")draw();});
-  canvas?.addEventListener("pointerup",()=>{if(gate.state==="fixing")setTimeout(refreshReview,20);});
+  el("fiRigAnatomy")?.addEventListener("change",()=>{
+    if(anatomy()==="no-tail")parkTail();refreshReview();appDraw();
+  });
+  el("fiRigShowBones")?.addEventListener("change",()=>{
+    if(el("showBones"))el("showBones").checked=el("fiRigShowBones").checked;appDraw();
+  });
+  document.getElementById("mainCanvas")?.addEventListener("pointerup",()=>{
+    if(gate.state==="fixing")setTimeout(refreshReview,20);
+  });
+  el("seedRig")?.addEventListener("click",()=>setTimeout(()=>{
+    if(getSource()){if(anatomy()==="no-tail")parkTail();openGate();}
+  },40));
 
-  // The old Seed Rig button now enters the same approval gate, so every route is protected.
-  el("seedRig")?.addEventListener("click",()=>setTimeout(()=>{if(source){if(anatomy()==="no-tail")parkTail();openGate();}},30));
-
-  window.FIRigApprovalGate={
-    autoRig,review:openGate,fix:fixRig,approve:approveRig,analyze:analyzeRig,state:gate
-  };
+  window.FIRigApprovalGate={autoRig,review:openGate,fix:fixRig,approve:approveRig,analyze:analyzeRig,state:gate};
 })();
 </script>
 
 
 <script>
 /* ============================================================
-   FATAL INSTINCT - C++ PHASE 3
-   SPRITE WALKER / PYTHON / C++ BRIDGE
+   FATAL INSTINCT - C++ MOTION BRIDGE
+   V25.7.1 MODULE-SAFE PRODUCTION FIX
    ============================================================ */
 (()=>{
-  const CPP_BRIDGE_FALLBACK="http://127.0.0.1:8765";
+  const api=()=>window.FISpriteWalkerAPI||null;
+  const LOCAL_FALLBACK="http://127.0.0.1:8765";
+  const isLocalApp=()=>location.hostname==="127.0.0.1"||location.hostname==="localhost";
 
-  function cppBridgeBase(){
-    if(location.protocol==="http:" || location.protocol==="https:"){
-      return location.origin;
-    }
-    return CPP_BRIDGE_FALLBACK;
+  function endpoint(){
+    return isLocalApp()&&(location.protocol==="http:"||location.protocol==="https:")
+      ? location.origin : LOCAL_FALLBACK;
   }
-
-  function cppBadge(text,ok=false,busy=false){
-    const badge=document.getElementById("cppBridgeBadge");
-    if(!badge)return;
-    badge.textContent=text;
-    badge.style.color=ok?"#62e7ad":busy?"#f2cc60":"#ff7b72";
+  function badge(txt,ok=false,busy=false){
+    const b=document.getElementById("cppBridgeBadge");if(!b)return;
+    b.textContent=txt;b.style.color=ok?"#62e7ad":busy?"#f2cc60":"#ff9b8f";
   }
+  const hostedMessage=()=>
+    "Live C++ correction requires the Windows localhost launcher. On iPhone, save the .fi_motion.json and use the Phone Motion Correct GitHub Action.";
 
-  async function cppHealth(){
-    try{
-      const response=await fetch(`${cppBridgeBase()}/health`,{
-        cache:"no-store"
-      });
-      if(!response.ok)throw new Error("health");
-      const data=await response.json();
-      if(!data.ok)throw new Error("health");
-      cppBadge("C++ ONLINE",true,false);
-      return true;
-    }catch(error){
-      cppBadge("C++ OFFLINE",false,false);
+  async function health(){
+    if(!isLocalApp()){
+      badge("C++ LOCAL / ACTION");
+      const btn=document.getElementById("cppAutoCorrect");
+      if(btn)btn.title=hostedMessage();
       return false;
     }
-  }
-
-  async function cppCorrectCurrentMotion(){
-    const button=document.getElementById("cppAutoCorrect");
-
     try{
-      if(typeof currentMotionPackage!=="function"){
-        throw new Error("Sprite Walker motion exporter is unavailable.");
+      const r=await fetch(`${endpoint()}/health`,{cache:"no-store"});
+      const d=await r.json();
+      if(!r.ok||!d.ok)throw new Error("health");
+      badge("C++ ONLINE",true);return true;
+    }catch(e){badge("C++ OFFLINE");return false;}
+  }
+
+  async function correct(){
+    const btn=document.getElementById("cppAutoCorrect"),a=api();
+    try{
+      if(!isLocalApp()){
+        const msg=hostedMessage();
+        try{a?.status?.(msg);}catch(e){}
+        alert(msg);return null;
       }
+      if(typeof a?.currentMotionPackage!=="function")throw new Error("Sprite Walker motion exporter is unavailable.");
+      const motion=a.currentMotionPackage();
+      if(!motion)throw new Error("No current motion is available to correct.");
 
-      const motion=currentMotionPackage();
+      const motionType=document.getElementById("cppMotionType")?.value||"auto";
+      if(btn)btn.disabled=true;
+      badge("C++ CORRECTING",false,true);
+      try{a.status("C++ Motion Core is analyzing and correcting this motion...");}catch(e){}
 
-      if(!motion){
-        throw new Error("No current motion is available to correct.");
-      }
-
-      const motionType=
-        document.getElementById("cppMotionType")?.value||"auto";
-
-      if(button)button.disabled=true;
-      cppBadge("C++ CORRECTING",false,true);
-
-      if(typeof status==="function"){
-        status("C++ Motion Core is analyzing and correcting this motion...");
-      }
-
-      const response=await fetch(`${cppBridgeBase()}/correct`,{
+      const r=await fetch(`${endpoint()}/correct`,{
         method:"POST",
-        headers:{
-          "Content-Type":"application/json"
-        },
-        body:JSON.stringify({
-          motion,
-          motion_type:motionType
-        })
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({motion,motion_type:motionType})
       });
+      const payload=await r.json();
+      if(!r.ok||!payload.ok)throw new Error(payload.error||`Bridge returned ${r.status}`);
+      if(typeof a.loadNativeMotion!=="function")throw new Error("Sprite Walker native-motion loader is unavailable.");
 
-      const payload=await response.json();
+      const corrected=payload.motion,report=payload.report||{};
+      a.loadNativeMotion(corrected,corrected.name||"C++ Corrected Motion");
 
-      if(!response.ok || !payload.ok){
-        throw new Error(payload.error||`Bridge returned ${response.status}`);
+      const before=Number(report.quality_before),after=Number(report.quality_after);
+      if(document.getElementById("v25CurrentQuality")&&Number.isFinite(after)){
+        document.getElementById("v25CurrentQuality").textContent=after.toFixed(1);
       }
-
-      const corrected=payload.motion;
-      const report=payload.report||{};
-
-      if(typeof loadNativeMotion!=="function"){
-        throw new Error("Sprite Walker native-motion loader is unavailable.");
-      }
-
-      loadNativeMotion(
-        corrected,
-        corrected.name||"C++ Corrected Motion"
-      );
-
-      const before=Number(report.quality_before);
-      const after=Number(report.quality_after);
-
-      if(
-        document.getElementById("v25CurrentQuality") &&
-        Number.isFinite(after)
-      ){
-        document.getElementById("v25CurrentQuality").textContent=
-          after.toFixed(1);
-      }
-
-      cppBadge("C++ CORRECTED",true,false);
-
-      if(typeof status==="function"){
-        const scoreText=
-          Number.isFinite(before) && Number.isFinite(after)
-          ? ` ${before.toFixed(1)} → ${after.toFixed(1)}.`
-          : "";
-        status(
-          `C++ correction loaded as native motion.${scoreText} `+
-          `Use Save Animation to export it.`
-        );
-      }
-
-      if(typeof refreshProductionPreflight==="function"){
-        try{refreshProductionPreflight();}catch(error){}
-      }
-
-      if(typeof saveAutosave==="function"){
-        try{saveAutosave(true);}catch(error){}
-      }
-
+      badge("C++ CORRECTED",true);
+      try{
+        const scores=Number.isFinite(before)&&Number.isFinite(after)?` ${before.toFixed(1)} → ${after.toFixed(1)}.`:"";
+        a.status(`C++ correction loaded as native motion.${scores} Use Save Animation to export it.`);
+      }catch(e){}
+      try{a.refreshProductionPreflight?.();}catch(e){}
+      try{a.saveAutosave?.(true);}catch(e){}
       return corrected;
-    }catch(error){
-      console.error("Fatal Instinct C++ bridge:",error);
-      cppBadge("C++ ERROR",false,false);
-
-      if(typeof status==="function"){
-        status(`C++ correction failed: ${error.message}`);
-      }else{
-        alert(`C++ correction failed: ${error.message}`);
-      }
-
+    }catch(e){
+      console.error("Fatal Instinct C++ bridge:",e);
+      badge("C++ ERROR");
+      try{a?.status?.(`C++ correction failed: ${e.message}`);}catch(_){alert(`C++ correction failed: ${e.message}`);}
       return null;
-    }finally{
-      if(button)button.disabled=false;
+    }finally{if(btn)btn.disabled=false;}
+  }
+
+  window.FICppBridge={health,correctCurrentMotion:correct,endpoint,isLocalApp};
+  document.getElementById("cppAutoCorrect")?.addEventListener("click",correct);
+  setTimeout(health,300);setInterval(health,10000);
+})();
+</script>
+
+<script>
+(()=>{
+  function run(){
+    const fails=[],a=window.FISpriteWalkerAPI;
+    if(!a)fails.push("module API");
+    else for(const k of ["getSource","getRig","seedHumanoidRig","draw","status","autoTraceAndBind","currentMotionPackage","loadNativeMotion"]){
+      if(typeof a[k]!=="function")fails.push(k);
     }
+    if(!window.FIRigApprovalGate)fails.push("rig approval");
+    if(!window.FICppBridge)fails.push("C++ bridge");
+    if(document.querySelectorAll('input[name="rosterSlot"]').length!==12)fails.push("12-fighter roster");
+    if(!document.getElementById("imageInput"))fails.push("character loader");
+    if(!document.getElementById("fiRigApprove"))fails.push("approve button");
+
+    const b=document.getElementById("fiAuditBadge"),t=document.getElementById("fiAuditText");
+    if(fails.length){
+      if(b){b.textContent="CHECK";b.className="fiGateStage review";}
+      if(t)t.textContent="Needs attention: "+fails.join(", ");
+      return false;
+    }
+    if(b){b.textContent="PASS";b.className="fiGateStage approved";}
+    if(t)t.textContent="Module bridge, Rig Approval Gate, 12-fighter roster, loader, and C++ hooks initialized.";
+    return true;
   }
-
-  window.FICppBridge={
-    health:cppHealth,
-    correctCurrentMotion:cppCorrectCurrentMotion,
-    endpoint:cppBridgeBase
-  };
-
-  const button=document.getElementById("cppAutoCorrect");
-  if(button){
-    button.addEventListener(
-      "click",
-      cppCorrectCurrentMotion
-    );
-  }
-
-  setTimeout(cppHealth,250);
-  setInterval(cppHealth,10000);
+  document.addEventListener("fi:spritewalker-ready",()=>setTimeout(run,50));
+  setTimeout(run,800);
+  window.FIEngineAudit={run};
 })();
 </script>
 
