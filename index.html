@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V25.7.2 - Rig Approval Gate + C++ Motion Core</title>
+<title>Fatal Instinct Sprite Walker V25.8.0 - Rig Approval Gate + C++ Motion Core</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -132,7 +132,7 @@
 
 
 /* ============================================================
-   V25.7.0 - MASTER SPRITE AUTO-RIG / RIG APPROVAL GATE
+   V25.8.0 - MASTER SPRITE AUTO-RIG / RIG APPROVAL GATE
    ============================================================ */
 .fiGateBanner{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:linear-gradient(135deg,#171d28,#10151e);border:1px solid #2c3545;border-radius:16px;padding:12px 14px;margin:10px 0 12px}
 .fiGateBanner b{font-size:14px}.fiGateBanner .fiGateSub{font-size:12px;color:var(--muted);margin-top:3px}.fiGateStage{font-size:11px;padding:5px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}.fiGateStage.review{color:#f2cc60;border-color:#7b6420}.fiGateStage.approved{color:var(--green);border-color:#246848}.fiGateStage.fix{color:#79c0ff;border-color:#275a7b}
@@ -160,7 +160,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V25.7.2</span></h1><div class="sub">Production Sprint • 12-Fighter Roster • Walk Critic Pipeline Repair • C++ Motion Core</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V25.8.0</span></h1><div class="sub">Production Sprint • 12-Fighter Roster • Canonical Motion Pipeline • C++ Motion Core</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -187,21 +187,21 @@
 <button id="undoBtn">Undo</button>
 <button id="redoBtn">Redo</button>
 <button id="productionDefaults">Production Defaults</button>
-<button id="quickProduction" class="primary">Build Production Walk</button>
+<button id="quickProduction" class="primary">Build Production Motion</button>
 <button id="exportCharacterPack">Export Character Pack</button>
 </div>
 
 <div class="fiGateBanner" id="fiGateBanner">
   <div>
     <b>Master Sprite Autopilot</b>
-    <div class="fiGateSub" id="fiGateBannerText">Load a master sprite. V25.7 will auto-rig it, then stop for your approval.</div>
+    <div class="fiGateSub" id="fiGateBannerText">Load a master sprite. V25.8 will auto-rig it, then stop for your approval.</div>
   </div>
   <span class="fiGateStage" id="fiGateStageBadge">WAITING</span>
 </div>
 
 <div class="fiGateBanner" id="fiAuditBanner">
   <div>
-    <b>V25.7.2 Engine Audit</b>
+    <b>V25.8.0 Engine Audit</b>
     <div class="fiGateSub" id="fiAuditText">Checking production systems…</div>
   </div>
   <span class="fiGateStage" id="fiAuditBadge">CHECKING</span>
@@ -451,7 +451,7 @@
     <button id="testLibrary">7 • Library</button>
     <button id="testBatch">8 • Batch</button>
   </div>
-  <div id="moduleStatus" class="status">V18 Production Sprint: validated animation engine + fast multi-character workflow.</div>
+  <div id="moduleStatus" class="status">V25.8 Production System: canonical action, scoring, rig, export, and motion workflow.</div>
 </div>
 
 <div class="moduleBox">
@@ -701,7 +701,7 @@
       <select id="animStateSelect">
         <option>Idle</option><option>Walk Forward</option><option>Walk Back</option>
         <option>Crouch</option><option>Jump</option><option>Punch</option><option>Kick</option>
-        <option>Block</option><option>Hit</option><option>Knockdown</option>
+        <option>Block</option><option>Hit</option><option>Knockdown</option><option>Victory</option>
       </select>
     </div>
 
@@ -808,7 +808,7 @@
 </div>
 
 <div class="moduleBox">
-  <div class="moduleHead"><b>V25.6.3 AI Production Director</b><span id="aiDirectorBadge" class="pill ok">READY</span></div>
+  <div class="moduleHead"><b>V25.8.0 AI Production Director</b><span id="aiDirectorBadge" class="pill ok">READY</span></div>
   <div class="v23Card" style="margin-bottom:8px">
     <div class="moduleHead"><b>Persistent Upgrade Checkpoint</b><span id="checkpointBadge" class="pill ok">AUTO SAVE</span></div>
     <div class="v23Card" style="margin-top:7px">
@@ -836,7 +836,7 @@
       <option>Walk Forward</option><option>Walk Back</option><option>Idle</option>
       <option>Light Punch</option><option>Medium Punch</option><option>Heavy Punch</option>
       <option>Light Kick</option><option>Medium Kick</option><option>Heavy Kick</option>
-      <option>Block</option><option>Jump</option><option>Hit Reaction</option><option>Knockdown</option>
+      <option>Block</option><option>Jump</option><option>Crouch</option><option>Hit Reaction</option><option>Knockdown</option><option>Victory</option>
     </select>
     <button id="aiRunPipelineBtn" class="primary">Run Full AI Pipeline</button>
   </div>
@@ -877,7 +877,7 @@
   </div>
   
   <div class="v25Panel">
-    <div class="moduleHead"><b>V25.7.2 Walk Critic Pipeline Repair</b><span id="v25Status" class="pill ok">READY</span></div>
+    <div class="moduleHead"><b>V25.8.0 Walk Critic Pipeline Repair</b><span id="v25Status" class="pill ok">READY</span></div>
     <div class="v23Mini">Closed-loop locomotion correction: analyze → repair → re-solve → re-score → keep only improvements.</div>
 
     <div class="switchRow"><span>Enable real-time self-correction</span><input id="v25Enabled" type="checkbox" checked></div>
@@ -946,6 +946,8 @@
       <div class="v25Stat"><span class="v23Mini">Grounding critic source</span><b id="v2563CriticSource">FINAL POSE CACHE</b></div>
       <div class="v25Stat"><span class="v23Mini">Final-pose cache</span><b id="v2572CacheStatus">EMPTY</b></div>
       <div class="v25Stat"><span class="v23Mini">Cached gait frames</span><b id="v2572CachedFrames">0 / 8</b></div>
+      <div class="v25Stat"><span class="v23Mini">Ground anchor source</span><b id="v258GroundAnchorSource">--</b></div>
+      <div class="v25Stat"><span class="v23Mini">Canonical score state</span><b id="v258CanonicalStatus">READY</b></div>
       <div class="v25Stat"><span class="v23Mini">Final-pose plant samples</span><b id="v2563FinalPlantSamples">--</b></div>
     </div>
 
@@ -1273,11 +1275,11 @@ function draw(frameCanvas=null,poseJoints=null){drawBackground();if(!source&&Obj
 
 function simplify(points,tol){if(points.length<3) return points;const out=[points[0]];let last=points[0];for(let i=1;i<points.length-1;i++){const p=points[i];if(Math.hypot(p[0]-last[0],p[1]-last[1])>=tol){out.push(p);last=p;}}out.push(points[points.length-1]);return out;}
 function pointDistance(a,b){return Math.hypot(a.x-b.x,a.y-b.y);}
-$("imageInput").onchange=e=>{const f=e.target.files[0];if(!f)return;const u=URL.createObjectURL(f),im=new Image();im.onload=async()=>{source=im;sourceName=f.name;autoTraceCache.dirty=true;autoTraceCache.masks={};autoTraceCache.preview=null;URL.revokeObjectURL(u);await v242StoreImageBlob(f,f.name);v242SaveCheckpoint(true);status(`Loaded ${f.name} — ${im.width}×${im.height} • cached for upgrade resume`);draw();};im.src=u;};
+$("imageInput").onchange=e=>{const f=e.target.files[0];if(!f)return;const u=URL.createObjectURL(f),im=new Image();im.onload=async()=>{source=im;sourceName=f.name;autoTraceCache.dirty=true;autoTraceCache.masks={};autoTraceCache.preview=null;if(typeof v258ProductionAction!=="undefined")v258ProductionAction=null;v258InvalidateRigApproval("character image loaded");v258ResetMotionState("character image loaded");URL.revokeObjectURL(u);await v242StoreImageBlob(f,f.name);v242SaveCheckpoint(true);status(`Loaded ${f.name} — ${im.width}×${im.height} • cached for upgrade resume`);draw();};im.src=u;};
 
 canvas.addEventListener("pointerdown",e=>{const p=toImg(e.clientX,e.clientY);canvas.setPointerCapture(e.pointerId);if(mode==="trace"){if(!source){status("Load a character image first.");return;}drawing=true;tracePoints=[[p.x,p.y]];draw();return;}if(mode==="joint"){const cur=rig.joints[jointSel.value];if(cur&&Math.hypot(cur[0]-p.x,cur[1]-p.y)<20) draggingJoint=true;else{rig.joints[jointSel.value]=[p.x,p.y];draggingJoint=true;autoTraceCache.dirty=true;}draw();}});
 canvas.addEventListener("pointermove",e=>{const p=toImg(e.clientX,e.clientY);if(mode==="trace"&&drawing){const last=tracePoints[tracePoints.length-1],cur={x:p.x,y:p.y};if(!last||pointDistance({x:last[0],y:last[1]},cur)>2.2) tracePoints.push([p.x,p.y]);draw();}else if(mode==="joint"&&draggingJoint){rig.joints[jointSel.value]=[p.x,p.y];autoTraceCache.dirty=true;draw();}});
-canvas.addEventListener("pointerup",()=>{const completedJoint=(mode==="joint"&&draggingJoint);if(mode==="trace"&&drawing){drawing=false;if(tracePoints.length>=8){rig.parts[partSel.value]=rig.parts[partSel.value]||{};rig.parts[partSel.value].poly=simplify(tracePoints,1.4);rig.parts[partSel.value].auto=false;autoTraceCache.dirty=true;status(`${partSel.value}: manual shape captured.`);}else status("Trace was too short. Try again.");tracePoints=[];draw();}draggingJoint=false;if(completedJoint&&guidedJointMode)guidedJointAdvance();if(completedJoint)v242SaveCheckpoint(true);});
+canvas.addEventListener("pointerup",()=>{const completedJoint=(mode==="joint"&&draggingJoint),completedTrace=(mode==="trace"&&drawing);if(mode==="trace"&&drawing){drawing=false;if(tracePoints.length>=8){rig.parts[partSel.value]=rig.parts[partSel.value]||{};rig.parts[partSel.value].poly=simplify(tracePoints,1.4);rig.parts[partSel.value].auto=false;autoTraceCache.dirty=true;v258InvalidateMotionApproval("sprite binding edited");status(`${partSel.value}: manual shape captured. Motion approval invalidated.`);}else status("Trace was too short. Try again.");tracePoints=[];draw();}draggingJoint=false;if(completedJoint){v258InvalidateRigApproval("joint edited");v258ResetMotionState("joint edited");}if(completedJoint&&guidedJointMode)guidedJointAdvance();if(completedJoint||completedTrace)v242SaveCheckpoint(true);});
 canvas.addEventListener("pointercancel",()=>{drawing=false;draggingJoint=false;tracePoints=[];draw();});
 
 jointSel.addEventListener("change",()=>{
@@ -1286,7 +1288,7 @@ jointSel.addEventListener("change",()=>{
   if(i>=0){guidedJointIndex=i;guidedJointRefresh();}
 });
 
-function seedHumanoidRig(){const {w,h}=sourceRect(),cx=w*0.50,pelvisY=h*0.54,neckY=h*0.25,hipDX=w*0.10,shoulderDX=w*0.15,kneeY=h*0.73,ankleY=h*0.92,toeY=h*0.96,armY=h*0.34,elbowY=h*0.52,wristY=h*0.69;rig.joints={pelvis:[cx,pelvisY],neck:[cx,neckY],left_shoulder:[cx-shoulderDX,armY],left_elbow:[cx-shoulderDX-22,elbowY],left_wrist:[cx-shoulderDX-28,wristY],right_shoulder:[cx+shoulderDX,armY],right_elbow:[cx+shoulderDX+22,elbowY],right_wrist:[cx+shoulderDX+28,wristY],left_hip:[cx-hipDX,pelvisY+8],left_knee:[cx-hipDX-6,kneeY],left_ankle:[cx-hipDX-10,ankleY],left_toe:[cx-hipDX+18,toeY],right_hip:[cx+hipDX,pelvisY+8],right_knee:[cx+hipDX+6,kneeY],right_ankle:[cx+hipDX+10,ankleY],right_toe:[cx+hipDX+36,toeY],tail_base:[cx-hipDX*1.3,pelvisY+10],tail_tip:[cx-w*0.22,pelvisY+30]};autoTraceCache.dirty=true;status("Seeded a basic humanoid walk rig. Adjust joints as needed, then Auto Trace & Bind.");draw();}
+function seedHumanoidRig(){v258InvalidateRigApproval("rig reseeded");v258ResetMotionState("rig reseeded");const {w,h}=sourceRect(),cx=w*0.50,pelvisY=h*0.54,neckY=h*0.25,hipDX=w*0.10,shoulderDX=w*0.15,kneeY=h*0.73,ankleY=h*0.92,toeY=h*0.96,armY=h*0.34,elbowY=h*0.52,wristY=h*0.69;rig.joints={pelvis:[cx,pelvisY],neck:[cx,neckY],left_shoulder:[cx-shoulderDX,armY],left_elbow:[cx-shoulderDX-22,elbowY],left_wrist:[cx-shoulderDX-28,wristY],right_shoulder:[cx+shoulderDX,armY],right_elbow:[cx+shoulderDX+22,elbowY],right_wrist:[cx+shoulderDX+28,wristY],left_hip:[cx-hipDX,pelvisY+8],left_knee:[cx-hipDX-6,kneeY],left_ankle:[cx-hipDX-10,ankleY],left_toe:[cx-hipDX+18,toeY],right_hip:[cx+hipDX,pelvisY+8],right_knee:[cx+hipDX+6,kneeY],right_ankle:[cx+hipDX+10,ankleY],right_toe:[cx+hipDX+36,toeY],tail_base:[cx-hipDX*1.3,pelvisY+10],tail_tip:[cx-w*0.22,pelvisY+30]};autoTraceCache.dirty=true;status("Seeded a basic humanoid walk rig. Adjust joints as needed, then Auto Trace & Bind.");draw();}
 $("seedRig").onclick=seedHumanoidRig;
 
 function pointFarthestFrom(points,p){let best=points[0],dist=-1;for(const q of points){const d=Math.hypot(q[0]-p[0],q[1]-p[1]);if(d>dist){dist=d;best=q;}}return[best[0],best[1]];}
@@ -1349,9 +1351,14 @@ document.querySelectorAll('input[name="rosterSlot"]').forEach(el=>{
 function productionSnapshot(){
   return {
     format:"fatal-instinct-production-snapshot",
-    version:18,
+    version:18,engine_version:"25.8.0",
     character_name:$("characterName").value.trim(),
     source_name:sourceName,
+    rig_approved:v258RigApprovalValid(),
+    rig_approval_signature:v258RigApprovalValid()?v258RigSignature():null,
+    motion_approved:v258MotionApprovalValid(),
+    motion_approval_signature:v258MotionApprovalValid()?v24Director.approvalSignature:null,
+    production_action:v258ProductionAction,
     rig:JSON.parse(JSON.stringify(rig)),
     settings:typeof projectSettings==="function"?projectSettings():{},
     library:JSON.parse(JSON.stringify(animationLibrary||[])),
@@ -1374,6 +1381,10 @@ function restoreProductionSnapshot(d){
   animationLibrary=d.library||animationLibrary;
   if(Array.isArray(d.roster)){rosterData=Array.from({length:12},(_,i)=>d.roster[i]||{name:"",stage:"Not Started",saved:null});rosterToUI();}
   $("characterName").value=d.character_name||"";
+  v258ProductionAction=d.production_action||null;
+  const rigSig=v258RigSignature(),rigOK=!!(d.rig_approved&&d.rig_approval_signature&&d.rig_approval_signature===rigSig);
+  if(window.FIRigApprovalGate?.state){window.FIRigApprovalGate.state.approved=rigOK;window.FIRigApprovalGate.state.approvalSignature=rigOK?rigSig:null;}
+  v24Director.approved=!!(d.motion_approved&&d.motion_approval_signature);v24Director.approvalSignature=d.motion_approval_signature||null;v24Director.lastAction=d.production_action||null;
   autoTraceCache.dirty=true;
   inferJointsFromParts();
   renderAnimationLibrary();
@@ -1390,19 +1401,30 @@ $("restoreAutosave").onclick=()=>{
   }catch(e){status("Could not restore autosave.");}
 };
 
+function v258RigApprovalValid(){
+  if(!source||!Object.keys(rig.joints||{}).length)return false;
+  const sig=v258RigSignature();
+  const state=window.FIRigApprovalGate?.state;
+  if(state?.approved&&state?.approvalSignature===sig)return true;
+  try{
+    const d=JSON.parse(localStorage.getItem(V258_RIG_APPROVAL_KEY)||"null");
+    return !!(d?.signature&&d.signature===sig);
+  }catch(e){return false;}
+}
 function productionChecks(){
   const requiredCore=["pelvis","neck","left_shoulder","left_elbow","left_wrist","right_shoulder","right_elbow","right_wrist","left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe"];
-  const joints=requiredCore.filter(j=>!!rig.joints[j]).length;
-  const parts=PARTS.filter(p=>rig.parts[p]&&(rig.parts[p].poly||rig.parts[p].auto)).length;
-  const stackIds=["opRoot","opContacts","opFoot","opFBIK","opTwist","opSmooth","opControl","opSkin"];
-  const stack=stackIds.filter(id=>$(id)?.checked).length;
+  const joints=requiredCore.filter(j=>!!rig.joints[j]).length,parts=PARTS.filter(p=>rig.parts[p]&&(rig.parts[p].poly||rig.parts[p].auto)).length;
+  const stackIds=["opRoot","opContacts","opFoot","opFBIK","opTwist","opSmooth","opControl","opSkin"],stack=stackIds.filter(id=>$(id)?.checked).length;
+  const action=v258ProductionAction||$("aiRequestedAction")?.value||"Walk Forward",motionOK=v258IsProceduralAction(action)||!!importedMotion.type;
   return [
     {name:"Character image",ok:!!source,detail:source?sourceName:"Load PNG"},
+    {name:"Rig approval",ok:v258RigApprovalValid(),detail:v258RigApprovalValid()?"Approved + signature current":"Run/review Rig Approval Gate"},
     {name:"Core skeleton",ok:joints===requiredCore.length,detail:`${joints}/${requiredCore.length} joints`},
     {name:"Sprite binding",ok:parts>=12,detail:`${parts}/${PARTS.length} parts`},
-    {name:"Imported motion",ok:!!importedMotion.type,detail:importedMotion.name||"Load FBX/motion"},
+    {name:`Motion: ${action}`,ok:motionOK,detail:motionOK?(v258UseImportedAction(action)?(importedMotion.name||"Imported motion"):"Procedural production motion"):`Import ${action} motion`},
     {name:"Correction stack",ok:stack===8,detail:`${stack}/8 active`},
-    {name:"Generated frames",ok:frames.length===FRAME_COUNT,detail:`${frames.length}/${FRAME_COUNT} frames`}
+    {name:"AI final approval",ok:v258MotionApprovalValid(),detail:v258MotionApprovalValid()?`Approved + signature current: ${action}`:"Run/re-run + approve pipeline"},
+    {name:"Generated frames",ok:frames.length===FRAME_COUNT&&v258FramesSignature===v258MotionSignature(),detail:frames.length===FRAME_COUNT?(v258FramesSignature===v258MotionSignature()?"8/8 current":"8/8 stale — regenerate"):`${frames.length}/${FRAME_COUNT} frames`}
   ];
 }
 function refreshProductionPreflight(){
@@ -1591,12 +1613,14 @@ $("quickProduction").onclick=()=>{
   const ready=requiredReadyForWalk();
   if(!source){status("Production build needs the character PNG first.");return;}
   if(!ready.ok){status("Production build needs a fitted/loaded rig first.");return;}
-  if(!importedMotion.type){status("Production build needs an imported FBX or saved motion.");return;}
+  if(!v258RigApprovalValid()){status("Production build blocked: review and approve the current signed rig first.");return;}
+  const action=v258SetProductionAction($("aiRequestedAction")?.value||"Walk Forward");
+  if(v258NeedsImportedAction(action)&&!importedMotion.type){status(`${action} needs an imported FBX or saved motion.`);return;}
   if(!ensureAutoBoundForProduction()){status("Could not bind sprite parts automatically. Check the rig.");return;}
   $("showAutoTrace").checked=false;
   $("showBones").checked=false;
   $("showSprite").checked=true;
-  $("motionSource").value="imported";
+  if(v258UseImportedAction(action))$("motionSource").value="imported";
   $("generate").click();
   setTimeout(()=>{
     const i=selectedRosterSlot();
@@ -1646,59 +1670,20 @@ async function spriteSheetArrayBuffer(){
 }
 $("exportCharacterPack").onclick=async()=>{
   if(!window.JSZip){status("Character Pack export needs JSZip. Check internet connection.");return;}
-  const name=$("characterName").value.trim()||`Player_${selectedRosterSlot()+1}`;
-  const safe=safeFileName(name);
-  const zip=new window.JSZip();
-
-  const manifest={
-    format:"fatal-instinct-character-pack",version:18,
-    character:name,source_name:sourceName,
-    created:new Date().toISOString(),
-    frame_count:frames.length,
-    motion:importedMotion.name||null,
-    production_checks:productionChecks()
-  };
+  const checks=productionChecks(),missing=checks.filter(c=>!c.ok);
+  if(missing.length){status(`Character Pack blocked: ${missing.map(x=>x.name).join(", ")}.`);return;}
+  const name=$("characterName").value.trim()||`Player_${selectedRosterSlot()+1}`,safe=safeFileName(name),action=v258ProductionAction||v258RequestedAction(),actionSafe=v258SafeActionName(action),zip=new window.JSZip();
+  const manifest={format:"fatal-instinct-character-pack",version:18,engine_version:"25.8.0",character:name,source_name:sourceName,created:new Date().toISOString(),current_action:action,frame_count:frames.length,motion:importedMotion.name||null,production_checks:checks};
   zip.file(`${safe}/manifest.json`,JSON.stringify(manifest,null,2));
-  zip.file(`${safe}/rig/${safe}_rig.json`,JSON.stringify({
-    version:18,source_name:sourceName,
-    source_size:source?[source.width,source.height]:null,
-    parts:rig.parts,joints:rig.joints
-  },null,2));
-  zip.file(`${safe}/project/${safe}_project.json`,JSON.stringify({
-    format:"fatal-instinct-sprite-walker-project",version:18,
-    character_name:name,rig,settings:projectSettings(),library:animationLibrary,source_name:sourceName
-  },null,2));
-
-  try{
-    const motion=currentMotionPackage();
-    if(motion) zip.file(`${safe}/motion/${safe}_${safeFileName(motion.name)}.fi_motion.json`,JSON.stringify(motion,null,2));
-  }catch(e){}
-
-  if(frames.length){
-    const sheet=await spriteSheetArrayBuffer();
-    if(sheet) zip.file(`${safe}/sprites/${safe}_walk_sheet.png`,sheet);
-    for(let i=0;i<frames.length;i++){
-      const buf=await canvasToArrayBuffer(frames[i]);
-      zip.file(`${safe}/sprites/frames/${safe}_${String(i+1).padStart(2,"0")}.png`,buf);
-    }
-  }
-
-  zip.file(`${safe}/README.txt`,
-`Fatal Instinct V18 Character Pack
-Character: ${name}
-Source: ${sourceName||"not recorded"}
-Motion: ${importedMotion.name||"none"}
-Frames: ${frames.length}
-Includes rig, project settings, reusable motion (when available), sprite sheet, and individual PNG frames.
-`);
-
-  const blob=await zip.generateAsync({type:"blob"});
-  download(blob,`${safe}_Fatal_Instinct_Character_Pack.zip`);
-
-  const i=selectedRosterSlot();
-  rosterFromUI();rosterData[i].name=name;rosterData[i].stage="Complete";rosterData[i].saved=productionSnapshot();
-  rosterToUI();persistRoster();saveAutosave();refreshProductionPreflight();
-  status(`${name} production pack exported and marked complete.`);
+  zip.file(`${safe}/rig/${safe}_rig.json`,JSON.stringify({version:18,engine_version:"25.8.0",source_name:sourceName,source_size:source?[source.width,source.height]:null,rig_approved:v258RigApprovalValid(),rig_approval_signature:v258RigApprovalValid()?v258RigSignature():null,parts:rig.parts,joints:rig.joints},null,2));
+  zip.file(`${safe}/project/${safe}_project.json`,JSON.stringify({format:"fatal-instinct-sprite-walker-project",version:18,engine_version:"25.8.0",character_name:name,rig,settings:projectSettings(),library:animationLibrary,source_name:sourceName},null,2));
+  try{const motion=currentMotionPackage();if(motion)zip.file(`${safe}/motion/${safe}_${actionSafe}.fi_motion.json`,JSON.stringify(motion,null,2));}catch(e){}
+  for(const clip of animationLibrary||[]){try{const clipSafe=safeFileName(clip.name||"motion");zip.file(`${safe}/motion/library/${clipSafe}.fi_motion.json`,JSON.stringify(clip,null,2));}catch(e){}}
+  if(frames.length){const sheet=await spriteSheetArrayBuffer();if(sheet)zip.file(`${safe}/sprites/${safe}_${actionSafe}_sheet.png`,sheet);for(let i=0;i<frames.length;i++){const buf=await canvasToArrayBuffer(frames[i]);zip.file(`${safe}/sprites/frames/${actionSafe}/${safe}_${String(i+1).padStart(2,"0")}.png`,buf);}}
+  zip.file(`${safe}/README.txt`,`Fatal Instinct V25.8 Production Pack\nCharacter: ${name}\nAction: ${action}\nSource: ${sourceName||"not recorded"}\nFrames: ${frames.length}\nLibrary motions: ${(animationLibrary||[]).length}\nThis export records the current approved action and motion library. It does not automatically mark the entire fighter complete.\n`);
+  const blob=await zip.generateAsync({type:"blob"});download(blob,`${safe}_${actionSafe}_Fatal_Instinct_Pack.zip`);
+  const i=selectedRosterSlot();rosterFromUI();rosterData[i].name=name;rosterData[i].stage="Frames Ready";rosterData[i].saved=productionSnapshot();rosterToUI();persistRoster();saveAutosave();refreshProductionPreflight();
+  status(`${name} ${action} production pack exported. Fighter remains Frames Ready until you manually mark the full character Complete.`);
 };
 
 function applyProductionMode(){
@@ -1718,8 +1703,8 @@ setInterval(productionAutosaveTick,30000);
 window.addEventListener("beforeunload",()=>saveAutosave(true));
 
 function download(blob,name){const a=document.createElement("a"),u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);}
-$("saveRig").onclick=()=>{const data={version:17,source_name:sourceName,source_size:source?[source.width,source.height]:null,parts:rig.parts,joints:rig.joints};download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"fatal_instinct_rig_v18.json");status("V18 rig exported.");};
-$("rigInput").onchange=async e=>{const f=e.target.files[0];if(!f) return;try{const d=JSON.parse(await f.text());rig.parts=d.parts||{};rig.joints=d.joints||{};autoTraceCache.dirty=true;inferJointsFromParts();status(`Loaded rig: ${f.name} (V${d.version||"?"})`);draw();}catch(err){status("Could not read rig JSON.");}};
+$("saveRig").onclick=()=>{const approved=v258RigApprovalValid(),data={version:18,engine_version:"25.8.0",rig_approved:approved,rig_approval_signature:approved?v258RigSignature():null,source_name:sourceName,source_size:source?[source.width,source.height]:null,parts:rig.parts,joints:rig.joints};const who=safeFileName($("characterName")?.value||sourceName||"character");download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),`${who}_${approved?"approved":"unapproved"}_rig.json`);status(`V25.8 rig exported${approved?" • signed approval preserved":" • approval not valid"}.`);};
+$("rigInput").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());v258ResetMotionState(`loaded rig ${f.name}`);rig.parts=d.parts||{};rig.joints=d.joints||{};autoTraceCache.dirty=true;inferJointsFromParts();const sig=v258RigSignature(),approved=!!(d.rig_approved&&d.rig_approval_signature&&d.rig_approval_signature===sig);if(window.FIRigApprovalGate?.state){window.FIRigApprovalGate.state.approved=approved;window.FIRigApprovalGate.state.approvalSignature=approved?sig:null;}if(approved){try{localStorage.setItem(V258_RIG_APPROVAL_KEY,JSON.stringify({source:sourceName,signature:sig,time:Date.now()}));}catch(e){}}status(`Loaded rig: ${f.name} (schema V${d.version||"?"})${approved?" • SIGNED APPROVAL VALID":" • REVIEW REQUIRED"}`);draw();refreshProductionPreflight();}catch(err){status("Could not read rig JSON.");}};
 
 function joint(name){return rig.joints[name]?[...rig.joints[name]]:null;}
 function length(a,b){return Math.hypot(b[0]-a[0],b[1]-a[1]);}
@@ -1740,8 +1725,230 @@ function legMetrics(){const lh=joint("left_hip"),lk=joint("left_knee"),la=joint(
 function scaledWalkValues(){const m=legMetrics();if(!m) return null;return{metrics:m,stridePx:m.avgLeg*(+$("stride").value/100),stepPx:m.avgLeg*(+$("step").value/100),bobPx:m.avgLeg*(+$("bob").value/100),pelvisShiftPx:m.pelvisWidth*0.08};}
 function requiredReadyForWalk(){const need=["pelvis","neck","left_shoulder","right_shoulder","left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe"];for(const j of need) if(!joint(j)) return{ok:false,msg:"Missing required joint: "+j};return{ok:true};}
 
+
 /* ============================================================
-   V25.7.2 - NON-REENTRANT FINAL-POSE CACHE
+   V25.8.0 - CANONICAL PRODUCTION ACTION LAYER
+   One requested action -> one real pose source -> one export path.
+   ============================================================ */
+const V258_ENGINE_VERSION="25.8.0";
+const V258_RIG_APPROVAL_KEY="fatal_instinct_v258_rig_approval";
+let v258ProductionAction=null;
+let v258SuppressWalkNormalizer=false;
+let v258FramesSignature=null;
+
+function v258StableHash(value){
+  const s=typeof value==="string"?value:JSON.stringify(value);
+  let h=0x811c9dc5;
+  for(let i=0;i<s.length;i++){
+    h^=s.charCodeAt(i);
+    h=Math.imul(h,0x01000193)>>>0;
+  }
+  return h.toString(16).padStart(8,"0");
+}
+function v258RigSignature(){
+  const joints={};
+  for(const k of Object.keys(rig.joints||{}).sort()){
+    const q=rig.joints[k];
+    if(Array.isArray(q)&&q.length>=2)joints[k]=[+q[0].toFixed(3),+q[1].toFixed(3)];
+  }
+  return v258StableHash({
+    engine:V258_ENGINE_VERSION,
+    source:sourceName||"",
+    size:source?[source.width,source.height]:null,
+    anatomy:$("fiRigAnatomy")?.value||"unknown",
+    joints
+  });
+}
+function v258BindingSignature(){
+  const parts={};
+  for(const k of Object.keys(rig.parts||{}).sort()){
+    const part=rig.parts[k]||{};
+    parts[k]={auto:!!part.auto,poly:Array.isArray(part.poly)?part.poly.map(q=>[+q[0].toFixed(2),+q[1].toFixed(2)]):null};
+  }
+  return v258StableHash({
+    rig:v258RigSignature(),parts,
+    trace:[$("alphaThreshold")?.value,$("traceDetail")?.value,$("autoOverlap")?.value]
+  });
+}
+function v258ImportedSignature(){
+  if(!importedMotion?.type)return "none";
+  if(importedMotion.type==="native"){
+    const d=importedMotion.native||{};
+    return v258StableHash({type:"native",name:importedMotion.name,action:d.action||null,samples:d.samples||[]});
+  }
+  const clip=importedMotion.clip;
+  return v258StableHash({type:"fbx",name:importedMotion.name,clip:clip?.name||null,duration:clip?.duration||0,uuid:clip?.uuid||null});
+}
+const V258_SIGNATURE_CONTROLS=[
+  "stride","step","bob","lean","arm","tail","motionSource","projection","retargetProfile","rootMotion","mirrorMotion","correctFeet",
+  "enableFBIK","opRoot","opContacts","opFoot","opFBIK","opTwist","opSmooth","opControl","opSkin","useJointMesh",
+  "plantTilt","swingTilt","groundTol","contactVelocity","fbikFoot","fbikPelvis","fbikSpine","constraintIterations","limbLengthLock","plantPin","bodyAnchor","spineStability","maxReach","poleKnees","poleElbows","poleStrength","poleDistance",
+  "walkNormalize","preventCrouch","straightPlantLeg","normalizeStride","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth",
+  "enableWeightedSkin","skinRenderMode","skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","enableUnifiedMesh","unifiedMeshMode","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid","sealJointGaps",
+  "v25Profile","v25TargetQuality","v252FinalPoseEnabled","v252ResolveAfter","v253PhaseLock","v253FootWorldLock","v254FreezeSolved","v254SupportSolve","v255PersistentContact","v255ProtectSolved","v256HardProtect","v256RejectDamage","v256AllowedDrop","v2562FinalFootLock","v2562ToeRelock","v2562GroundTol",
+  "ai4bppOptimize","aiTileReuse","aiVramCheck","aiOamCheck"
+];
+function v258MotionControlSnapshot(){
+  const out={};
+  for(const id of V258_SIGNATURE_CONTROLS){
+    const el=$(id);if(!el)continue;
+    out[id]=(el.type==="checkbox"||el.type==="radio")?!!el.checked:el.value;
+  }
+  return out;
+}
+function v258MotionSignature(){
+  return v258StableHash({
+    engine:V258_ENGINE_VERSION,
+    action:v258RequestedAction(),
+    rig:v258RigSignature(),
+    binding:v258BindingSignature(),
+    imported:v258UseImportedAction(v258RequestedAction())?v258ImportedSignature():"procedural",
+    controls:v258MotionControlSnapshot(),
+    finalCorrections:v252FinalCorrections||{},
+    finalCorrectionTargets:v252FinalCorrectionTargets||{},
+    correctives:(typeof v23!=="undefined"?(v23.correctives||[]):[])
+  });
+}
+function v258InvalidateMotionApproval(reason="motion changed"){
+  v258FramesSignature=null;
+  if(typeof v24Director!=="undefined"&&v24Director){
+    v24Director.approved=false;
+    v24Director.approvalSignature=null;
+  }
+  if($("aiDirectorBadge")?.textContent==="APPROVED")$("aiDirectorBadge").textContent="REVIEW";
+  if($("aiDecision")&&reason)$("aiDecision").textContent=`Production changed (${reason}). Re-run the affected pipeline before final approval.`;
+}
+function v258MotionApprovalValid(){
+  return !!(typeof v24Director!=="undefined"&&v24Director?.approved&&v24Director?.approvalSignature&&v24Director.lastAction===v258RequestedAction()&&v24Director.approvalSignature===v258MotionSignature());
+}
+function v258InvalidateRigApproval(reason="rig changed"){
+  try{localStorage.removeItem(V258_RIG_APPROVAL_KEY);}catch(e){}
+  if(window.FIRigApprovalGate?.state){window.FIRigApprovalGate.state.approved=false;window.FIRigApprovalGate.state.approvalSignature=null;}
+  v258InvalidateMotionApproval(reason);
+  if($("fiGateStageBadge")){$("fiGateStageBadge").textContent="REVIEW";$("fiGateStageBadge").className="fiGateStage review";}
+}
+
+function v258RequestedAction(){
+  return v258ProductionAction || $("aiRequestedAction")?.value || "Walk Forward";
+}
+function v258StateForAction(action){
+  if(action==="Walk Forward"||action==="Walk Back"||action==="Idle"||action==="Block"||action==="Jump"||action==="Crouch"||action==="Knockdown"||action==="Victory")return action;
+  if(/Punch/.test(action))return "Punch";
+  if(/Kick/.test(action))return "Kick";
+  if(action==="Hit Reaction")return "Hit";
+  return action||"Idle";
+}
+function v258IsWalkAction(action=v258RequestedAction()){return /^Walk\b/i.test(action||"");}
+function v258IsProceduralAction(action=v258RequestedAction()){
+  return action==="Walk Forward"||action==="Walk Back"||action==="Idle";
+}
+function v258NeedsImportedAction(action=v258RequestedAction()){
+  return !v258IsProceduralAction(action);
+}
+function v258ImportedMatchesAction(action=v258RequestedAction()){
+  if(!importedMotion.type)return false;
+  const nativeAction=String(importedMotion.native?.action||"").toLowerCase();
+  const name=String(importedMotion.name||"").toLowerCase();
+  const s=(nativeAction+" "+name);
+  if(v258IsWalkAction(action))return /walk|locomotion/.test(s);
+  if(action==="Idle")return /idle|stand|breath/.test(s);
+  if(/Punch/.test(action))return /punch|jab|hook|uppercut|strike/.test(s);
+  if(/Kick/.test(action))return /kick/.test(s);
+  if(action==="Block")return /block|guard/.test(s);
+  if(action==="Jump")return /jump|air/.test(s);
+  if(action==="Crouch")return /crouch|duck/.test(s);
+  if(action==="Hit Reaction")return /hit|hurt|damage|reaction/.test(s);
+  if(action==="Knockdown")return /knock|down|fall|ko/.test(s);
+  if(action==="Victory")return /victory|win|celebr/.test(s);
+  return true;
+}
+function v258UseImportedAction(action=v258RequestedAction()){
+  if(v258NeedsImportedAction(action))return true;
+  if(action==="Idle")return false;
+  return v258IsWalkAction(action) && $("motionSource")?.value==="imported" && !!importedMotion.type;
+}
+function v258WalkDirection(action=v258RequestedAction()){
+  return action==="Walk Back"?-1:1;
+}
+function v258ActionLoops(action=v258RequestedAction()){
+  return action==="Idle"||v258IsWalkAction(action)||action==="Block";
+}
+function v258SafeActionName(action=v258RequestedAction()){
+  return String(action||"motion").replace(/[^a-z0-9]+/gi,"_").replace(/^_+|_+$/g,"")||"motion";
+}
+function v258ResetMotionState(reason="action changed"){
+  v258FramesSignature=null;
+  v258InvalidateMotionApproval(reason);
+  v252FinalCorrections={};
+  v252FinalCorrectionTargets={};
+  if(typeof v23!=="undefined"){
+    v23.correctives=(v23.correctives||[]).filter(x=>x?.source!=="v25");
+    v23.poseKeys=[];
+  }
+  if(typeof v25Motion!=="undefined"){
+    v25Motion.pass=0;v25Motion.bestScore=-1;v25Motion.currentScore=-1;
+    v25Motion.bestCorrectives=null;v25Motion.bestFinalCorrections=null;v25Motion.bestFinalCorrectionTargets=null;v25Motion.bestControls=null;
+    v25Motion.bestLockedMetrics=null;v25Motion.bestProtectedSnapshot=null;v25Motion.bestTargetFailures=null;
+    v25Motion.bestScoreObj=null;v25Motion.currentScoreObj=null;v25Motion.history=[];v25Motion.lastReport=null;
+  }
+  if(typeof v254LockedMetrics!=="undefined")v254LockedMetrics={};
+  if(typeof v253TargetFailures!=="undefined")v253TargetFailures={};
+  try{v253ResetFootLocks();}catch(e){}
+  try{v255ResetContactLocks();}catch(e){}
+  try{v2572ResetFinalPoseCache();}catch(e){}
+  frames=[];
+  if(typeof strip!=="undefined"&&strip)strip.innerHTML="";
+  if($("v258CanonicalStatus"))$("v258CanonicalStatus").textContent="RESET";
+  console.info(`V25.8 motion state reset: ${reason}`);
+}
+function v258SetProductionAction(action){
+  action=action||"Walk Forward";
+  if(v258ProductionAction!==action){
+    v258ResetMotionState(`${v258ProductionAction||"none"} → ${action}`);
+  }
+  v258ProductionAction=action;
+  const state=v258StateForAction(action);
+  if(typeof v23SetState==="function")v23SetState(state);
+  return action;
+}
+function v258BuildIdlePose(i){
+  const ready=requiredReadyForWalk();if(!ready.ok)return {error:ready.msg};
+  const orig={};JOINTS.forEach(j=>{if(joint(j))orig[j]=joint(j);});
+  const pose=v252ClonePose(orig),leg=legMetrics()?.avgLeg||120;
+  const wave=Math.sin((((i%8)+8)%8)/8*Math.PI*2);
+  const dy=wave*leg*.003;
+  for(const j of ["neck","left_shoulder","right_shoulder","left_elbow","right_elbow","left_wrist","right_wrist"]){
+    if(pose[j])pose[j][1]+=dy;
+  }
+  const torsoM=(orig.pelvis&&orig.neck&&pose.pelvis&&pose.neck)?matrixFromTwoPoints(orig.pelvis,orig.neck,pose.pelvis,pose.neck):matrixIdentity();
+  return {pose,torsoM,phaseName:"Idle",metrics:legMetrics()};
+}
+function v258BuildRequestedPose(i,action=v258RequestedAction(),skipAutoRepair=false){
+  action=action||"Walk Forward";
+  if(v258UseImportedAction(action)){
+    if(!importedMotion.type)return {error:`${action} requires an imported FBX or Fatal Instinct motion.`};
+    const prev=v258SuppressWalkNormalizer;
+    v258SuppressWalkNormalizer=!v258IsWalkAction(action);
+    try{return retargetImportedPose(i);}finally{v258SuppressWalkNormalizer=prev;}
+  }
+  if(action==="Idle")return v258BuildIdlePose(i);
+  if(v258IsWalkAction(action))return buildPose(i,skipAutoRepair,v258WalkDirection(action));
+  return {error:`No procedural generator exists for ${action}. Import an approved motion first.`};
+}
+function v258CollectActionPoses(action=v258RequestedAction(),skipAutoRepair=false){
+  const poses=[],built=[];
+  for(let i=0;i<8;i++){
+    let b=null;
+    try{b=v258BuildRequestedPose(i,action,skipAutoRepair);}catch(e){b={error:e?.message||String(e)};}
+    built.push(b);
+    if(!b||b.error||!b.pose)return {ok:false,error:b?.error||`Frame ${i+1} failed`,poses,built};
+    poses.push(b.pose);
+  }
+  return {ok:true,poses,built};
+}
+
+/* ============================================================
+   V25.8.0 - NON-REENTRANT FINAL-POSE CACHE
    ============================================================ */
 let v2572FinalPoseCache=new Array(8).fill(null);
 
@@ -1769,27 +1976,28 @@ function v2572CacheFinalPose(frame,pose){
     count===8?"READY":"FILLING";
 }
 
-function buildPose(i,skipAutoRepair=false){
+function buildPose(i,skipAutoRepair=false,direction=1){
  const ready=requiredReadyForWalk(); if(!ready.ok) return{error:ready.msg};
  const scaled=scaledWalkValues(); if(!scaled) return{error:"Could not measure leg bones."};
  const {metrics,stridePx,stepPx,bobPx,pelvisShiftPx}=scaled;
+ const dir=direction<0?-1:1;
  const leanScale=(+$("lean").value)/2.0, armScale=(+$("arm").value)/12.0, tailSwing=(+$("tail").value);
  const orig={}; JOINTS.forEach(j=>{if(joint(j)) orig[j]=joint(j);});
  function supportScore(w){if(w.stance==="flat") return 3; if(w.stance==="contact") return 2; if(w.stance==="toe") return 1; return 0;}
  const leftW=LEFT_WALK[i], rightW=RIGHT_WALK[i], supportSide=supportScore(leftW)>=supportScore(rightW)?"left":"right", supportDir=supportSide==="left"?-1:+1;
- const pose={}, pelvis0=orig.pelvis, pelvisXOffset=PELVIS_X[i]*pelvisShiftPx + supportDir*metrics.pelvisWidth*0.07, pelvisYOffset=(PELVIS_Y[i]/2.0)*bobPx, torsoLean=TORSO_LEAN[i]*leanScale;
+ const pose={}, pelvis0=orig.pelvis, pelvisXOffset=dir*(PELVIS_X[i]*pelvisShiftPx + supportDir*metrics.pelvisWidth*0.07), pelvisYOffset=(PELVIS_Y[i]/2.0)*bobPx, torsoLean=dir*TORSO_LEAN[i]*leanScale;
  pose.pelvis=[pelvis0[0]+pelvisXOffset,pelvis0[1]+pelvisYOffset];
  let torsoM=matrixIdentity();
  if(orig.neck){pose.neck=add(pose.pelvis,rotateVec(sub(orig.neck,orig.pelvis),torsoLean));torsoM=matrixFromTwoPoints(orig.pelvis,orig.neck,pose.pelvis,pose.neck);}
  else {pose.neck=[pose.pelvis[0],pose.pelvis[1]-metrics.avgLeg*0.65];torsoM=rigidFromPointAndAngle(orig.pelvis,pose.pelvis,torsoLean*Math.PI/180);}
- const shoulderCounterPx=SHOULDER_COUNTER[i]*metrics.pelvisWidth*0.7;
+ const shoulderCounterPx=dir*SHOULDER_COUNTER[i]*metrics.pelvisWidth*0.7;
  ["left_shoulder","right_shoulder","tail_base"].forEach(n=>{if(orig[n]){pose[n]=transformPoint(torsoM,orig[n]);if(n==="left_shoulder"||n==="right_shoulder") pose[n][0]+=shoulderCounterPx;}});
  if(orig.tail_tip&&pose.tail_base){const tailPhase=Math.sin((i/8)*Math.PI*2 + Math.PI/2);pose.tail_tip=add(pose.tail_base,rotateVec(sub(orig.tail_tip,orig.tail_base),tailSwing*tailPhase));}
  ["left","right"].forEach(side=>{
    const hip0=orig[`${side}_hip`], knee0=orig[`${side}_knee`], ankle0=orig[`${side}_ankle`], toe0=orig[`${side}_toe`];
    const footVec0=footVector(ankle0,toe0), hipTarget=transformPoint(torsoM,hip0); pose[`${side}_hip`]=hipTarget;
    const table=side==="left"?LEFT_WALK:RIGHT_WALK, w=table[i], sideLeg=side==="left"?metrics.leftLeg:metrics.rightLeg, localStride=stridePx*(sideLeg/metrics.avgLeg), localStep=stepPx*(sideLeg/metrics.avgLeg);
-   let toeTarget=[toe0[0]+(w.x/10.0)*localStride, toe0[1]+(w.y/15.0)*localStep];
+   let toeTarget=[toe0[0]+dir*(w.x/10.0)*localStride, toe0[1]+(w.y/15.0)*localStep];
    if(w.stance==="contact"||w.stance==="flat"||w.stance==="toe") toeTarget[1]=toe0[1];
    if(side===supportSide && (w.stance==="contact"||w.stance==="flat"||w.stance==="toe")) toeTarget[0]=toe0[0];
    const footVecT=rotateVec(footVec0,w.foot); let ankleTarget=[toeTarget[0]-footVecT[0], toeTarget[1]-footVecT[1]];
@@ -1802,7 +2010,7 @@ function buildPose(i,skipAutoRepair=false){
  });
  ["left","right"].forEach(side=>{
    const s0=orig[`${side}_shoulder`], e0=orig[`${side}_elbow`], w0=orig[`${side}_wrist`]; if(!s0) return;
-   const armTable=side==="left"?LEFT_ARM:RIGHT_ARM, swing=armTable[i]*armScale;
+   const armTable=side==="left"?LEFT_ARM:RIGHT_ARM, swing=dir*armTable[i]*armScale;
    pose[`${side}_shoulder`]=pose[`${side}_shoulder`]||transformPoint(torsoM,s0);
    if(e0){pose[`${side}_elbow`]=add(pose[`${side}_shoulder`], rotateVec(sub(e0,s0), swing + torsoLean)); if(w0) pose[`${side}_wrist`]=add(pose[`${side}_elbow`], rotateVec(sub(w0,e0), swing*0.65 + torsoLean));}
  });
@@ -1816,7 +2024,7 @@ function buildPose(i,skipAutoRepair=false){
  v252ApplyFinalPoseLayer(i,pose);
  v2562ApplyFinalFootLock(i,pose);
  v2572CacheFinalPose(i,pose);
- return{pose,torsoM,phaseName:WALK_NAMES[i],metrics};
+ return{pose,torsoM,phaseName:(dir<0?`Walk Back • ${WALK_NAMES[i]}`:WALK_NAMES[i]),metrics};
 }
 
 function distPointToSegment(px,py,ax,ay,bx,by){
@@ -2089,6 +2297,7 @@ function generateAutoSegmentation(force=false){
 }
 function autoTraceAndBind(){
   if(!source){status("Load a transparent character PNG first.");return;}
+  v258InvalidateMotionApproval("sprite auto-bind changed");
   const ready=requiredReadyForWalk();
   if(!ready.ok){status("Fit/load the skeleton first: "+ready.msg);return;}
 
@@ -2400,22 +2609,25 @@ function applyProjectSettings(o){
 }
 $("saveProject").onclick=()=>{
   const data={
-    format:"fatal-instinct-sprite-walker-project",version:17,
-    rig,settings:projectSettings(),library:animationLibrary,
-    source_name:sourceName
+    format:"fatal-instinct-sprite-walker-project",version:18,engine_version:"25.8.0",
+    rig,settings:projectSettings(),library:animationLibrary,director:v24Director,
+    source_name:sourceName,rig_approved:v258RigApprovalValid(),rig_approval_signature:v258RigApprovalValid()?v258RigSignature():null,
+    production_action:v258ProductionAction,motion_approved:v258MotionApprovalValid(),motion_approval_signature:v258MotionApprovalValid()?v24Director.approvalSignature:null
   };
-  download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"fatal_instinct_project_v17.json");
-  status("V17 project saved.");
+  download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"fatal_instinct_project_v18.json");
+  status("V25.8 project saved.");
 };
 $("projectInput").onchange=async e=>{
   const f=e.target.files[0];if(!f)return;
   try{
     const d=JSON.parse(await f.text());
-    if(d.format!=="fatal-instinct-sprite-walker-project"){status("Not a V17 project file.");return;}
+    if(d.format!=="fatal-instinct-sprite-walker-project"){status("Not a Fatal Instinct Sprite Walker project file.");return;}
     snapshotState("load project");
-    rig=d.rig||rig;animationLibrary=d.library||[];applyProjectSettings(d.settings||{});
-    autoTraceCache.dirty=true;renderAnimationLibrary();detectTargetChains();draw();
-    status("V17 project loaded. Reload character PNG if needed.");
+    v258ResetMotionState(`loaded project ${f.name}`);rig=d.rig||rig;animationLibrary=d.library||[];applyProjectSettings(d.settings||{});v258ProductionAction=d.production_action||null;
+    const sig=v258RigSignature(),rigOK=!!(d.rig_approved&&d.rig_approval_signature&&d.rig_approval_signature===sig);if(window.FIRigApprovalGate?.state){window.FIRigApprovalGate.state.approved=rigOK;window.FIRigApprovalGate.state.approvalSignature=rigOK?sig:null;}
+    if(d.director)v24Director=Object.assign(v24Director,d.director);v24Director.approved=!!(d.motion_approved&&d.motion_approval_signature);v24Director.approvalSignature=d.motion_approval_signature||null;v24Director.lastAction=d.production_action||v24Director.lastAction;
+    autoTraceCache.dirty=true;renderAnimationLibrary();detectTargetChains();draw();refreshProductionPreflight();
+    status("V25.8 project loaded. Reload character PNG if needed.");
   }catch(err){status("Could not load project.");}
 };
 
@@ -2457,6 +2669,7 @@ function projectVector3(v){
 
 function selectFBXClip(index){
   if(!importedMotion.object || !importedMotion.clips.length) return;
+  v258ResetMotionState("FBX clip changed");
   const i=Math.max(0,Math.min(importedMotion.clips.length-1,index|0));
   importedMotion.clip=importedMotion.clips[i];
   if(importedMotion.mixer) importedMotion.mixer.stopAllAction();
@@ -2547,6 +2760,7 @@ function validateNativeMotion(d){
 }
 function loadNativeMotion(d,name){
   if(!validateNativeMotion(d)){ status("This JSON is not a Fatal Instinct motion file."); return; }
+  v258ResetMotionState("native motion loaded");
   importedMotion={
     type:"native",name:d.name||name||"Fatal Instinct Motion",
     object:null,mixer:null,clips:[],clip:null,action:null,bones:{},boneMap:{},native:d
@@ -3272,6 +3486,7 @@ function v212NormalizePelvis(pose,orig){
 }
 
 function v212ApplyWalkNormalizer(i,pose,orig){
+  if(v258SuppressWalkNormalizer) return pose;
   if(!$("walkNormalize")?.checked) return pose;
 
   const lm=legMetrics();
@@ -3832,7 +4047,9 @@ function v2561LightCheckpointPayload(d){
     copy.v25Motion.history=[];
     copy.v25Motion.bestCorrectives=null;
     copy.v25Motion.bestFinalCorrections=null;
+    copy.v25Motion.bestFinalCorrectionTargets=null;
     copy.v25Motion.bestControls=null;
+    copy.v25Motion.bestProtectedSnapshot=null;
   }
   if(copy.director?.results){
     // Keep pass/fail summaries only.
@@ -3875,6 +4092,7 @@ function v2561ClearMotionCache(){
       if(d){
         d.v25Motion=null;
         d.v252FinalCorrections={};
+        d.v252FinalCorrectionTargets={};
         if(d.v23State){
           d.v23State.correctives=[];
           d.v23State.poseKeys=[];
@@ -3887,6 +4105,7 @@ function v2561ClearMotionCache(){
       }
     }
     v252FinalCorrections={};
+    v252FinalCorrectionTargets={};
     if(typeof v23!=="undefined"){
       v23.correctives=[];
       v23.poseKeys=[];
@@ -3955,7 +4174,7 @@ function v242ApplyControls(values){
 function v242CheckpointPayload(){
   return {
     format:"fatal-instinct-v24-checkpoint",
-    version:"25.6.3",
+    version:"25.8.0",engine_version:"25.8.0",
     savedAt:new Date().toISOString(),
     sourceName,
     rig:JSON.parse(JSON.stringify(rig)),
@@ -3968,6 +4187,7 @@ function v242CheckpointPayload(){
     guided:{enabled:guidedJointMode,index:guidedJointIndex},
     currentMode:mode,
     v252FinalCorrections:JSON.parse(JSON.stringify(v252FinalCorrections||{})),
+    v252FinalCorrectionTargets:JSON.parse(JSON.stringify(v252FinalCorrectionTargets||{})),
     v25Motion:{
       bestScore:v25Motion.bestScore,
       currentScore:v25Motion.currentScore,
@@ -3976,7 +4196,14 @@ function v242CheckpointPayload(){
       history:v25Motion.history,
       lastReport:v25Motion.lastReport,
       bestCorrectives:v25Motion.bestCorrectives,
-      bestControls:v25Motion.bestControls
+      bestFinalCorrections:v25Motion.bestFinalCorrections,
+      bestFinalCorrectionTargets:v25Motion.bestFinalCorrectionTargets,
+      bestControls:v25Motion.bestControls,
+      bestLockedMetrics:v25Motion.bestLockedMetrics,
+      bestProtectedSnapshot:v25Motion.bestProtectedSnapshot,
+      bestTargetFailures:v25Motion.bestTargetFailures,
+      bestScoreObj:v25Motion.bestScoreObj,
+      currentScoreObj:v25Motion.currentScoreObj
     }
   };
 }
@@ -4026,6 +4253,7 @@ async function v242RestoreCheckpoint(){
     if(d.currentMode)setMode(d.currentMode);
     if(!v2561SafeBoot){
       if(d.v252FinalCorrections)v252FinalCorrections=JSON.parse(JSON.stringify(d.v252FinalCorrections));
+      v252FinalCorrectionTargets=JSON.parse(JSON.stringify(d.v252FinalCorrectionTargets||{}));
       if(d.v25Motion){
         v25Motion=Object.assign(v25Motion,d.v25Motion);
         if(v25Motion.bestScore>=0){
@@ -4036,10 +4264,13 @@ async function v242RestoreCheckpoint(){
       }
     }else{
       v252FinalCorrections={};
+      v252FinalCorrectionTargets={};
       v25Motion.history=[];
       v25Motion.bestCorrectives=null;
       v25Motion.bestFinalCorrections=null;
+      v25Motion.bestFinalCorrectionTargets=null;
       v25Motion.bestControls=null;
+      v25Motion.bestProtectedSnapshot=null;
     }
     autoTraceCache.dirty=true;
     const imageOK=await v242RestoreImage();
@@ -4099,7 +4330,7 @@ async function v242ResumePreviousTest(){
   return false;
 }
 
-let v24Director={running:false,currentStage:null,failedStage:null,results:{},approved:false,bypasses:[],lastAction:null};
+let v24Director={running:false,currentStage:null,failedStage:null,results:{},approved:false,approvalSignature:null,bypasses:[],lastAction:null};
 
 const V24_STAGES=[
 ["rig","aiStageRig","Map FI Skeleton"],["mesh","aiStageMesh","Build Unified Mesh"],["weights","aiStageWeights","Weight Cleanup"],
@@ -4120,7 +4351,7 @@ function v24StageState(key,state,msg){
 }
 function v24ResetStages(){
   for(const [key,id] of V24_STAGES){const el=$(id);if(el){el.classList.remove("pass","fail","run","skip");el.querySelector("span").textContent="Waiting";}}
-  v24Director.results={};v24Director.failedStage=null;v24Director.approved=false;
+  v24Director.results={};v24Director.failedStage=null;v24Director.approved=false;v24Director.approvalSignature=null;
   $("aiOverallScore").textContent="--";$("aiDecision").textContent="Running checks...";
 }
 function v24ScoreClamp(v){return Math.max(0,Math.min(100,Math.round(v)));}
@@ -4182,7 +4413,7 @@ function v256CaptureProtectedSnapshot(){
   const score=v25ScoreMotion();
   snap.metrics=JSON.parse(JSON.stringify(score.metrics||{}));
   for(let i=0;i<8;i++){
-    const b=buildPose(i); if(b.error)continue;
+    const b=v258BuildRequestedPose(i,v258RequestedAction(),false); if(b.error)continue;
     snap.poses[i]={};
     for(const [channel,locked] of Object.entries(v254LockedMetrics||{})){
       if(!locked)continue;
@@ -4196,10 +4427,23 @@ function v256CaptureProtectedSnapshot(){
   return snap;
 }
 
-function v256RestoreProtectedJoints(frame,pose){
+const V258_TARGET_EDITABLE={
+  feet:new Set(["left_ankle","left_toe","right_ankle","right_toe"]),
+  weight:new Set(["pelvis"]),
+  stride:new Set(["left_hip","left_knee","right_hip","right_knee"]),
+  torso:new Set(["neck","left_shoulder","right_shoulder","left_elbow","right_elbow","left_wrist","right_wrist"]),
+  arms:new Set(["left_elbow","left_wrist","right_elbow","right_wrist"]),
+  heeltoe:new Set(["left_toe","right_toe"]),
+  continuity:new Set(["pelvis","neck"])
+};
+function v256RestoreProtectedJoints(frame,pose,targetKey=null){
   if(!$("v256HardProtect")?.checked||!v256ProtectedSnapshot)return;
   const saved=v256ProtectedSnapshot.poses?.[frame]; if(!saved)return;
+  // Protection is target-specific. A generic replay must never infer edit rights from
+  // the current lock set because that makes saved poses non-deterministic after restore.
+  const editable=V258_TARGET_EDITABLE[targetKey]||new Set();
   for(const [j,p] of Object.entries(saved)){
+    if(editable.has(j))continue;
     if(pose[j]){pose[j][0]=p[0];pose[j][1]=p[1];}
   }
 }
@@ -4207,9 +4451,10 @@ function v256RestoreProtectedJoints(frame,pose){
 function v256LockedDamage(beforeMetrics,afterMetrics){
   const allowed=+$("v256AllowedDrop")?.value||1;
   const damage=[];
+  const protectedBase=v256ProtectedSnapshot?.metrics||beforeMetrics||{};
   for(const [k,locked] of Object.entries(v254LockedMetrics||{})){
     if(!locked)continue;
-    const b=beforeMetrics?.[k],a=afterMetrics?.[k];
+    const b=protectedBase?.[k],a=afterMetrics?.[k];
     if(Number.isFinite(b)&&Number.isFinite(a)&&a < b-allowed){
       damage.push({key:k,before:b,after:a,drop:b-a});
     }
@@ -4232,33 +4477,33 @@ function v256ValidateProtectedCandidate(beforeState,beforeScore,afterScore,targe
 }
 
 function v256HierarchicalSolve(frame,pose,targetKey){
-  const v2562Anchor=v2562CaptureSupportAnchor(frame,pose);
   // 1) Feet/contact are immutable first.
   v255ApplyPersistentContact(frame,pose);
 
   // 2) Pelvis / weight.
-  if(targetKey==="weight"||targetKey==="all")v255BodyCompensate(frame,pose);
+  if(targetKey==="weight"||targetKey==="all"){
+    v255BodyCompensate(frame,pose);
+    v254OptimizeWeightTransfer(frame,pose);
+  }
 
   // 3) Legs / stride.
   if(targetKey==="stride"||targetKey==="all")v254OptimizePassingStride(frame,pose);
 
-  // 4) Torso.
-  if((targetKey==="torso"||targetKey==="all")&&!v254LockedMetrics.torso){
-    const ph=v253Phase(frame),leg=legMetrics()?.avgLeg||120;
-    const amount=ph.pelvis*leg*.012;
-    for(const j of ["neck","left_shoulder","right_shoulder"]){
-      if(pose[j])pose[j][0]-=amount;
-    }
-  }
+  // 4) Torso: solve directly to the critic's 3% total-travel target.
+  if(targetKey==="torso"||targetKey==="all")v258OptimizeTorsoMotion(frame,pose);
 
   // Solve legality while foot contact is pinned.
   v252ResolvePose(frame,pose);
   v255ApplyPersistentContact(frame,pose);
+  // Constraint solving can move the upper body. Re-apply the torso target after it,
+  // then keep the whole upper chain translated together so arm lengths/opposition survive.
+  if(targetKey==="torso"||targetKey==="all")v258OptimizeTorsoMotion(frame,pose);
 
   // 5) Finally restore all solved protected channels.
-  v256RestoreProtectedJoints(frame,pose);
+  v256RestoreProtectedJoints(frame,pose,targetKey);
 
-  v2562ApplyFinalFootLock(frame,pose,v2562Anchor);
+  // Persistent contact is the single support-foot authority.
+  v2562ApplyFinalFootLock(frame,pose);
 }
 
 let v255ContactLocks={
@@ -4322,8 +4567,10 @@ function v255BodyCompensate(frame,pose){
 
   // Explicit weight transfer toward support leg while preserving solved upper-body channels.
   const weightTarget=(+$("v254WeightTarget")?.value||5)/100;
-  const leg=legMetrics()?.avgLeg||120;
-  const desired=rig.joints.pelvis[0]+ph.pelvis*leg*weightTarget;
+  const leg=legMetrics()?.avgLeg||120,direction=v258WalkDirection(v258RequestedAction());
+  // The score target is total within-support travel, so each phase extreme is half
+  // that range. Reverse the target for Walk Back instead of forcing forward sway.
+  const desired=rig.joints.pelvis[0]+ph.pelvis*leg*weightTarget*0.5*direction;
   const shift=(desired-pose.pelvis[0])*.38*strength;
   for(const j of ["pelvis","left_hip","right_hip"]){
     if(pose[j])pose[j][0]+=shift;
@@ -4377,20 +4624,18 @@ function v255ApplyPersistentSolver(frame,pose,targetKey="all"){
   }
   if(targetKey==="weight"||targetKey==="all"){
     v255BodyCompensate(frame,pose);
+    v254OptimizeWeightTransfer(frame,pose);
   }
   if(targetKey==="stride"||targetKey==="all"){
     v254OptimizePassingStride(frame,pose);
   }
   if(targetKey==="torso"||targetKey==="all"){
-    if(!v254LockedMetrics.torso){
-      const ph=v253Phase(frame),leg=legMetrics()?.avgLeg||120;
-      const amount=ph.pelvis*leg*.012;
-      for(const j of ["neck","left_shoulder","right_shoulder"])if(pose[j])pose[j][0]-=amount;
-    }
+    v258OptimizeTorsoMotion(frame,pose);
   }
 
   v252ResolvePose(frame,pose);
   v255ApplyPersistentContact(frame,pose);
+  if(targetKey==="torso"||targetKey==="all")v258OptimizeTorsoMotion(frame,pose);
   v255ProtectSolvedChannels(before,pose);
 }
 
@@ -4449,7 +4694,8 @@ function v254OptimizeWeightTransfer(frame,pose){
   if(v254LockedMetrics.weight)return;
   const ph=v253Phase(frame),leg=legMetrics()?.avgLeg||120;
   const targetPct=(+$("v254WeightTarget")?.value||5)/100;
-  const target=leg*targetPct*ph.pelvis;
+  // Metric target is total pelvis travel, so each extreme uses half the requested range.
+  const target=leg*targetPct*0.5*ph.pelvis*v258WalkDirection(v258RequestedAction());
   if(!pose.pelvis)return;
   const base=rig.joints.pelvis;
   if(!base)return;
@@ -4460,6 +4706,18 @@ function v254OptimizeWeightTransfer(frame,pose){
   }
   for(const j of ["neck","left_shoulder","right_shoulder"]){
     if(pose[j])pose[j][0]-=dx*.18;
+  }
+}
+
+function v258OptimizeTorsoMotion(frame,pose){
+  if(v254LockedMetrics.torso||!pose.neck||!rig.joints.neck)return;
+  const ph=v253Phase(frame),leg=legMetrics()?.avgLeg||120;
+  // Torso critic measures neck motion relative to pelvis, not world translation.
+  const bindRel=rig.joints.neck[0]-(rig.joints.pelvis?.[0]||0);
+  const desired=(pose.pelvis?.[0]||rig.joints.pelvis?.[0]||0)+bindRel+ph.pelvis*leg*.015*v258WalkDirection(v258RequestedAction());
+  const dx=desired-pose.neck[0];
+  for(const j of ["neck","left_shoulder","right_shoulder","left_elbow","right_elbow","left_wrist","right_wrist"]){
+    if(pose[j])pose[j][0]+=dx;
   }
 }
 
@@ -4652,12 +4910,13 @@ function v253NextTarget(currentScore){
 }
 
 let v252FinalCorrections={};
+let v252FinalCorrectionTargets={};
 
 function v252ClonePose(pose){
   const out={}; for(const [k,v] of Object.entries(pose||{})) out[k]=Array.isArray(v)?[v[0],v[1]]:v;
   return out;
 }
-function v252StoreFinalCorrection(frame,pose){
+function v252StoreFinalCorrection(frame,pose,targetKey="all"){
   const delta={};
   for(const j of JOINTS){
     if(pose[j]&&rig.joints[j]){
@@ -4665,6 +4924,7 @@ function v252StoreFinalCorrection(frame,pose){
     }
   }
   v252FinalCorrections[frame]=delta;
+  v252FinalCorrectionTargets[frame]=targetKey||"all";
 }
 function v252ApplyStoredFinalCorrection(frame,pose){
   const d=v252FinalCorrections[frame];
@@ -4687,16 +4947,17 @@ function v252ResolvePose(frame,pose){
   }catch(e){}
 }
 function v252ApplyFinalPoseLayer(frame,pose){
-  const v2562Anchor=v2562CaptureSupportAnchor(frame,pose);
   if(!$("v252FinalPoseEnabled")?.checked)return;
   const applied=v252ApplyStoredFinalCorrection(frame,pose);
   if(applied){
+    // Stored deltas are the already-repaired, already-solved canonical pose. Re-running
+    // the hierarchical solver here made best states depend on whatever metrics happened
+    // to be locked later. Rehydrate the exact pose and only re-establish contact anchors.
     v255ApplyPersistentContact(frame,pose);
-    v256HierarchicalSolve(frame,pose,"all");
-    if($("v252FinalPoseStatus"))$("v252FinalPoseStatus").textContent="ACTIVE";
+    if($("v252FinalPoseStatus"))$("v252FinalPoseStatus").textContent=
+      `ACTIVE • ${v252FinalCorrectionTargets[frame]||"saved"}`;
   }
-
-  v2562ApplyFinalFootLock(frame,pose,v2562Anchor);
+  v2562ApplyFinalFootLock(frame,pose);
 }
 
 let v25Motion={
@@ -4707,7 +4968,13 @@ let v25Motion={
   currentScore:-1,
   bestCorrectives:null,
   bestFinalCorrections:null,
+  bestFinalCorrectionTargets:null,
   bestControls:null,
+  bestLockedMetrics:null,
+  bestProtectedSnapshot:null,
+  bestTargetFailures:null,
+  bestScoreObj:null,
+  currentScoreObj:null,
   lastImprove:0,
   history:[],
   lastReport:null
@@ -4759,225 +5026,117 @@ function v2563MeasureGrounding(){
 
   if(cacheCount<8){
     if($("v2563CriticSource"))$("v2563CriticSource").textContent="FINAL POSE CACHE";
-    if($("v2563FinalPlantSamples"))$("v2563FinalPlantSamples").textContent=
-      `0 (cache ${cacheCount}/8)`;
-    return {ready:false,score:null,avg:null,maxDrift:null,samples:0,cacheCount};
+    if($("v258GroundAnchorSource"))$("v258GroundAnchorSource").textContent="WAITING";
+    if($("v2563FinalPlantSamples"))$("v2563FinalPlantSamples").textContent=`0 (cache ${cacheCount}/8)`;
+    return {ready:false,score:null,avg:null,maxDrift:null,samples:0,cacheCount,anchorSource:"WAITING"};
   }
 
   const byFrame=new Map(samples.map(s=>[s.frame,s.pose]));
-  const drifts=[];
-  let plantCount=0;
+  const drifts=[];let plantCount=0,persistentSides=0;
 
   for(const group of [
     {side:"left",frames:[0,1,2,3]},
     {side:"right",frames:[4,5,6,7]}
   ]){
-    const ankleKey=`${group.side}_ankle`;
-    const toeKey=`${group.side}_toe`;
+    const ankleKey=`${group.side}_ankle`,toeKey=`${group.side}_toe`;
     const first=byFrame.get(group.frames[0]);
     if(!first?.[ankleKey])continue;
 
-    const ankleAnchor=[first[ankleKey][0],first[ankleKey][1]];
-    const toeAnchor=first[toeKey]?[first[toeKey][0],first[toeKey][1]]:null;
+    const lock=v255ContactLocks?.[group.side];
+    const usePersistent=!!lock?.ankle;
+    if(usePersistent)persistentSides++;
+    const ankleAnchor=usePersistent?[...lock.ankle]:[...first[ankleKey]];
+    const toeAnchor=(usePersistent&&lock?.toe)?[...lock.toe]:(first[toeKey]?[...first[toeKey]]:null);
+    const frames=usePersistent?group.frames:group.frames.slice(1);
 
-    for(const frame of group.frames.slice(1)){
-      const pose=byFrame.get(frame);
-      if(!pose?.[ankleKey])continue;
-
-      drifts.push(Math.hypot(
-        pose[ankleKey][0]-ankleAnchor[0],
-        pose[ankleKey][1]-ankleAnchor[1]
-      ));
-      plantCount++;
-
+    for(const frame of frames){
+      const pose=byFrame.get(frame);if(!pose?.[ankleKey])continue;
+      drifts.push(Math.hypot(pose[ankleKey][0]-ankleAnchor[0],pose[ankleKey][1]-ankleAnchor[1]));plantCount++;
       if(toeAnchor&&pose[toeKey]){
-        drifts.push(Math.hypot(
-          pose[toeKey][0]-toeAnchor[0],
-          pose[toeKey][1]-toeAnchor[1]
-        ));
-        plantCount++;
+        drifts.push(Math.hypot(pose[toeKey][0]-toeAnchor[0],pose[toeKey][1]-toeAnchor[1]));plantCount++;
       }
     }
   }
 
+  const anchorSource=persistentSides===2?"PERSISTENT CONTACT":persistentSides?"MIXED CONTACT":"INTERVAL START";
+  if($("v258GroundAnchorSource"))$("v258GroundAnchorSource").textContent=anchorSource;
   if(!plantCount||!drifts.length){
     if($("v2563CriticSource"))$("v2563CriticSource").textContent="FINAL POSE CACHE";
-    if($("v2563FinalPlantSamples"))$("v2563FinalPlantSamples").textContent=
-      `0 (cache ${cacheCount}/8)`;
-    return {ready:false,score:null,avg:null,maxDrift:null,samples:0,cacheCount};
+    if($("v2563FinalPlantSamples"))$("v2563FinalPlantSamples").textContent=`0 (cache ${cacheCount}/8)`;
+    return {ready:false,score:null,avg:null,maxDrift:null,samples:0,cacheCount,anchorSource};
   }
 
-  const avg=drifts.reduce((a,b)=>a+b,0)/drifts.length;
-  const maxDrift=Math.max(...drifts);
+  const avg=drifts.reduce((a,b)=>a+b,0)/drifts.length,maxDrift=Math.max(...drifts);
   const tol=Math.max(.25,(+$("v2562GroundTol")?.value)||1);
-
-  const normalized=Math.max(
-    0,
-    Math.min(1,1-Math.max(0,avg-tol)/(tol*3))
-  );
-  const score=Math.round(normalized*100);
+  const avgNorm=Math.max(0,Math.min(1,1-Math.max(0,avg-tol)/(tol*3)));
+  const maxNorm=Math.max(0,Math.min(1,1-Math.max(0,maxDrift-tol)/(tol*2.5)));
+  // A single badly sliding planted frame must not be hidden by many good samples.
+  const score=Math.round(Math.min(avgNorm,maxNorm)*100);
 
   if($("v2563CriticSource"))$("v2563CriticSource").textContent="FINAL POSE CACHE";
-  if($("v2563FinalPlantSamples"))$("v2563FinalPlantSamples").textContent=
-    `${plantCount} (avg ${avg.toFixed(2)} px / max ${maxDrift.toFixed(2)} px)`;
-
-  return {ready:true,score,avg,maxDrift,samples:plantCount,cacheCount};
+  if($("v2563FinalPlantSamples"))$("v2563FinalPlantSamples").textContent=`${plantCount} (avg ${avg.toFixed(2)} px / max ${maxDrift.toFixed(2)} px)`;
+  return {ready:true,score,avg,maxDrift,samples:plantCount,cacheCount,anchorSource};
 }
-
-function v25ScoreMotion(){
-  const c=v24AnalyzeCurrentAnimation();
+function v25ScoreMotion(action=v258RequestedAction()){
   const poses=new Array(8).fill(null);
-
   v2572ResetFinalPoseCache();
   try{v253ResetFootLocks();}catch(e){}
   try{v255ResetContactLocks();}catch(e){}
 
   for(let i=0;i<8;i++){
     try{
-      const b=buildPose(i);
-      if(b&&!b.error&&b.pose)poses[i]=b.pose;
-    }catch(e){
-      console.error(`V25.7.2 pose build failed at frame ${i}:`,e);
-    }
+      const b=v258BuildRequestedPose(i,action,false);
+      if(b&&!b.error&&b.pose){poses[i]=b.pose;v2572CacheFinalPose(i,b.pose);}
+    }catch(e){console.error(`V25.8 pose build failed at frame ${i}:`,e);}
   }
 
-  const orig=rig.joints;
-  const leg=legMetrics()?.avgLeg||120;
-  const metric={
-    weight:70,torso:70,arms:70,stride:70,
-    feet:68,heeltoe:70,continuity:70
-  };
+  const c=v258AnalyzePoseArray(poses,action),orig=rig.joints,leg=legMetrics()?.avgLeg||120;
+  const metric={weight:0,torso:0,arms:0,stride:0,feet:0,heeltoe:0,continuity:0};
   let plantSamples=0,slideAvg=0;
+  const complete=poses.every(Boolean);
 
-  if(poses.every(Boolean)){
-    let px=[],py=[],nx=[],opp=[],jumps=[],slide=0,plants=0;
-
+  if(complete){
+    let px=[],torsoRel=[],opp=[],jumps=[],slide=0,plants=0;
     for(let i=0;i<8;i++){
-      const p=poses[i];
-      if(p.pelvis){px.push(p.pelvis[0]);py.push(p.pelvis[1]);}
-      if(p.neck)nx.push(p.neck[0]);
-
+      const p=poses[i];if(p.pelvis)px.push(p.pelvis[0]);if(p.neck&&p.pelvis)torsoRel.push(p.neck[0]-p.pelvis[0]);
       if(p.left_wrist&&p.right_wrist&&orig.left_wrist&&orig.right_wrist){
-        const ph=v253Phase(i);
-        const lMove=p.left_wrist[0]-orig.left_wrist[0];
-        const rMove=p.right_wrist[0]-orig.right_wrist[0];
-        const expected=ph.arm;
-        if(Math.abs(expected)<0.1){
-          opp.push(Math.abs(lMove-rMove)<leg*.08?1:.6);
-        }else{
-          opp.push((lMove-rMove)*expected>0?1:0);
-        }
+        const ph=v253Phase(i),lMove=p.left_wrist[0]-orig.left_wrist[0],rMove=p.right_wrist[0]-orig.right_wrist[0],expected=ph.arm*v258WalkDirection(action);
+        opp.push(Math.abs(expected)<.1?(Math.abs(lMove-rMove)<leg*.08?1:.6):((lMove-rMove)*expected>0?1:0));
       }
-
-      if(i&&poses[i-1].pelvis&&p.pelvis){
-        jumps.push(length(poses[i-1].pelvis,p.pelvis)/leg*100);
-      }
-
+      if(i&&poses[i-1].pelvis&&p.pelvis)jumps.push(length(poses[i-1].pelvis,p.pelvis)/leg*100);
       const side=v253Phase(i).support;
-      if(
-        i>0 &&
-        v253Phase(i-1).support===side &&
-        poses[i-1][`${side}_ankle`] &&
-        p[`${side}_ankle`]
-      ){
-        slide+=length(
-          poses[i-1][`${side}_ankle`],
-          p[`${side}_ankle`]
-        )/leg*100;
-        plants++;
+      if(i>0&&v253Phase(i-1).support===side&&poses[i-1][`${side}_ankle`]&&p[`${side}_ankle`]){
+        slide+=length(poses[i-1][`${side}_ankle`],p[`${side}_ankle`])/leg*100;plants++;
       }
     }
-
-    plantSamples=plants;
-    slideAvg=plants?slide/plants:0;
-
-    const range=a=>a.length?Math.max(...a)-Math.min(...a):0;
-    const wt=+$("v254WeightTarget")?.value||5;
-    metric.weight=v24ScoreClamp(
-      100-Math.abs(range(px)/leg*100-wt)*7-
-      Math.abs(range(py)/leg*100-2.2)*6
-    );
-    metric.torso=v24ScoreClamp(
-      100-Math.abs(range(nx)/leg*100-3)*8
-    );
-    metric.arms=opp.length
-      ?v24ScoreClamp(opp.reduce((a,b)=>a+b,0)/opp.length*100)
-      :55;
-
+    plantSamples=plants;slideAvg=plants?slide/plants:0;
+    const range=a=>a.length?Math.max(...a)-Math.min(...a):0,wt=+$("v254WeightTarget")?.value||5;
+    // Weight transfer is measured inside each planted support interval. This removes the
+    // legitimate left/right world-space anchor offset created by locked feet.
+    const leftTravel=range(px.slice(0,4))/leg*100,rightTravel=range(px.slice(4,8))/leg*100;
+    const weightTravel=(leftTravel+rightTravel)/2;
+    metric.weight=v24ScoreClamp(100-Math.abs(weightTravel-wt)*7-Math.abs(leftTravel-rightTravel)*2);
+    // Torso motion is neck travel relative to pelvis so root/body compensation is not double-counted.
+    metric.torso=v24ScoreClamp(100-Math.abs(range(torsoRel)/leg*100-3)*8);
+    metric.arms=opp.length?v24ScoreClamp(opp.reduce((a,b)=>a+b,0)/opp.length*100):55;
     let sp=0,spn=0;
-    for(const fi of [2,6]){
-      const p=poses[fi];
-      if(p?.left_ankle&&p?.right_ankle&&orig.left_hip&&orig.right_hip){
-        const ratio=
-          length(p.left_ankle,p.right_ankle)/
-          (length(orig.left_hip,orig.right_hip)||1);
-        const target=(+$("v254PassingTarget")?.value||125)/100;
-        sp+=Math.abs(ratio-target)*24;
-        spn++;
-      }
-    }
+    for(const fi of [2,6]){const p=poses[fi];if(p?.left_ankle&&p?.right_ankle&&orig.left_hip&&orig.right_hip){const ratio=length(p.left_ankle,p.right_ankle)/(length(orig.left_hip,orig.right_hip)||1),target=(+$("v254PassingTarget")?.value||125)/100;sp+=Math.abs(ratio-target)*24;spn++;}}
     metric.stride=v24ScoreClamp(100-(spn?sp/spn:20));
-
     metric.feet=plants?v24ScoreClamp(100-slideAvg*7.5):68;
-
     let he=0,hen=0;
-    for(const fi of [0,3,4,7]){
-      const p=poses[fi];
-      const side=(fi===0||fi===3)?"left":"right";
-      if(p?.[`${side}_toe`]&&p?.[`${side}_ankle`]){
-        hen++;
-        if(
-          Math.abs(
-            p[`${side}_toe`][1]-p[`${side}_ankle`][1]
-          )/leg*100>1
-        )he++;
-      }
-    }
+    for(const fi of [0,3,4,7]){const p=poses[fi],side=(fi===0||fi===3)?"left":"right";if(p?.[`${side}_toe`]&&p?.[`${side}_ankle`]){hen++;if(Math.abs(p[`${side}_toe`][1]-p[`${side}_ankle`][1])/leg*100>1)he++;}}
     metric.heeltoe=v24ScoreClamp(hen?65+(he/hen)*35:65);
-
-    const avgJump=jumps.length
-      ?jumps.reduce((a,b)=>a+b,0)/jumps.length
-      :0;
-    const maxJump=jumps.length?Math.max(...jumps):0;
-    metric.continuity=v24ScoreClamp(
-      100-Math.max(0,avgJump-7)*5-
-      Math.max(0,maxJump-14)*4
-    );
+    const avgJump=jumps.length?jumps.reduce((a,b)=>a+b,0)/jumps.length:0,maxJump=jumps.length?Math.max(...jumps):0;
+    metric.continuity=v24ScoreClamp(100-Math.max(0,avgJump-7)*5-Math.max(0,maxJump-14)*4);
   }
 
-  // Grounding is now authoritative BEFORE locomotion score is computed.
   const ground=v2563MeasureGrounding();
-  if(ground.ready){
-    metric.feet=ground.score;
-    plantSamples=ground.samples;
-    slideAvg=(ground.avg/leg)*100;
-  }
-
-  const locScore=v24ScoreClamp(
-    metric.weight*.18+
-    metric.torso*.14+
-    metric.arms*.13+
-    metric.stride*.15+
-    metric.feet*.18+
-    metric.heeltoe*.10+
-    metric.continuity*.12
-  );
-  const geometry=v24ScoreClamp(
-    (c.balance+c.limb+c.silhouette+c.integrity)/4
-  );
-
-  return {
-    score:v24ScoreClamp(locScore*.82+geometry*.18),
-    locScore,
-    geometry,
-    critic:c,
-    metrics:metric,
-    plantSamples,
-    slideAvg:+slideAvg.toFixed(2),
-    grounding:ground
-  };
+  if(ground.ready){metric.feet=ground.score;plantSamples=ground.samples;slideAvg=(ground.avg/leg)*100;}
+  const locRaw=metric.weight*.18+metric.torso*.14+metric.arms*.13+metric.stride*.15+metric.feet*.18+metric.heeltoe*.10+metric.continuity*.12;
+  const geometryRaw=(c.balance+c.limb+c.silhouette+c.integrity)/4;
+  const rawScore=locRaw*.82+geometryRaw*.18;
+  return {valid:complete,score:v24ScoreClamp(rawScore),rawScore:+rawScore.toFixed(4),locScore:v24ScoreClamp(locRaw),locRaw:+locRaw.toFixed(4),geometry:v24ScoreClamp(geometryRaw),critic:c,metrics:metric,plantSamples,slideAvg:+slideAvg.toFixed(2),grounding:ground,poses};
 }
-
 function v251UpdateDiagnostics(s){
   const m=s.metrics||{},pairs=[["v251Weight","weight"],["v251Torso","torso"],["v251Arms","arms"],["v251Stride","stride"],["v251Feet","feet"],["v251HeelToe","heeltoe"],["v251Continuity","continuity"]];
   for(const [id,k] of pairs)if($(id))$(id).textContent=Math.round(m[k]??0)+"%";
@@ -4989,15 +5148,63 @@ function v251WeakestMetric(s){
   return {key,val,label:labels[key]||key};
 }
 function v251PoseFingerprint(){
-  let sum=0,count=0;try{for(let i=0;i<8;i++){const b=buildPose(i);if(b.error)continue;for(const j of JOINTS){const p=b.pose[j];if(p){sum+=p[0]*.731+p[1]*1.173;count++;}}}}catch(e){}
+  let sum=0,count=0;try{for(let i=0;i<8;i++){const b=v258BuildRequestedPose(i,v258RequestedAction(),false);if(b.error)continue;for(const j of JOINTS){const p=b.pose[j];if(p){sum+=p[0]*.731+p[1]*1.173;count++;}}}}catch(e){}
   return count?sum/count:0;
+}
+
+
+function v258ScoreMerit(s){
+  const vals=Object.values(s?.metrics||{}).filter(Number.isFinite),sum=vals.reduce((a,b)=>a+b,0),min=vals.length?Math.min(...vals):0;
+  const target=+$("v25TargetQuality")?.value||92,solved=vals.filter(v=>v>=target).length;
+  return {raw:+(s?.rawScore||s?.score||0),sum,min,solved};
+}
+function v258BetterCandidate(candidate,best,targetKey=null){
+  if(!best)return true;
+  const a=v258ScoreMerit(candidate),b=v258ScoreMerit(best),eps=.001;
+  if(a.raw>b.raw+eps)return true;if(a.raw<b.raw-eps)return false;
+  if(targetKey){const av=candidate?.metrics?.[targetKey]??0,bv=best?.metrics?.[targetKey]??0;if(av>bv+.25)return true;if(av<bv-.25)return false;}
+  if(a.solved!==b.solved)return a.solved>b.solved;
+  if(a.min!==b.min)return a.min>b.min;
+  return a.sum>b.sum+.25;
+}
+function v258SlimScore(s){
+  if(!s)return null;
+  return {score:s.score,rawScore:s.rawScore,locScore:s.locScore,geometry:s.geometry,metrics:JSON.parse(JSON.stringify(s.metrics||{})),plantSamples:s.plantSamples,slideAvg:s.slideAvg,grounding:s.grounding?{ready:s.grounding.ready,score:s.grounding.score,avg:s.grounding.avg,maxDrift:s.grounding.maxDrift,samples:s.grounding.samples,cacheCount:s.grounding.cacheCount,anchorSource:s.grounding.anchorSource}:null};
+}
+function v258CanonicalRescore(reason="rescore",updateBestLabel=false){
+  const s=v25ScoreMotion(v258RequestedAction());
+  v251UpdateDiagnostics(s);
+  if($("v25CurrentQuality"))$("v25CurrentQuality").textContent=s.score+"%";
+  if($("v258CanonicalStatus"))$("v258CanonicalStatus").textContent=s.valid?"SYNCED":"INCOMPLETE";
+  v25Motion.currentScore=s.score;v25Motion.currentScoreObj=v258SlimScore(s);
+  if(updateBestLabel&&v25Motion.bestScore>=0&&$("v25BestQuality"))$("v25BestQuality").textContent=v25Motion.bestScore+"%";
+  console.info(`V25.8 canonical rescore (${reason}): ${s.score}%`);
+  return s;
+}
+function v258CaptureBest(s,reason="improved"){
+  v25Motion.bestScore=s.score;v25Motion.bestScoreObj=v258SlimScore(s);
+  v25Motion.bestCorrectives=JSON.parse(JSON.stringify(v23.correctives||[]));
+  v25Motion.bestFinalCorrections=JSON.parse(JSON.stringify(v252FinalCorrections||{}));
+  v25Motion.bestFinalCorrectionTargets=JSON.parse(JSON.stringify(v252FinalCorrectionTargets||{}));
+  v25Motion.bestControls=v242CaptureControls();
+  if($("v25BestQuality"))$("v25BestQuality").textContent=s.score+"%";
+  v254FreezeSolvedMetrics(s);
+  v256CaptureProtectedSnapshot();
+  v25Motion.bestLockedMetrics=JSON.parse(JSON.stringify(v254LockedMetrics||{}));
+  v25Motion.bestProtectedSnapshot=v256ProtectedSnapshot?JSON.parse(JSON.stringify(v256ProtectedSnapshot)):null;
+  v25Motion.bestTargetFailures=JSON.parse(JSON.stringify(v253TargetFailures||{}));
+  v25Log(`Best state updated (${reason}): ${s.score}% • weakest ${Math.min(...Object.values(s.metrics||{}))}%.`);
 }
 
 function v25SnapshotMotionState(){
   return {
     correctives:JSON.parse(JSON.stringify(v23.correctives||[])),
     finalCorrections:JSON.parse(JSON.stringify(v252FinalCorrections||{})),
-    controls:v242CaptureControls()
+    finalCorrectionTargets:JSON.parse(JSON.stringify(v252FinalCorrectionTargets||{})),
+    controls:v242CaptureControls(),
+    lockedMetrics:JSON.parse(JSON.stringify(v254LockedMetrics||{})),
+    protectedSnapshot:v256ProtectedSnapshot?JSON.parse(JSON.stringify(v256ProtectedSnapshot)):null,
+    targetFailures:JSON.parse(JSON.stringify(v253TargetFailures||{}))
   };
 }
 
@@ -5005,13 +5212,20 @@ function v25RestoreMotionState(snap){
   if(!snap)return;
   if(snap.correctives)v23.correctives=JSON.parse(JSON.stringify(snap.correctives));
   if(snap.finalCorrections)v252FinalCorrections=JSON.parse(JSON.stringify(snap.finalCorrections));
+  if(snap.finalCorrectionTargets)v252FinalCorrectionTargets=JSON.parse(JSON.stringify(snap.finalCorrectionTargets));
+  else v252FinalCorrectionTargets={};
   if(snap.controls)v242ApplyControls(snap.controls);
+  v254LockedMetrics=JSON.parse(JSON.stringify(snap.lockedMetrics||{}));
+  v256ProtectedSnapshot=snap.protectedSnapshot?JSON.parse(JSON.stringify(snap.protectedSnapshot)):null;
+  v253TargetFailures=JSON.parse(JSON.stringify(snap.targetFailures||{}));
+  v254UpdateLockedDisplay();
+  if($("v256ProtectionStatus"))$("v256ProtectionStatus").textContent=v256ProtectedSnapshot?"SNAPSHOT ACTIVE":"READY";
   draw();
 }
 
 function v25GetPoseForCorrection(i){
   try{
-    const b=buildPose(i,true);
+    const b=v258BuildRequestedPose(i,v258RequestedAction(),true);
     return b&&!b.error?b.pose:null;
   }catch(e){return null;}
 }
@@ -5110,8 +5324,8 @@ function v25GenerateCorrectivePass(passNum,targetKey){
 
     v243RepairPose(i,pose,rig.joints,true);
     v255ApplyPersistentContact(i,pose);
-    v256RestoreProtectedJoints(i,pose);
-    v252StoreFinalCorrection(i,pose);
+    v256RestoreProtectedJoints(i,pose,targetKey);
+    v252StoreFinalCorrection(i,pose,targetKey);
     reports.push({frame:i+1,target:targetKey,phase:v253Phase(i).name,support:v253Phase(i).support});
   }
   if($("v252FinalPoseStatus"))$("v252FinalPoseStatus").textContent="ACTIVE";
@@ -5119,107 +5333,135 @@ function v25GenerateCorrectivePass(passNum,targetKey){
 }
 
 async function v25RunSelfCorrection(){
+  const action=v258RequestedAction();
   if(v25Motion.running||!$("v25Enabled")?.checked)return;
-  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V25.7.2 walk correction started.";
+  if(!v258IsWalkAction(action)){status("V25.8 self-correction is reserved for walk motions.");return;}
+  if(v258UseImportedAction(action)){
+    status("Imported walks are scored here but corrected by the C++ Motion Core. Use C++ Auto Correct (Windows) or Phone Motion Correct (iPhone).");
+    return;
+  }
+
+  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;
+  $("v25Status").textContent="RUNNING";$("v25Report").textContent="V25.8 canonical walk correction started.";
   const target=+$("v25TargetQuality").value||92,maxPasses=+$("v25MaxPasses").value||12,minImprove=+$("v25MinImprove").value||.5;
-  let base=v25ScoreMotion();v251UpdateDiagnostics(base);v25Motion.currentScore=base.score;v25Motion.bestScore=base.score;
-  v25Motion.bestCorrectives=JSON.parse(JSON.stringify(v23.correctives||[]));v25Motion.bestFinalCorrections=JSON.parse(JSON.stringify(v252FinalCorrections||{}));v25Motion.bestControls=v242CaptureControls();v25Motion.history=[{pass:0,score:base.score,metrics:base.metrics}];
-  $("v25CurrentQuality").textContent=base.score+"%";$("v25BestQuality").textContent=base.score+"%";$("v25PassCount").textContent=`0 / ${maxPasses}`;
-  v25Log(`Baseline: ${base.score}% (locomotion ${base.locScore}%, geometry ${base.geometry}%). Target: ${target}%.`);
+  let base=v258CanonicalRescore("baseline");
+  v25Motion.currentScore=base.score;v25Motion.currentScoreObj=v258SlimScore(base);v25Motion.bestScore=base.score;
+  v25Motion.bestScoreObj=v258SlimScore(base);v25Motion.bestCorrectives=JSON.parse(JSON.stringify(v23.correctives||[]));
+  v25Motion.bestFinalCorrections=JSON.parse(JSON.stringify(v252FinalCorrections||{}));
+  v25Motion.bestFinalCorrectionTargets=JSON.parse(JSON.stringify(v252FinalCorrectionTargets||{}));
+  v25Motion.bestControls=v242CaptureControls();
+  v25Motion.history=[{pass:0,score:base.score,rawScore:base.rawScore,metrics:base.metrics}];
+  $("v25BestQuality").textContent=base.score+"%";$("v25PassCount").textContent=`0 / ${maxPasses}`;
+  v25Log(`Baseline: ${base.score}% (raw ${base.rawScore.toFixed(2)}, locomotion ${base.locScore}%, geometry ${base.geometry}%). Target: ${target}%.`);
   if(base.score>=target){$("v25Status").textContent="PASS";v25Motion.running=false;v25FinalizeReport("pass");v242SaveCheckpoint(true);return;}
+
   let noChange=0;v253TargetFailures={};v254LockedMetrics={};v254FreezeSolvedMetrics(base);v256CaptureProtectedSnapshot();
+  v25Motion.bestLockedMetrics=JSON.parse(JSON.stringify(v254LockedMetrics||{}));
+  v25Motion.bestProtectedSnapshot=v256ProtectedSnapshot?JSON.parse(JSON.stringify(v256ProtectedSnapshot)):null;
+  v25Motion.bestTargetFailures=JSON.parse(JSON.stringify(v253TargetFailures||{}));
   for(let p=1;p<=maxPasses;p++){
-    if(v25Motion.stopRequested)break;v25Motion.pass=p;$("v25PassCount").textContent=`${p} / ${maxPasses}`;
-    const current=v25ScoreMotion(),weak=v255PriorityTarget(current);$("v251Target").textContent=`${weak.label} ${Math.round(weak.val)}%`;
-    const before=v25SnapshotMotionState(),beforeScore=v25ScoreMotion(),fp0=v251PoseFingerprint();v25GenerateCorrectivePass(p,weak.key);await new Promise(r=>setTimeout(r,60));
+    if(v25Motion.stopRequested)break;
+    v25Motion.pass=p;$("v25PassCount").textContent=`${p} / ${maxPasses}`;
+    const current=v258CanonicalRescore(`pass ${p} start`),weak=v255PriorityTarget(current);
+    $("v251Target").textContent=`${weak.label} ${Math.round(weak.val)}%`;
+    const before=v25SnapshotMotionState(),beforeScore=current,fp0=v251PoseFingerprint();
+    v25GenerateCorrectivePass(p,weak.key);await new Promise(r=>setTimeout(r,40));
     const changed=Math.abs(v251PoseFingerprint()-fp0)>.0005;
     if(!changed){
-      v25RestoreMotionState(before);noChange++;v253TargetFailures[weak.key]=(v253TargetFailures[weak.key]||0)+1;
-      v25Log(`Pass ${p}: ${weak.label} targeted, but pose did not change. Rotating target.`);
+      v25RestoreMotionState(before);const restored=v258CanonicalRescore("no-change rollback");
+      noChange++;v253TargetFailures[weak.key]=(v253TargetFailures[weak.key]||0)+1;
+      v25Log(`Pass ${p}: ${weak.label} targeted, but canonical pose did not change. Restored ${restored.score}%.`);
       if(noChange>=4){$("v25Status").textContent="NEEDS UPGRADE";v25Motion.running=false;v25RestoreBest();v25FinalizeReport("no-feedback");return;}
       continue;
     }
-    const scored=v25ScoreMotion();v251UpdateDiagnostics(scored);
+
+    const scored=v258CanonicalRescore(`pass ${p} candidate`);
     const protectedCheck=v256ValidateProtectedCandidate(before,beforeScore,scored,weak.key);
     if(!protectedCheck.ok){
+      const restored=v258CanonicalRescore("protected rollback");
+      v25Motion.currentScore=restored.score;v25Motion.currentScoreObj=v258SlimScore(restored);
       v253TargetFailures[weak.key]=(v253TargetFailures[weak.key]||0)+1;
       continue;
     }
-    const improve=scored.score-v25Motion.currentScore;v25Motion.lastImprove=improve;
-    $("v25CurrentQuality").textContent=scored.score+"%";$("v25LastImprove").textContent=(improve>=0?"+":"")+improve.toFixed(1)+"%";
-    if(scored.score>v25Motion.bestScore){v25Motion.bestScore=scored.score;v25Motion.bestCorrectives=JSON.parse(JSON.stringify(v23.correctives||[]));v25Motion.bestFinalCorrections=JSON.parse(JSON.stringify(v252FinalCorrections||{}));v25Motion.bestControls=v242CaptureControls();$("v25BestQuality").textContent=scored.score+"%";v254FreezeSolvedMetrics(scored);v256CaptureProtectedSnapshot();}
+
+    const prior=v258SlimScore(beforeScore),improve=(scored.rawScore-(prior?.rawScore??prior?.score??0));
+    v25Motion.lastImprove=improve;$("v25LastImprove").textContent=(improve>=0?"+":"")+improve.toFixed(2)+"%";
+    const bestObj=v25Motion.bestScoreObj;
+    if(v258BetterCandidate(scored,bestObj,weak.key))v258CaptureBest(scored,`${weak.key} improved`);
+
     if(improve<0&&$("v25AutoRevert")?.checked){
-      v25RestoreMotionState(before);
+      v25RestoreMotionState(before);const restored=v258CanonicalRescore("negative revert");
       v253TargetFailures[weak.key]=(v253TargetFailures[weak.key]||0)+1;
-      v25Log(`Pass ${p}: targeted ${weak.label}; ${scored.score}% (${improve.toFixed(1)}). Reverted; rotating target.`);
+      v25Log(`Pass ${p}: ${weak.label} candidate ${scored.score}% (${improve.toFixed(2)}). Reverted to canonical ${restored.score}%.`);
     }else{
-      v25Motion.currentScore=scored.score;
-      if(improve<.5)v253TargetFailures[weak.key]=(v253TargetFailures[weak.key]||0)+1;
+      v25Motion.currentScore=scored.score;v25Motion.currentScoreObj=v258SlimScore(scored);
+      if(improve<minImprove&&((scored.metrics?.[weak.key]??0)<=(prior?.metrics?.[weak.key]??0)+.25))v253TargetFailures[weak.key]=(v253TargetFailures[weak.key]||0)+1;
       else v253TargetFailures[weak.key]=0;
-      v25Log(`Pass ${p}: targeted ${weak.label}; ${scored.score}% (${improve>=0?"+":""}${improve.toFixed(1)}). Verified pose change.`);
+      v25Log(`Pass ${p}: ${weak.label}; canonical ${scored.score}% (${improve>=0?"+":""}${improve.toFixed(2)} raw).`);
     }
-    v25Motion.history.push({pass:p,target:weak.key,score:scored.score,improve,metrics:scored.metrics,poseChanged:true});v242SaveCheckpoint(true);
-    if(v25Motion.bestScore>=target){$("v25Status").textContent="PASS";v25Motion.running=false;v25RestoreBest();v25FinalizeReport("pass");return;}
-    if(p>=2&&Math.abs(improve)<minImprove){const n=v255PriorityTarget(scored);v25Log(`Pass ${p}: plateau on ${weak.label}; switching priority toward ${n.label}.`);}
+
+    v25Motion.history.push({pass:p,target:weak.key,score:scored.score,rawScore:scored.rawScore,improve,metrics:scored.metrics,poseChanged:true});v242SaveCheckpoint(true);
+    if(v25Motion.bestScore>=target){
+      const verified=v25RestoreBest();
+      if(verified.score>=target){
+        $("v25Status").textContent="PASS";v25Motion.running=false;v25FinalizeReport("pass");return;
+      }
+      v25Log(`Best-state verification changed ${scored.score}% candidate to ${verified.score}%. Continuing instead of issuing a false PASS.`);
+    }
   }
-  v25Motion.running=false;v25RestoreBest();$("v25Status").textContent=v25Motion.bestScore>=target?"PASS":"NEEDS REVIEW";v25FinalizeReport(v25Motion.bestScore>=target?"pass":"maxpasses");
+  v25Motion.running=false;
+  const verified=v25RestoreBest();
+  const passed=verified.score>=target;
+  $("v25Status").textContent=passed?"PASS":"NEEDS REVIEW";
+  v25FinalizeReport(passed?"pass":"maxpasses");
 }
 
-function v25Stop(){
-  v25Motion.stopRequested=true;
-  v25Log("Stop requested. Finishing current correction pass.");
-}
+function v25Stop(){v25Motion.stopRequested=true;v25Log("Stop requested. Finishing current correction pass.");}
 
 function v25RestoreBest(){
   if(v25Motion.bestCorrectives)v23.correctives=JSON.parse(JSON.stringify(v25Motion.bestCorrectives));
   if(v25Motion.bestFinalCorrections)v252FinalCorrections=JSON.parse(JSON.stringify(v25Motion.bestFinalCorrections));
+  v252FinalCorrectionTargets=JSON.parse(JSON.stringify(v25Motion.bestFinalCorrectionTargets||{}));
   if(v25Motion.bestControls)v242ApplyControls(v25Motion.bestControls);
+  v254LockedMetrics=JSON.parse(JSON.stringify(v25Motion.bestLockedMetrics||{}));
+  v256ProtectedSnapshot=v25Motion.bestProtectedSnapshot?JSON.parse(JSON.stringify(v25Motion.bestProtectedSnapshot)):null;
+  v253TargetFailures=JSON.parse(JSON.stringify(v25Motion.bestTargetFailures||{}));
+  v254UpdateLockedDisplay();
+  if($("v256ProtectionStatus"))$("v256ProtectionStatus").textContent=v256ProtectedSnapshot?"SNAPSHOT ACTIVE":"READY";
   draw();
-  if(v25Motion.bestScore>=0){
-    $("v25CurrentQuality").textContent=v25Motion.bestScore+"%";
-    $("v25BestQuality").textContent=v25Motion.bestScore+"%";
+  const expected=v25Motion.bestScoreObj?.score;
+  const restored=v258CanonicalRescore("restore best");
+  v25Motion.bestScore=restored.score;v25Motion.bestScoreObj=v258SlimScore(restored);
+  $("v25CurrentQuality").textContent=restored.score+"%";$("v25BestQuality").textContent=restored.score+"%";
+  if(Number.isFinite(expected)&&Math.abs(restored.score-expected)>1){
+    v25Log(`Best-state reproducibility guard: saved ${expected}% → restored ${restored.score}%. Canonical restored score is authoritative.`);
   }
-  v242SaveCheckpoint(true);
+  v242SaveCheckpoint(true);return restored;
 }
 
-function v25FindRemainingDefect(){
-  const s=v25ScoreMotion();
-  v254FreezeSolvedMetrics(s);
-  const w=v255PriorityTarget(s);
-  const hints={
-    feet:(s.plantSamples?`persistent support-foot drift ${s.slideAvg}% across ${s.plantSamples} interval samples`:"no support interval samples detected"),
-    stride:"passing width remains outside configured stance target",
-    arms:"arm/leg phase opposition remains insufficient",
-    torso:"upper body remains too static",
-    weight:"pelvis transfer remains outside configured target",
-    heeltoe:"foot roll progression remains weak",
-    continuity:"frame-to-frame body travel remains uneven"
-  };
+function v25FindRemainingDefect(s=null){
+  s=s||v258CanonicalRescore("remaining defect");
+  v254FreezeSolvedMetrics(s);const w=v255PriorityTarget(s);
+  const hints={feet:(s.plantSamples?`canonical support-foot drift ${s.slideAvg}% across ${s.plantSamples} samples (${s.grounding?.anchorSource||"unknown anchor"})`:"no support samples detected"),stride:"passing width remains outside configured stance target",arms:"arm/leg phase opposition remains insufficient",torso:"upper body remains too static",weight:"pelvis transfer remains outside configured target",heeltoe:"foot roll progression remains weak",continuity:"frame-to-frame body travel remains uneven"};
   return `${w.label} ${Math.round(w.val)}%${hints[w.key]?` — ${hints[w.key]}`:""}`;
 }
 
 function v25FinalizeReport(reason){
-  const defect=v25FindRemainingDefect();
-  const target=+$("v25TargetQuality").value||92;
-  const report={
-    reason,
-    bestScore:v25Motion.bestScore,
-    target,
-    passes:v25Motion.pass,
-    remainingDefect:defect,
-    history:v25Motion.history
-  };
-  v25Motion.lastReport=report;
-
-  if(v25Motion.bestScore>=target){
-    v25Log(`FINAL: PASS ${v25Motion.bestScore}% after ${v25Motion.pass} pass(es).`);
-    v25Log("Recommendation: preview visually, then Final Approval.");
+  const finalScore=v258CanonicalRescore("final report"),target=+$("v25TargetQuality").value||92,defect=v25FindRemainingDefect(finalScore);
+  v25Motion.bestScore=finalScore.score;v25Motion.bestScoreObj=v258SlimScore(finalScore);
+  const report={reason,bestScore:finalScore.score,rawScore:finalScore.rawScore,target,passes:v25Motion.pass,metrics:finalScore.metrics,grounding:finalScore.grounding,remainingDefect:defect,history:v25Motion.history};
+  v25Motion.lastReport=report;$("v25BestQuality").textContent=finalScore.score+"%";
+  if(finalScore.score>=target){
+    $("v25Status").textContent="PASS";
+    v25Log(`FINAL CANONICAL: PASS ${finalScore.score}% after ${v25Motion.pass} pass(es).`);v25Log("Recommendation: preview visually, then Final Approval.");
   }else{
-    v25Log(`FINAL: ${v25Motion.bestScore}% / ${target}% target after ${v25Motion.pass} pass(es).`);
-    v25Log(`Remaining defect: ${defect}.`);
-    v25Log("Recommendation: send this report for a targeted engine upgrade or controlled bypass.");
+    if($("v25Status").textContent==="PASS")v25Log("Consistency guard removed a stale PASS because the final canonical score is below target.");
+    $("v25Status").textContent=(reason==="no-feedback")?"NEEDS UPGRADE":"NEEDS REVIEW";
+    v25Log(`FINAL CANONICAL: ${finalScore.score}% / ${target}% target after ${v25Motion.pass} pass(es).`);v25Log(`Remaining defect: ${defect}.`);v25Log("Recommendation: use this canonical report for the next targeted correction; do not trust stale candidate diagnostics.");
   }
+  $("v25CurrentQuality").textContent=finalScore.score+"%";
   v242SaveCheckpoint(true);
+  return report;
 }
 
 $("v25RunBtn").onclick=v25RunSelfCorrection;
@@ -5368,62 +5610,60 @@ function v243RepairAllOutliers(){
   return reports;
 }
 
-function v24AnalyzeCurrentAnimation(){
-  let balance=100,integrity=100,silhouette=90,attack=88;
+function v258AnalyzePoseArray(poses,action=v258RequestedAction()){
+  let balance=100,integrity=100,silhouette=90,attack=96;
   const segments=[
-    ["left upper arm","left_shoulder","left_elbow"],
-    ["left forearm","left_elbow","left_wrist"],
-    ["right upper arm","right_shoulder","right_elbow"],
-    ["right forearm","right_elbow","right_wrist"],
-    ["left thigh","left_hip","left_knee"],
-    ["left shin","left_knee","left_ankle"],
-    ["right thigh","right_hip","right_knee"],
-    ["right shin","right_knee","right_ankle"]
+    ["left upper arm","left_shoulder","left_elbow"],["left forearm","left_elbow","left_wrist"],
+    ["right upper arm","right_shoulder","right_elbow"],["right forearm","right_elbow","right_wrist"],
+    ["left thigh","left_hip","left_knee"],["left shin","left_knee","left_ankle"],
+    ["right thigh","right_hip","right_knee"],["right shin","right_knee","right_ankle"]
   ];
   let totalErr=0,samples=0,worstErr=0,worstName="--",worstFrame=0,footY=[];
-  try{
-    const orig=rig.joints;
-    for(let i=0;i<8;i++){
-      const b=buildPose(i);if(b.error)continue;
-      const p=b.pose;
-      for(const [label,a,bn] of segments){
-        if(!p[a]||!p[bn]||!orig[a]||!orig[bn])continue;
-        const base=length(orig[a],orig[bn])||1;
-        const err=Math.abs(length(p[a],p[bn])-base)/base*100;
-        totalErr+=err;samples++;
-        if(err>worstErr){worstErr=err;worstName=label;worstFrame=i+1;}
-      }
-      if(p.left_ankle)footY.push(p.left_ankle[1]);
-      if(p.right_ankle)footY.push(p.right_ankle[1]);
+  const orig=rig.joints,valid=(poses||[]).filter(Boolean);
+  if(valid.length!==8)return {balance:0,limb:0,silhouette:0,integrity:0,attack:0,worstLimb:"missing pose",worstFrame:0,worstError:0,avgLimbError:0};
+
+  for(let i=0;i<8;i++){
+    const p=poses[i];
+    for(const [label,a,bn] of segments){
+      if(!p[a]||!p[bn]||!orig[a]||!orig[bn])continue;
+      const base=length(orig[a],orig[bn])||1;
+      const err=Math.abs(length(p[a],p[bn])-base)/base*100;
+      totalErr+=err;samples++;
+      if(err>worstErr){worstErr=err;worstName=label;worstFrame=i+1;}
     }
-    const avgErr=samples?totalErr/samples:100;
-
-    // Errors are already percentages. Give a small tolerance for subpixel/solver rounding.
-    // 0–1% average should score near-perfect; larger worst-case errors are penalized progressively.
-    const avgPenalty=Math.max(0,avgErr-0.35)*7.0;
-    const worstPenalty=Math.max(0,worstErr-1.5)*2.2;
-    var limb=v24ScoreClamp(100-avgPenalty-worstPenalty);
-
-    const spread=footY.length?Math.max(...footY)-Math.min(...footY):0;
-    const leg=legMetrics()?.avgLeg||120;
-    balance=v24ScoreClamp(100-(spread/leg)*22);
-    integrity=$("enableUnifiedMesh")?.checked?94:72;
-    silhouette=$("sealJointGaps")?.checked?94:80;
-    const action=$("aiRequestedAction")?.value||"";
-    attack=/Punch|Kick/.test(action)?90:96;
-  }catch(e){
-    var limb=70;balance=70;integrity=70;silhouette=70;attack=70;
-    worstName="analysis error";worstErr=0;worstFrame=0;
+    if(p.left_ankle)footY.push(p.left_ankle[1]);
+    if(p.right_ankle)footY.push(p.right_ankle[1]);
   }
-  return {
-    balance,limb,silhouette,integrity,attack,
-    worstLimb:worstName,worstFrame,worstError:+worstErr.toFixed(2),
-    avgLimbError:samples?+(totalErr/samples).toFixed(2):0
-  };
-}
+  const avgErr=samples?totalErr/samples:100;
+  const avgPenalty=Math.max(0,avgErr-.35)*7.0,worstPenalty=Math.max(0,worstErr-1.5)*2.2;
+  const limb=v24ScoreClamp(100-avgPenalty-worstPenalty);
+  const leg=legMetrics()?.avgLeg||120;
+  if(v258IsWalkAction(action)||action==="Idle"||action==="Block"){
+    const spread=footY.length?Math.max(...footY)-Math.min(...footY):0;
+    balance=v24ScoreClamp(100-(spread/leg)*22);
+  }else balance=94;
+  integrity=$("enableUnifiedMesh")?.checked?94:72;
+  silhouette=$("sealJointGaps")?.checked?94:80;
 
+  if(/Punch/.test(action)){
+    let reach=0;
+    for(const p of poses){for(const side of ["left","right"]){const w=p[`${side}_wrist`],w0=orig[`${side}_wrist`];if(w&&w0)reach=Math.max(reach,length(w,w0)/leg*100);}}
+    attack=v24ScoreClamp(55+reach*2.2);
+  }else if(/Kick/.test(action)){
+    let reach=0;
+    for(const p of poses){for(const side of ["left","right"]){const a=p[`${side}_ankle`],a0=orig[`${side}_ankle`];if(a&&a0)reach=Math.max(reach,length(a,a0)/leg*100);}}
+    attack=v24ScoreClamp(55+reach*2.0);
+  }
+  return {balance,limb,silhouette,integrity,attack,worstLimb:worstName,worstFrame,worstError:+worstErr.toFixed(2),avgLimbError:+avgErr.toFixed(2)};
+}
+function v24AnalyzeCurrentAnimation(){
+  const action=v258RequestedAction(),set=v258CollectActionPoses(action);
+  if(!set.ok)return {balance:0,limb:0,silhouette:0,integrity:0,attack:0,worstLimb:set.error||"pose error",worstFrame:0,worstError:0,avgLimbError:0,error:set.error};
+  return v258AnalyzePoseArray(set.poses,action);
+}
 function v24RunRig(){
-  v24StageState("rig","run","Mapping...");
+  v24StageState("rig","run","Verifying signed rig + mapping...");
+  if(!v258RigApprovalValid())return {pass:false,score:0,msg:"Rig Approval Gate signature is missing or stale. Review and approve the rig first."};
   v23MapUniversalSkeleton();
   const mapped=Object.keys(v23.universalMap||{}).length;
   const score=v24ScoreClamp(mapped/V23_STANDARD_JOINTS.length*100);
@@ -5436,35 +5676,52 @@ function v24RunMesh(){
 }
 function v24RunWeights(){
   v24StageState("weights","run","Cleaning influences...");
-  try{if(typeof v211RunWeightCleanup==="function")v211RunWeightCleanup();}catch(e){}
-  return {pass:true,score:94,msg:"Cross-limb weights filtered"};
+  try{
+    if(typeof v211RunCleanup!=="function")return {pass:false,score:0,msg:"Weight cleanup module unavailable"};
+    v211RunCleanup();
+    return {pass:true,score:94,msg:"Cross-limb weights filtered + extremities protected"};
+  }catch(e){return {pass:false,score:0,msg:`Weight cleanup failed: ${e?.message||e}`};}
 }
 function v24RunMotion(){
-  v24StageState("motion","run","Indexing poses + selecting motion...");
-  v23IndexPoseLibrary(); const count=v23.poseIndex.length; const action=$("aiRequestedAction").value;
-  if(action==="Walk Forward")v23SetState("Walk Forward"); else if(action==="Walk Back")v23SetState("Walk Back"); else if(action==="Idle")v23SetState("Idle");
-  else if(action.includes("Punch"))v23SetState("Punch"); else if(action.includes("Kick"))v23SetState("Kick");
-  if($("blendSpeed")) $("blendSpeed").value=50;
-  if($("animationSpeed")) $("animationSpeed").value=50;
-  const score=count>=6?95:count*12;
-  return {pass:count>=4,score,msg:`${count} poses indexed; ${action} selected; blend/playback 50%`};
+  v24StageState("motion","run","Validating requested motion source...");
+  const action=v258SetProductionAction($("aiRequestedAction").value);
+  if(v258NeedsImportedAction(action)&&!importedMotion.type){
+    return {pass:false,score:0,msg:`${action} needs an imported FBX or .fi_motion.json. The engine will not substitute walk geometry.`};
+  }
+  if(v258NeedsImportedAction(action)&&!v258ImportedMatchesAction(action)){
+    return {pass:false,score:20,msg:`Imported clip “${importedMotion.name||"motion"}” does not identify as ${action}. Load the correct motion before production.`};
+  }
+  if(v258IsWalkAction(action)&&$("motionSource")?.value==="imported"&&importedMotion.type&&!v258ImportedMatchesAction(action)){
+    return {pass:false,score:20,msg:`Imported clip “${importedMotion.name||"motion"}” does not look like a walk. Switch to Built-in Authored Walk or load a walk clip.`};
+  }
+  if(v258NeedsImportedAction(action)&&$("motionSource"))$("motionSource").value="imported";
+  if(action==="Idle"&&$("motionSource"))$("motionSource").value="authored";
+  v23SetState(v258StateForAction(action));
+  const set=v258CollectActionPoses(action),count=set.ok?set.poses.length:0;
+  v23.poseIndex=[];
+  if(set.ok)set.poses.forEach((p,i)=>v23.poseIndex.push({frame:i,sig:v23PoseSignature(p)}));
+  $("indexedPoseCount").textContent=v23.poseIndex.length;
+  if($("blendSpeed"))$("blendSpeed").value=50;if($("animationSpeed"))$("animationSpeed").value=50;
+  const source=v258UseImportedAction(action)?`imported ${importedMotion.name||"motion"}`:"procedural production motion";
+  const score=count===8?96:count*12;
+  return {pass:count===8,score,msg:count===8?`8 real poses validated; ${action}; source: ${source}`:(set.error||`${count}/8 poses available`)};
 }
 function v24RunRetarget(){
   v24StageState("retarget","run","Applying solver + pole targets...");
-  if($("enableV20Solver")) $("enableV20Solver").checked=true;
-  if($("lockLimbLengths")) $("lockLimbLengths").checked=true;
-  if($("pinPlantedFeet")) $("pinPlantedFeet").checked=true;
-  if($("constraintIterations")) $("constraintIterations").value=4;
-  if($("limbLengthLock")) $("limbLengthLock").value=100;
-  if($("plantPin")) $("plantPin").value=96;
-  if($("bodyAnchor")) $("bodyAnchor").value=92;
-  if($("spineStability")) $("spineStability").value=72;
-  if($("maxReach")) $("maxReach").value=98;
-  if($("kneePoles")) $("kneePoles").checked=true;
-  if($("elbowPoles")) $("elbowPoles").checked=true;
-  let good=0;try{for(let i=0;i<8;i++){const b=buildPose(i);if(!b.error)good++;}}catch(e){}
+  if($("enableConstraints"))$("enableConstraints").checked=true;
+  if($("lockLimbLengths"))$("lockLimbLengths").checked=true;
+  if($("pinPlantFeet"))$("pinPlantFeet").checked=true;
+  if($("constraintIterations"))$("constraintIterations").value=4;
+  if($("limbLengthLock"))$("limbLengthLock").value=100;
+  if($("plantPin"))$("plantPin").value=96;
+  if($("bodyAnchor"))$("bodyAnchor").value=92;
+  if($("spineStability"))$("spineStability").value=72;
+  if($("maxReach"))$("maxReach").value=98;
+  if($("poleKnees"))$("poleKnees").checked=true;
+  if($("poleElbows"))$("poleElbows").checked=true;
+  const action=v258RequestedAction(),set=v258CollectActionPoses(action),good=set.ok?8:set.poses?.length||0;
   const score=v24ScoreClamp(good/8*100);
-  return {pass:good>=6,score,msg:`Solver defaults + poles active; ${good}/8 poses solved`};
+  return {pass:good===8,score,msg:good===8?`Solver + pole targets active; 8/8 ${action} poses valid`:(set.error||`${good}/8 poses solved`)};
 }
 function v24RunNormalize(){
   const action=$("aiRequestedAction")?.value||"";
@@ -5490,50 +5747,39 @@ function v24RunNormalize(){
   if($("straightPlantLeg"))$("straightPlantLeg").checked=true;
   return {pass:true,score:94,msg:"Arcade Walk normalization active"};
 }
-function v24RunCritic(){
-  v24StageState("critic","run","Inspecting animation...");
-  let c=v24AnalyzeCurrentAnimation();
-  const threshold=+$("aiPassThreshold").value;
-  let score=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity+c.attack)/5);
-
-  // V24.3 isolated limb repair remains the first safety pass.
-  let repaired=false;
-  if(score<threshold && $("aiAutoCorrect")?.checked && $("autoLimbRepair")?.checked && c.limb<82){
-    const before=c;
-    c=v24AnalyzeCurrentAnimation();
-    score=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity+c.attack)/5);
-    repaired=c.limb>before.limb;
-    if(repaired)v24Log(`Auto Limb Repair: limb score ${before.limb}% → ${c.limb}%.`);
+function v258RepairCurrentActionLimbOutliers(action=v258RequestedAction()){
+  if(v258UseImportedAction(action))return [];
+  if(!v258IsWalkAction(action))return [];
+  const reports=[];
+  for(let i=0;i<8;i++){
+    const b=v258BuildRequestedPose(i,action,true);if(!b||b.error)continue;
+    const orig={};JOINTS.forEach(j=>{if(joint(j))orig[j]=joint(j);});
+    const r=v243RepairPose(i,b.pose,orig,true);
+    if(r.repaired){v252StoreFinalCorrection(i,b.pose);reports.push(r);}
   }
-
-  $("criticBalance").textContent=c.balance+"%";$("criticLimbs").textContent=c.limb+"%";
-  $("criticSilhouette").textContent=c.silhouette+"%";$("criticIntegrity").textContent=c.integrity+"%";$("criticAttack").textContent=c.attack+"%";
-  $("criticWorstLimb").textContent=c.worstFrame?`${c.worstLimb} • frame ${c.worstFrame}`:"--";
-  $("criticWorstError").textContent=c.worstFrame?`${c.worstError}% (avg ${c.avgLimbError}%)`:"--";
-
-  const detail=c.worstFrame?`worst ${c.worstLimb} F${c.worstFrame}: ${c.worstError}%`:"no limb error";
-  const repairMsg=repaired?" • auto-limb-repaired":"";
-
-  const requestedAction=$("aiRequestedAction")?.value||"";
-  const isWalk=/^Walk\b/i.test(requestedAction);
-  if(score>=threshold && isWalk && $("v25Enabled")?.checked){
-    const q=v25ScoreMotion();
-    v251UpdateDiagnostics(q);
-    $("v25CurrentQuality").textContent=q.score+"%";
-    if(v25Motion.bestScore<0)$("v25BestQuality").textContent=q.score+"%";
-    const target=+$("v25TargetQuality").value||92;
+  return reports;
+}
+function v24RunCritic(){
+  v24StageState("critic","run","Inspecting canonical requested animation...");
+  const action=v258RequestedAction(),threshold=+$("aiPassThreshold").value;
+  let c=v24AnalyzeCurrentAnimation();
+  if(c.error)return {pass:false,score:0,msg:c.error,details:c};
+  let score=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity+c.attack)/5),repaired=false;
+  if(score<threshold&&$("aiAutoCorrect")?.checked&&$("autoLimbRepair")?.checked&&c.limb<82){
+    const before=c,repairs=v258RepairCurrentActionLimbOutliers(action);
+    if(repairs.length){c=v24AnalyzeCurrentAnimation();score=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity+c.attack)/5);repaired=c.limb>before.limb;}
+  }
+  $("criticBalance").textContent=c.balance+"%";$("criticLimbs").textContent=c.limb+"%";$("criticSilhouette").textContent=c.silhouette+"%";$("criticIntegrity").textContent=c.integrity+"%";$("criticAttack").textContent=c.attack+"%";
+  $("criticWorstLimb").textContent=c.worstFrame?`${c.worstLimb} • frame ${c.worstFrame}`:"--";$("criticWorstError").textContent=c.worstFrame?`${c.worstError}% (avg ${c.avgLimbError}%)`:"--";
+  const detail=c.worstFrame?`worst ${c.worstLimb} F${c.worstFrame}: ${c.worstError}%`:"no limb error",repairMsg=repaired?" • auto-limb-repaired":"";
+  if(score>=threshold&&v258IsWalkAction(action)&&$("v25Enabled")?.checked){
+    const q=v258CanonicalRescore("AI walk critic");const target=+$("v25TargetQuality").value||92;
     if(q.score<target){
       const cache=q.grounding?.cacheCount??0;
-      return {
-        pass:false,
-        score:q.score,
-        msg:`Geometry passed, walk locomotion ${q.score}% < ${target}% target. Final-pose cache ${cache}/8. Run V25.7.2 Self-Correction.`,
-        details:c,
-        needsV25:true
-      };
+      const next=v258UseImportedAction(action)?"Use C++ Auto Correct / Phone Motion Correct.":"Run V25.8.0 Self-Correction.";
+      return {pass:false,score:q.score,msg:`Geometry passed, walk locomotion ${q.score}% < ${target}% target. Final-pose cache ${cache}/8. ${next}`,details:c,needsV25:!v258UseImportedAction(action),needsCpp:v258UseImportedAction(action)};
     }
   }
-
   return {pass:score>=threshold,score,msg:`Critic score ${score}% • ${detail}${repairMsg}`,details:c,autoRepair:repaired};
 }
 function v24RunCleanup(){
@@ -5557,20 +5803,59 @@ function v24RunCombat(){
   }
   return {pass:true,score:92,msg:"No attack metadata required"};
 }
+function v258GenerateCanonicalFrames(action=v258RequestedAction()){
+  if(!source)return {ok:false,error:"Character image missing"};
+  if(!hasRenderableSpriteParts())return {ok:false,error:"Renderable sprite binding missing"};
+  const next=[];
+  for(let i=0;i<FRAME_COUNT;i++){
+    const b=v258BuildRequestedPose(i,action,false);
+    if(!b||b.error)return {ok:false,error:b?.error||`Frame ${i+1} pose failed`};
+    const canvasOut=renderPoseFrame(b.pose,b.torsoM);
+    if(!canvasOut)return {ok:false,error:`Frame ${i+1} render failed`};
+    next.push(canvasOut);
+  }
+  frames=next;v258FramesSignature=v258MotionSignature();renderFrames();
+  return {ok:true,count:frames.length,signature:v258FramesSignature};
+}
+function v258AnalyzeSnesFrames(){
+  if(!frames.length)return {ready:false,maxObjects:0,maxScanline:0,tiles:0};
+  let maxObjects=0,maxScanline=0,tiles=0;
+  for(const c of frames){
+    const g=c.getContext("2d"),w=c.width,h=c.height,d=g.getImageData(0,0,w,h).data,rows=Math.ceil(h/16),cols=Math.ceil(w/16);let objects=0;
+    for(let by=0;by<rows;by++){let rowObjects=0;for(let bx=0;bx<cols;bx++){let used=false;for(let y=by*16;y<Math.min(h,(by+1)*16)&&!used;y++){for(let x=bx*16;x<Math.min(w,(bx+1)*16);x++){if(d[(y*w+x)*4+3]>16){used=true;break;}}}if(used){objects++;rowObjects++;tiles++;}}maxScanline=Math.max(maxScanline,rowObjects);}maxObjects=Math.max(maxObjects,objects);
+  }
+  return {ready:true,maxObjects,maxScanline,tiles};
+}
 function v24RunSnes(){
-  v24StageState("snes","run","Checking SNES budgets...");
-  let score=100;const warnings=[];
-  if(source){if(source.width>256){score-=8;warnings.push("wide source");}if(source.height>256){score-=8;warnings.push("tall source");}}
-  if($("ai4bppOptimize").checked)score=Math.min(100,score+2);
+  v24StageState("snes","run","Generating canonical frames + checking SNES budgets...");
+  const expected=v258MotionSignature();
+  if(frames.length!==FRAME_COUNT||v258FramesSignature!==expected){
+    const made=v258GenerateCanonicalFrames(v258RequestedAction());
+    if(!made.ok)return {pass:false,score:0,msg:`SNES validation could not render canonical frames: ${made.error}`};
+  }
+  let score=100;const warnings=[],a=v258AnalyzeSnesFrames();
+  if(!a.ready||frames.length!==FRAME_COUNT)return {pass:false,score:0,msg:"SNES validation requires all 8 current canonical frames."};
+  if(source){if(source.width>256){score-=6;warnings.push("source wider than 256px");}if(source.height>256){score-=6;warnings.push("source taller than 256px");}}
+  if($("aiOamCheck")?.checked){if(!a.ready){score-=10;warnings.push("generate frames for OAM analysis");}else{if(a.maxObjects>128){score-=40;warnings.push(`OAM ${a.maxObjects}>128`);}if(a.maxScanline>32){score-=30;warnings.push(`scanline objects ${a.maxScanline}>32`);}}}
+  if($("aiVramCheck")?.checked&&a.ready){const bytes=a.tiles*128;if(bytes>65536){score-=20;warnings.push(`raw animation tiles ~${Math.round(bytes/1024)}KB before reuse`);}}
+  if($("aiTileReuse")?.checked&&a.ready)score=Math.min(100,score+2);
+  if($("ai4bppOptimize")?.checked)score=Math.min(100,score+2);
   score=v24ScoreClamp(score);
-  return {pass:score>=75,score,msg:warnings.length?`Pass with warnings: ${warnings.join(", ")}`:"SNES export profile compatible"};
+  const detail=a.ready?`max ${a.maxObjects} 16×16 objects/frame; ${a.maxScanline}/scanline`:"frame budget pending";
+  return {pass:score>=75,score,msg:warnings.length?`${detail}; ${warnings.join(", ")}`:`SNES budget pass • ${detail}`};
 }
 const V24_RUNNERS={rig:v24RunRig,mesh:v24RunMesh,weights:v24RunWeights,motion:v24RunMotion,retarget:v24RunRetarget,normalize:v24RunNormalize,critic:v24RunCritic,cleanup:v24RunCleanup,combat:v24RunCombat,snes:v24RunSnes};
 
 async function v24RunPipeline(startKey=null){
   if(v24Director.running||!$("aiDirectorEnabled").checked)return;
-  v24Director.running=true;v24Director.lastAction=$("aiRequestedAction").value;$("aiDirectorBadge").textContent="RUNNING";
-  $("aiDirectorLog").textContent="AI Production Director started.";if(!startKey)v24ResetStages();
+  const requested=$("aiRequestedAction").value;
+  if(startKey&&v24Director.lastAction&&v24Director.lastAction!==requested){
+    v24Log(`Requested action changed ${v24Director.lastAction} → ${requested}; restarting the full pipeline.`);
+    startKey=null;
+  }
+  if(!startKey)v24ResetStages();
+  v24Director.running=true;v24Director.lastAction=requested;v24Director.approved=false;v24Director.approvalSignature=null;$("aiDirectorBadge").textContent="RUNNING";
+  $("aiDirectorLog").textContent="AI Production Director started.";
   let start=startKey?V24_STAGES.findIndex(x=>x[0]===startKey):0;if(start<0)start=0;
   for(let n=start;n<V24_STAGES.length;n++){
     const [key,id,label]=V24_STAGES[n];v24Director.currentStage=key;v24Log(`Running ${label}...`);
@@ -5585,26 +5870,34 @@ async function v24RunPipeline(startKey=null){
       if($("aiStopOnFail").checked){v24Director.running=false;v24UpdateScore();return;}
     }
   }
-  v24Director.failedStage=null;v24Director.running=false;v24UpdateScore();$("aiDirectorBadge").textContent="AWAITING APPROVAL";
-  $("aiDecision").textContent="All automated stages passed. Awaiting your final approval.";v24Log("Pipeline complete. Final human approval required.");v242SaveCheckpoint(true);
+  v24Director.failedStage=null;v24Director.running=false;v24UpdateScore();
+  if($("aiRequireApproval")?.checked){$("aiDirectorBadge").textContent="AWAITING APPROVAL";$("aiDecision").textContent="All automated stages passed. Awaiting your final approval.";v24Log("Pipeline complete. Final human approval required.");v242SaveCheckpoint(true);}
+  else{v24FinalApproval(true);}
 }
 function v24UpdateScore(){const vals=Object.values(v24Director.results).map(x=>x.score).filter(Number.isFinite);const score=vals.length?v24ScoreClamp(vals.reduce((a,b)=>a+b,0)/vals.length):0;$("aiOverallScore").textContent=score+"%";}
 function v24RetryFailed(){if(!v24Director.failedStage){v24Log("No failed stage to retry.");return;}const key=v24Director.failedStage;v24Director.failedStage=null;v242SaveCheckpoint(true);v24RunPipeline(key);}
 function v24ApplyBypass(){
   const key=v24Director.failedStage;if(!key){v24Log("No failed stage available for bypass.");return;}
   if(!$("aiAllowBypass").checked){v24Log("Bypasses are disabled.");return;}
-  v24Director.bypasses.push({stage:key,reason:"User-controlled bypass",time:Date.now()});v24Director.results[key]={pass:true,score:70,msg:"Controlled bypass applied",bypass:true};
-  v24StageState(key,"skip","BYPASS • controlled override");v24Log(`Controlled bypass applied to ${key}. Continuing pipeline.`);v24Director.failedStage=null;v242SaveCheckpoint(true);
-  const idx=V24_STAGES.findIndex(x=>x[0]===key);const next=V24_STAGES[idx+1]?.[0];if(next)v24RunPipeline(next);else v24UpdateScore();
+  const critical=new Set(["rig","mesh","weights","motion","retarget","critic"]);
+  if(critical.has(key)){v24Log(`Bypass blocked: ${key} is a production-critical stage.`);$("aiDecision").textContent=`${key} must pass before production can continue.`;return;}
+  v24Director.bypasses.push({stage:key,reason:"User-controlled non-critical bypass",time:Date.now()});v24Director.results[key]={pass:true,score:70,msg:"Controlled non-critical bypass applied",bypass:true};
+  v24StageState(key,"skip","BYPASS • controlled non-critical override");v24Log(`Controlled bypass applied to ${key}. Continuing pipeline.`);v24Director.failedStage=null;v242SaveCheckpoint(true);
+  const idx=V24_STAGES.findIndex(x=>x[0]===key),next=V24_STAGES[idx+1]?.[0];if(next)v24RunPipeline(next);else v24UpdateScore();
 }
-function v24FinalApproval(){
-  if(v24Director.failedStage){v24Log("Approval blocked: unresolved failed stage.");$("aiDecision").textContent="Resolve or bypass the failed stage first.";return;}
-  v24Director.approved=true;v242SaveCheckpoint(true);$("aiDirectorBadge").textContent="APPROVED";$("aiDecision").textContent="Final approval recorded. Animation is production-ready.";v24Log("FINAL APPROVAL recorded.");
+function v24FinalApproval(auto=false){
+  if(v24Director.running){v24Log("Approval blocked: pipeline is still running.");return false;}
+  if(v24Director.failedStage){v24Log("Approval blocked: unresolved failed stage.");$("aiDecision").textContent="Resolve the failed stage first.";return false;}
+  const missing=V24_STAGES.map(x=>x[0]).filter(k=>!v24Director.results[k]?.pass);
+  if(missing.length){v24Log(`Approval blocked: incomplete stages ${missing.join(", ")}.`);$("aiDecision").textContent="Run the complete production pipeline before approval.";return false;}
+  if(v24Director.lastAction!==v258RequestedAction()){v24Log("Approval blocked: pipeline action no longer matches the active production action.");return false;}
+  v24Director.approved=true;v24Director.lastAction=v258RequestedAction();v24Director.approvalSignature=v258MotionSignature();v242SaveCheckpoint(true);$("aiDirectorBadge").textContent="APPROVED";$("aiDecision").textContent=auto?"All stages passed. Automatic approval recorded by configuration.":"Final approval recorded. Animation is production-ready.";v24Log(auto?"AUTO APPROVAL recorded because human approval requirement is OFF.":"FINAL APPROVAL recorded.");refreshProductionPreflight();return true;
 }
 function v24Snapshot(){return {
-  version:"24.2",
+  version:"25.8.0",engine_version:"25.8.0",
   action:v24Director.lastAction,
-  approved:v24Director.approved,
+  approved:v258MotionApprovalValid(),
+  approval_signature:v258MotionApprovalValid()?v24Director.approvalSignature:null,
   results:v24Director.results,
   bypasses:v24Director.bypasses,
   threshold:+$("aiPassThreshold").value,
@@ -5616,7 +5909,7 @@ function v24Snapshot(){return {
   },
   grounding_critic:{
     source:"final_pose_after_absolute_lock",
-    version:"25.6.3"
+    version:"25.8.0"
   },
   final_foot_lock:{
     enabled:!!$("v2562FinalFootLock")?.checked,
@@ -5661,7 +5954,14 @@ function v24Snapshot(){return {
   }
 };}
 
-$("aiRunPipelineBtn").onclick=()=>v24RunPipeline();$("aiRetryBtn").onclick=v24RetryFailed;$("aiBypassBtn").onclick=v24ApplyBypass;$("aiApproveBtn").onclick=v24FinalApproval;
+$("aiRunPipelineBtn").onclick=()=>v24RunPipeline();
+$("aiRequestedAction")?.addEventListener("change",()=>{
+  const next=$("aiRequestedAction").value;
+  if(v258ProductionAction&&v258ProductionAction!==next)v258SetProductionAction(next);
+  v258InvalidateMotionApproval("requested action changed");
+  refreshProductionPreflight();
+});
+$("aiRetryBtn").onclick=v24RetryFailed;$("aiBypassBtn").onclick=v24ApplyBypass;$("aiApproveBtn").onclick=v24FinalApproval;
 $("resumeCheckpointBtn").onclick=async()=>{
   v2561SafeBoot=true;
   await v242RestoreCheckpoint();
@@ -5672,7 +5972,12 @@ $("saveCheckpointBtn").onclick=()=>v242SaveCheckpoint(false);
 window.addEventListener("beforeunload",()=>v242SaveCheckpoint(true));
 document.addEventListener("change",e=>{
   const el=e.target;
-  if(el && el.id && el.type!=="file")setTimeout(()=>v242SaveCheckpoint(true),40);
+  if(el && el.id && el.type!=="file"){
+    setTimeout(()=>{
+      if(v24Director.approved&&!v258MotionApprovalValid())v258InvalidateMotionApproval(`${el.id} changed`);
+      refreshProductionPreflight();v242SaveCheckpoint(true);
+    },40);
+  }
 });
 setTimeout(()=>{
   let has=false;try{has=!!localStorage.getItem(V242_CHECKPOINT_KEY)||!!localStorage.getItem(PROD_AUTOSAVE_KEY);}catch(e){}
@@ -5722,17 +6027,12 @@ function v23PoseDistance(a,b){
 }
 
 function v23IndexPoseLibrary(){
-  v23.poseIndex=[];
+  v23.poseIndex=[];const action=v258RequestedAction();
   for(let i=0;i<8;i++){
-    try{
-      const built=buildPose(i);
-      if(!built.error) v23.poseIndex.push({frame:i,sig:v23PoseSignature(built.pose)});
-    }catch(e){}
+    try{const built=v258BuildRequestedPose(i,action,false);if(!built.error)v23.poseIndex.push({frame:i,sig:v23PoseSignature(built.pose)});}catch(e){}
   }
-  $("indexedPoseCount").textContent=v23.poseIndex.length;
-  $("v23Badge").textContent="POSE INDEXED";
+  $("indexedPoseCount").textContent=v23.poseIndex.length;$("v23Badge").textContent="POSE INDEXED";
 }
-
 function v23FindBestPose(pose){
   if(!$("poseSearchEnabled")?.checked||!v23.poseIndex.length) return null;
   const sig=v23PoseSignature(pose);
@@ -6363,95 +6663,46 @@ function connectedJointDiagnostics(pose,orig){
 }
 
 function previewSelectedMotion(){
-  const imported=$("motionSource").value==="imported";
-  if(imported && !importedMotion.type){ status("Import an animation first."); return; }
-
-  const ready=requiredReadyForWalk();
-  if(!ready.ok){status(ready.msg);return;}
-
-  clearInterval(timer);
-  let i=0;
-
+  const action=v258ProductionAction||($("motionSource").value==="imported"?(importedMotion.name||"Imported Motion"):"Walk Forward");
+  if($("motionSource").value==="imported"&&!importedMotion.type&&!v258ProductionAction){status("Import an animation first.");return;}
+  const ready=requiredReadyForWalk();if(!ready.ok){status(ready.msg);return;}
+  clearInterval(timer);let i=0;
   timer=setInterval(()=>{
-    const built=imported ? retargetImportedPose(i) : buildPose(i);
-    if(built.error){
-      status(built.error);
-      clearInterval(timer);
-      return;
-    }
-
-    // V17.2 FIX:
-    // Live preview must render the bound sprite from the current animated pose.
-    // Previous builds drew the original source PNG and only animated the skeleton.
+    const built=v258ProductionAction?v258BuildRequestedPose(i,v258ProductionAction,false):($("motionSource").value==="imported"?retargetImportedPose(i):buildPose(i));
+    if(built.error){status(built.error);clearInterval(timer);return;}
     let animatedFrame=null;
-
-    if($("showSprite").checked && hasRenderableSpriteParts()){
-      try{
-        animatedFrame=renderPoseFrame(built.pose,built.torsoM);
-      }catch(err){
-        console.error("Live sprite preview render failed:",err);
-        animatedFrame=null;
-      }
-    }
-
-    // draw() can overlay the animated skeleton on top of the animated sprite
-    // when Show Skeleton is enabled.
+    if($("showSprite").checked&&hasRenderableSpriteParts()){try{animatedFrame=renderPoseFrame(built.pose,built.torsoM);}catch(err){console.error("Live sprite preview render failed:",err);}}
     draw(animatedFrame,built.pose);
-
-    const spriteState = animatedFrame ? " • Sprite LIVE" :
-      ($("showSprite").checked ? " • Skeleton only (trace/bind sprite parts)" : "");
-
-    status(`${imported?"Imported":"Authored"} motion • Frame ${i+1}/${FRAME_COUNT} • ${built.phaseName}${spriteState}`);
-    i=(i+1)%FRAME_COUNT;
+    const spriteState=animatedFrame?" • Sprite LIVE":($("showSprite").checked?" • Skeleton only (trace/bind sprite parts)":"");
+    status(`${v258ProductionAction?"Production":"Preview"} motion • ${action} • Frame ${i+1}/${FRAME_COUNT} • ${built.phaseName}${spriteState}`);i=(i+1)%FRAME_COUNT;
   },animationFrameMs());
 }
 $("previewMotion").onclick=previewSelectedMotion;
 
 function normalizeMotionSamplesFromCurrentSource(){
-  if(importedMotion.type==="native") return importedMotion.native.samples;
-  if(importedMotion.type==="fbx"){
-    const sourceLeg=sourceLegLength3D()||1;
-    const raw0=sampleFBXRawAtTime(0);
-    if(!raw0?.pelvis) return null;
-    const root0=raw0.pelvis;
-    const samples=[];
-    for(let i=0;i<FRAME_COUNT;i++){
-      const raw=sampleFBXRawAtTime((i/FRAME_COUNT)*(importedMotion.clip.duration||1));
-      const s={};
-      for(const [k,p] of Object.entries(raw)){
-        s[k]=[(p[0]-root0[0])/sourceLeg,(p[1]-root0[1])/sourceLeg];
-      }
-      samples.push(s);
-    }
-    return samples;
+  const action=v258ProductionAction;
+  if(!action&&importedMotion.type==="native")return importedMotion.native.samples;
+  if(!action&&importedMotion.type==="fbx"){
+    const sourceLeg=sourceLegLength3D()||1,raw0=sampleFBXRawAtTime(0);if(!raw0?.pelvis)return null;const root0=raw0.pelvis,samples=[];
+    for(let i=0;i<FRAME_COUNT;i++){const raw=sampleFBXRawAtTime((i/FRAME_COUNT)*(importedMotion.clip.duration||1)),s={};for(const [k,p] of Object.entries(raw))s[k]=[(p[0]-root0[0])/sourceLeg,(p[1]-root0[1])/sourceLeg];samples.push(s);}return samples;
   }
-
-  // Save the built-in authored walk as a reusable normalized motion too.
-  const m=legMetrics(); if(!m) return null;
-  const root0=rig.joints.pelvis;
-  const samples=[];
-  for(let i=0;i<FRAME_COUNT;i++){
-    const b=buildPose(i); if(b.error) return null;
-    const s={};
-    for(const k of Object.keys(MCO_CANDIDATES)){
-      const p=b.pose[k];
-      if(p) s[k]=[(p[0]-root0[0])/m.avgLeg,(p[1]-root0[1])/m.avgLeg];
+  if(action&&v258UseImportedAction(action)){
+    if(importedMotion.type==="native")return importedMotion.native.samples;
+    if(importedMotion.type==="fbx"){
+      const sourceLeg=sourceLegLength3D()||1,raw0=sampleFBXRawAtTime(0);if(!raw0?.pelvis)return null;const root0=raw0.pelvis,samples=[];
+      for(let i=0;i<FRAME_COUNT;i++){const raw=sampleFBXRawAtTime((i/FRAME_COUNT)*(importedMotion.clip.duration||1)),s={};for(const [k,p] of Object.entries(raw))s[k]=[(p[0]-root0[0])/sourceLeg,(p[1]-root0[1])/sourceLeg];samples.push(s);}return samples;
     }
-    samples.push(s);
   }
-  return samples;
+  const m=legMetrics();if(!m)return null;const root0=rig.joints.pelvis,samples=[];
+  for(let i=0;i<FRAME_COUNT;i++){const b=action?v258BuildRequestedPose(i,action,false):buildPose(i);if(b.error)return null;const s={};for(const k of Object.keys(MCO_CANDIDATES)){const p=b.pose[k];if(p)s[k]=[(p[0]-root0[0])/m.avgLeg,(p[1]-root0[1])/m.avgLeg];}samples.push(s);}return samples;
 }
 
-
 function currentMotionPackage(){
-  const samples=normalizeMotionSamplesFromCurrentSource();
-  if(!samples)return null;
-  return {
-    format:"fatal-instinct-motion",version:2,
-    name:$("motionSource").value==="imported"?(importedMotion.name||"Imported Motion"):"Fatal Instinct Authored Walk",
-    frames:samples.length,loop:true,projection:$("projection").value,
-    profile:$("retargetProfile").value,preview_speed_percent:+$("animationSpeed").value,frame_ms:animationFrameMs(),constraint_solver:{enabled:$("enableConstraints").checked,iterations:+$("constraintIterations").value,limb_lock:+$("limbLengthLock").value,plant_pin:+$("plantPin").value,body_anchor:+$("bodyAnchor").value,spine_stability:+$("spineStability").value,max_reach:+$("maxReach").value},weighted_skin:{enabled:$("enableWeightedSkin").checked,mode:$("skinRenderMode").value,blend_radius:+$("skinBlendRadius").value,influence:+$("boneInfluence").value,mesh_grid:+$("weightedMeshGrid").value,joint_blend:+$("weightJointBlend").value},pole_targets:{knees:$("poleKnees").checked,elbows:$("poleElbows").checked,strength:+$("poleStrength").value,distance:+$("poleDistance").value},walk_normalizer:{enabled:$("walkNormalize").checked,max_pelvis_drop:+$("maxPelvisDrop").value,max_knee_lift:+$("maxKneeLift").value,height_floor:+$("standingHeightFloor").value,stride_scale:+$("walkStrideScale").value,plant_straight:+$("plantLegStraight").value,pelvis_smoothing:+$("pelvisSmooth").value},unified_mesh:{enabled:$("enableUnifiedMesh").checked,mode:$("unifiedMeshMode").value,columns:+$("unifiedCols").value,padding:+$("unifiedPadding").value,falloff:+$("unifiedFalloff").value,joint_seal:+$("jointSealStrength").value,accessory_rigid:+$("unifiedAccessoryRigid").value},ultimate_animation:v23CaptureGraphSnapshot(),ai_production_director:v24Snapshot(),contacts:analyzeContacts(),samples
-  };
+  const samples=normalizeMotionSamplesFromCurrentSource();if(!samples)return null;
+  const action=v258ProductionAction||($("motionSource").value==="imported"?(v258RequestedAction()||"Imported Motion"):"Walk Forward");
+  const char=$("characterName")?.value?.trim()||sourceName?.replace(/\.[^.]+$/,"")||"Fatal Instinct";
+  const name=v258ProductionAction?`${char} - ${action}`:($("motionSource").value==="imported"?(importedMotion.name||"Imported Motion"):"Fatal Instinct Authored Walk");
+  return {format:"fatal-instinct-motion",version:2,engine_version:"25.8.0",name,action,frames:samples.length,loop:v258ActionLoops(action),projection:$("projection").value,profile:$("retargetProfile").value,preview_speed_percent:+$("animationSpeed").value,frame_ms:animationFrameMs(),constraint_solver:{enabled:$("enableConstraints").checked,iterations:+$("constraintIterations").value,limb_lock:+$("limbLengthLock").value,plant_pin:+$("plantPin").value,body_anchor:+$("bodyAnchor").value,spine_stability:+$("spineStability").value,max_reach:+$("maxReach").value},weighted_skin:{enabled:$("enableWeightedSkin").checked,mode:$("skinRenderMode").value,blend_radius:+$("skinBlendRadius").value,influence:+$("boneInfluence").value,mesh_grid:+$("weightedMeshGrid").value,joint_blend:+$("weightJointBlend").value},pole_targets:{knees:$("poleKnees").checked,elbows:$("poleElbows").checked,strength:+$("poleStrength").value,distance:+$("poleDistance").value},walk_normalizer:{enabled:v258IsWalkAction(action)&&$("walkNormalize").checked,max_pelvis_drop:+$("maxPelvisDrop").value,max_knee_lift:+$("maxKneeLift").value,height_floor:+$("standingHeightFloor").value,stride_scale:+$("walkStrideScale").value,plant_straight:+$("plantLegStraight").value,pelvis_smoothing:+$("pelvisSmooth").value},unified_mesh:{enabled:$("enableUnifiedMesh").checked,mode:$("unifiedMeshMode").value,columns:+$("unifiedCols").value,padding:+$("unifiedPadding").value,falloff:+$("unifiedFalloff").value,joint_seal:+$("jointSealStrength").value,accessory_rigid:+$("unifiedAccessoryRigid").value},ultimate_animation:v23CaptureGraphSnapshot(),ai_production_director:v24Snapshot(),contacts:analyzeContacts(),samples};
 }
 function renderAnimationLibrary(){
   const box=$("animationLibrary");box.innerHTML="";
@@ -6611,41 +6862,35 @@ function renderFrames(){
     const card=document.createElement("div");card.className="card";
     const c=document.createElement("canvas");c.width=f.width;c.height=f.height;c.getContext("2d").drawImage(f,0,0);
     const t=document.createElement("div");
-    if(imported){
-      const clipName=(importedMotion.name||"Imported Motion").split("/").pop().replace(/\.fbx$/i,"");
-      t.textContent=`Frame ${i+1} • ${clipName}`;
-    }else{
-      t.textContent=`Frame ${i+1} • ${WALK_NAMES[i]}`;
-    }
+    if(v258ProductionAction){t.textContent=`Frame ${i+1} • ${v258ProductionAction} • ${i+1}/8`;}
+    else if(imported){const clipName=(importedMotion.name||"Imported Motion").split("/").pop().replace(/\.fbx$/i,"");t.textContent=`Frame ${i+1} • ${clipName}`;}
+    else{t.textContent=`Frame ${i+1} • ${WALK_NAMES[i]}`;}
     card.append(c,t);strip.appendChild(card);
   });
 }
 $("generate").onclick=()=>{
-  inferJointsFromParts();
-  const ready=requiredReadyForWalk();
-  if(!ready.ok){status(ready.msg);return;}
-  const imported=$("motionSource").value==="imported";
-  if(imported && !importedMotion.type){status("Import an animation or switch Motion Source to Built-in Authored Walk.");return;}
-
-  frames=[];
-  const hasParts=source&&Object.keys(rig.parts).some(k=>rig.parts[k]&&(rig.parts[k].poly||rig.parts[k].auto));
+  inferJointsFromParts();const ready=requiredReadyForWalk();if(!ready.ok){status(ready.msg);return;}
+  const action=v258ProductionAction;
+  if(action&&!v258RigApprovalValid()){status("Production frame generation blocked: signed rig approval is required.");return;}
+  if(action&&v258NeedsImportedAction(action)&&!importedMotion.type){status(`${action} requires an imported animation before frame generation.`);return;}
+  const imported=!action&&$("motionSource").value==="imported";
+  if(imported&&!importedMotion.type){status("Import an animation or switch Motion Source to Built-in Authored Walk.");return;}
+  frames=[];const hasParts=source&&Object.keys(rig.parts).some(k=>rig.parts[k]&&(rig.parts[k].poly||rig.parts[k].auto));
   if(hasParts){
-    for(let i=0;i<FRAME_COUNT;i++){
-      const built=imported ? buildImportedFrameCanvas(i) : buildFrameCanvas(i);
-      if(!built || !built.canvas){status("Could not build frame. Check rig, animation mapping, or source image.");return;}
-      frames.push(built.canvas);
+    if(action){
+      const made=v258GenerateCanonicalFrames(action);if(!made.ok){status(made.error);return;}
+    }else{
+      for(let i=0;i<FRAME_COUNT;i++){const built=imported?buildImportedFrameCanvas(i):buildFrameCanvas(i);if(!built?.canvas){status("Could not build frame. Check rig, motion source, and binding.");return;}frames.push(built.canvas);}
+      v258FramesSignature=null;renderFrames();
     }
-    renderFrames();draw(frames[0]);
-    status(`Generated ${FRAME_COUNT} frames from ${imported?(importedMotion.name||"imported motion"):"authored walk"}${imported&&$("correctFeet").checked?" • V17 foot correction ON":""}.`);
+    draw(frames[0]);status(`Generated ${FRAME_COUNT} frames from ${action||((importedMotion.name&&imported)?importedMotion.name:"authored walk")}.`);refreshProductionPreflight();
   }else{
-    const built=imported ? retargetImportedPose(0) : buildPose(0);
-    if(!built.error) draw(null,built.pose);
-    status("Skeleton motion is ready. Load/trace sprite body parts to render sprite frames.");
+    const built=action?v258BuildRequestedPose(0,action,false):(imported?retargetImportedPose(0):buildPose(0));if(!built.error)draw(null,built.pose);status("Skeleton motion is ready. Load/trace sprite body parts to render sprite frames.");
   }
 };
-$("export").onclick=()=>{if(!frames.length){status("Generate frames first.");return;}const s=document.createElement("canvas");s.width=frames[0].width*frames.length;s.height=frames[0].height;const g=s.getContext("2d");frames.forEach((f,i)=>g.drawImage(f,i*frames[0].width,0));s.toBlob(b=>{if(b){download(b,"walk_sheet_v18.png");status("V18 sprite sheet exported to Downloads.");}},"image/png");};
+$("export").onclick=()=>{if(!frames.length){status("Generate frames first.");return;}const s=document.createElement("canvas");s.width=frames[0].width*frames.length;s.height=frames[0].height;const g=s.getContext("2d");frames.forEach((f,i)=>g.drawImage(f,i*frames[0].width,0));const action=v258SafeActionName(v258ProductionAction||"Walk Forward"),who=safeFileName($("characterName")?.value||"character");s.toBlob(b=>{if(b){download(b,`${who}_${action}_sheet.png`);status(`Sprite sheet exported: ${who} ${v258ProductionAction||"Walk Forward"}.`);}},"image/png");};
 $("clear").onclick=()=>{delete rig.parts[partSel.value];autoTraceCache.dirty=true;status(`${partSel.value} cleared.`);draw();};
-$("resetFrames").onclick=()=>{frames=[];strip.innerHTML="";draw();status("Generated frames cleared.");};
+$("resetFrames").onclick=()=>{frames=[];v258FramesSignature=null;strip.innerHTML="";v258InvalidateMotionApproval("generated frames cleared");draw();status("Generated frames cleared.");};
 $("showSprite").onchange=()=>draw();$("showBones").onchange=()=>draw();$("showAutoTrace").onchange=()=>{if($("showAutoTrace").checked&&source){generateAutoSegmentation(false);}draw();};partSel.onchange=()=>draw();jointSel.onchange=()=>draw();
 
 
@@ -6716,7 +6961,7 @@ $("generate").addEventListener("click",()=>setTimeout(()=>{refreshProductionPref
 v23SetState("Idle");v23DrawTimeline();v23ApplyBlendTree();
 detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFrameMs();resize();
 
-/* V25.7.2 controlled cross-script API */
+/* V25.8.0 controlled cross-script API */
 window.FISpriteWalkerAPI={
   getSource:()=>source,
   getSourceName:()=>sourceName,
@@ -6732,7 +6977,24 @@ window.FISpriteWalkerAPI={
   refreshProductionPreflight,
   currentMotionPackage,
   loadNativeMotion,
-  saveAutosave
+  saveAutosave,
+  resetCharacterMotionState:(reason)=>v258ResetMotionState(reason||"new character"),
+  canonicalRescore:(reason="external audit")=>v258CanonicalRescore(reason),
+  buildRequestedPose:v258BuildRequestedPose,
+  betterCandidate:v258BetterCandidate,
+  rigSignature:v258RigSignature,
+  motionSignature:v258MotionSignature,
+  rigApprovalValid:v258RigApprovalValid,
+  motionApprovalValid:v258MotionApprovalValid,
+  invalidateRigApproval:v258InvalidateRigApproval,
+  invalidateMotionApproval:v258InvalidateMotionApproval,
+  generateCanonicalFrames:v258GenerateCanonicalFrames,
+  correctionConsistency:()=>{
+    const target=+($("v25TargetQuality")?.value||92);
+    const current=+(String($("v25CurrentQuality")?.textContent||"").replace("%","")||NaN);
+    const statusText=$("v25Status")?.textContent||"";
+    return {ok:statusText!=="PASS"||Number.isFinite(current)&&current>=target,status:statusText,current,target};
+  }
 };
 
 setTimeout(()=>{
@@ -6741,7 +7003,7 @@ setTimeout(()=>{
   if($("v25BestQuality"))$("v25BestQuality").textContent="--";
   if($("v25PassCount"))$("v25PassCount").textContent="0 / 12";
   if($("v25Report"))$("v25Report").textContent=
-    "V25.7.2 audit build ready. Production bridges initialized.";
+    "V25.8.0 Production Stabilization ready. Signed approvals + canonical scoring initialized.";
 },50);
 
 document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
@@ -6750,7 +7012,7 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
 
 <script>
 /* ============================================================
-   FATAL INSTINCT V25.7.2
+   FATAL INSTINCT V25.8.0
    MASTER SPRITE AUTO-RIG + HUMAN APPROVAL GATE
    MODULE-SAFE PRODUCTION FIX
    ============================================================ */
@@ -6763,7 +7025,7 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
     "right_hip","right_knee","right_ankle","right_toe"
   ];
   const TAIL_JOINTS=["tail_base","tail_tip"];
-  const gate={state:"waiting",approved:false,lastSource:"",score:0,warnings:[]};
+  const gate={state:"waiting",approved:false,approvalSignature:null,lastSource:"",score:0,warnings:[]};
   let alphaCanvas=null,alphaCtx=null,alphaSource=null;
 
   const el=id=>document.getElementById(id);
@@ -6915,15 +7177,18 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
   function autoRig(){
     const a=api(),src=getSource(),r=getRig();
     if(!a||!src||!r){appStatus("Load a master sprite first.");return;}
+    const newSource=getSourceName();
+    if(gate.lastSource!==newSource){try{a.resetCharacterMotionState?.(`new master: ${newSource}`);}catch(e){};gate.lastSource=newSource;}
     r.parts={};r.joints={};
     alphaSource=null;alphaCtx=null;alphaCanvas=null;
     a.seedHumanoidRig();
     if(anatomy()==="no-tail")parkTail();
-    gate.approved=false;
+    gate.approved=false;gate.approvalSignature=null;
+    try{a.invalidateRigApproval?.("auto-rig rerun");}catch(e){}
     if(el("showBones"))el("showBones").checked=true;
     if(el("showSprite"))el("showSprite").checked=true;
     appMode("joint");appDraw();saveCheckpoint();openGate();
-    appStatus("V25.7.2 Auto-Rig complete. Rig Approval Gate is ready.");
+    appStatus("V25.8.0 Auto-Rig complete. Rig Approval Gate is ready.");
   }
 
   function fixRig(){
@@ -6944,12 +7209,14 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
       openGate();return;
     }
     if(anatomy()==="no-tail")parkTail();
-    gate.approved=true;
+    const signature=a.rigSignature?.();
+    if(!signature){appStatus("Rig approval could not create a production signature.");return;}
+    gate.approved=true;gate.approvalSignature=signature;
     closeGate();el("fiRigFixDock")?.classList.remove("open");
-    setGateStage("approved",`Rig approved at ${result.score}% confidence. Automation may continue.`);
+    setGateStage("approved",`Rig approved at ${result.score}% confidence. Signed production rig locked.`);
     try{
-      localStorage.setItem("fatal_instinct_v257_rig_approval",JSON.stringify({
-        source:getSourceName(),score:result.score,anatomy:anatomy(),time:Date.now(),joints:r.joints
+      localStorage.setItem("fatal_instinct_v258_rig_approval",JSON.stringify({
+        source:getSourceName(),score:result.score,anatomy:anatomy(),time:Date.now(),signature,joints:r.joints
       }));
     }catch(e){}
     saveCheckpoint();
@@ -6974,7 +7241,7 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
     const tick=()=>{
       const a=api();
       if(a?.getSource?.()&&a?.getSourceName?.()===fileName){
-        gate.lastSource=fileName;autoRig();return;
+        autoRig();return;
       }
       if(++tries<80)setTimeout(tick,100);
       else{
@@ -6994,19 +7261,20 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
   el("fiRigApproveDock")?.addEventListener("click",approveRig);
   el("fiRigReview")?.addEventListener("click",openGate);
   el("fiRigAnatomy")?.addEventListener("change",()=>{
+    try{api()?.invalidateRigApproval?.("anatomy changed");}catch(e){}
     if(anatomy()==="no-tail")parkTail();refreshReview();appDraw();
   });
   el("fiRigShowBones")?.addEventListener("change",()=>{
     if(el("showBones"))el("showBones").checked=el("fiRigShowBones").checked;appDraw();
   });
   document.getElementById("mainCanvas")?.addEventListener("pointerup",()=>{
-    if(gate.state==="fixing")setTimeout(refreshReview,20);
+    if(gate.state==="fixing"){gate.approved=false;gate.approvalSignature=null;setTimeout(refreshReview,20);}
   });
   el("seedRig")?.addEventListener("click",()=>setTimeout(()=>{
     if(getSource()){if(anatomy()==="no-tail")parkTail();openGate();}
   },40));
 
-  window.FIRigApprovalGate={autoRig,review:openGate,fix:fixRig,approve:approveRig,analyze:analyzeRig,state:gate};
+  window.FIRigApprovalGate={autoRig,review:openGate,fix:fixRig,approve:approveRig,analyze:analyzeRig,state:gate,invalidate:(reason="rig changed")=>{gate.approved=false;gate.approvalSignature=null;setGateStage("review",`Rig approval invalidated: ${reason}. Review and approve again.`);}};
 })();
 </script>
 
@@ -7014,7 +7282,7 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
 <script>
 /* ============================================================
    FATAL INSTINCT - C++ MOTION BRIDGE
-   V25.7.2 MODULE-SAFE PRODUCTION FIX
+   V25.8.0 MODULE-SAFE PRODUCTION FIX
    ============================================================ */
 (()=>{
   const api=()=>window.FISpriteWalkerAPI||null;
@@ -7116,6 +7384,14 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
     if(!document.getElementById("imageInput"))fails.push("character loader");
     if(!document.getElementById("fiRigApprove"))fails.push("approve button");
     if(!document.getElementById("v2572CacheStatus"))fails.push("walk critic cache");
+    if(typeof a?.canonicalRescore!=="function")fails.push("canonical rescore");
+    if(typeof a?.buildRequestedPose!=="function")fails.push("action pose router");
+    if(typeof a?.betterCandidate!=="function")fails.push("best-state comparator");
+    if(typeof a?.rigSignature!=="function")fails.push("rig signature");
+    if(typeof a?.motionSignature!=="function")fails.push("motion signature");
+    if(typeof a?.generateCanonicalFrames!=="function")fails.push("canonical frame generator");
+    if(typeof a?.correctionConsistency!=="function")fails.push("correction consistency guard");
+    for(const id of ["enableConstraints","pinPlantFeet","poleKnees","poleElbows","v258CanonicalStatus","v258GroundAnchorSource"]){if(!document.getElementById(id))fails.push(`missing ${id}`);}
 
     const b=document.getElementById("fiAuditBadge"),t=document.getElementById("fiAuditText");
     if(fails.length){
@@ -7124,7 +7400,7 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
       return false;
     }
     if(b){b.textContent="PASS";b.className="fiGateStage approved";}
-    if(t)t.textContent="Module bridge, Rig Approval Gate, 12-fighter roster, walk critic cache, loader, and C++ hooks initialized.";
+    if(t)t.textContent="PASS: module bridge, signed rig/motion approvals, 12-fighter roster, canonical scoring, action routing, worst-case grounding, canonical frame validation, loader, and C++ hooks initialized.";
     return true;
   }
   document.addEventListener("fi:spritewalker-ready",()=>setTimeout(run,50));
