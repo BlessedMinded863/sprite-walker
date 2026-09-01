@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V25.7.1 - Rig Approval Gate + C++ Motion Core</title>
+<title>Fatal Instinct Sprite Walker V25.7.2 - Rig Approval Gate + C++ Motion Core</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -160,7 +160,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V25.7.1</span></h1><div class="sub">Production Sprint • 12-Fighter Roster • Rig Approval Gate • C++ Motion Core • Audit Fix</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V25.7.2</span></h1><div class="sub">Production Sprint • 12-Fighter Roster • Walk Critic Pipeline Repair • C++ Motion Core</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -201,7 +201,7 @@
 
 <div class="fiGateBanner" id="fiAuditBanner">
   <div>
-    <b>V25.7.1 Engine Audit</b>
+    <b>V25.7.2 Engine Audit</b>
     <div class="fiGateSub" id="fiAuditText">Checking production systems…</div>
   </div>
   <span class="fiGateStage" id="fiAuditBadge">CHECKING</span>
@@ -877,7 +877,7 @@
   </div>
   
   <div class="v25Panel">
-    <div class="moduleHead"><b>V25.6.3 Final-Pose Grounding Critic</b><span id="v25Status" class="pill ok">READY</span></div>
+    <div class="moduleHead"><b>V25.7.2 Walk Critic Pipeline Repair</b><span id="v25Status" class="pill ok">READY</span></div>
     <div class="v23Mini">Closed-loop locomotion correction: analyze → repair → re-solve → re-score → keep only improvements.</div>
 
     <div class="switchRow"><span>Enable real-time self-correction</span><input id="v25Enabled" type="checkbox" checked></div>
@@ -943,7 +943,9 @@
       <div class="v25Stat"><span class="v23Mini">Last protected rollback</span><b id="v256RollbackStatus">--</b></div>
       <div class="v25Stat"><span class="v23Mini">Final foot lock</span><b id="v2562FootLockStatus">READY</b></div>
       <div class="v25Stat"><span class="v23Mini">Post-solve foot drift</span><b id="v2562FootDrift">--</b></div>
-      <div class="v25Stat"><span class="v23Mini">Grounding critic source</span><b id="v2563CriticSource">FINAL POSE</b></div>
+      <div class="v25Stat"><span class="v23Mini">Grounding critic source</span><b id="v2563CriticSource">FINAL POSE CACHE</b></div>
+      <div class="v25Stat"><span class="v23Mini">Final-pose cache</span><b id="v2572CacheStatus">EMPTY</b></div>
+      <div class="v25Stat"><span class="v23Mini">Cached gait frames</span><b id="v2572CachedFrames">0 / 8</b></div>
       <div class="v25Stat"><span class="v23Mini">Final-pose plant samples</span><b id="v2563FinalPlantSamples">--</b></div>
     </div>
 
@@ -1737,6 +1739,36 @@ function twoBoneIK(hip,knee0,ankle0,ankleTarget,bendSign){const l1=length(hip,kn
 function legMetrics(){const lh=joint("left_hip"),lk=joint("left_knee"),la=joint("left_ankle"),rh=joint("right_hip"),rk=joint("right_knee"),ra=joint("right_ankle");if(!lh||!lk||!la||!rh||!rk||!ra) return null;const leftUpper=length(lh,lk),leftLower=length(lk,la),rightUpper=length(rh,rk),rightLower=length(rk,ra),leftLeg=leftUpper+leftLower,rightLeg=rightUpper+rightLower,avgLeg=(leftLeg+rightLeg)/2,lt=joint("left_toe"),rt=joint("right_toe"),leftFoot=lt?length(la,lt):avgLeg*0.18,rightFoot=rt?length(ra,rt):avgLeg*0.18,avgFoot=(leftFoot+rightFoot)/2,pelvisWidth=length(lh,rh);return{leftUpper,leftLower,rightUpper,rightLower,leftLeg,rightLeg,avgLeg,leftFoot,rightFoot,avgFoot,pelvisWidth};}
 function scaledWalkValues(){const m=legMetrics();if(!m) return null;return{metrics:m,stridePx:m.avgLeg*(+$("stride").value/100),stepPx:m.avgLeg*(+$("step").value/100),bobPx:m.avgLeg*(+$("bob").value/100),pelvisShiftPx:m.pelvisWidth*0.08};}
 function requiredReadyForWalk(){const need=["pelvis","neck","left_shoulder","right_shoulder","left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe"];for(const j of need) if(!joint(j)) return{ok:false,msg:"Missing required joint: "+j};return{ok:true};}
+
+/* ============================================================
+   V25.7.2 - NON-REENTRANT FINAL-POSE CACHE
+   ============================================================ */
+let v2572FinalPoseCache=new Array(8).fill(null);
+
+function v2572ClonePose(pose){
+  const out={};
+  for(const [k,v] of Object.entries(pose||{})){
+    out[k]=Array.isArray(v)?[v[0],v[1]]:v;
+  }
+  return out;
+}
+
+function v2572ResetFinalPoseCache(){
+  v2572FinalPoseCache=new Array(8).fill(null);
+  if($("v2572CacheStatus"))$("v2572CacheStatus").textContent="EMPTY";
+  if($("v2572CachedFrames"))$("v2572CachedFrames").textContent="0 / 8";
+}
+
+function v2572CacheFinalPose(frame,pose){
+  if(!pose)return;
+  const i=((frame%8)+8)%8;
+  v2572FinalPoseCache[i]=v2572ClonePose(pose);
+  const count=v2572FinalPoseCache.filter(Boolean).length;
+  if($("v2572CachedFrames"))$("v2572CachedFrames").textContent=`${count} / 8`;
+  if($("v2572CacheStatus"))$("v2572CacheStatus").textContent=
+    count===8?"READY":"FILLING";
+}
+
 function buildPose(i,skipAutoRepair=false){
  const ready=requiredReadyForWalk(); if(!ready.ok) return{error:ready.msg};
  const scaled=scaledWalkValues(); if(!scaled) return{error:"Could not measure leg bones."};
@@ -1783,6 +1815,7 @@ function buildPose(i,skipAutoRepair=false){
  }
  v252ApplyFinalPoseLayer(i,pose);
  v2562ApplyFinalFootLock(i,pose);
+ v2572CacheFinalPose(i,pose);
  return{pose,torsoM,phaseName:WALK_NAMES[i],metrics};
 }
 
@@ -4116,7 +4149,7 @@ function v2562CaptureSupportAnchor(frame,pose){
 function v2562ApplyFinalFootLock(frame,pose,anchor=null){
   if(!$("v2562FinalFootLock")?.checked)return pose;
   const k=v2562SupportKeys(frame);
-  const saved=v255PersistentContact?.[k.side]||null;
+  const saved=v255ContactLocks?.[k.side]||null;
   const a=anchor?.ankle||saved?.ankle||null;
   const t=anchor?.toe||saved?.toe||null;
   let drift=0;
@@ -4715,136 +4748,234 @@ function v25FramePhase(i){
 
 
 function v2563FinalPoseSamples(){
-  const poses=[];
-  for(let i=0;i<8;i++){
-    try{
-      const b=buildPose(i);
-      if(!b||b.error||!b.pose)continue;
-      // buildPose already applies final-pose correction and absolute foot lock.
-      poses.push({frame:i,pose:b.pose});
-    }catch(e){}
-  }
-  return poses;
+  return v2572FinalPoseCache
+    .map((pose,frame)=>pose?{frame,pose}:null)
+    .filter(Boolean);
 }
 
 function v2563MeasureGrounding(){
   const samples=v2563FinalPoseSamples();
-  let drifts=[],plantCount=0;
+  const cacheCount=samples.length;
 
-  const groups=[
+  if(cacheCount<8){
+    if($("v2563CriticSource"))$("v2563CriticSource").textContent="FINAL POSE CACHE";
+    if($("v2563FinalPlantSamples"))$("v2563FinalPlantSamples").textContent=
+      `0 (cache ${cacheCount}/8)`;
+    return {ready:false,score:null,avg:null,maxDrift:null,samples:0,cacheCount};
+  }
+
+  const byFrame=new Map(samples.map(s=>[s.frame,s.pose]));
+  const drifts=[];
+  let plantCount=0;
+
+  for(const group of [
     {side:"left",frames:[0,1,2,3]},
     {side:"right",frames:[4,5,6,7]}
-  ];
+  ]){
+    const ankleKey=`${group.side}_ankle`;
+    const toeKey=`${group.side}_toe`;
+    const first=byFrame.get(group.frames[0]);
+    if(!first?.[ankleKey])continue;
 
-  for(const g of groups){
-    const key=`${g.side}_ankle`;
-    const toeKey=`${g.side}_toe`;
-    let anchor=null;
+    const ankleAnchor=[first[ankleKey][0],first[ankleKey][1]];
+    const toeAnchor=first[toeKey]?[first[toeKey][0],first[toeKey][1]]:null;
 
-    for(const fi of g.frames){
-      const s=samples.find(x=>x.frame===fi);
-      if(!s||!s.pose[key])continue;
+    for(const frame of group.frames.slice(1)){
+      const pose=byFrame.get(frame);
+      if(!pose?.[ankleKey])continue;
 
-      const p=s.pose[key];
-      if(!anchor)anchor=[p[0],p[1]];
-      else{
-        drifts.push(Math.hypot(p[0]-anchor[0],p[1]-anchor[1]));
+      drifts.push(Math.hypot(
+        pose[ankleKey][0]-ankleAnchor[0],
+        pose[ankleKey][1]-ankleAnchor[1]
+      ));
+      plantCount++;
+
+      if(toeAnchor&&pose[toeKey]){
+        drifts.push(Math.hypot(
+          pose[toeKey][0]-toeAnchor[0],
+          pose[toeKey][1]-toeAnchor[1]
+        ));
         plantCount++;
-      }
-
-      // Toe sample is included as a second contact consistency check when available.
-      if(s.pose[toeKey]){
-        const tp=s.pose[toeKey];
-        const saved=v255PersistentContact?.[g.side]?.toe;
-        if(saved){
-          drifts.push(Math.hypot(tp[0]-saved[0],tp[1]-saved[1]));
-          plantCount++;
-        }
       }
     }
   }
 
-  const avg=drifts.length?drifts.reduce((a,b)=>a+b,0)/drifts.length:0;
-  const tol=Math.max(.25,(+$("v2562GroundTol")?.value)||1);
-  const maxDrift=drifts.length?Math.max(...drifts):0;
+  if(!plantCount||!drifts.length){
+    if($("v2563CriticSource"))$("v2563CriticSource").textContent="FINAL POSE CACHE";
+    if($("v2563FinalPlantSamples"))$("v2563FinalPlantSamples").textContent=
+      `0 (cache ${cacheCount}/8)`;
+    return {ready:false,score:null,avg:null,maxDrift:null,samples:0,cacheCount};
+  }
 
-  // Full score at or below tolerance, smoothly falling to zero at 4x tolerance.
-  const normalized=Math.max(0,Math.min(1,1-(avg-tol)/(tol*3)));
+  const avg=drifts.reduce((a,b)=>a+b,0)/drifts.length;
+  const maxDrift=Math.max(...drifts);
+  const tol=Math.max(.25,(+$("v2562GroundTol")?.value)||1);
+
+  const normalized=Math.max(
+    0,
+    Math.min(1,1-Math.max(0,avg-tol)/(tol*3))
+  );
   const score=Math.round(normalized*100);
 
-  if($("v2563CriticSource"))$("v2563CriticSource").textContent="FINAL POSE";
+  if($("v2563CriticSource"))$("v2563CriticSource").textContent="FINAL POSE CACHE";
   if($("v2563FinalPlantSamples"))$("v2563FinalPlantSamples").textContent=
     `${plantCount} (avg ${avg.toFixed(2)} px / max ${maxDrift.toFixed(2)} px)`;
 
-  return {score,avg,maxDrift,samples:plantCount};
+  return {ready:true,score,avg,maxDrift,samples:plantCount,cacheCount};
 }
 
 function v25ScoreMotion(){
-  const c=v24AnalyzeCurrentAnimation(),poses=[];
-  try{for(let i=0;i<8;i++){const b=buildPose(i);if(!b.error)poses.push(b.pose);}}catch(e){}
-  const orig=rig.joints,leg=legMetrics()?.avgLeg||120;
-  const metric={weight:70,torso:70,arms:70,stride:70,feet:70,heeltoe:70,continuity:70};
+  const c=v24AnalyzeCurrentAnimation();
+  const poses=new Array(8).fill(null);
+
+  v2572ResetFinalPoseCache();
+  try{v253ResetFootLocks();}catch(e){}
+  try{v255ResetContactLocks();}catch(e){}
+
+  for(let i=0;i<8;i++){
+    try{
+      const b=buildPose(i);
+      if(b&&!b.error&&b.pose)poses[i]=b.pose;
+    }catch(e){
+      console.error(`V25.7.2 pose build failed at frame ${i}:`,e);
+    }
+  }
+
+  const orig=rig.joints;
+  const leg=legMetrics()?.avgLeg||120;
+  const metric={
+    weight:70,torso:70,arms:70,stride:70,
+    feet:68,heeltoe:70,continuity:70
+  };
   let plantSamples=0,slideAvg=0;
-  if(poses.length>=8){
+
+  if(poses.every(Boolean)){
     let px=[],py=[],nx=[],opp=[],jumps=[],slide=0,plants=0;
+
     for(let i=0;i<8;i++){
-      const p=poses[i];if(p.pelvis){px.push(p.pelvis[0]);py.push(p.pelvis[1]);}if(p.neck)nx.push(p.neck[0]);
+      const p=poses[i];
+      if(p.pelvis){px.push(p.pelvis[0]);py.push(p.pelvis[1]);}
+      if(p.neck)nx.push(p.neck[0]);
+
       if(p.left_wrist&&p.right_wrist&&orig.left_wrist&&orig.right_wrist){
         const ph=v253Phase(i);
         const lMove=p.left_wrist[0]-orig.left_wrist[0];
         const rMove=p.right_wrist[0]-orig.right_wrist[0];
         const expected=ph.arm;
-        if(Math.abs(expected)<0.1)opp.push(Math.abs(lMove-rMove)<leg*.08?1:0.6);
-        else{
-          const measured=lMove-rMove;
-          opp.push(measured*expected>0?1:0);
+        if(Math.abs(expected)<0.1){
+          opp.push(Math.abs(lMove-rMove)<leg*.08?1:.6);
+        }else{
+          opp.push((lMove-rMove)*expected>0?1:0);
         }
       }
-      if(i&&poses[i-1].pelvis&&p.pelvis)jumps.push(length(poses[i-1].pelvis,p.pelvis)/leg*100);
-      const ph=v253Phase(i),side=ph.support;
-      if(i>0&&v253Phase(i-1).support===side&&poses[i-1][`${side}_ankle`]&&p[`${side}_ankle`]){
-        slide+=length(poses[i-1][`${side}_ankle`],p[`${side}_ankle`])/leg*100;plants++;
+
+      if(i&&poses[i-1].pelvis&&p.pelvis){
+        jumps.push(length(poses[i-1].pelvis,p.pelvis)/leg*100);
+      }
+
+      const side=v253Phase(i).support;
+      if(
+        i>0 &&
+        v253Phase(i-1).support===side &&
+        poses[i-1][`${side}_ankle`] &&
+        p[`${side}_ankle`]
+      ){
+        slide+=length(
+          poses[i-1][`${side}_ankle`],
+          p[`${side}_ankle`]
+        )/leg*100;
+        plants++;
       }
     }
+
     plantSamples=plants;
     slideAvg=plants?slide/plants:0;
+
     const range=a=>a.length?Math.max(...a)-Math.min(...a):0;
-    const wt=+$("v254WeightTarget")?.value||5;metric.weight=v24ScoreClamp(100-Math.abs(range(px)/leg*100-wt)*7-Math.abs(range(py)/leg*100-2.2)*6);
-    metric.torso=v24ScoreClamp(100-Math.abs(range(nx)/leg*100-3)*8);
-    metric.arms=opp.length?v24ScoreClamp(opp.reduce((a,b)=>a+b,0)/opp.length*100):55;
+    const wt=+$("v254WeightTarget")?.value||5;
+    metric.weight=v24ScoreClamp(
+      100-Math.abs(range(px)/leg*100-wt)*7-
+      Math.abs(range(py)/leg*100-2.2)*6
+    );
+    metric.torso=v24ScoreClamp(
+      100-Math.abs(range(nx)/leg*100-3)*8
+    );
+    metric.arms=opp.length
+      ?v24ScoreClamp(opp.reduce((a,b)=>a+b,0)/opp.length*100)
+      :55;
+
     let sp=0,spn=0;
     for(const fi of [2,6]){
       const p=poses[fi];
       if(p?.left_ankle&&p?.right_ankle&&orig.left_hip&&orig.right_hip){
-        const ratio=length(p.left_ankle,p.right_ankle)/(length(orig.left_hip,orig.right_hip)||1);
-        const passTarget=(+$("v254PassingTarget")?.value||125)/100;sp+=Math.abs(ratio-passTarget)*24;spn++;
+        const ratio=
+          length(p.left_ankle,p.right_ankle)/
+          (length(orig.left_hip,orig.right_hip)||1);
+        const target=(+$("v254PassingTarget")?.value||125)/100;
+        sp+=Math.abs(ratio-target)*24;
+        spn++;
       }
     }
     metric.stride=v24ScoreClamp(100-(spn?sp/spn:20));
-    // V25.2: no valid plant samples is "unknown/needs detection", not catastrophic 0%.
+
     metric.feet=plants?v24ScoreClamp(100-slideAvg*7.5):68;
+
     let he=0,hen=0;
     for(const fi of [0,3,4,7]){
-      const p=poses[fi],side=(fi===0||fi===3)?"left":"right";
+      const p=poses[fi];
+      const side=(fi===0||fi===3)?"left":"right";
       if(p?.[`${side}_toe`]&&p?.[`${side}_ankle`]){
         hen++;
-        if(Math.abs(p[`${side}_toe`][1]-p[`${side}_ankle`][1])/leg*100>1)he++;
+        if(
+          Math.abs(
+            p[`${side}_toe`][1]-p[`${side}_ankle`][1]
+          )/leg*100>1
+        )he++;
       }
     }
     metric.heeltoe=v24ScoreClamp(hen?65+(he/hen)*35:65);
-    const avg=jumps.length?jumps.reduce((a,b)=>a+b,0)/jumps.length:0,mx=jumps.length?Math.max(...jumps):0;
-    metric.continuity=v24ScoreClamp(100-Math.max(0,avg-7)*5-Math.max(0,mx-14)*4);
+
+    const avgJump=jumps.length
+      ?jumps.reduce((a,b)=>a+b,0)/jumps.length
+      :0;
+    const maxJump=jumps.length?Math.max(...jumps):0;
+    metric.continuity=v24ScoreClamp(
+      100-Math.max(0,avgJump-7)*5-
+      Math.max(0,maxJump-14)*4
+    );
   }
-  const locScore=v24ScoreClamp(metric.weight*.18+metric.torso*.14+metric.arms*.13+metric.stride*.15+metric.feet*.18+metric.heeltoe*.10+metric.continuity*.12);
-  const geometry=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity)/4);
-  
-  const v2563Ground=v2563MeasureGrounding();
-  if(typeof metrics!=="undefined"&&metrics){
-    metrics.feet=v2563Ground.score;
-    metrics.footSlide=v2563Ground.avg;
-    metrics.plantSamples=v2563Ground.samples;
+
+  // Grounding is now authoritative BEFORE locomotion score is computed.
+  const ground=v2563MeasureGrounding();
+  if(ground.ready){
+    metric.feet=ground.score;
+    plantSamples=ground.samples;
+    slideAvg=(ground.avg/leg)*100;
   }
-return {score:v24ScoreClamp(locScore*.82+geometry*.18),locScore,geometry,critic:c,metrics:metric,plantSamples,slideAvg:+slideAvg.toFixed(2)};
+
+  const locScore=v24ScoreClamp(
+    metric.weight*.18+
+    metric.torso*.14+
+    metric.arms*.13+
+    metric.stride*.15+
+    metric.feet*.18+
+    metric.heeltoe*.10+
+    metric.continuity*.12
+  );
+  const geometry=v24ScoreClamp(
+    (c.balance+c.limb+c.silhouette+c.integrity)/4
+  );
+
+  return {
+    score:v24ScoreClamp(locScore*.82+geometry*.18),
+    locScore,
+    geometry,
+    critic:c,
+    metrics:metric,
+    plantSamples,
+    slideAvg:+slideAvg.toFixed(2),
+    grounding:ground
+  };
 }
 
 function v251UpdateDiagnostics(s){
@@ -4989,7 +5120,7 @@ function v25GenerateCorrectivePass(passNum,targetKey){
 
 async function v25RunSelfCorrection(){
   if(v25Motion.running||!$("v25Enabled")?.checked)return;
-  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V25.6 protected-channel correction started.";
+  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V25.7.2 walk correction started.";
   const target=+$("v25TargetQuality").value||92,maxPasses=+$("v25MaxPasses").value||12,minImprove=+$("v25MinImprove").value||.5;
   let base=v25ScoreMotion();v251UpdateDiagnostics(base);v25Motion.currentScore=base.score;v25Motion.bestScore=base.score;
   v25Motion.bestCorrectives=JSON.parse(JSON.stringify(v23.correctives||[]));v25Motion.bestFinalCorrections=JSON.parse(JSON.stringify(v252FinalCorrections||{}));v25Motion.bestControls=v242CaptureControls();v25Motion.history=[{pass:0,score:base.score,metrics:base.metrics}];
@@ -5336,8 +5467,24 @@ function v24RunRetarget(){
   return {pass:good>=6,score,msg:`Solver defaults + poles active; ${good}/8 poses solved`};
 }
 function v24RunNormalize(){
+  const action=$("aiRequestedAction")?.value||"";
+  const isWalk=/^Walk\b/i.test(action);
+
+  if(!isWalk){
+    v24StageState("normalize","run","Skipping walk-only normalization...");
+    return {
+      pass:true,
+      score:94,
+      msg:`Walk normalization skipped for ${action||"non-walk motion"}`
+    };
+  }
+
   v24StageState("normalize","run","Applying Arcade Walk preset...");
-  try{ if(typeof v212ApplyArcadeWalkPreset==="function") v212ApplyArcadeWalkPreset(); }catch(e){}
+  try{
+    if(typeof v212ApplyArcadeWalkPreset==="function"){
+      v212ApplyArcadeWalkPreset();
+    }
+  }catch(e){}
   if($("walkNormalize"))$("walkNormalize").checked=true;
   if($("preventCrouch"))$("preventCrouch").checked=true;
   if($("straightPlantLeg"))$("straightPlantLeg").checked=true;
@@ -5367,14 +5514,23 @@ function v24RunCritic(){
   const detail=c.worstFrame?`worst ${c.worstLimb} F${c.worstFrame}: ${c.worstError}%`:"no limb error";
   const repairMsg=repaired?" • auto-limb-repaired":"";
 
-  // Stage 7 can pass its geometric critic while V25 still evaluates locomotion quality.
-  if(score>=threshold && $("v25Enabled")?.checked){
+  const requestedAction=$("aiRequestedAction")?.value||"";
+  const isWalk=/^Walk\b/i.test(requestedAction);
+  if(score>=threshold && isWalk && $("v25Enabled")?.checked){
     const q=v25ScoreMotion();
+    v251UpdateDiagnostics(q);
     $("v25CurrentQuality").textContent=q.score+"%";
     if(v25Motion.bestScore<0)$("v25BestQuality").textContent=q.score+"%";
     const target=+$("v25TargetQuality").value||92;
     if(q.score<target){
-      return {pass:false,score:q.score,msg:`Geometry passed, locomotion quality ${q.score}% < ${target}% target. Run V25.6 Self-Correction.`,details:c,needsV25:true};
+      const cache=q.grounding?.cacheCount??0;
+      return {
+        pass:false,
+        score:q.score,
+        msg:`Geometry passed, walk locomotion ${q.score}% < ${target}% target. Final-pose cache ${cache}/8. Run V25.7.2 Self-Correction.`,
+        details:c,
+        needsV25:true
+      };
     }
   }
 
@@ -6560,7 +6716,7 @@ $("generate").addEventListener("click",()=>setTimeout(()=>{refreshProductionPref
 v23SetState("Idle");v23DrawTimeline();v23ApplyBlendTree();
 detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFrameMs();resize();
 
-/* V25.7.1 controlled cross-script API */
+/* V25.7.2 controlled cross-script API */
 window.FISpriteWalkerAPI={
   getSource:()=>source,
   getSourceName:()=>sourceName,
@@ -6585,7 +6741,7 @@ setTimeout(()=>{
   if($("v25BestQuality"))$("v25BestQuality").textContent="--";
   if($("v25PassCount"))$("v25PassCount").textContent="0 / 12";
   if($("v25Report"))$("v25Report").textContent=
-    "V25.7.1 audit build ready. Production bridges initialized.";
+    "V25.7.2 audit build ready. Production bridges initialized.";
 },50);
 
 document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
@@ -6594,7 +6750,7 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
 
 <script>
 /* ============================================================
-   FATAL INSTINCT V25.7.1
+   FATAL INSTINCT V25.7.2
    MASTER SPRITE AUTO-RIG + HUMAN APPROVAL GATE
    MODULE-SAFE PRODUCTION FIX
    ============================================================ */
@@ -6767,7 +6923,7 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
     if(el("showBones"))el("showBones").checked=true;
     if(el("showSprite"))el("showSprite").checked=true;
     appMode("joint");appDraw();saveCheckpoint();openGate();
-    appStatus("V25.7.1 Auto-Rig complete. Rig Approval Gate is ready.");
+    appStatus("V25.7.2 Auto-Rig complete. Rig Approval Gate is ready.");
   }
 
   function fixRig(){
@@ -6858,7 +7014,7 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
 <script>
 /* ============================================================
    FATAL INSTINCT - C++ MOTION BRIDGE
-   V25.7.1 MODULE-SAFE PRODUCTION FIX
+   V25.7.2 MODULE-SAFE PRODUCTION FIX
    ============================================================ */
 (()=>{
   const api=()=>window.FISpriteWalkerAPI||null;
@@ -6959,6 +7115,7 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
     if(document.querySelectorAll('input[name="rosterSlot"]').length!==12)fails.push("12-fighter roster");
     if(!document.getElementById("imageInput"))fails.push("character loader");
     if(!document.getElementById("fiRigApprove"))fails.push("approve button");
+    if(!document.getElementById("v2572CacheStatus"))fails.push("walk critic cache");
 
     const b=document.getElementById("fiAuditBadge"),t=document.getElementById("fiAuditText");
     if(fails.length){
@@ -6967,7 +7124,7 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
       return false;
     }
     if(b){b.textContent="PASS";b.className="fiGateStage approved";}
-    if(t)t.textContent="Module bridge, Rig Approval Gate, 12-fighter roster, loader, and C++ hooks initialized.";
+    if(t)t.textContent="Module bridge, Rig Approval Gate, 12-fighter roster, walk critic cache, loader, and C++ hooks initialized.";
     return true;
   }
   document.addEventListener("fi:spritewalker-ready",()=>setTimeout(run,50));
