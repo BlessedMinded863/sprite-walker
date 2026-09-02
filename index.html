@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V25.8.4 - Rig Approval Gate + C++ Motion Core</title>
+<title>Fatal Instinct Sprite Walker V25.8.5 - Rig Approval Gate + C++ Motion Core</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -177,7 +177,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V25.8.4</span></h1><div class="sub">Production Sprint • 12-Fighter Roster • SNES Production Packing • Canonical Motion • C++ Core</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V25.8.5</span></h1><div class="sub">Production Sprint • 12-Fighter Roster • SNES Production Packing • Canonical Motion • C++ Core</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -218,7 +218,7 @@
 
 <div class="fiGateBanner" id="fiAuditBanner">
   <div>
-    <b>V25.8.4 Engine Audit</b>
+    <b>V25.8.5 Engine Audit</b>
     <div class="fiGateSub" id="fiAuditText">Checking production systems…</div>
   </div>
   <span class="fiGateStage" id="fiAuditBadge">CHECKING</span>
@@ -921,11 +921,12 @@
     <div class="v23Row"><span>Worst length error</span><b id="criticWorstError">--</b></div>
     <div class="switchRow"><span>Auto-repair isolated limb outliers</span><input id="autoLimbRepair" type="checkbox" checked></div>
     <div class="slider"><label>Repair trigger <span><b id="limbRepairTriggerV">5</b>%</span></label><input id="limbRepairTrigger" type="range" min="2" max="20" value="5"></div>
+    <div class="v23Row"><span>Limb repair coverage</span><b id="v2585RepairCoverage">ARMS + LEGS</b></div>
     <div class="v23Row"><span>Last automatic repair</span><b id="lastLimbRepair">--</b></div>
   </div>
   
   <div class="v25Panel">
-    <div class="moduleHead"><b>V25.8.3 Walk Critic Pipeline Repair</b><span id="v25Status" class="pill ok">READY</span></div>
+    <div class="moduleHead"><b>V25.8.5 Full Limb Integrity Solver</b><span id="v25Status" class="pill ok">READY</span></div>
     <div class="v23Mini">Closed-loop locomotion correction: analyze → repair → re-solve → re-score → keep only improvements.</div>
 
     <div class="switchRow"><span>Enable real-time self-correction</span><input id="v25Enabled" type="checkbox" checked></div>
@@ -1426,7 +1427,7 @@ document.querySelectorAll('input[name="rosterSlot"]').forEach(el=>{
 function productionSnapshot(includeRoster=true){
   const data={
     format:"fatal-instinct-production-snapshot",
-    version:19,engine_version:"25.8.4",
+    version:19,engine_version:"25.8.5",
     character_name:$("characterName").value.trim(),
     source_name:sourceName,
     rig_approved:v258RigApprovalValid(),
@@ -1771,10 +1772,10 @@ $("exportCharacterPack").onclick=async()=>{
   const checks=productionChecks(),missing=checks.filter(c=>!c.ok);
   if(missing.length){status(`Character Pack blocked: ${missing.map(x=>x.name).join(", ")}.`);return;}
   const name=$("characterName").value.trim()||`Player_${selectedRosterSlot()+1}`,safe=safeFileName(name),action=v258ProductionAction||v258RequestedAction(),actionSafe=v258SafeActionName(action),zip=new window.JSZip();
-  const manifest={format:"fatal-instinct-character-pack",version:20,engine_version:"25.8.4",character:name,source_name:sourceName,created:new Date().toISOString(),current_action:action,frame_count:frames.length,motion:importedMotion.name||null,production_checks:checks,snes_pack:v2582SnesPack?.metadata||null};
+  const manifest={format:"fatal-instinct-character-pack",version:20,engine_version:"25.8.5",character:name,source_name:sourceName,created:new Date().toISOString(),current_action:action,frame_count:frames.length,motion:importedMotion.name||null,production_checks:checks,snes_pack:v2582SnesPack?.metadata||null};
   zip.file(`${safe}/manifest.json`,JSON.stringify(manifest,null,2));
-  zip.file(`${safe}/rig/${safe}_rig.json`,JSON.stringify({version:18,engine_version:"25.8.4",source_name:sourceName,source_size:source?[source.width,source.height]:null,rig_approved:v258RigApprovalValid(),rig_approval_signature:v258RigApprovalValid()?v258RigSignature():null,parts:rig.parts,joints:rig.joints},null,2));
-  zip.file(`${safe}/project/${safe}_project.json`,JSON.stringify({format:"fatal-instinct-sprite-walker-project",version:18,engine_version:"25.8.4",character_name:name,rig,settings:projectSettings(),library:animationLibrary,source_name:sourceName},null,2));
+  zip.file(`${safe}/rig/${safe}_rig.json`,JSON.stringify({version:18,engine_version:"25.8.5",source_name:sourceName,source_size:source?[source.width,source.height]:null,rig_approved:v258RigApprovalValid(),rig_approval_signature:v258RigApprovalValid()?v258RigSignature():null,parts:rig.parts,joints:rig.joints},null,2));
+  zip.file(`${safe}/project/${safe}_project.json`,JSON.stringify({format:"fatal-instinct-sprite-walker-project",version:18,engine_version:"25.8.5",character_name:name,rig,settings:projectSettings(),library:animationLibrary,source_name:sourceName},null,2));
   zip.file(`${safe}/memory/${safe}_evolution_memory.json`,JSON.stringify(v2584CharacterMemoryExport(),null,2));
   try{const motion=currentMotionPackage();if(motion)zip.file(`${safe}/motion/${safe}_${actionSafe}.fi_motion.json`,JSON.stringify(motion,null,2));}catch(e){}
   for(const clip of animationLibrary||[]){try{const clipSafe=safeFileName(clip.name||"motion");zip.file(`${safe}/motion/library/${clipSafe}.fi_motion.json`,JSON.stringify(clip,null,2));}catch(e){}}
@@ -1808,7 +1809,7 @@ setInterval(productionAutosaveTick,30000);
 window.addEventListener("beforeunload",()=>saveAutosave(true));
 
 function download(blob,name){const a=document.createElement("a"),u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);}
-$("saveRig").onclick=()=>{const approved=v258RigApprovalValid(),data={version:18,engine_version:"25.8.4",rig_approved:approved,rig_approval_signature:approved?v258RigSignature():null,source_name:sourceName,source_size:source?[source.width,source.height]:null,parts:rig.parts,joints:rig.joints};const who=safeFileName($("characterName")?.value||sourceName||"character");download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),`${who}_${approved?"approved":"unapproved"}_rig.json`);status(`V25.8 rig exported${approved?" • signed approval preserved":" • approval not valid"}.`);};
+$("saveRig").onclick=()=>{const approved=v258RigApprovalValid(),data={version:18,engine_version:"25.8.5",rig_approved:approved,rig_approval_signature:approved?v258RigSignature():null,source_name:sourceName,source_size:source?[source.width,source.height]:null,parts:rig.parts,joints:rig.joints};const who=safeFileName($("characterName")?.value||sourceName||"character");download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),`${who}_${approved?"approved":"unapproved"}_rig.json`);status(`V25.8 rig exported${approved?" • signed approval preserved":" • approval not valid"}.`);};
 $("rigInput").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());v258ResetMotionState(`loaded rig ${f.name}`);rig.parts=d.parts||{};rig.joints=d.joints||{};autoTraceCache.dirty=true;inferJointsFromParts();const sig=v258RigSignature(),approved=!!(d.rig_approved&&d.rig_approval_signature&&d.rig_approval_signature===sig);if(window.FIRigApprovalGate?.state){window.FIRigApprovalGate.state.approved=approved;window.FIRigApprovalGate.state.approvalSignature=approved?sig:null;}if(approved){try{localStorage.setItem(V258_RIG_APPROVAL_KEY,JSON.stringify({source:sourceName,signature:sig,time:Date.now()}));}catch(e){}}status(`Loaded rig: ${f.name} (schema V${d.version||"?"})${approved?" • SIGNED APPROVAL VALID":" • REVIEW REQUIRED"}`);draw();refreshProductionPreflight();}catch(err){status("Could not read rig JSON.");}};
 
 function joint(name){return rig.joints[name]?[...rig.joints[name]]:null;}
@@ -1835,7 +1836,7 @@ function requiredReadyForWalk(){const need=["pelvis","neck","left_shoulder","rig
    V25.8.3 - CANONICAL PRODUCTION ACTION LAYER
    One requested action -> one real pose source -> one export path.
    ============================================================ */
-const V258_ENGINE_VERSION="25.8.4";
+const V258_ENGINE_VERSION="25.8.5";
 const V258_RIG_APPROVAL_KEY="fatal_instinct_v258_rig_approval";
 let v258ProductionAction=null;
 let v258SuppressWalkNormalizer=false;
@@ -2126,7 +2127,7 @@ function buildPose(i,skipAutoRepair=false,direction=1){
    const rep=v243RepairPose(i,pose,orig,false);
    if(rep.repaired){
      window.__v243LastRepair=rep;
-     if($("lastLimbRepair")) $("lastLimbRepair").textContent=`${rep.primary} leg • frame ${rep.frame} • ${rep.worstBefore}% → ${rep.worstAfter}%`;
+     if($("lastLimbRepair")) $("lastLimbRepair").textContent=`${rep.label||`${rep.primary} ${rep.chain}`} • frame ${rep.frame} • ${rep.worstBefore}% → ${rep.worstAfter}%`;
    }
  }
  v252ApplyFinalPoseLayer(i,pose);
@@ -2717,7 +2718,7 @@ function applyProjectSettings(o){
 }
 $("saveProject").onclick=()=>{
   const data={
-    format:"fatal-instinct-sprite-walker-project",version:19,engine_version:"25.8.4",
+    format:"fatal-instinct-sprite-walker-project",version:19,engine_version:"25.8.5",
     rig,settings:projectSettings(),library:animationLibrary,director:v24Director,
     source_name:sourceName,rig_approved:v258RigApprovalValid(),rig_approval_signature:v258RigApprovalValid()?v258RigSignature():null,
     production_action:v258ProductionAction,motion_approved:v258MotionApprovalValid(),motion_approval_signature:v258MotionApprovalValid()?v24Director.approvalSignature:null,
@@ -3787,7 +3788,7 @@ function retargetImportedPose(i){
   const v243ImportedRepair=v243RepairPose(i,pose,orig,false);
   if(v243ImportedRepair.repaired){
     window.__v243LastRepair=v243ImportedRepair;
-    if($("lastLimbRepair")) $("lastLimbRepair").textContent=`${v243ImportedRepair.primary} leg • frame ${v243ImportedRepair.frame} • ${v243ImportedRepair.worstBefore}% → ${v243ImportedRepair.worstAfter}%`;
+    if($("lastLimbRepair")) $("lastLimbRepair").textContent=`${v243ImportedRepair.label||`${v243ImportedRepair.primary} ${v243ImportedRepair.chain}`} • frame ${v243ImportedRepair.frame} • ${v243ImportedRepair.worstBefore}% → ${v243ImportedRepair.worstAfter}%`;
   }
 
   // Rebuild torso matrix after root/control/FBIK correction so rigid parts follow.
@@ -4287,7 +4288,7 @@ function v242ApplyControls(values){
 function v242CheckpointPayload(){
   return {
     format:"fatal-instinct-v24-checkpoint",
-    version:"25.8.4",engine_version:"25.8.4",
+    version:"25.8.5",engine_version:"25.8.5",
     savedAt:new Date().toISOString(),
     sourceName,
     rig:JSON.parse(JSON.stringify(rig)),
@@ -5146,7 +5147,7 @@ function v2583SeedCanonicalContacts(action=v258RequestedAction(),force=false){
       };
     }
   }catch(e){
-    console.error('V25.8.4 canonical anchor seed failed:',e);
+    console.error('V25.8.5 canonical anchor seed failed:',e);
     v2581CanonicalContacts=oldContacts;
   }finally{
     if(finalPoseBox)finalPoseBox.checked=!!savedFinalPose;
@@ -5445,7 +5446,7 @@ const V2584_MEMORY_KEY="fatal_instinct_evolution_memory";
 const V2584_MEMORY_DB="fatal_instinct_evolution_memory_db";
 const V2584_MEMORY_STORE="memory";
 const V2584_MEMORY_ID="global";
-const V2584_CURRENT_VERSION="25.8.4";
+const V2584_CURRENT_VERSION="25.8.5";
 
 function v2584Now(){return new Date().toISOString();}
 function v2584Clone(v){return JSON.parse(JSON.stringify(v));}
@@ -5464,7 +5465,8 @@ function v2584DefaultMemory(){
       {version:"25.8.1",state:"stable",lessons:["Canonical contact authority produced LOCKED + 0.00 px drift + 92% Duroc Walk Forward PASS."]},
       {version:"25.8.2",state:"regressed",lessons:["SNES packer added.","Canonical anchors could be lost during protected rollback."]},
       {version:"25.8.3",state:"candidate",lessons:["Canonical anchors seeded before scoring and protected through correction lifecycle."]},
-      {version:"25.8.4",state:"current",lessons:["Evolution Memory Intelligence protects previous engineering knowledge from regression."]}
+      {version:"25.8.4",state:"historical",lessons:["Evolution Memory Intelligence introduced regression memory.","Animation Critic exposed that the legacy automatic limb repair covered legs but not shoulder-elbow-wrist chains."]},
+      {version:"25.8.5",state:"current",lessons:["Full Limb Integrity Solver adds exact two-bone repair for arms and legs.","Sparse limb corrections preserve canonical locomotion instead of replacing whole poses."]}
     ],
     knownFixes:[
       {id:"KF_MODULE_API",name:"Controlled module bridge",introduced:"25.7.1"},
@@ -5476,7 +5478,9 @@ function v2584DefaultMemory(){
       {id:"KF_CANONICAL_ROLLBACK",name:"Canonical anchor lifecycle recovery",introduced:"25.8.3"},
       {id:"KF_SNES_PACKER",name:"SNES 4bpp hardware packer",introduced:"25.8.2"},
       {id:"KF_STAGE7_SYNC",name:"Canonical Self-Correction resolves Stage 7",introduced:"25.8.2"},
-      {id:"KF_PROJECT_MEMORY",name:"Portable evolution memory",introduced:"25.8.4"}
+      {id:"KF_PROJECT_MEMORY",name:"Portable evolution memory",introduced:"25.8.4"},
+      {id:"KF_FULL_LIMB_SOLVER",name:"Full arm + leg two-bone integrity solver",introduced:"25.8.5"},
+      {id:"KF_SPARSE_LIMB_CORRECTION",name:"Sparse limb-only final correction merge",introduced:"25.8.5"}
     ],
     fingerprints:[
       {id:"R001",name:"Rig gate module-scope failure",recovery:"Use the controlled FISpriteWalkerAPI bridge."},
@@ -5488,7 +5492,8 @@ function v2584DefaultMemory(){
       {id:"R007",name:"Raw master art treated as SNES OAM",recovery:"Crop/scale/quantize/pack before OAM and scanline validation."},
       {id:"R008",name:"Stage 7 stale after successful correction",recovery:"Resolve the failed critic from the final canonical score and continue Stage 8."},
       {id:"R009",name:"Production roster reverted to 6",recovery:"Require exactly 12 roster slots and migrate older six-slot state."},
-      {id:"R010",name:"Hosted page used as C++ endpoint",recovery:"Use localhost for live C++ and GitHub Action for phone correction."}
+      {id:"R010",name:"Hosted page used as C++ endpoint",recovery:"Use localhost for live C++ and GitHub Action for phone correction."},
+      {id:"R011",name:"Arm-length defect survives limb repair",recovery:"Use the full shoulder → elbow → wrist exact two-bone solver and merge only repaired limb joints into final corrections."}
     ],
     regressions:[],releaseRuns:[],characters:{},events:[],lastKnownGood:null
   };
@@ -5662,7 +5667,7 @@ function v2584CharacterMemoryExport(){
 function v2584TestResult(id,label,pass,critical=true,detail="",skipped=false,group="runtime"){return {id,label,pass:!!pass,critical:!!critical,detail,skipped:!!skipped,group};}
 function v2584ParseNumber(text){const m=String(text||"").match(/-?\d+(?:\.\d+)?/);return m?+m[0]:NaN;}
 function v2584FingerprintForFailure(test){
-  const map={MEM_MODULE_API:"R001",MEM_CACHE:"R002",MEM_GROUND_ORDER:"R003",MEM_DRIFT_SYNC:"R004",MEM_ANCHOR:"R005",MEM_ACTION_GATE:"R006",MEM_SNES:"R007",MEM_STAGE7:"R008",MEM_ROSTER:"R009",MEM_CPP:"R010"};
+  const map={MEM_MODULE_API:"R001",MEM_CACHE:"R002",MEM_GROUND_ORDER:"R003",MEM_DRIFT_SYNC:"R004",MEM_ANCHOR:"R005",MEM_ACTION_GATE:"R006",MEM_SNES:"R007",MEM_STAGE7:"R008",MEM_ROSTER:"R009",MEM_CPP:"R010",MEM_FULL_LIMB_SOLVER:"R011",MEM_ARM_RUNTIME:"R011"};
   return map[test.id]||test.id;
 }
 function v2584RecoveryForFingerprint(id){const f=(v2584Memory.fingerprints||[]).find(x=>x.id===id);return f?.recovery||"Compare this state with the last-known-good version before continuing production.";}
@@ -5682,6 +5687,7 @@ function v2584RunEvolutionAudit(context="manual"){
   structural("MEM_STAGE7_AUTOSYNC","Stage 7 correction handoff",typeof v2582ResolveDirectorCriticAfterCorrection==="function");
   structural("MEM_CPP","C++ bridge integration",!!window.FICppBridge||!!document.getElementById("cppAutoCorrect"));
   structural("MEM_PROJECT_MEMORY","Evolution memory persistence",typeof v2584ExportableMemory==="function"&&!!window.indexedDB);
+  structural("MEM_FULL_LIMB_SOLVER","Full arm + leg limb repair",typeof v2585SolveArmExact==="function"&&typeof v243SolveLegExact==="function"&&typeof v2585MergeLimbFinalCorrection==="function");
 
   const action=v258RequestedAction(),isWalk=v258IsWalkAction(action);
   const persistent=String($("v255ContactStatus")?.textContent||"");
@@ -5727,6 +5733,13 @@ function v2584RunEvolutionAudit(context="manual"){
   const a=v2584Memory.characters?.[v2584CharacterKey()]?.actions?.[action],golden=a?.goldenBaseline;
   if(golden&&Number.isFinite(+golden.score)&&Number.isFinite(current))runtime("MEM_GOLDEN","Current quality remains near golden baseline",current>=+golden.score-3,false,`${current}% current • ${golden.score}% golden`);
   else runtime("MEM_GOLDEN","Current quality remains near golden baseline",true,false,"No comparable golden baseline.",true);
+
+  const worstLimbText=String($("criticWorstLimb")?.textContent||"");
+  const worstLimbError=v2584ParseNumber($("criticWorstError")?.textContent);
+  const repairTrigger=+($("limbRepairTrigger")?.value||5);
+  if(/arm|forearm/i.test(worstLimbText)&&Number.isFinite(worstLimbError)&&worstLimbError>=repairTrigger){
+    runtime("MEM_ARM_RUNTIME","Arm defect cleared by full limb solver",false,true,`${worstLimbText} • ${worstLimbError}% >= ${repairTrigger}% trigger`);
+  }else runtime("MEM_ARM_RUNTIME","Arm defect cleared by full limb solver",true,true,worstLimbText||"No unresolved arm defect.");
 
   const failed=tests.filter(x=>!x.skipped&&!x.pass),criticalFailures=failed.filter(x=>x.critical),structuralTests=tests.filter(x=>x.group==="structural"),runtimeTests=tests.filter(x=>x.group==="runtime"&&!x.skipped);
   const passedRuntime=runtimeTests.filter(x=>x.pass).length;
@@ -5998,7 +6011,7 @@ async function v25RunSelfCorrection(){
   }
 
   v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;
-  $("v25Status").textContent="RUNNING";$("v25Report").textContent="V25.8.4 canonical walk correction started.";
+  $("v25Status").textContent="RUNNING";$("v25Report").textContent="V25.8.5 canonical walk correction started.";
   const target=+$("v25TargetQuality").value||92,maxPasses=+$("v25MaxPasses").value||12,minImprove=+$("v25MinImprove").value||.5;
   v2581EnsureCanonicalContactsFromStoredCorrections();
   if(!v2583SeedCanonicalContacts(action)){
@@ -6231,59 +6244,160 @@ function v243SolveLegExact(i,pose,orig,side,preserveFoot){
   return {ok:true,footShift};
 }
 
+function v2585ArmWorstError(pose,orig,side){
+  return Math.max(
+    v243SegmentErrorPct(pose,orig,`${side}_shoulder`,`${side}_elbow`),
+    v243SegmentErrorPct(pose,orig,`${side}_elbow`,`${side}_wrist`)
+  );
+}
+
+function v2585SolveArmExact(pose,orig,side){
+  const s=pose[`${side}_shoulder`],e=pose[`${side}_elbow`],w=pose[`${side}_wrist`];
+  const s0=orig[`${side}_shoulder`],e0=orig[`${side}_elbow`],w0=orig[`${side}_wrist`];
+  if(!s||!e||!w||!s0||!e0||!w0)return {ok:false};
+
+  const l1=length(s0,e0),l2=length(e0,w0);
+  const maxReach=(l1+l2)*0.997;
+  const minReach=Math.abs(l1-l2)+0.003;
+  let d=length(s,w);
+  let wristShift=[0,0];
+
+  // Preserve the authored wrist/hand target whenever it is physically reachable.
+  // If impossible, move it only the minimum radial distance needed for a legal chain.
+  if(d>maxReach||d<minReach){
+    const vx=w[0]-s[0],vy=w[1]-s[1],mag=Math.hypot(vx,vy)||1;
+    const targetD=clamp(d,minReach,maxReach);
+    const nw=[s[0]+vx/mag*targetD,s[1]+vy/mag*targetD];
+    wristShift=[nw[0]-w[0],nw[1]-w[1]];
+    pose[`${side}_wrist`]=nw;
+    d=targetD;
+  }
+
+  // Same exact circle-intersection solver used for legs.
+  // Choosing the solution nearest the current elbow preserves bend/pole intent.
+  const elbow=v243CircleKnee(
+    pose[`${side}_shoulder`],
+    pose[`${side}_wrist`],
+    l1,l2,
+    pose[`${side}_elbow`]
+  );
+  if(!elbow)return {ok:false,unreachable:true,maxReach,l1,l2};
+
+  pose[`${side}_elbow`]=elbow;
+  return {
+    ok:true,
+    wristShift,
+    upperError:v243SegmentErrorPct(pose,orig,`${side}_shoulder`,`${side}_elbow`),
+    foreError:v243SegmentErrorPct(pose,orig,`${side}_elbow`,`${side}_wrist`)
+  };
+}
+
+function v2585WorstLimbState(pose,orig){
+  const entries=[
+    {side:"left",chain:"leg",value:v243LegWorstError(pose,orig,"left"),label:"left leg"},
+    {side:"right",chain:"leg",value:v243LegWorstError(pose,orig,"right"),label:"right leg"},
+    {side:"left",chain:"arm",value:v2585ArmWorstError(pose,orig,"left"),label:"left arm"},
+    {side:"right",chain:"arm",value:v2585ArmWorstError(pose,orig,"right"),label:"right arm"}
+  ];
+  entries.sort((a,b)=>b.value-a.value);
+  return {worst:entries[0],entries};
+}
+
 function v243RepairPose(i,pose,orig,force=false){
-  if(!$("autoLimbRepair")?.checked && !force) return {repaired:false};
+  if(!$("autoLimbRepair")?.checked&&!force)return {repaired:false};
   const trigger=+$("limbRepairTrigger")?.value||5;
+  const before=v2585WorstLimbState(pose,orig);
+  const worst=before.worst?.value||0;
+  if(!force&&worst<trigger)return {repaired:false,worstBefore:worst};
 
-  const beforeL=v243LegWorstError(pose,orig,"left");
-  const beforeR=v243LegWorstError(pose,orig,"right");
-  const worst=Math.max(beforeL,beforeR);
-  if(!force && worst<trigger) return {repaired:false,worstBefore:worst};
+  const details={left:{},right:{}};
+  const changedJoints=new Set();
 
-  const primary=beforeR>=beforeL?"right":"left";
-  const plantedPrimary=v212IsPlanted(i,primary,pose,orig);
+  // LEG REPAIR ------------------------------------------------
+  // Keep planted support feet intact. Only move the body when a planted
+  // leg is physically overextended, then re-solve both two-bone chains.
+  const legCandidates=before.entries.filter(x=>x.chain==="leg"&&(force||x.value>=trigger));
+  if(legCandidates.length){
+    const primaryLeg=legCandidates[0];
+    const plantedPrimary=v212IsPlanted(i,primaryLeg.side,pose,orig);
+    let rootShift=[0,0];
+    const h=pose[`${primaryLeg.side}_hip`],a=pose[`${primaryLeg.side}_ankle`];
+    const h0=orig[`${primaryLeg.side}_hip`],k0=orig[`${primaryLeg.side}_knee`],a0=orig[`${primaryLeg.side}_ankle`];
 
-  // If the planted leg is over-extended, preserve the foot and move the body
-  // just enough toward that foot to put the chain back inside legal reach.
-  let rootShift=[0,0];
-  const h=pose[`${primary}_hip`],a=pose[`${primary}_ankle`];
-  const h0=orig[`${primary}_hip`],k0=orig[`${primary}_knee`],a0=orig[`${primary}_ankle`];
-  if(h&&a&&h0&&k0&&a0&&plantedPrimary){
-    const maxReach=(length(h0,k0)+length(k0,a0))*0.997;
-    const d=length(h,a);
-    if(d>maxReach){
-      const excess=d-maxReach;
-      const ux=(a[0]-h[0])/(d||1),uy=(a[1]-h[1])/(d||1);
-      rootShift=[ux*excess,uy*excess];
-      v243TranslateRoot(pose,rootShift[0],rootShift[1]);
+    if(h&&a&&h0&&k0&&a0&&plantedPrimary){
+      const maxReach=(length(h0,k0)+length(k0,a0))*0.997;
+      const d=length(h,a);
+      if(d>maxReach){
+        const excess=d-maxReach;
+        const ux=(a[0]-h[0])/(d||1),uy=(a[1]-h[1])/(d||1);
+        rootShift=[ux*excess,uy*excess];
+        v243TranslateRoot(pose,rootShift[0],rootShift[1]);
+        for(const j of V243_ROOT_SHIFT_JOINTS)if(pose[j])changedJoints.add(j);
+      }
+    }
+
+    const leftPlant=v212IsPlanted(i,"left",pose,orig);
+    const rightPlant=v212IsPlanted(i,"right",pose,orig);
+    const order=primaryLeg.side==="left"?["left","right"]:["right","left"];
+    for(const side of order){
+      if(!force&&v243LegWorstError(pose,orig,side)<trigger)continue;
+      details[side].leg=v243SolveLegExact(
+        i,pose,orig,side,side==="left"?leftPlant:rightPlant
+      );
+      changedJoints.add(`${side}_knee`);
+      changedJoints.add(`${side}_ankle`);
+      if(pose[`${side}_toe`])changedJoints.add(`${side}_toe`);
+    }
+    details.rootShift=Math.hypot(rootShift[0],rootShift[1]);
+  }
+
+  // ARM REPAIR ------------------------------------------------
+  // Shoulder remains attached to the torso. Wrist/hand intent remains fixed
+  // whenever reachable; elbow is solved exactly to bind upper/forearm lengths.
+  const armCandidates=before.entries.filter(x=>x.chain==="arm"&&(force||x.value>=trigger));
+  for(const item of armCandidates){
+    details[item.side].arm=v2585SolveArmExact(pose,orig,item.side);
+    if(details[item.side].arm?.ok){
+      changedJoints.add(`${item.side}_elbow`);
+      changedJoints.add(`${item.side}_wrist`);
     }
   }
 
-  // Solve the support leg first. Keep its ankle/toe fixed. The swing leg is
-  // allowed a minimal endpoint correction if required.
-  const leftPlant=v212IsPlanted(i,"left",pose,orig);
-  const rightPlant=v212IsPlanted(i,"right",pose,orig);
-  const order=primary==="left"?["left","right"]:["right","left"];
-  const details={};
-  for(const side of order){
-    details[side]=v243SolveLegExact(
-      i,pose,orig,side,side==="left"?leftPlant:rightPlant
-    );
-  }
-
-  const afterL=v243LegWorstError(pose,orig,"left");
-  const afterR=v243LegWorstError(pose,orig,"right");
-  const after=Math.max(afterL,afterR);
+  const after=v2585WorstLimbState(pose,orig);
+  const afterWorst=after.worst?.value||0;
+  const repaired=afterWorst<worst-0.05;
 
   return {
-    repaired:after<worst-0.05,
-    primary,
+    repaired,
+    primary:before.worst?.side||"--",
+    chain:before.worst?.chain||"--",
+    label:before.worst?.label||"--",
     frame:i+1,
     worstBefore:+worst.toFixed(2),
-    worstAfter:+after.toFixed(2),
-    rootShift:+Math.hypot(rootShift[0],rootShift[1]).toFixed(2),
+    worstAfter:+afterWorst.toFixed(2),
+    changedJoints:[...changedJoints],
     details
   };
+}
+
+function v2585MergeLimbFinalCorrection(frame,pose,report){
+  if(!report?.repaired||!report.changedJoints?.length)return false;
+  const delta=Object.assign({},v252FinalCorrections?.[frame]||{});
+
+  for(const j of report.changedJoints){
+    if(!pose[j]||!rig.joints[j])continue;
+    delta[j]=[
+      pose[j][0]-rig.joints[j][0],
+      pose[j][1]-rig.joints[j][1]
+    ];
+  }
+
+  v252FinalCorrections[frame]=delta;
+  v252FinalCorrectionTargets[frame]=`limb:${report.label||report.chain||"repair"}`;
+
+  // If a leg chain was touched, canonical contact remains authoritative.
+  try{v2581NormalizeStoredSupportContacts();}catch(e){}
+  return true;
 }
 
 function v243RepairAllOutliers(){
@@ -6437,14 +6551,20 @@ function v24RunNormalize(){
   return {pass:true,score:94,msg:"Arcade Walk normalization active"};
 }
 function v258RepairCurrentActionLimbOutliers(action=v258RequestedAction()){
-  if(v258UseImportedAction(action))return [];
-  if(!v258IsWalkAction(action))return [];
   const reports=[];
   for(let i=0;i<8;i++){
-    const b=v258BuildRequestedPose(i,action,true);if(!b||b.error)continue;
+    const b=v258BuildRequestedPose(i,action,true);
+    if(!b||b.error||!b.pose)continue;
     const orig={};JOINTS.forEach(j=>{if(joint(j))orig[j]=joint(j);});
-    const r=v243RepairPose(i,b.pose,orig,true);
-    if(r.repaired){v252StoreFinalCorrection(i,b.pose);reports.push(r);}
+    const r=v243RepairPose(i,b.pose,orig,false);
+    if(r.repaired){
+      v2585MergeLimbFinalCorrection(i,b.pose,r);
+      reports.push(r);
+      window.__v243LastRepair=r;
+      if($("lastLimbRepair")){
+        $("lastLimbRepair").textContent=`${r.label} • frame ${r.frame} • ${r.worstBefore}% → ${r.worstAfter}%`;
+      }
+    }
   }
   return reports;
 }
@@ -6454,10 +6574,11 @@ function v24RunCritic(){
   let c=v24AnalyzeCurrentAnimation();
   if(c.error)return {pass:false,score:0,msg:c.error,details:c};
 
-  let geometry=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity+c.attack)/5),repaired=false;
+  let geometry=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity+c.attack)/5),repaired=false,repairCount=0;
   if(geometry<threshold&&$("aiAutoCorrect")?.checked&&$("autoLimbRepair")?.checked&&c.limb<82){
     const before=c,repairs=v258RepairCurrentActionLimbOutliers(action);
-    if(repairs.length){
+    repairCount=repairs.length;
+    if(repairCount){
       c=v24AnalyzeCurrentAnimation();
       geometry=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity+c.attack)/5);
       repaired=c.limb>before.limb;
@@ -6473,7 +6594,7 @@ function v24RunCritic(){
   $("criticWorstError").textContent=c.worstFrame?`${c.worstError}% (avg ${c.avgLimbError}%)`:"--";
 
   const detail=c.worstFrame?`worst ${c.worstLimb} F${c.worstFrame}: ${c.worstError}%`:"no limb error";
-  const repairMsg=repaired?" • auto-limb-repaired":"";
+  const repairMsg=repaired?` • full-limb repair ${repairCount} frame${repairCount===1?"":"s"}`:"";
 
   if(geometry<threshold){
     return {pass:false,score:geometry,msg:`Geometry ${geometry}% < ${threshold}% threshold • ${detail}${repairMsg}`,details:c};
@@ -6485,7 +6606,7 @@ function v24RunCritic(){
     const stageScore=v24ScoreClamp((geometry+q.score)/2);
     if(q.score<target){
       const cache=q.grounding?.cacheCount??0;
-      const next=v258UseImportedAction(action)?"Use C++ Auto Correct / Phone Motion Correct.":"Run V25.8.4 Self-Correction.";
+      const next=v258UseImportedAction(action)?"Use C++ Auto Correct / Phone Motion Correct.":"Run V25.8.5 Self-Correction.";
       return {
         pass:false,
         score:stageScore,
@@ -6808,7 +6929,7 @@ async function v2582ExportCurrentSnesPack(){
     zip.file(`${who}_${action}_palette.bin`,pack.paletteBinary);
     zip.file(`${who}_${action}_metasprite.json`,JSON.stringify(pack.metadata,null,2));
     const sheet=v2582PackedSheetCanvas(pack);if(sheet)zip.file(`${who}_${action}_snes_preview.png`,await canvasToArrayBuffer(sheet));
-    zip.file("README.txt",`Fatal Instinct Sprite Walker V25.8.4 SNES Action Pack
+    zip.file("README.txt",`Fatal Instinct Sprite Walker V25.8.5 SNES Action Pack
 Character: ${who}
 Action: ${v258RequestedAction()}
 Profile: ${pack.profile.name}
@@ -6913,7 +7034,7 @@ function v24FinalApproval(auto=false){
   v242SaveCheckpoint(true);$("aiDirectorBadge").textContent="APPROVED";$("aiDecision").textContent=auto?"All stages passed. Automatic approval recorded by configuration.":"Final approval recorded. Animation is production-ready.";v24Log(auto?"AUTO APPROVAL recorded because human approval requirement is OFF.":"FINAL APPROVAL recorded.");refreshProductionPreflight();return true;
 }
 function v24Snapshot(){return {
-  version:"25.8.4",engine_version:"25.8.4",
+  version:"25.8.5",engine_version:"25.8.5",
   action:v24Director.lastAction,
   approved:v258MotionApprovalValid(),
   approval_signature:v258MotionApprovalValid()?v24Director.approvalSignature:null,
@@ -7721,7 +7842,7 @@ function currentMotionPackage(){
   const action=v258ProductionAction||($("motionSource").value==="imported"?(v258RequestedAction()||"Imported Motion"):"Walk Forward");
   const char=$("characterName")?.value?.trim()||sourceName?.replace(/\.[^.]+$/,"")||"Fatal Instinct";
   const name=v258ProductionAction?`${char} - ${action}`:($("motionSource").value==="imported"?(importedMotion.name||"Imported Motion"):"Fatal Instinct Authored Walk");
-  return {format:"fatal-instinct-motion",version:2,engine_version:"25.8.4",name,action,frames:samples.length,loop:v258ActionLoops(action),projection:$("projection").value,profile:$("retargetProfile").value,preview_speed_percent:+$("animationSpeed").value,frame_ms:animationFrameMs(),constraint_solver:{enabled:$("enableConstraints").checked,iterations:+$("constraintIterations").value,limb_lock:+$("limbLengthLock").value,plant_pin:+$("plantPin").value,body_anchor:+$("bodyAnchor").value,spine_stability:+$("spineStability").value,max_reach:+$("maxReach").value},weighted_skin:{enabled:$("enableWeightedSkin").checked,mode:$("skinRenderMode").value,blend_radius:+$("skinBlendRadius").value,influence:+$("boneInfluence").value,mesh_grid:+$("weightedMeshGrid").value,joint_blend:+$("weightJointBlend").value},pole_targets:{knees:$("poleKnees").checked,elbows:$("poleElbows").checked,strength:+$("poleStrength").value,distance:+$("poleDistance").value},walk_normalizer:{enabled:v258IsWalkAction(action)&&$("walkNormalize").checked,max_pelvis_drop:+$("maxPelvisDrop").value,max_knee_lift:+$("maxKneeLift").value,height_floor:+$("standingHeightFloor").value,stride_scale:+$("walkStrideScale").value,plant_straight:+$("plantLegStraight").value,pelvis_smoothing:+$("pelvisSmooth").value},unified_mesh:{enabled:$("enableUnifiedMesh").checked,mode:$("unifiedMeshMode").value,columns:+$("unifiedCols").value,padding:+$("unifiedPadding").value,falloff:+$("unifiedFalloff").value,joint_seal:+$("jointSealStrength").value,accessory_rigid:+$("unifiedAccessoryRigid").value},ultimate_animation:v23CaptureGraphSnapshot(),ai_production_director:v24Snapshot(),contacts:analyzeContacts(),snes_profile:v2582ProfileForAction(action),samples};
+  return {format:"fatal-instinct-motion",version:2,engine_version:"25.8.5",name,action,frames:samples.length,loop:v258ActionLoops(action),projection:$("projection").value,profile:$("retargetProfile").value,preview_speed_percent:+$("animationSpeed").value,frame_ms:animationFrameMs(),constraint_solver:{enabled:$("enableConstraints").checked,iterations:+$("constraintIterations").value,limb_lock:+$("limbLengthLock").value,plant_pin:+$("plantPin").value,body_anchor:+$("bodyAnchor").value,spine_stability:+$("spineStability").value,max_reach:+$("maxReach").value},weighted_skin:{enabled:$("enableWeightedSkin").checked,mode:$("skinRenderMode").value,blend_radius:+$("skinBlendRadius").value,influence:+$("boneInfluence").value,mesh_grid:+$("weightedMeshGrid").value,joint_blend:+$("weightJointBlend").value},pole_targets:{knees:$("poleKnees").checked,elbows:$("poleElbows").checked,strength:+$("poleStrength").value,distance:+$("poleDistance").value},walk_normalizer:{enabled:v258IsWalkAction(action)&&$("walkNormalize").checked,max_pelvis_drop:+$("maxPelvisDrop").value,max_knee_lift:+$("maxKneeLift").value,height_floor:+$("standingHeightFloor").value,stride_scale:+$("walkStrideScale").value,plant_straight:+$("plantLegStraight").value,pelvis_smoothing:+$("pelvisSmooth").value},unified_mesh:{enabled:$("enableUnifiedMesh").checked,mode:$("unifiedMeshMode").value,columns:+$("unifiedCols").value,padding:+$("unifiedPadding").value,falloff:+$("unifiedFalloff").value,joint_seal:+$("jointSealStrength").value,accessory_rigid:+$("unifiedAccessoryRigid").value},ultimate_animation:v23CaptureGraphSnapshot(),ai_production_director:v24Snapshot(),contacts:analyzeContacts(),snes_profile:v2582ProfileForAction(action),samples};
 }
 function renderAnimationLibrary(){
   const box=$("animationLibrary");box.innerHTML="";
@@ -7980,7 +8101,7 @@ $("generate").addEventListener("click",()=>setTimeout(()=>{refreshProductionPref
 v23SetState("Idle");v23DrawTimeline();v23ApplyBlendTree();
 detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFrameMs();resize();
 
-/* V25.8.4 controlled cross-script API */
+/* V25.8.5 controlled cross-script API */
 window.FISpriteWalkerAPI={
   getSource:()=>source,
   getSourceName:()=>sourceName,
@@ -8018,6 +8139,7 @@ window.FISpriteWalkerAPI={
   recordRigApproval:(result)=>v2584RecordRigApproval(result||{}),
   recordFinalApproval:()=>v2584RecordFinalApproval(),
   correctionHint:()=>v2584CorrectionHint(),
+  fullLimbRepair:(action=v258RequestedAction())=>v258RepairCurrentActionLimbOutliers(action),
   correctionConsistency:()=>{
     const target=+($("v25TargetQuality")?.value||92);
     const current=+(String($("v25CurrentQuality")?.textContent||"").replace("%","")||NaN);
@@ -8417,6 +8539,7 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
     if(!document.getElementById("v2572CacheStatus"))fails.push("walk critic cache");
     if(!document.getElementById("v2584MemoryPanel"))fails.push("evolution memory");
     if(typeof window.FISpriteWalkerAPI?.runEvolutionAudit!=="function")fails.push("memory audit API");
+    if(typeof window.FISpriteWalkerAPI?.fullLimbRepair!=="function")fails.push("full limb solver");
     if(typeof window.FISpriteWalkerAPI?.getCanonicalContacts!=="function")fails.push("canonical contacts");
     if(typeof v2583SeedCanonicalContacts!=="function")fails.push("canonical anchor recovery");
     if(typeof a?.canonicalRescore!=="function")fails.push("canonical rescore");
