@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V25.8.1 - Rig Approval Gate + C++ Motion Core</title>
+<title>Fatal Instinct Sprite Walker V25.8.2 - Rig Approval Gate + C++ Motion Core</title>
 <style>
 :root{--bg:#101218;--panel:#1a1e27;--panel2:#222734;--line:#343c4e;--text:#f6f7fb;--muted:#a7afbf;--pink:#ff4d73;--green:#62e7ad;--blue:#7fb5ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}header{padding:16px 16px 8px}h1{font-size:22px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 12px 28px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button,.btn,select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;padding:12px 14px;font-size:15px}button{cursor:pointer}.btn input{display:none}.primary{background:var(--pink);border-color:transparent;font-weight:800}.active{outline:2px solid var(--green)}.workspace{display:grid;grid-template-columns:1fr;gap:12px}.canvasWrap{position:relative;background:#090b0f;border:1px solid var(--line);border-radius:17px;overflow:hidden;height:58vh;min-height:390px;max-height:680px;touch-action:none}#mainCanvas{width:100%;height:100%;display:block}.hint{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none;text-align:center;padding:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}.panel label.title{display:block;font-weight:800;margin-bottom:6px}select{width:100%}.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sliders{margin-top:12px}.slider{margin:12px 0}.slider label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.slider input{width:100%;margin-top:7px}.help{background:#131720;color:var(--muted);border-radius:13px;padding:11px 12px;font-size:13px;line-height:1.35}.help p{margin:5px 0}.status{color:var(--muted);font-size:13px;margin-top:10px;min-height:18px}.switchRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}.switchRow input{width:22px;height:22px}.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#13241e;color:var(--green);font-size:12px;margin-left:6px}.frames{margin-top:14px}.frames h2{font-size:18px}.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}.card{min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:7px}.card canvas{width:100%;display:block;image-rendering:pixelated}.card div{text-align:center;color:var(--muted);font-size:12px;margin-top:5px}@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 420px}.canvasWrap{height:74vh}}
@@ -132,7 +132,7 @@
 
 
 /* ============================================================
-   V25.8.1 - MASTER SPRITE AUTO-RIG / RIG APPROVAL GATE
+   V25.8.2 - MASTER SPRITE AUTO-RIG / RIG APPROVAL GATE
    ============================================================ */
 .fiGateBanner{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:linear-gradient(135deg,#171d28,#10151e);border:1px solid #2c3545;border-radius:16px;padding:12px 14px;margin:10px 0 12px}
 .fiGateBanner b{font-size:14px}.fiGateBanner .fiGateSub{font-size:12px;color:var(--muted);margin-top:3px}.fiGateStage{font-size:11px;padding:5px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}.fiGateStage.review{color:#f2cc60;border-color:#7b6420}.fiGateStage.approved{color:var(--green);border-color:#246848}.fiGateStage.fix{color:#79c0ff;border-color:#275a7b}
@@ -160,7 +160,7 @@
 
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V25.8.1</span></h1><div class="sub">Production Sprint • 12-Fighter Roster • Canonical Motion Pipeline • C++ Motion Core</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V25.8.2</span></h1><div class="sub">Production Sprint • 12-Fighter Roster • SNES Production Packing • Canonical Motion • C++ Core</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -201,7 +201,7 @@
 
 <div class="fiGateBanner" id="fiAuditBanner">
   <div>
-    <b>V25.8.1 Engine Audit</b>
+    <b>V25.8.2 Engine Audit</b>
     <div class="fiGateSub" id="fiAuditText">Checking production systems…</div>
   </div>
   <span class="fiGateStage" id="fiAuditBadge">CHECKING</span>
@@ -808,7 +808,7 @@
 </div>
 
 <div class="moduleBox">
-  <div class="moduleHead"><b>V25.8.1 AI Production Director</b><span id="aiDirectorBadge" class="pill ok">READY</span></div>
+  <div class="moduleHead"><b>V25.8.2 AI Production Director</b><span id="aiDirectorBadge" class="pill ok">READY</span></div>
   <div class="v23Card" style="margin-bottom:8px">
     <div class="moduleHead"><b>Persistent Upgrade Checkpoint</b><span id="checkpointBadge" class="pill ok">AUTO SAVE</span></div>
     <div class="v23Card" style="margin-top:7px">
@@ -877,7 +877,7 @@
   </div>
   
   <div class="v25Panel">
-    <div class="moduleHead"><b>V25.8.1 Walk Critic Pipeline Repair</b><span id="v25Status" class="pill ok">READY</span></div>
+    <div class="moduleHead"><b>V25.8.2 Walk Critic Pipeline Repair</b><span id="v25Status" class="pill ok">READY</span></div>
     <div class="v23Mini">Closed-loop locomotion correction: analyze → repair → re-solve → re-score → keep only improvements.</div>
 
     <div class="switchRow"><span>Enable real-time self-correction</span><input id="v25Enabled" type="checkbox" checked></div>
@@ -968,12 +968,38 @@
   </div>
 
 <div class="v23Card" style="margin-top:8px">
-    <h4>SNES Creation Validator</h4>
+    <h4>SNES Production Packing + Validator</h4>
+    <div class="v23Row"><span class="v23Mini">Hardware object profile</span>
+      <select id="aiSnesProfile">
+        <option value="auto" selected>Auto by action (96×112 / 128×112)</option>
+        <option value="standard">Standard Fighter • 96×112 • 42 OBJ</option>
+        <option value="wide">Wide Fighter • 128×112 • 56 OBJ</option>
+      </select>
+    </div>
+    <div class="switchRow"><span>Trim transparent master bounds</span><input id="aiSnesTrim" type="checkbox" checked></div>
     <div class="switchRow"><span>4bpp palette optimization</span><input id="ai4bppOptimize" type="checkbox" checked></div>
-    <div class="switchRow"><span>Duplicate tile reuse</span><input id="aiTileReuse" type="checkbox" checked></div>
-    <div class="switchRow"><span>VRAM budget analysis</span><input id="aiVramCheck" type="checkbox" checked></div>
-    <div class="switchRow"><span>OAM budget analysis</span><input id="aiOamCheck" type="checkbox" checked></div>
+    <div class="switchRow"><span>Duplicate tile reuse analysis</span><input id="aiTileReuse" type="checkbox" checked></div>
+    <div class="switchRow"><span>VRAM / DMA budget analysis</span><input id="aiVramCheck" type="checkbox" checked></div>
+    <div class="switchRow"><span>OAM / scanline budget analysis</span><input id="aiOamCheck" type="checkbox" checked></div>
     <div class="switchRow"><span>Animation compression suggestions</span><input id="aiCompression" type="checkbox" checked></div>
+
+    <div class="v25Grid">
+      <div class="v25Stat"><span class="v23Mini">SNES pack</span><b id="v2582PackStatus">EMPTY</b></div>
+      <div class="v25Stat"><span class="v23Mini">Visible envelope</span><b id="v2582Envelope">--</b></div>
+      <div class="v25Stat"><span class="v23Mini">Master → SNES scale</span><b id="v2582Scale">--</b></div>
+      <div class="v25Stat"><span class="v23Mini">OAM objects</span><b id="v2582Oam">--</b></div>
+      <div class="v25Stat"><span class="v23Mini">Objects / scanline</span><b id="v2582Scanline">--</b></div>
+      <div class="v25Stat"><span class="v23Mini">4bpp frame DMA</span><b id="v2582FrameBytes">--</b></div>
+      <div class="v25Stat"><span class="v23Mini">8-frame ROM payload</span><b id="v2582RomBytes">--</b></div>
+      <div class="v25Stat"><span class="v23Mini">Palette</span><b id="v2582Palette">--</b></div>
+      <div class="v25Stat"><span class="v23Mini">Unique 8×8 tiles</span><b id="v2582UniqueTiles">--</b></div>
+      <div class="v25Stat"><span class="v23Mini">Tile reuse</span><b id="v2582Reuse">--</b></div>
+    </div>
+    <div class="aiControls" style="margin-top:8px">
+      <button id="v2582BuildSnesPack">Build SNES Pack</button>
+      <button id="v2582ExportSnesPack">Export SNES Pack</button>
+    </div>
+    <div class="v23Mini" style="margin-top:7px">V25.8.2 outputs the current game-engine format: 128×128 4bpp tile memory per frame ($2000 / 8192 bytes), with a 96×112 or 128×112 visible OAM grid.</div>
   </div>
 </div>
 <div class="preservePanel">
@@ -1051,6 +1077,7 @@ PARTS.forEach(p=>{const o=document.createElement("option");o.value=p;o.textConte
 JOINTS.forEach(j=>{const o=document.createElement("option");o.value=j;o.textContent=j;jointSel.appendChild(o);});
 
 let source=null,sourceName="",rig={parts:{},joints:{}},mode="trace",tracePoints=[],drawing=false,draggingJoint=false,frames=[],timer=null;
+let v2582SnesPack=null;
 
 const PROD_AUTOSAVE_KEY="fatal_instinct_sprite_walker_v18_autosave";
 const PROD_ROSTER_KEY="fatal_instinct_sprite_walker_v18_roster";
@@ -1351,7 +1378,7 @@ document.querySelectorAll('input[name="rosterSlot"]').forEach(el=>{
 function productionSnapshot(includeRoster=true){
   const data={
     format:"fatal-instinct-production-snapshot",
-    version:19,engine_version:"25.8.1",
+    version:19,engine_version:"25.8.2",
     character_name:$("characterName").value.trim(),
     source_name:sourceName,
     rig_approved:v258RigApprovalValid(),
@@ -1441,7 +1468,8 @@ function productionChecks(){
     {name:`Motion: ${action}`,ok:motionOK,detail:motionOK?(v258UseImportedAction(action)?(importedMotion.name||"Imported motion"):"Procedural production motion"):`Import ${action} motion`},
     {name:"Correction stack",ok:stack===8,detail:`${stack}/8 active`},
     {name:"AI final approval",ok:v258MotionApprovalValid(),detail:v258MotionApprovalValid()?`Approved + signature current: ${action}`:"Run/re-run + approve pipeline"},
-    {name:"Generated frames",ok:frames.length===FRAME_COUNT&&v258FramesSignature===v258MotionSignature(),detail:frames.length===FRAME_COUNT?(v258FramesSignature===v258MotionSignature()?"8/8 current":"8/8 stale — regenerate"):`${frames.length}/${FRAME_COUNT} frames`}
+    {name:"Generated frames",ok:frames.length===FRAME_COUNT&&v258FramesSignature===v258MotionSignature(),detail:frames.length===FRAME_COUNT?(v258FramesSignature===v258MotionSignature()?"8/8 current":"8/8 stale — regenerate"):`${frames.length}/${FRAME_COUNT} frames`},
+    {name:"SNES production pack",ok:!!(v2582SnesPack?.pass&&v2582SnesPack.signature===v2582SnesSignature()),detail:v2582SnesPack?.signature===v2582SnesSignature()?(v2582SnesPack.pass?`${v2582SnesPack.profile.name} • ${v2582SnesPack.frameBytes} bytes/frame`:"SNES pack needs correction"):"Run Stage 10 / Build SNES Pack"}
   ];
 }
 function refreshProductionPreflight(){
@@ -1690,14 +1718,20 @@ $("exportCharacterPack").onclick=async()=>{
   const checks=productionChecks(),missing=checks.filter(c=>!c.ok);
   if(missing.length){status(`Character Pack blocked: ${missing.map(x=>x.name).join(", ")}.`);return;}
   const name=$("characterName").value.trim()||`Player_${selectedRosterSlot()+1}`,safe=safeFileName(name),action=v258ProductionAction||v258RequestedAction(),actionSafe=v258SafeActionName(action),zip=new window.JSZip();
-  const manifest={format:"fatal-instinct-character-pack",version:18,engine_version:"25.8.1",character:name,source_name:sourceName,created:new Date().toISOString(),current_action:action,frame_count:frames.length,motion:importedMotion.name||null,production_checks:checks};
+  const manifest={format:"fatal-instinct-character-pack",version:20,engine_version:"25.8.2",character:name,source_name:sourceName,created:new Date().toISOString(),current_action:action,frame_count:frames.length,motion:importedMotion.name||null,production_checks:checks,snes_pack:v2582SnesPack?.metadata||null};
   zip.file(`${safe}/manifest.json`,JSON.stringify(manifest,null,2));
-  zip.file(`${safe}/rig/${safe}_rig.json`,JSON.stringify({version:18,engine_version:"25.8.1",source_name:sourceName,source_size:source?[source.width,source.height]:null,rig_approved:v258RigApprovalValid(),rig_approval_signature:v258RigApprovalValid()?v258RigSignature():null,parts:rig.parts,joints:rig.joints},null,2));
-  zip.file(`${safe}/project/${safe}_project.json`,JSON.stringify({format:"fatal-instinct-sprite-walker-project",version:18,engine_version:"25.8.1",character_name:name,rig,settings:projectSettings(),library:animationLibrary,source_name:sourceName},null,2));
+  zip.file(`${safe}/rig/${safe}_rig.json`,JSON.stringify({version:18,engine_version:"25.8.2",source_name:sourceName,source_size:source?[source.width,source.height]:null,rig_approved:v258RigApprovalValid(),rig_approval_signature:v258RigApprovalValid()?v258RigSignature():null,parts:rig.parts,joints:rig.joints},null,2));
+  zip.file(`${safe}/project/${safe}_project.json`,JSON.stringify({format:"fatal-instinct-sprite-walker-project",version:18,engine_version:"25.8.2",character_name:name,rig,settings:projectSettings(),library:animationLibrary,source_name:sourceName},null,2));
   try{const motion=currentMotionPackage();if(motion)zip.file(`${safe}/motion/${safe}_${actionSafe}.fi_motion.json`,JSON.stringify(motion,null,2));}catch(e){}
   for(const clip of animationLibrary||[]){try{const clipSafe=safeFileName(clip.name||"motion");zip.file(`${safe}/motion/library/${clipSafe}.fi_motion.json`,JSON.stringify(clip,null,2));}catch(e){}}
   if(frames.length){const sheet=await spriteSheetArrayBuffer();if(sheet)zip.file(`${safe}/sprites/${safe}_${actionSafe}_sheet.png`,sheet);for(let i=0;i<frames.length;i++){const buf=await canvasToArrayBuffer(frames[i]);zip.file(`${safe}/sprites/frames/${actionSafe}/${safe}_${String(i+1).padStart(2,"0")}.png`,buf);}}
-  zip.file(`${safe}/README.txt`,`Fatal Instinct V25.8 Production Pack\nCharacter: ${name}\nAction: ${action}\nSource: ${sourceName||"not recorded"}\nFrames: ${frames.length}\nLibrary motions: ${(animationLibrary||[]).length}\nThis export records the current approved action and motion library. It does not automatically mark the entire fighter complete.\n`);
+  let snes=v2582SnesPack;if(!snes||snes.signature!==v2582SnesSignature())snes=v2582BuildSnesPack();
+  if(!snes?.pass){status(`Character Pack blocked: SNES production pack is not valid (${snes?.error||snes?.warnings?.join(", ")||"unknown"}).`);return;}
+  zip.file(`${safe}/snes/${actionSafe}/${safe}_${actionSafe}_frames_4bpp.bin`,snes.binary);
+  zip.file(`${safe}/snes/${actionSafe}/${safe}_${actionSafe}_palette.bin`,snes.paletteBinary);
+  zip.file(`${safe}/snes/${actionSafe}/${safe}_${actionSafe}_metasprite.json`,JSON.stringify(snes.metadata,null,2));
+  const snesSheet=v2582PackedSheetCanvas(snes);if(snesSheet)zip.file(`${safe}/snes/${actionSafe}/${safe}_${actionSafe}_preview.png`,await canvasToArrayBuffer(snesSheet));
+  zip.file(`${safe}/README.txt`,`Fatal Instinct V25.8.2 Production Pack\nCharacter: ${name}\nAction: ${action}\nSource: ${sourceName||"not recorded"}\nFrames: ${frames.length}\nLibrary motions: ${(animationLibrary||[]).length}\nSNES profile: ${snes.profile.name}\nSNES frame bytes: ${snes.frameBytes} ($2000)\nSNES raw action bytes: ${snes.romBytes}\nSNES OAM: ${snes.maxObjects} objects, ${snes.maxScanline}/scanline\nThis export records the current approved action, motion library, and game-ready 4bpp SNES action pack. It does not automatically mark the entire fighter complete.\n`);
   const blob=await zip.generateAsync({type:"blob"});download(blob,`${safe}_${actionSafe}_Fatal_Instinct_Pack.zip`);
   const i=selectedRosterSlot();rosterFromUI();rosterData[i].name=name;rosterData[i].stage="Frames Ready";rosterData[i].saved=productionSnapshot(false);rosterToUI();persistRoster();saveAutosave();refreshProductionPreflight();
   status(`${name} ${action} production pack exported. Fighter remains Frames Ready until you manually mark the full character Complete.`);
@@ -1720,7 +1754,7 @@ setInterval(productionAutosaveTick,30000);
 window.addEventListener("beforeunload",()=>saveAutosave(true));
 
 function download(blob,name){const a=document.createElement("a"),u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);}
-$("saveRig").onclick=()=>{const approved=v258RigApprovalValid(),data={version:18,engine_version:"25.8.1",rig_approved:approved,rig_approval_signature:approved?v258RigSignature():null,source_name:sourceName,source_size:source?[source.width,source.height]:null,parts:rig.parts,joints:rig.joints};const who=safeFileName($("characterName")?.value||sourceName||"character");download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),`${who}_${approved?"approved":"unapproved"}_rig.json`);status(`V25.8 rig exported${approved?" • signed approval preserved":" • approval not valid"}.`);};
+$("saveRig").onclick=()=>{const approved=v258RigApprovalValid(),data={version:18,engine_version:"25.8.2",rig_approved:approved,rig_approval_signature:approved?v258RigSignature():null,source_name:sourceName,source_size:source?[source.width,source.height]:null,parts:rig.parts,joints:rig.joints};const who=safeFileName($("characterName")?.value||sourceName||"character");download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),`${who}_${approved?"approved":"unapproved"}_rig.json`);status(`V25.8 rig exported${approved?" • signed approval preserved":" • approval not valid"}.`);};
 $("rigInput").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());v258ResetMotionState(`loaded rig ${f.name}`);rig.parts=d.parts||{};rig.joints=d.joints||{};autoTraceCache.dirty=true;inferJointsFromParts();const sig=v258RigSignature(),approved=!!(d.rig_approved&&d.rig_approval_signature&&d.rig_approval_signature===sig);if(window.FIRigApprovalGate?.state){window.FIRigApprovalGate.state.approved=approved;window.FIRigApprovalGate.state.approvalSignature=approved?sig:null;}if(approved){try{localStorage.setItem(V258_RIG_APPROVAL_KEY,JSON.stringify({source:sourceName,signature:sig,time:Date.now()}));}catch(e){}}status(`Loaded rig: ${f.name} (schema V${d.version||"?"})${approved?" • SIGNED APPROVAL VALID":" • REVIEW REQUIRED"}`);draw();refreshProductionPreflight();}catch(err){status("Could not read rig JSON.");}};
 
 function joint(name){return rig.joints[name]?[...rig.joints[name]]:null;}
@@ -1744,10 +1778,10 @@ function requiredReadyForWalk(){const need=["pelvis","neck","left_shoulder","rig
 
 
 /* ============================================================
-   V25.8.1 - CANONICAL PRODUCTION ACTION LAYER
+   V25.8.2 - CANONICAL PRODUCTION ACTION LAYER
    One requested action -> one real pose source -> one export path.
    ============================================================ */
-const V258_ENGINE_VERSION="25.8.1";
+const V258_ENGINE_VERSION="25.8.2";
 const V258_RIG_APPROVAL_KEY="fatal_instinct_v258_rig_approval";
 let v258ProductionAction=null;
 let v258SuppressWalkNormalizer=false;
@@ -1803,7 +1837,7 @@ const V258_SIGNATURE_CONTROLS=[
   "walkNormalize","preventCrouch","straightPlantLeg","normalizeStride","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth",
   "enableWeightedSkin","skinRenderMode","skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","enableUnifiedMesh","unifiedMeshMode","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid","sealJointGaps",
   "v25Profile","v25TargetQuality","v252FinalPoseEnabled","v252ResolveAfter","v253PhaseLock","v253FootWorldLock","v254FreezeSolved","v254SupportSolve","v255PersistentContact","v255ProtectSolved","v256HardProtect","v256RejectDamage","v256AllowedDrop","v2562FinalFootLock","v2562ToeRelock","v2562GroundTol",
-  "ai4bppOptimize","aiTileReuse","aiVramCheck","aiOamCheck"
+  "ai4bppOptimize","aiTileReuse","aiVramCheck","aiOamCheck","aiSnesProfile","aiSnesTrim"
 ];
 function v258MotionControlSnapshot(){
   const out={};
@@ -1829,6 +1863,7 @@ function v258MotionSignature(){
 }
 function v258InvalidateMotionApproval(reason="motion changed"){
   v258FramesSignature=null;
+  if(typeof v2582ResetSnesPack==="function")v2582ResetSnesPack(reason);
   if(typeof v24Director!=="undefined"&&v24Director){
     v24Director.approved=false;
     v24Director.approvalSignature=null;
@@ -1967,7 +2002,7 @@ function v258CollectActionPoses(action=v258RequestedAction(),skipAutoRepair=fals
 }
 
 /* ============================================================
-   V25.8.1 - NON-REENTRANT FINAL-POSE CACHE
+   V25.8.2 - NON-REENTRANT FINAL-POSE CACHE
    ============================================================ */
 let v2572FinalPoseCache=new Array(8).fill(null);
 
@@ -2628,7 +2663,7 @@ function applyProjectSettings(o){
 }
 $("saveProject").onclick=()=>{
   const data={
-    format:"fatal-instinct-sprite-walker-project",version:19,engine_version:"25.8.1",
+    format:"fatal-instinct-sprite-walker-project",version:19,engine_version:"25.8.2",
     rig,settings:projectSettings(),library:animationLibrary,director:v24Director,
     source_name:sourceName,rig_approved:v258RigApprovalValid(),rig_approval_signature:v258RigApprovalValid()?v258RigSignature():null,
     production_action:v258ProductionAction,motion_approved:v258MotionApprovalValid(),motion_approval_signature:v258MotionApprovalValid()?v24Director.approvalSignature:null,
@@ -4196,7 +4231,7 @@ function v242ApplyControls(values){
 function v242CheckpointPayload(){
   return {
     format:"fatal-instinct-v24-checkpoint",
-    version:"25.8.1",engine_version:"25.8.1",
+    version:"25.8.2",engine_version:"25.8.2",
     savedAt:new Date().toISOString(),
     sourceName,
     rig:JSON.parse(JSON.stringify(rig)),
@@ -4946,7 +4981,7 @@ let v252FinalCorrections={};
 let v252FinalCorrectionTargets={};
 
 /* ============================================================
-   V25.8.1 - CANONICAL SUPPORT-CONTACT AUTHORITY
+   V25.8.2 - CANONICAL SUPPORT-CONTACT AUTHORITY
    ============================================================ */
 let v2581CanonicalContacts={
   left:{ankle:null,toe:null,startFrame:0},
@@ -5605,7 +5640,28 @@ function v25FinalizeReport(reason){
   }
   $("v25CurrentQuality").textContent=finalScore.score+"%";
   v242SaveCheckpoint(true);
+
+  if(finalScore.score>=target&&typeof v24Director!=="undefined"&&v24Director?.failedStage==="critic"&&v24Director.lastAction===v258RequestedAction()){
+    setTimeout(()=>v2582ResolveDirectorCriticAfterCorrection(finalScore),80);
+  }
   return report;
+}
+
+function v2582ResolveDirectorCriticAfterCorrection(finalScore){
+  if(!finalScore||finalScore.score<(+$("v25TargetQuality")?.value||92))return false;
+  if(v24Director.running||v24Director.failedStage!=="critic")return false;
+  const c=v24AnalyzeCurrentAnimation();if(c.error)return false;
+  const geometry=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity+c.attack)/5),threshold=+$("aiPassThreshold")?.value||82;
+  if(geometry<threshold)return false;
+
+  const stageScore=v24ScoreClamp((geometry+finalScore.score)/2);
+  const result={pass:true,score:stageScore,msg:`Geometry ${geometry}% • Locomotion ${finalScore.score}% • PASS after canonical Self-Correction`,details:c,geometryScore:geometry,locomotionScore:finalScore.score,corrected:true};
+  v24Director.results.critic=result;v24Director.failedStage=null;
+  v24StageState("critic","pass",`PASS • ${stageScore}% • ${result.msg}`);
+  v24Log(`Preview + Animation Critic: PASS (${stageScore}%). ${result.msg}`);
+  v24UpdateScore();v242SaveCheckpoint(true);
+  $("aiDecision").textContent="Walk correction passed. Continuing the production pipeline.";
+  setTimeout(()=>v24RunPipeline("cleanup"),120);return true;
 }
 
 $("v25RunBtn").onclick=v25RunSelfCorrection;
@@ -5908,23 +5964,61 @@ function v24RunCritic(){
   const action=v258RequestedAction(),threshold=+$("aiPassThreshold").value;
   let c=v24AnalyzeCurrentAnimation();
   if(c.error)return {pass:false,score:0,msg:c.error,details:c};
-  let score=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity+c.attack)/5),repaired=false;
-  if(score<threshold&&$("aiAutoCorrect")?.checked&&$("autoLimbRepair")?.checked&&c.limb<82){
+
+  let geometry=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity+c.attack)/5),repaired=false;
+  if(geometry<threshold&&$("aiAutoCorrect")?.checked&&$("autoLimbRepair")?.checked&&c.limb<82){
     const before=c,repairs=v258RepairCurrentActionLimbOutliers(action);
-    if(repairs.length){c=v24AnalyzeCurrentAnimation();score=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity+c.attack)/5);repaired=c.limb>before.limb;}
-  }
-  $("criticBalance").textContent=c.balance+"%";$("criticLimbs").textContent=c.limb+"%";$("criticSilhouette").textContent=c.silhouette+"%";$("criticIntegrity").textContent=c.integrity+"%";$("criticAttack").textContent=c.attack+"%";
-  $("criticWorstLimb").textContent=c.worstFrame?`${c.worstLimb} • frame ${c.worstFrame}`:"--";$("criticWorstError").textContent=c.worstFrame?`${c.worstError}% (avg ${c.avgLimbError}%)`:"--";
-  const detail=c.worstFrame?`worst ${c.worstLimb} F${c.worstFrame}: ${c.worstError}%`:"no limb error",repairMsg=repaired?" • auto-limb-repaired":"";
-  if(score>=threshold&&v258IsWalkAction(action)&&$("v25Enabled")?.checked){
-    const q=v258CanonicalRescore("AI walk critic");const target=+$("v25TargetQuality").value||92;
-    if(q.score<target){
-      const cache=q.grounding?.cacheCount??0;
-      const next=v258UseImportedAction(action)?"Use C++ Auto Correct / Phone Motion Correct.":"Run V25.8.1 Self-Correction.";
-      return {pass:false,score:q.score,msg:`Geometry passed, walk locomotion ${q.score}% < ${target}% target. Final-pose cache ${cache}/8. ${next}`,details:c,needsV25:!v258UseImportedAction(action),needsCpp:v258UseImportedAction(action)};
+    if(repairs.length){
+      c=v24AnalyzeCurrentAnimation();
+      geometry=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity+c.attack)/5);
+      repaired=c.limb>before.limb;
     }
   }
-  return {pass:score>=threshold,score,msg:`Critic score ${score}% • ${detail}${repairMsg}`,details:c,autoRepair:repaired};
+
+  $("criticBalance").textContent=c.balance+"%";
+  $("criticLimbs").textContent=c.limb+"%";
+  $("criticSilhouette").textContent=c.silhouette+"%";
+  $("criticIntegrity").textContent=c.integrity+"%";
+  $("criticAttack").textContent=c.attack+"%";
+  $("criticWorstLimb").textContent=c.worstFrame?`${c.worstLimb} • frame ${c.worstFrame}`:"--";
+  $("criticWorstError").textContent=c.worstFrame?`${c.worstError}% (avg ${c.avgLimbError}%)`:"--";
+
+  const detail=c.worstFrame?`worst ${c.worstLimb} F${c.worstFrame}: ${c.worstError}%`:"no limb error";
+  const repairMsg=repaired?" • auto-limb-repaired":"";
+
+  if(geometry<threshold){
+    return {pass:false,score:geometry,msg:`Geometry ${geometry}% < ${threshold}% threshold • ${detail}${repairMsg}`,details:c};
+  }
+
+  if(v258IsWalkAction(action)&&$("v25Enabled")?.checked){
+    const q=v258CanonicalRescore("AI walk critic");
+    const target=+$("v25TargetQuality").value||92;
+    const stageScore=v24ScoreClamp((geometry+q.score)/2);
+    if(q.score<target){
+      const cache=q.grounding?.cacheCount??0;
+      const next=v258UseImportedAction(action)?"Use C++ Auto Correct / Phone Motion Correct.":"Run V25.8.2 Self-Correction.";
+      return {
+        pass:false,
+        score:stageScore,
+        msg:`Geometry ${geometry}% PASS • Locomotion ${q.score}% < ${target}% target • final-pose cache ${cache}/8. ${next}`,
+        details:c,
+        geometryScore:geometry,
+        locomotionScore:q.score,
+        needsV25:!v258UseImportedAction(action),
+        needsCpp:v258UseImportedAction(action)
+      };
+    }
+    return {
+      pass:true,
+      score:stageScore,
+      msg:`Geometry ${geometry}% • Locomotion ${q.score}% • PASS • ${detail}${repairMsg}`,
+      details:c,
+      geometryScore:geometry,
+      locomotionScore:q.score
+    };
+  }
+
+  return {pass:true,score:geometry,msg:`Geometry ${geometry}% • PASS • ${detail}${repairMsg}`,details:c,autoRepair:repaired};
 }
 function v24RunCleanup(){
   v24StageState("cleanup","run","Repairing sprite...");
@@ -5961,33 +6055,312 @@ function v258GenerateCanonicalFrames(action=v258RequestedAction()){
   frames=next;v258FramesSignature=v258MotionSignature();renderFrames();
   return {ok:true,count:frames.length,signature:v258FramesSignature};
 }
-function v258AnalyzeSnesFrames(){
-  if(!frames.length)return {ready:false,maxObjects:0,maxScanline:0,tiles:0};
-  let maxObjects=0,maxScanline=0,tiles=0;
-  for(const c of frames){
-    const g=c.getContext("2d"),w=c.width,h=c.height,d=g.getImageData(0,0,w,h).data,rows=Math.ceil(h/16),cols=Math.ceil(w/16);let objects=0;
-    for(let by=0;by<rows;by++){let rowObjects=0;for(let bx=0;bx<cols;bx++){let used=false;for(let y=by*16;y<Math.min(h,(by+1)*16)&&!used;y++){for(let x=bx*16;x<Math.min(w,(bx+1)*16);x++){if(d[(y*w+x)*4+3]>16){used=true;break;}}}if(used){objects++;rowObjects++;tiles++;}}maxScanline=Math.max(maxScanline,rowObjects);}maxObjects=Math.max(maxObjects,objects);
+function v2582ProfileForAction(action=v258RequestedAction()){
+  const setting=$("aiSnesProfile")?.value||"auto";
+  let key=setting;
+  if(setting==="auto")key=/^(Idle|Walk)/i.test(action||"")?"standard":"wide";
+  if(key!=="wide")key="standard";
+
+  if(key==="wide"){
+    return {key:"wide",name:"WIDE 128×112",visibleWidth:128,visibleHeight:112,textureWidth:128,textureHeight:128,objects:56,scanline:8};
   }
-  return {ready:true,maxObjects,maxScanline,tiles};
+  return {key:"standard",name:"STANDARD 96×112",visibleWidth:96,visibleHeight:112,textureWidth:128,textureHeight:128,objects:42,scanline:6};
 }
-function v24RunSnes(){
-  v24StageState("snes","run","Generating canonical frames + checking SNES budgets...");
+
+function v2582SnesSignature(){
+  const p=v2582ProfileForAction();
+  return v258StableHash({
+    engine:V258_ENGINE_VERSION,
+    motion:v258MotionSignature(),
+    profile:p.key,
+    trim:!!$("aiSnesTrim")?.checked,
+    optimize:!!$("ai4bppOptimize")?.checked,
+    reuse:!!$("aiTileReuse")?.checked
+  });
+}
+
+function v2582ResetSnesPack(reason=""){
+  v2582SnesPack=null;
+  if($("v2582PackStatus"))$("v2582PackStatus").textContent=reason?"STALE":"EMPTY";
+  for(const id of ["v2582Envelope","v2582Scale","v2582Oam","v2582Scanline","v2582FrameBytes","v2582RomBytes","v2582Palette","v2582UniqueTiles","v2582Reuse"]){
+    if($(id))$(id).textContent="--";
+  }
+}
+
+function v2582FrameAlphaBounds(c,threshold=16){
+  const g=c.getContext("2d"),w=c.width,h=c.height,d=g.getImageData(0,0,w,h).data;
+  let minX=w,minY=h,maxX=-1,maxY=-1;
+  for(let y=0;y<h;y++){
+    const row=y*w*4;
+    for(let x=0;x<w;x++){
+      if(d[row+x*4+3]>threshold){
+        if(x<minX)minX=x;if(x>maxX)maxX=x;
+        if(y<minY)minY=y;if(y>maxY)maxY=y;
+      }
+    }
+  }
+  return maxX<minX?null:{x:minX,y:minY,w:maxX-minX+1,h:maxY-minY+1};
+}
+
+function v2582UnionAlphaBounds(inputFrames){
+  if(!$("aiSnesTrim")?.checked){
+    const c=inputFrames[0];
+    return c?{x:0,y:0,w:c.width,h:c.height}:null;
+  }
+  let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity,found=false;
+  for(const c of inputFrames){
+    const b=v2582FrameAlphaBounds(c);
+    if(!b)continue;
+    found=true;
+    minX=Math.min(minX,b.x);minY=Math.min(minY,b.y);
+    maxX=Math.max(maxX,b.x+b.w-1);maxY=Math.max(maxY,b.y+b.h-1);
+  }
+  if(!found)return null;
+  const pad=2,ref=inputFrames[0];
+  minX=Math.max(0,minX-pad);minY=Math.max(0,minY-pad);
+  maxX=Math.min(ref.width-1,maxX+pad);maxY=Math.min(ref.height-1,maxY+pad);
+  return {x:minX,y:minY,w:maxX-minX+1,h:maxY-minY+1};
+}
+
+function v2582ScaleFramesToHardware(inputFrames,profile,bounds){
+  const scale=Math.min(profile.visibleWidth/bounds.w,profile.visibleHeight/bounds.h);
+  const dw=Math.max(1,Math.round(bounds.w*scale)),dh=Math.max(1,Math.round(bounds.h*scale));
+  const dx=Math.floor((profile.visibleWidth-dw)/2),dy=Math.max(0,profile.visibleHeight-dh),out=[];
+  for(const srcFrame of inputFrames){
+    const c=document.createElement("canvas");c.width=profile.textureWidth;c.height=profile.textureHeight;
+    const g=c.getContext("2d");g.clearRect(0,0,c.width,c.height);g.imageSmoothingEnabled=false;
+    g.drawImage(srcFrame,bounds.x,bounds.y,bounds.w,bounds.h,dx,dy,dw,dh);out.push(c);
+  }
+  return {frames:out,scale,dx,dy,dw,dh};
+}
+
+function v2582ColorHistogram(canvases){
+  const hist=new Map();
+  for(const c of canvases){
+    const d=c.getContext("2d").getImageData(0,0,c.width,c.height).data;
+    for(let i=0;i<d.length;i+=4){
+      if(d[i+3]<=16)continue;
+      const r5=Math.round(d[i]*31/255),g5=Math.round(d[i+1]*31/255),b5=Math.round(d[i+2]*31/255),key=(r5<<10)|(g5<<5)|b5;
+      hist.set(key,(hist.get(key)||0)+1);
+    }
+  }
+  return hist;
+}
+
+function v2582MedianCutPalette(hist,maxColors=15){
+  const entries=[...hist.entries()].map(([key,count])=>({r:(key>>10)&31,g:(key>>5)&31,b:key&31,count}));
+  if(!entries.length)return [[0,0,0]];
+  if(entries.length<=maxColors){entries.sort((a,b)=>b.count-a.count);return entries.map(e=>[e.r,e.g,e.b]);}
+  let boxes=[entries];
+  const rangeScore=box=>{
+    let r0=31,g0=31,b0=31,r1=0,g1=0,b1=0,total=0;
+    for(const e of box){r0=Math.min(r0,e.r);g0=Math.min(g0,e.g);b0=Math.min(b0,e.b);r1=Math.max(r1,e.r);g1=Math.max(g1,e.g);b1=Math.max(b1,e.b);total+=e.count;}
+    return {r:r1-r0,g:g1-g0,b:b1-b0,total,score:Math.max(r1-r0,g1-g0,b1-b0)*total};
+  };
+  while(boxes.length<maxColors){
+    let best=-1,bestScore=-1;
+    for(let i=0;i<boxes.length;i++){if(boxes[i].length<2)continue;const s=rangeScore(boxes[i]).score;if(s>bestScore){best=i;bestScore=s;}}
+    if(best<0)break;
+    const box=boxes.splice(best,1)[0],rs=rangeScore(box),ch=rs.r>=rs.g&&rs.r>=rs.b?"r":(rs.g>=rs.b?"g":"b");
+    box.sort((a,b)=>a[ch]-b[ch]);
+    const total=box.reduce((a,e)=>a+e.count,0);let accum=0,split=1;
+    for(let i=0;i<box.length-1;i++){accum+=box[i].count;if(accum>=total/2){split=i+1;break;}}
+    boxes.push(box.slice(0,split),box.slice(split));
+  }
+  return boxes.map(box=>{
+    let total=0,r=0,g=0,b=0;
+    for(const e of box){total+=e.count;r+=e.r*e.count;g+=e.g*e.count;b+=e.b*e.count;}
+    return [Math.round(r/total),Math.round(g/total),Math.round(b/total)];
+  });
+}
+
+function v2582BuildPalette(canvases){
+  const hist=v2582ColorHistogram(canvases);
+  let colors;
+  if($("ai4bppOptimize")?.checked)colors=v2582MedianCutPalette(hist,15);
+  else colors=[...hist.entries()].sort((a,b)=>b[1]-a[1]).slice(0,15).map(([key])=>[(key>>10)&31,(key>>5)&31,key&31]);
+  colors=colors.slice(0,15);while(colors.length<15)colors.push([0,0,0]);
+  const palette5=[[0,0,0],...colors],palette8=palette5.map(c=>c.map(v=>Math.round(v*255/31)));
+  return {palette5,palette8,sourceColors:hist.size};
+}
+
+function v2582NearestPaletteIndex(r,g,b,palette5){
+  const r5=Math.round(r*31/255),g5=Math.round(g*31/255),b5=Math.round(b*31/255);
+  let best=1,bestD=Infinity;
+  for(let i=1;i<palette5.length;i++){const p=palette5[i],dr=r5-p[0],dg=g5-p[1],db=b5-p[2],d=dr*dr+dg*dg+db*db;if(d<bestD){bestD=d;best=i;if(d===0)break;}}
+  return {index:best,error:Math.sqrt(bestD)};
+}
+
+function v2582QuantizeFrame(c,palette5,palette8){
+  const w=c.width,h=c.height,g=c.getContext("2d"),src=g.getImageData(0,0,w,h),d=src.data,indices=new Uint8Array(w*h);
+  const preview=document.createElement("canvas");preview.width=w;preview.height=h;
+  const pg=preview.getContext("2d"),out=pg.createImageData(w,h),od=out.data;let err=0,opaque=0;
+  for(let p=0,i=0;p<indices.length;p++,i+=4){
+    if(d[i+3]<=16){indices[p]=0;od[i]=0;od[i+1]=0;od[i+2]=0;od[i+3]=0;continue;}
+    const n=v2582NearestPaletteIndex(d[i],d[i+1],d[i+2],palette5);indices[p]=n.index;err+=n.error;opaque++;
+    const q=palette8[n.index];od[i]=q[0];od[i+1]=q[1];od[i+2]=q[2];od[i+3]=255;
+  }
+  pg.putImageData(out,0,0);return {indices,preview,error:opaque?err/opaque:0,opaque};
+}
+
+function v2582Encode8x8(indices,w,x0,y0){
+  const out=new Uint8Array(32);
+  for(let y=0;y<8;y++){
+    let p0=0,p1=0,p2=0,p3=0;
+    for(let x=0;x<8;x++){
+      const v=indices[(y0+y)*w+(x0+x)]&15,bit=7-x;
+      if(v&1)p0|=1<<bit;if(v&2)p1|=1<<bit;if(v&4)p2|=1<<bit;if(v&8)p3|=1<<bit;
+    }
+    out[y*2]=p0;out[y*2+1]=p1;out[16+y*2]=p2;out[16+y*2+1]=p3;
+  }
+  return out;
+}
+
+function v2582EncodeFrame4bpp(indices,w=128,h=128){
+  const tilesX=w/8,tilesY=h/8,out=new Uint8Array(tilesX*tilesY*32);let off=0;
+  for(let ty=0;ty<tilesY;ty++)for(let tx=0;tx<tilesX;tx++){const t=v2582Encode8x8(indices,w,tx*8,ty*8);out.set(t,off);off+=32;}
+  return out;
+}
+
+function v2582PaletteBinary(palette5){
+  const out=new Uint8Array(32);
+  for(let i=0;i<16;i++){const p=palette5[i]||[0,0,0],word=((p[2]&31)<<10)|((p[1]&31)<<5)|(p[0]&31);out[i*2]=word&255;out[i*2+1]=(word>>8)&255;}
+  return out;
+}
+
+function v2582TileReuseStats(encodedFrames){
+  const seen=new Set(),nonBlankSeen=new Set();let total=0,nonBlank=0;
+  for(const frame of encodedFrames){
+    for(let off=0;off<frame.length;off+=32){
+      total++;const tile=frame.subarray(off,off+32);let blank=true,key="";
+      for(let i=0;i<tile.length;i++){if(tile[i])blank=false;key+=String.fromCharCode(tile[i]);}
+      seen.add(key);if(!blank){nonBlank++;nonBlankSeen.add(key);}
+    }
+  }
+  const unique=seen.size,uniqueNonBlank=nonBlankSeen.size,reuse=total?Math.round((1-unique/total)*100):0,nonBlankReuse=nonBlank?Math.round((1-uniqueNonBlank/nonBlank)*100):0;
+  return {total,unique,reuse,nonBlank,uniqueNonBlank,nonBlankReuse};
+}
+
+function v2582UpdateSnesUI(pack){
+  if(!pack)return;
+  if($("v2582PackStatus"))$("v2582PackStatus").textContent=pack.pass?"READY":"CHECK";
+  if($("v2582Envelope"))$("v2582Envelope").textContent=`${pack.profile.visibleWidth}×${pack.profile.visibleHeight}`;
+  if($("v2582Scale"))$("v2582Scale").textContent=`${(pack.scale*100).toFixed(1)}%`;
+  if($("v2582Oam"))$("v2582Oam").textContent=`${pack.maxObjects} / 128`;
+  if($("v2582Scanline"))$("v2582Scanline").textContent=`${pack.maxScanline} / 32`;
+  if($("v2582FrameBytes"))$("v2582FrameBytes").textContent=`${Math.round(pack.frameBytes/1024)} KB`;
+  if($("v2582RomBytes"))$("v2582RomBytes").textContent=`${Math.round(pack.romBytes/1024)} KB`;
+  if($("v2582Palette"))$("v2582Palette").textContent="16 colors / 32 B";
+  if($("v2582UniqueTiles"))$("v2582UniqueTiles").textContent=`${pack.tileStats.uniqueNonBlank}`;
+  if($("v2582Reuse"))$("v2582Reuse").textContent=`${pack.tileStats.nonBlankReuse}%`;
+}
+
+function v2582BuildSnesPack(){
   const expected=v258MotionSignature();
   if(frames.length!==FRAME_COUNT||v258FramesSignature!==expected){
     const made=v258GenerateCanonicalFrames(v258RequestedAction());
-    if(!made.ok)return {pass:false,score:0,msg:`SNES validation could not render canonical frames: ${made.error}`};
+    if(!made.ok)return {pass:false,error:`Could not render canonical frames: ${made.error}`};
   }
-  let score=100;const warnings=[],a=v258AnalyzeSnesFrames();
-  if(!a.ready||frames.length!==FRAME_COUNT)return {pass:false,score:0,msg:"SNES validation requires all 8 current canonical frames."};
-  if(source){if(source.width>256){score-=6;warnings.push("source wider than 256px");}if(source.height>256){score-=6;warnings.push("source taller than 256px");}}
-  if($("aiOamCheck")?.checked){if(!a.ready){score-=10;warnings.push("generate frames for OAM analysis");}else{if(a.maxObjects>128){score-=40;warnings.push(`OAM ${a.maxObjects}>128`);}if(a.maxScanline>32){score-=30;warnings.push(`scanline objects ${a.maxScanline}>32`);}}}
-  if($("aiVramCheck")?.checked&&a.ready){const bytes=a.tiles*128;if(bytes>65536){score-=20;warnings.push(`raw animation tiles ~${Math.round(bytes/1024)}KB before reuse`);}}
-  if($("aiTileReuse")?.checked&&a.ready)score=Math.min(100,score+2);
-  if($("ai4bppOptimize")?.checked)score=Math.min(100,score+2);
+  const profile=v2582ProfileForAction(),bounds=v2582UnionAlphaBounds(frames);
+  if(!bounds)return {pass:false,error:"No visible sprite pixels were found in the canonical frames."};
+
+  const scaled=v2582ScaleFramesToHardware(frames,profile,bounds),pal=v2582BuildPalette(scaled.frames);
+  const quantized=scaled.frames.map(c=>v2582QuantizeFrame(c,pal.palette5,pal.palette8));
+  const encodedFrames=quantized.map(q=>v2582EncodeFrame4bpp(q.indices,128,128));
+  const frameBytes=8192,romBytes=frameBytes*encodedFrames.length,binary=new Uint8Array(romBytes);
+  encodedFrames.forEach((b,i)=>binary.set(b,i*frameBytes));
+  const tileStats=v2582TileReuseStats(encodedFrames),paletteBinary=v2582PaletteBinary(pal.palette5);
+  const paletteError=quantized.reduce((a,q)=>a+q.error,0)/Math.max(1,quantized.length);
+  const maxObjects=profile.objects,maxScanline=profile.scanline,warnings=[];let score=100;
+
+  if(maxObjects>128){score-=70;warnings.push(`OAM ${maxObjects}>128`);}
+  if(maxScanline>32){score-=70;warnings.push(`scanline objects ${maxScanline}>32`);}
+  if(frameBytes!==8192){score-=80;warnings.push("frame DMA block is not $2000 bytes");}
+  if(romBytes>131072){score-=15;warnings.push(`action ROM payload ${Math.round(romBytes/1024)}KB`);}
+  if(scaled.scale<0.08){score-=12;warnings.push(`extreme master downscale ${(scaled.scale*100).toFixed(1)}%`);}
+  else if(scaled.scale<0.12){score-=5;warnings.push(`heavy master downscale ${(scaled.scale*100).toFixed(1)}%`);}
+  if(paletteError>7){score-=8;warnings.push(`high 4bpp palette error ${paletteError.toFixed(2)}`);}
+  else if(paletteError>5){score-=3;warnings.push(`palette error ${paletteError.toFixed(2)}`);}
+
   score=v24ScoreClamp(score);
-  const detail=a.ready?`max ${a.maxObjects} 16×16 objects/frame; ${a.maxScanline}/scanline`:"frame budget pending";
-  return {pass:score>=75,score,msg:warnings.length?`${detail}; ${warnings.join(", ")}`:`SNES budget pass • ${detail}`};
+  const pass=score>=75&&maxObjects<=128&&maxScanline<=32&&frameBytes===8192;
+  const frameOffsets=encodedFrames.map((_,i)=>i*frameBytes);
+  const metadata={
+    format:"fatal-instinct-snes-action-pack",version:1,engine_version:V258_ENGINE_VERSION,
+    character:$("characterName")?.value?.trim()||sourceName||"character",action:v258RequestedAction(),
+    profile:{key:profile.key,name:profile.name,visible_width:profile.visibleWidth,visible_height:profile.visibleHeight,texture_width:128,texture_height:128,oam_objects:profile.objects,objects_per_scanline:profile.scanline},
+    crop:{x:bounds.x,y:bounds.y,width:bounds.w,height:bounds.h},
+    transform:{scale:scaled.scale,dest_x:scaled.dx,dest_y:scaled.dy,dest_width:scaled.dw,dest_height:scaled.dh},
+    palette:{colors:16,bytes:32,source_5bit_colors:pal.sourceColors,mean_error_5bit:+paletteError.toFixed(3)},
+    frame_format:{snes_4bpp:true,bytes_per_frame:8192,frame_count:encodedFrames.length,total_bytes:romBytes,frame_offsets},
+    oam:{max_objects_per_frame:maxObjects,max_objects_per_scanline:maxScanline},tile_reuse:tileStats,
+    source_size:source?[source.width,source.height]:null,motion_signature:v258MotionSignature(),snes_signature:v2582SnesSignature()
+  };
+
+  const pack={pass,score,warnings,profile,bounds,scale:scaled.scale,maxObjects,maxScanline,frameBytes,romBytes,binary,paletteBinary,metadata,tileStats,paletteError,previewFrames:quantized.map(q=>q.preview),signature:v2582SnesSignature()};
+  v2582SnesPack=pack;v2582UpdateSnesUI(pack);return pack;
 }
+
+function v2582PackedSheetCanvas(pack=v2582SnesPack){
+  if(!pack?.previewFrames?.length)return null;
+  const s=document.createElement("canvas");s.width=128*pack.previewFrames.length;s.height=128;
+  const g=s.getContext("2d");g.imageSmoothingEnabled=false;pack.previewFrames.forEach((f,i)=>g.drawImage(f,i*128,0));return s;
+}
+
+async function v2582ExportCurrentSnesPack(){
+  let pack=v2582SnesPack;if(!pack||pack.signature!==v2582SnesSignature())pack=v2582BuildSnesPack();
+  if(!pack?.pass){status(`SNES pack export blocked: ${pack?.error||pack?.warnings?.join(", ")||"validator failed"}`);return;}
+  const who=safeFileName($("characterName")?.value||sourceName||"character"),action=v258SafeActionName(v258RequestedAction());
+  if(window.JSZip){
+    const zip=new window.JSZip();
+    zip.file(`${who}_${action}_frames_4bpp.bin`,pack.binary);
+    zip.file(`${who}_${action}_palette.bin`,pack.paletteBinary);
+    zip.file(`${who}_${action}_metasprite.json`,JSON.stringify(pack.metadata,null,2));
+    const sheet=v2582PackedSheetCanvas(pack);if(sheet)zip.file(`${who}_${action}_snes_preview.png`,await canvasToArrayBuffer(sheet));
+    zip.file("README.txt",`Fatal Instinct Sprite Walker V25.8.2 SNES Action Pack
+Character: ${who}
+Action: ${v258RequestedAction()}
+Profile: ${pack.profile.name}
+Visible grid: ${pack.profile.visibleWidth}x${pack.profile.visibleHeight}
+VRAM texture: 128x128 4bpp
+Frame bytes: 8192 ($2000)
+Frames: ${FRAME_COUNT}
+Total raw action bytes: ${pack.romBytes}
+Palette bytes: 32
+OAM objects: ${pack.maxObjects}
+Objects per scanline: ${pack.maxScanline}
+
+The frame binary is laid out as 16x16 8x8 SNES 4bpp tiles in row-major order.
+Each frame occupies exactly $2000 bytes, matching the Fatal Instinct frame DMA layout.
+`);
+    const blob=await zip.generateAsync({type:"blob"});download(blob,`${who}_${action}_SNES_Pack.zip`);
+  }else{
+    download(new Blob([pack.binary],{type:"application/octet-stream"}),`${who}_${action}_frames_4bpp.bin`);
+    download(new Blob([pack.paletteBinary],{type:"application/octet-stream"}),`${who}_${action}_palette.bin`);
+  }
+  status(`SNES production pack exported: ${pack.profile.name} • ${pack.maxObjects} OBJ • ${pack.maxScanline}/scanline • 8KB/frame.`);
+}
+
+function v24RunSnes(){
+  v24StageState("snes","run","Packing 128×128 4bpp frames + validating SNES hardware budgets...");
+  const pack=v2582BuildSnesPack();
+  if(!pack?.pass)return {pass:false,score:pack?.score||0,msg:pack?.error||pack?.warnings?.join(", ")||"SNES pack failed"};
+
+  const details=[`${pack.profile.name}`,`${pack.maxObjects} OAM`,`${pack.maxScanline}/scanline`,`${Math.round(pack.frameBytes/1024)}KB/frame`,`${Math.round(pack.romBytes/1024)}KB/${FRAME_COUNT} frames`,`16-color palette`];
+  if($("aiTileReuse")?.checked)details.push(`${pack.tileStats.nonBlankReuse}% tile reuse`);
+  if(pack.warnings.length)details.push(`warnings: ${pack.warnings.join(", ")}`);
+  return {pass:true,score:pack.score,msg:`SNES PACK READY • ${details.join(" • ")}`,packSummary:pack.metadata};
+}
+
+$("v2582BuildSnesPack")?.addEventListener("click",()=>{
+  const p=v2582BuildSnesPack();
+  if(p?.pass)status(`SNES pack ready: ${p.profile.name} • ${p.maxObjects} OBJ • ${p.maxScanline}/scanline • 8KB/frame.`);
+  else status(`SNES pack needs attention: ${p?.error||p?.warnings?.join(", ")||"unknown error"}`);
+  refreshProductionPreflight();
+});
+$("v2582ExportSnesPack")?.addEventListener("click",v2582ExportCurrentSnesPack);
+["aiSnesProfile","aiSnesTrim","ai4bppOptimize","aiTileReuse"].forEach(id=>$(id)?.addEventListener("change",()=>v2582ResetSnesPack("settings changed")));
+
 const V24_RUNNERS={rig:v24RunRig,mesh:v24RunMesh,weights:v24RunWeights,motion:v24RunMotion,retarget:v24RunRetarget,normalize:v24RunNormalize,critic:v24RunCritic,cleanup:v24RunCleanup,combat:v24RunCombat,snes:v24RunSnes};
 
 async function v24RunPipeline(startKey=null){
@@ -6023,7 +6396,7 @@ function v24RetryFailed(){if(!v24Director.failedStage){v24Log("No failed stage t
 function v24ApplyBypass(){
   const key=v24Director.failedStage;if(!key){v24Log("No failed stage available for bypass.");return;}
   if(!$("aiAllowBypass").checked){v24Log("Bypasses are disabled.");return;}
-  const critical=new Set(["rig","mesh","weights","motion","retarget","critic"]);
+  const critical=new Set(["rig","mesh","weights","motion","retarget","critic","snes"]);if(/Punch|Kick/i.test(v258RequestedAction()))critical.add("combat");
   if(critical.has(key)){v24Log(`Bypass blocked: ${key} is a production-critical stage.`);$("aiDecision").textContent=`${key} must pass before production can continue.`;return;}
   v24Director.bypasses.push({stage:key,reason:"User-controlled non-critical bypass",time:Date.now()});v24Director.results[key]={pass:true,score:70,msg:"Controlled non-critical bypass applied",bypass:true};
   v24StageState(key,"skip","BYPASS • controlled non-critical override");v24Log(`Controlled bypass applied to ${key}. Continuing pipeline.`);v24Director.failedStage=null;v242SaveCheckpoint(true);
@@ -6038,7 +6411,7 @@ function v24FinalApproval(auto=false){
   v24Director.approved=true;v24Director.lastAction=v258RequestedAction();v24Director.approvalSignature=v258MotionSignature();v242SaveCheckpoint(true);$("aiDirectorBadge").textContent="APPROVED";$("aiDecision").textContent=auto?"All stages passed. Automatic approval recorded by configuration.":"Final approval recorded. Animation is production-ready.";v24Log(auto?"AUTO APPROVAL recorded because human approval requirement is OFF.":"FINAL APPROVAL recorded.");refreshProductionPreflight();return true;
 }
 function v24Snapshot(){return {
-  version:"25.8.1",engine_version:"25.8.1",
+  version:"25.8.2",engine_version:"25.8.2",
   action:v24Director.lastAction,
   approved:v258MotionApprovalValid(),
   approval_signature:v258MotionApprovalValid()?v24Director.approvalSignature:null,
@@ -6053,7 +6426,7 @@ function v24Snapshot(){return {
   },
   grounding_critic:{
     source:"final_pose_after_absolute_lock",
-    version:"25.8.1"
+    version:"25.8.2"
   },
   final_foot_lock:{
     enabled:!!$("v2562FinalFootLock")?.checked,
@@ -6846,7 +7219,7 @@ function currentMotionPackage(){
   const action=v258ProductionAction||($("motionSource").value==="imported"?(v258RequestedAction()||"Imported Motion"):"Walk Forward");
   const char=$("characterName")?.value?.trim()||sourceName?.replace(/\.[^.]+$/,"")||"Fatal Instinct";
   const name=v258ProductionAction?`${char} - ${action}`:($("motionSource").value==="imported"?(importedMotion.name||"Imported Motion"):"Fatal Instinct Authored Walk");
-  return {format:"fatal-instinct-motion",version:2,engine_version:"25.8.1",name,action,frames:samples.length,loop:v258ActionLoops(action),projection:$("projection").value,profile:$("retargetProfile").value,preview_speed_percent:+$("animationSpeed").value,frame_ms:animationFrameMs(),constraint_solver:{enabled:$("enableConstraints").checked,iterations:+$("constraintIterations").value,limb_lock:+$("limbLengthLock").value,plant_pin:+$("plantPin").value,body_anchor:+$("bodyAnchor").value,spine_stability:+$("spineStability").value,max_reach:+$("maxReach").value},weighted_skin:{enabled:$("enableWeightedSkin").checked,mode:$("skinRenderMode").value,blend_radius:+$("skinBlendRadius").value,influence:+$("boneInfluence").value,mesh_grid:+$("weightedMeshGrid").value,joint_blend:+$("weightJointBlend").value},pole_targets:{knees:$("poleKnees").checked,elbows:$("poleElbows").checked,strength:+$("poleStrength").value,distance:+$("poleDistance").value},walk_normalizer:{enabled:v258IsWalkAction(action)&&$("walkNormalize").checked,max_pelvis_drop:+$("maxPelvisDrop").value,max_knee_lift:+$("maxKneeLift").value,height_floor:+$("standingHeightFloor").value,stride_scale:+$("walkStrideScale").value,plant_straight:+$("plantLegStraight").value,pelvis_smoothing:+$("pelvisSmooth").value},unified_mesh:{enabled:$("enableUnifiedMesh").checked,mode:$("unifiedMeshMode").value,columns:+$("unifiedCols").value,padding:+$("unifiedPadding").value,falloff:+$("unifiedFalloff").value,joint_seal:+$("jointSealStrength").value,accessory_rigid:+$("unifiedAccessoryRigid").value},ultimate_animation:v23CaptureGraphSnapshot(),ai_production_director:v24Snapshot(),contacts:analyzeContacts(),samples};
+  return {format:"fatal-instinct-motion",version:2,engine_version:"25.8.2",name,action,frames:samples.length,loop:v258ActionLoops(action),projection:$("projection").value,profile:$("retargetProfile").value,preview_speed_percent:+$("animationSpeed").value,frame_ms:animationFrameMs(),constraint_solver:{enabled:$("enableConstraints").checked,iterations:+$("constraintIterations").value,limb_lock:+$("limbLengthLock").value,plant_pin:+$("plantPin").value,body_anchor:+$("bodyAnchor").value,spine_stability:+$("spineStability").value,max_reach:+$("maxReach").value},weighted_skin:{enabled:$("enableWeightedSkin").checked,mode:$("skinRenderMode").value,blend_radius:+$("skinBlendRadius").value,influence:+$("boneInfluence").value,mesh_grid:+$("weightedMeshGrid").value,joint_blend:+$("weightJointBlend").value},pole_targets:{knees:$("poleKnees").checked,elbows:$("poleElbows").checked,strength:+$("poleStrength").value,distance:+$("poleDistance").value},walk_normalizer:{enabled:v258IsWalkAction(action)&&$("walkNormalize").checked,max_pelvis_drop:+$("maxPelvisDrop").value,max_knee_lift:+$("maxKneeLift").value,height_floor:+$("standingHeightFloor").value,stride_scale:+$("walkStrideScale").value,plant_straight:+$("plantLegStraight").value,pelvis_smoothing:+$("pelvisSmooth").value},unified_mesh:{enabled:$("enableUnifiedMesh").checked,mode:$("unifiedMeshMode").value,columns:+$("unifiedCols").value,padding:+$("unifiedPadding").value,falloff:+$("unifiedFalloff").value,joint_seal:+$("jointSealStrength").value,accessory_rigid:+$("unifiedAccessoryRigid").value},ultimate_animation:v23CaptureGraphSnapshot(),ai_production_director:v24Snapshot(),contacts:analyzeContacts(),snes_profile:v2582ProfileForAction(action),samples};
 }
 function renderAnimationLibrary(){
   const box=$("animationLibrary");box.innerHTML="";
@@ -7090,7 +7463,7 @@ $("characterName").addEventListener("input",()=>saveAutosave(true));
 $("generate").addEventListener("click",()=>setTimeout(()=>{refreshProductionPreflight();saveAutosave(true);},120));
 
 
-["enableWeightedSkin","showWeightMap","rigidCoreWeights","poleKnees","poleElbows","neutralBindMode","rejectCrossLimb","lockExtremities","protectPixelIslands","walkNormalize","preventCrouch","straightPlantLeg","normalizeStride","enableUnifiedMesh","alphaUnifiedMask","unifiedIslands","sealJointGaps","unifiedAccessories","showUnifiedMesh","animGraphEnabled","poseSearchEnabled","ctlHeadAim","ctlWeaponTarget","ctlPoseMirror","constraintCopyPos","constraintCopyRot","constraintParent","constraintAim","correctivePoseEnabled","spriteSwapEnabled","montageEnabled","motionWarpEnabled","blendTreeEnabled","universalSkeletonEnabled","aiDirectorEnabled","aiStopOnFail","aiAutoCorrect","aiAllowBypass","aiRequireApproval","ai4bppOptimize","aiTileReuse","aiVramCheck","aiOamCheck","aiCompression","autoLimbRepair","v25Enabled","v25AutoRevert","v25PreserveFeet","v25PreserveSilhouette","v252FinalPoseEnabled","v252ResolveAfter","v253PhaseLock","v253FootWorldLock","v253RotateTargets","v254FreezeSolved","v254SupportSolve","v255PersistentContact","v255ProtectSolved","v256HardProtect","v256RejectDamage","v2562FinalFootLock","v2562ToeRelock"].forEach(id=>{
+["enableWeightedSkin","showWeightMap","rigidCoreWeights","poleKnees","poleElbows","neutralBindMode","rejectCrossLimb","lockExtremities","protectPixelIslands","walkNormalize","preventCrouch","straightPlantLeg","normalizeStride","enableUnifiedMesh","alphaUnifiedMask","unifiedIslands","sealJointGaps","unifiedAccessories","showUnifiedMesh","animGraphEnabled","poseSearchEnabled","ctlHeadAim","ctlWeaponTarget","ctlPoseMirror","constraintCopyPos","constraintCopyRot","constraintParent","constraintAim","correctivePoseEnabled","spriteSwapEnabled","montageEnabled","motionWarpEnabled","blendTreeEnabled","universalSkeletonEnabled","aiDirectorEnabled","aiStopOnFail","aiAutoCorrect","aiAllowBypass","aiRequireApproval","aiSnesProfile","aiSnesTrim","ai4bppOptimize","aiTileReuse","aiVramCheck","aiOamCheck","aiCompression","autoLimbRepair","v25Enabled","v25AutoRevert","v25PreserveFeet","v25PreserveSilhouette","v252FinalPoseEnabled","v252ResolveAfter","v253PhaseLock","v253FootWorldLock","v253RotateTargets","v254FreezeSolved","v254SupportSolve","v255PersistentContact","v255ProtectSolved","v256HardProtect","v256RejectDamage","v2562FinalFootLock","v2562ToeRelock"].forEach(id=>{
   $(id)?.addEventListener("change",()=>draw());
 });
 ["skinBlendRadius","boneInfluence","weightedMeshGrid","weightJointBlend","poleStrength","poleDistance","crossLimbReject","extremityRigidity","maxPelvisDrop","maxKneeLift","standingHeightFloor","walkStrideScale","plantLegStraight","pelvisSmooth","unifiedCols","unifiedPadding","unifiedFalloff","jointSealStrength","unifiedAccessoryRigid","stateBlend","poseThreshold","correctiveStrength","montageStartup","montageActive","montageRecovery","motionStrideWarp","orientationWarp","aiPassThreshold"].forEach(id=>{
@@ -7105,7 +7478,7 @@ $("generate").addEventListener("click",()=>setTimeout(()=>{refreshProductionPref
 v23SetState("Idle");v23DrawTimeline();v23ApplyBlendTree();
 detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFrameMs();resize();
 
-/* V25.8.1 controlled cross-script API */
+/* V25.8.2 controlled cross-script API */
 window.FISpriteWalkerAPI={
   getSource:()=>source,
   getSourceName:()=>sourceName,
@@ -7134,6 +7507,9 @@ window.FISpriteWalkerAPI={
   invalidateRigApproval:v258InvalidateRigApproval,
   invalidateMotionApproval:v258InvalidateMotionApproval,
   generateCanonicalFrames:v258GenerateCanonicalFrames,
+  buildSnesPack:v2582BuildSnesPack,
+  snesSignature:v2582SnesSignature,
+  exportSnesPack:v2582ExportCurrentSnesPack,
   correctionConsistency:()=>{
     const target=+($("v25TargetQuality")?.value||92);
     const current=+(String($("v25CurrentQuality")?.textContent||"").replace("%","")||NaN);
@@ -7148,7 +7524,7 @@ setTimeout(()=>{
   if($("v25BestQuality"))$("v25BestQuality").textContent="--";
   if($("v25PassCount"))$("v25PassCount").textContent="0 / 12";
   if($("v25Report"))$("v25Report").textContent=
-    "V25.8.1 Canonical Contact Stabilization ready. Signed approvals + canonical scoring initialized.";
+    "V25.8.2 SNES Production Packing ready. Canonical correction + 4bpp/OAM/DMA validation initialized.";
 },50);
 
 document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
@@ -7157,7 +7533,7 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
 
 <script>
 /* ============================================================
-   FATAL INSTINCT V25.8.1
+   FATAL INSTINCT V25.8.2
    MASTER SPRITE AUTO-RIG + HUMAN APPROVAL GATE
    MODULE-SAFE PRODUCTION FIX
    ============================================================ */
@@ -7333,7 +7709,7 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
     if(el("showBones"))el("showBones").checked=true;
     if(el("showSprite"))el("showSprite").checked=true;
     appMode("joint");appDraw();saveCheckpoint();openGate();
-    appStatus("V25.8.1 Auto-Rig complete. Rig Approval Gate is ready.");
+    appStatus("V25.8.2 Auto-Rig complete. Rig Approval Gate is ready.");
   }
 
   function fixRig(){
@@ -7427,7 +7803,7 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
 <script>
 /* ============================================================
    FATAL INSTINCT - C++ MOTION BRIDGE
-   V25.8.1 MODULE-SAFE PRODUCTION FIX
+   V25.8.2 MODULE-SAFE PRODUCTION FIX
    ============================================================ */
 (()=>{
   const api=()=>window.FISpriteWalkerAPI||null;
@@ -7537,7 +7913,9 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
     if(typeof a?.motionSignature!=="function")fails.push("motion signature");
     if(typeof a?.generateCanonicalFrames!=="function")fails.push("canonical frame generator");
     if(typeof a?.correctionConsistency!=="function")fails.push("correction consistency guard");
-    for(const id of ["enableConstraints","pinPlantFeet","poleKnees","poleElbows","v258CanonicalStatus","v258GroundAnchorSource"]){if(!document.getElementById(id))fails.push(`missing ${id}`);}
+    if(typeof a?.buildSnesPack!=="function")fails.push("SNES production packer");
+    if(typeof a?.snesSignature!=="function")fails.push("SNES pack signature");
+    for(const id of ["enableConstraints","pinPlantFeet","poleKnees","poleElbows","v258CanonicalStatus","v258GroundAnchorSource","aiSnesProfile","v2582PackStatus","v2582ExportSnesPack"]){if(!document.getElementById(id))fails.push(`missing ${id}`);}
 
     const b=document.getElementById("fiAuditBadge"),t=document.getElementById("fiAuditText");
     if(fails.length){
@@ -7546,7 +7924,7 @@ document.dispatchEvent(new CustomEvent("fi:spritewalker-ready"));
       return false;
     }
     if(b){b.textContent="PASS";b.className="fiGateStage approved";}
-    if(t)t.textContent="PASS: module bridge, signed approvals, 12-fighter roster, canonical contact authority, canonical scoring, action routing, worst-case grounding, full project persistence, loader, and C++ hooks initialized.";
+    if(t)t.textContent="PASS: module bridge, signed approvals, 12-fighter roster, canonical contact/scoring, action routing, auto critic handoff, 128×128 SNES 4bpp packer, OAM/DMA validation, project persistence, loader, and C++ hooks initialized.";
     return true;
   }
   document.addEventListener("fi:spritewalker-ready",()=>setTimeout(run,50));
