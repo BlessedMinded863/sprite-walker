@@ -148,7 +148,7 @@
 
 
 /* ============================================================
-   FATAL INSTINCT V26.2 — BODY-PART APPROVAL GATE
+   FATAL INSTINCT V26.3 — BODY-PART APPROVAL GATE
    ============================================================ */
 .fiPartsGateOverlay{position:fixed;inset:0;z-index:99995;background:rgba(3,6,10,.86);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center;padding:10px env(safe-area-inset-right) calc(10px + env(safe-area-inset-bottom)) env(safe-area-inset-left)}
 .fiPartsGateOverlay.open{display:flex}
@@ -190,6 +190,103 @@
   .fiPartsActions{grid-template-columns:repeat(3,1fr)}
 }
 
+
+/* ============================================================
+   FATAL INSTINCT V26.3 — RIG GEOMETRY AUDIT + PROTECTED REBIND
+   ============================================================ */
+.fiAuditOverlay{
+  position:fixed;inset:0;z-index:99993;
+  background:rgba(3,6,10,.86);backdrop-filter:blur(8px);
+  display:none;align-items:flex-end;justify-content:center;
+  padding:10px env(safe-area-inset-right)
+          calc(10px + env(safe-area-inset-bottom))
+          env(safe-area-inset-left)
+}
+.fiAuditOverlay.open{display:flex}
+.fiAuditCard{
+  width:min(820px,100%);max-height:92vh;overflow:auto;
+  background:#10151e;border:1px solid #364154;border-radius:22px;
+  padding:16px;box-shadow:0 24px 80px rgba(0,0,0,.62)
+}
+.fiAuditHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.fiAuditHead h2{font-size:20px;margin:0 0 5px}
+.fiAuditHead p{font-size:12px;color:var(--muted);margin:0;line-height:1.45}
+.fiAuditScore{
+  min-width:92px;text-align:center;border:1px solid var(--line);
+  background:#0b1017;border-radius:15px;padding:9px
+}
+.fiAuditScore b{display:block;font-size:25px}
+.fiAuditScore span{font-size:10px;color:var(--muted)}
+.fiAuditGrid{
+  display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:12px 0
+}
+.fiAuditItem{
+  display:flex;justify-content:space-between;gap:8px;align-items:center;
+  background:#0b1017;border:1px solid #2b3442;border-radius:10px;
+  padding:9px;font-size:11px
+}
+.fiAuditItem .left{display:flex;gap:7px;align-items:center;min-width:0}
+.fiAuditItem .dot{width:8px;height:8px;border-radius:50%;background:#768390;flex:0 0 auto}
+.fiAuditItem small{color:var(--muted);white-space:nowrap}
+.fiAuditItem.ok{border-color:#245b43}.fiAuditItem.ok .dot{background:#3fb950}
+.fiAuditItem.warn{border-color:#735f20}.fiAuditItem.warn .dot{background:#d29922}
+.fiAuditItem.bad{border-color:#7d2e33}.fiAuditItem.bad .dot{background:#f85149}
+.fiAuditWarnings{
+  background:#0c1119;border:1px solid #2a3442;border-radius:12px;
+  padding:10px;font-size:11px;color:var(--muted);line-height:1.5;
+  max-height:145px;overflow:auto
+}
+.fiAuditActions{
+  display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px
+}
+.fiAuditActions button{min-height:44px}
+.fiAuditActions .approve{
+  background:#153d2c;border-color:#2d7f58;color:#a8f0cb;font-weight:700
+}
+.fiAuditActions .fix{
+  background:#1b3045;border-color:#32648c;color:#a7d8ff
+}
+.fiAuditActions .rerun{
+  background:#3b2e10;border-color:#806921;color:#ffe08a
+}
+.fiAuditActions .approve:disabled{opacity:.38;filter:grayscale(1);cursor:not-allowed}
+.fiRebindPanel{
+  margin-top:12px;border:1px solid #304257;border-radius:13px;
+  background:#0b1119;padding:10px
+}
+.fiRebindHead{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.fiRebindHead b{font-size:12px}
+.fiRebindHead span{
+  font-size:10px;border:1px solid #31526c;color:#79c0ff;
+  border-radius:999px;padding:4px 7px
+}
+.fiRebindRows{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.fiRebindRow{
+  border:1px solid #263345;border-radius:9px;padding:7px;font-size:10px;
+  display:flex;justify-content:space-between;gap:8px
+}
+.fiRebindRow b{font-size:10px}.fiRebindRow span{color:var(--muted)}
+.fiAuditFixDock{
+  position:fixed;z-index:99992;
+  left:max(10px,env(safe-area-inset-left));
+  right:max(10px,env(safe-area-inset-right));
+  bottom:calc(10px + env(safe-area-inset-bottom));
+  display:none;align-items:center;gap:8px;
+  background:#101821;border:1px solid #31526c;border-radius:15px;
+  padding:9px;box-shadow:0 18px 55px rgba(0,0,0,.48)
+}
+.fiAuditFixDock.open{display:flex}
+.fiAuditFixDock .text{flex:1;min-width:0}
+.fiAuditFixDock .text b{display:block;font-size:12px}
+.fiAuditFixDock .text span{display:block;font-size:10px;color:var(--muted);margin-top:2px}
+.fiAuditFixDock button{padding:8px 10px;font-size:10px}
+@media(min-width:700px){
+  .fiAuditOverlay{align-items:center}
+  .fiAuditGrid{grid-template-columns:repeat(3,1fr)}
+  .fiAuditActions{grid-template-columns:repeat(3,1fr)}
+  .fiRebindRows{grid-template-columns:repeat(3,1fr)}
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
@@ -220,7 +317,7 @@ setTimeout(()=>{
 </style>
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V26.2</span></h1><div class="sub">Production Engine • TypeScript Runtime • Browser C++ WebAssembly • Rig Approval Gate</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V26.3</span></h1><div class="sub">Production Engine • TypeScript Runtime • Browser C++ WebAssembly • Rig Approval Gate</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -333,6 +430,61 @@ setTimeout(()=>{
   <button id="fiRigApproveDock" class="fiApprove">Approve</button>
 </div>
 
+
+
+
+<div class="fiAuditOverlay" id="fiRigAuditOverlay" role="dialog" aria-modal="true" aria-labelledby="fiRigAuditTitle">
+  <div class="fiAuditCard">
+    <div class="fiAuditHead">
+      <div>
+        <h2 id="fiRigAuditTitle">Rig Geometry Audit</h2>
+        <p>
+          This gate checks whether Duroc's actual anatomical hinges are usable
+          before body-part separation and motion generation continue.
+        </p>
+      </div>
+      <div class="fiAuditScore">
+        <b id="fiRigAuditScore">--</b>
+        <span>GEOMETRY SCORE</span>
+      </div>
+    </div>
+
+    <div class="fiAuditGrid" id="fiRigAuditGrid"></div>
+
+    <div class="fiAuditWarnings" id="fiRigAuditWarnings">
+      <b>Audit:</b> approve the rig first.
+    </div>
+
+    <div class="fiRebindPanel">
+      <div class="fiRebindHead">
+        <b>Protected Rebind / Rigid-Part Lock</b>
+        <span id="fiRebindBadge">WAITING</span>
+      </div>
+      <div class="fiRebindRows">
+        <div class="fiRebindRow"><b>Torso / Head</b><span>Rigid protected</span></div>
+        <div class="fiRebindRow"><b>Upper Arms / Forearms</b><span>Rigid hinge</span></div>
+        <div class="fiRebindRow"><b>Hands</b><span>Rigid extremity</span></div>
+        <div class="fiRebindRow"><b>Thighs / Shins</b><span>Rigid hinge</span></div>
+        <div class="fiRebindRow"><b>Feet</b><span>Rigid + foot lock</span></div>
+        <div class="fiRebindRow"><b>Joint Seams</b><span>Localized mesh only</span></div>
+      </div>
+    </div>
+
+    <div class="fiAuditActions">
+      <button id="fiRigAuditFix" class="fix">Fix Rig</button>
+      <button id="fiRigAuditRerun" class="rerun">Re-run Audit</button>
+      <button id="fiRigAuditApprove" class="approve">Approve Geometry + Protected Rebind</button>
+    </div>
+  </div>
+</div>
+
+<div class="fiAuditFixDock" id="fiRigAuditFixDock">
+  <div class="text">
+    <b>Rig Geometry Fix Mode</b>
+    <span id="fiRigAuditFixText">Drag the flagged joints, then run the audit again.</span>
+  </div>
+  <button id="fiRigAuditReviewDock">Review Audit</button>
+</div>
 
 
 <div class="fiPartsGateOverlay" id="fiPartsGateOverlay" role="dialog" aria-modal="true" aria-labelledby="fiPartsGateTitle">
@@ -2181,7 +2333,7 @@ function autoTraceAndBind(){
     $("showBones").checked=false;
     $("showSprite").checked=true;
     $("traceRegionSelect").value="all";
-    status(`V26.2 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Body-Part Approval is required.`);
+    status(`V26.3 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Body-Part Approval is required.`);
     draw();
     if(window.FIBodyPartsGate && typeof window.FIBodyPartsGate.reviewAfterBind==="function"){
       window.FIBodyPartsGate.reviewAfterBind();
@@ -4304,7 +4456,7 @@ function v256ValidateProtectedCandidate(beforeState,beforeScore,afterScore,targe
   const damage=v256LockedDamage(beforeScore.metrics,afterScore.metrics);
   const overallDrop=(beforeScore?.score??0)-(afterScore?.score??0);
 
-  // V26.2: NEVER accept a correction that lowers total motion quality.
+  // V26.3: NEVER accept a correction that lowers total motion quality.
   if(overallDrop>0.01){
     v25RestoreMotionState(beforeState);
 
@@ -5129,7 +5281,7 @@ function v25ScoreMotion(){
     );
   }
 
-  // V26.2: FINAL POSE grounding is authoritative.
+  // V26.3: FINAL POSE grounding is authoritative.
   const v2563Ground=v2563MeasureGrounding();
 
   metric.feet=v2563Ground.score;
@@ -5319,11 +5471,11 @@ function v25GenerateCorrectivePass(passNum,targetKey){
 async function v25RunSelfCorrection(){
   if(v25Motion.running||!$("v25Enabled")?.checked)return;
 
-  // V26.2: fresh support/contact anchors for every correction run.
+  // V26.3: fresh support/contact anchors for every correction run.
   v255ResetContactLocks();
   v253ResetFootLocks();
   v2562LastFootDrift=0;
-  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V26.2 protected-channel correction started.";
+  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V26.3 protected-channel correction started.";
   const target=+$("v25TargetQuality").value||92,maxPasses=+$("v25MaxPasses").value||12,minImprove=+$("v25MinImprove").value||.5;
   let base=v25ScoreMotion();v251UpdateDiagnostics(base);v25Motion.currentScore=base.score;v25Motion.bestScore=base.score;
   v25Motion.bestCorrectives=JSON.parse(JSON.stringify(v23.correctives||[]));v25Motion.bestFinalCorrections=JSON.parse(JSON.stringify(v252FinalCorrections||{}));v25Motion.bestControls=v242CaptureControls();v25Motion.history=[{pass:0,score:base.score,metrics:base.metrics}];
@@ -7049,29 +7201,55 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
 
   function approveRig(fromDock=false){
     const result=refreshReview();
+
     if(result.score<68){
-      const go=window.confirm(`Rig confidence is ${result.score}%. Approve anyway and continue?`);
+      const go=window.confirm(
+        `Rig confidence is ${result.score}%. Approve the basic rig and send it to Geometry Audit anyway?`
+      );
       if(!go){openGate();return;}
     }
+
     if(anatomy()==="no-tail")parkTail();
+
     gate.approved=true;
-    closeGate();el("fiRigFixDock")?.classList.remove("open");
-    setGateStage("approved",`Rig approved at ${result.score}% confidence. Automation may continue.`);
-    try{localStorage.setItem("fatal_instinct_v257_rig_approval",JSON.stringify({source:sourceName,score:result.score,anatomy:anatomy(),time:Date.now(),joints:rig.joints}));}catch(e){}
-    if(typeof v242SaveCheckpoint==="function")try{v242SaveCheckpoint(true);}catch(e){}
+    closeGate();
+    el("fiRigFixDock")?.classList.remove("open");
+
+    setGateStage(
+      "approved",
+      `Basic rig approved at ${result.score}% confidence. Geometry Audit is next.`
+    );
+
+    try{
+      localStorage.setItem(
+        "fatal_instinct_v263_rig_approval",
+        JSON.stringify({
+          source:sourceName,
+          score:result.score,
+          anatomy:anatomy(),
+          time:Date.now(),
+          joints:rig.joints
+        })
+      );
+    }catch(e){}
+
+    if(typeof v242SaveCheckpoint==="function"){
+      try{v242SaveCheckpoint(true);}catch(e){}
+    }
 
     if(el("fiRigApprovalBehavior")?.value==="continue"){
-      let separated=false;
-      try{if(typeof autoTraceAndBind==="function"){autoTraceAndBind();separated=true;}}catch(e){console.error(e);}
-      try{if(typeof v23MapUniversalSkeleton==="function")v23MapUniversalSkeleton();}catch(e){}
-      el("fiAutopilotHandoff")?.classList.add("open");
-      if(el("fiAutopilotHandoffText"))el("fiAutopilotHandoffText").textContent=separated?
-        "Rig locked. Auto Trace & Bind has started body-part separation. Body-Part Approval is now required before motion/render production unlocks.":
-        "Rig locked. The next automation stage is ready; body-part separation may still need to run.";
-      if(typeof refreshProductionPreflight==="function")try{refreshProductionPreflight();}catch(e){}
-      if(typeof status==="function")status("Rig APPROVED. Body-part separation started. Waiting for Body-Part Approval.");
+      if(
+        window.FIRigGeometryAudit &&
+        typeof window.FIRigGeometryAudit.open==="function"
+      ){
+        window.FIRigGeometryAudit.open();
+      }else{
+        status("Rig approved, but Geometry Audit failed to initialize.");
+      }
     }else{
-      if(typeof status==="function")status("Rig APPROVED and held. Press Auto Trace & Bind when you want to continue.");
+      status(
+        "Basic rig APPROVED and held. Run the Rig Geometry Audit before body-part separation."
+      );
     }
   }
 
@@ -7100,6 +7278,511 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
   // The old Seed Rig button now enters the same approval gate, so every route is protected.
   el("seedRig")?.addEventListener("click",()=>setTimeout(()=>{if(source){if(anatomy()==="no-tail")parkTail();openGate();}},30));
 
+
+  /* ============================================================
+     FATAL INSTINCT V26.3 — RIG GEOMETRY AUDIT
+     + PROTECTED REBIND / RIGID-PART LOCK
+     ============================================================ */
+  const fiRigAuditState={
+    approved:false,
+    score:0,
+    report:null,
+    source:""
+  };
+
+  function fiDist(a,b){
+    if(!a||!b)return 0;
+    return Math.hypot(a[0]-b[0],a[1]-b[1]);
+  }
+
+  function fiMid(a,b){
+    return [(a[0]+b[0])/2,(a[1]+b[1])/2];
+  }
+
+  function fiPointSegmentDistance(p,a,b){
+    if(!p||!a||!b)return 1e9;
+    const vx=b[0]-a[0],vy=b[1]-a[1];
+    const den=vx*vx+vy*vy||1;
+    const t=Math.max(0,Math.min(1,((p[0]-a[0])*vx+(p[1]-a[1])*vy)/den));
+    const q=[a[0]+vx*t,a[1]+vy*t];
+    return fiDist(p,q);
+  }
+
+  function fiRatioScore(value,minGood,maxGood,minFail,maxFail){
+    if(!Number.isFinite(value))return 0;
+    if(value>=minGood&&value<=maxGood)return 100;
+    if(value<=minFail||value>=maxFail)return 0;
+    if(value<minGood){
+      return Math.round(
+        100*(value-minFail)/Math.max(.0001,minGood-minFail)
+      );
+    }
+    return Math.round(
+      100*(maxFail-value)/Math.max(.0001,maxFail-maxGood)
+    );
+  }
+
+  function fiAuditLevel(score){
+    if(score>=82)return "ok";
+    if(score>=62)return "warn";
+    return "bad";
+  }
+
+  function fiRigGeometryAudit(){
+    const j=rig.joints||{};
+    const h=Math.max(1,source?.height||500);
+    const w=Math.max(1,source?.width||400);
+    const leg=legMetrics()?.avgLeg||h*.34;
+    const items=[];
+    const warnings=[];
+
+    const push=(key,label,score,note)=>{
+      score=Math.max(0,Math.min(100,Math.round(score||0)));
+      const level=fiAuditLevel(score);
+      items.push({key,label,score,note,level});
+      if(level==="bad")warnings.push(`${label}: ${note}`);
+      else if(level==="warn")warnings.push(`${label} should be inspected: ${note}`);
+    };
+
+    // Torso center / pelvis relative to hips.
+    if(j.pelvis&&j.left_hip&&j.right_hip){
+      const hm=fiMid(j.left_hip,j.right_hip);
+      const dx=Math.abs(j.pelvis[0]-hm[0])/Math.max(1,w);
+      const dy=Math.abs(j.pelvis[1]-hm[1])/Math.max(1,h);
+      const s=100-Math.min(100,dx*700+Math.max(0,dy-.07)*700);
+      push(
+        "pelvis",
+        "Pelvis / Hip Center",
+        s,
+        `center offset ${(dx*w).toFixed(0)} px`
+      );
+    }else{
+      push("pelvis","Pelvis / Hip Center",0,"required joints missing");
+    }
+
+    // Shoulder symmetry / torso socket geometry.
+    if(j.left_shoulder&&j.right_shoulder&&j.neck&&j.pelvis){
+      const sm=fiMid(j.left_shoulder,j.right_shoulder);
+      const torsoX=(j.neck[0]+j.pelvis[0])/2;
+      const centerErr=Math.abs(sm[0]-torsoX)/w;
+      const yErr=Math.abs(j.left_shoulder[1]-j.right_shoulder[1])/h;
+      const span=fiDist(j.left_shoulder,j.right_shoulder)/Math.max(1,leg);
+      const spanScore=fiRatioScore(span,.38,1.05,.18,1.55);
+      const score=spanScore*.48+
+        Math.max(0,100-centerErr*900)*.32+
+        Math.max(0,100-yErr*800)*.20;
+      push(
+        "shoulders",
+        "Shoulder Pivots",
+        score,
+        `span ${span.toFixed(2)}× leg`
+      );
+    }else{
+      push("shoulders","Shoulder Pivots",0,"required joints missing");
+    }
+
+    // Hip symmetry.
+    if(j.left_hip&&j.right_hip&&j.pelvis){
+      const hm=fiMid(j.left_hip,j.right_hip);
+      const centerErr=Math.abs(hm[0]-j.pelvis[0])/w;
+      const yErr=Math.abs(j.left_hip[1]-j.right_hip[1])/h;
+      const span=fiDist(j.left_hip,j.right_hip)/Math.max(1,leg);
+      const spanScore=fiRatioScore(span,.20,.62,.08,.95);
+      const score=spanScore*.50+
+        Math.max(0,100-centerErr*1000)*.30+
+        Math.max(0,100-yErr*900)*.20;
+      push("hips","Hip Pivots",score,`span ${span.toFixed(2)}× leg`);
+    }else{
+      push("hips","Hip Pivots",0,"required joints missing");
+    }
+
+    function chainAudit(side,type,aName,bName,cName,minRatio,maxRatio){
+      const a=j[aName],b=j[bName],c=j[cName];
+      const label=`${side==="left"?"Left":"Right"} ${type}`;
+      if(!a||!b||!c){
+        push(`${side}_${type}`,label,0,"required joints missing");
+        return;
+      }
+      const l1=fiDist(a,b),l2=fiDist(b,c);
+      const ratio=l1/Math.max(1,l2);
+      const ratioScore=fiRatioScore(
+        ratio,
+        minRatio,maxRatio,
+        minRatio*.42,maxRatio*1.85
+      );
+      const lineErr=fiPointSegmentDistance(b,a,c)/
+        Math.max(1,l1+l2);
+      // A hinge should not be perfectly straight, but it also should not be
+      // wildly outside the limb chain.
+      const bendScore=lineErr<.03?76:
+        Math.max(0,100-Math.max(0,lineErr-.22)*360);
+      const score=ratioScore*.62+bendScore*.38;
+      push(
+        `${side}_${type}`,
+        label,
+        score,
+        `segment ratio ${ratio.toFixed(2)}`
+      );
+    }
+
+    chainAudit(
+      "left","Arm",
+      "left_shoulder","left_elbow","left_wrist",
+      .58,1.70
+    );
+    chainAudit(
+      "right","Arm",
+      "right_shoulder","right_elbow","right_wrist",
+      .58,1.70
+    );
+    chainAudit(
+      "left","Leg",
+      "left_hip","left_knee","left_ankle",
+      .66,1.52
+    );
+    chainAudit(
+      "right","Leg",
+      "right_hip","right_knee","right_ankle",
+      .66,1.52
+    );
+
+    // Foot hinge + toe geometry.
+    for(const side of ["left","right"]){
+      const a=j[`${side}_ankle`];
+      const t=j[`${side}_toe`];
+      const s=j[`${side}_knee`];
+      const label=`${side==="left"?"Left":"Right"} Ankle / Toe`;
+
+      if(!a||!t||!s){
+        push(`${side}_foot`,label,0,"required joints missing");
+        continue;
+      }
+
+      const foot=fiDist(a,t)/Math.max(1,fiDist(s,a));
+      const score=fiRatioScore(foot,.20,.70,.06,1.10);
+      push(
+        `${side}_foot`,
+        label,
+        score,
+        `foot/shin ${foot.toFixed(2)}`
+      );
+    }
+
+    // Neck / torso axis.
+    if(j.neck&&j.pelvis){
+      const torsoLen=fiDist(j.neck,j.pelvis);
+      const vertical=Math.abs(j.neck[1]-j.pelvis[1])/
+        Math.max(1,torsoLen);
+      const order=j.neck[1]<j.pelvis[1]?100:0;
+      const score=order*.65+Math.min(100,vertical*115)*.35;
+      push(
+        "torso_axis",
+        "Neck / Torso Axis",
+        score,
+        order?"neck above pelvis":"neck must be above pelvis"
+      );
+    }else{
+      push("torso_axis","Neck / Torso Axis",0,"required joints missing");
+    }
+
+    const score=items.length
+      ?Math.round(items.reduce((a,b)=>a+b.score,0)/items.length)
+      :0;
+
+    const bad=items.filter(x=>x.level==="bad").length;
+    const warn=items.filter(x=>x.level==="warn").length;
+
+    return {
+      score,
+      items,
+      warnings,
+      bad,
+      warn,
+      valid:bad===0 && score>=68
+    };
+  }
+
+  function fiRenderRigAudit(){
+    const report=fiRigGeometryAudit();
+    fiRigAuditState.report=report;
+    fiRigAuditState.score=report.score;
+
+    const scoreEl=el("fiRigAuditScore");
+    if(scoreEl){
+      scoreEl.textContent=report.score+"%";
+      scoreEl.style.color=
+        report.valid?"#62e7ad":
+        report.score>=62?"#f2cc60":"#ff7b72";
+    }
+
+    const grid=el("fiRigAuditGrid");
+    if(grid){
+      grid.innerHTML="";
+      for(const item of report.items){
+        const row=document.createElement("div");
+        row.className=`fiAuditItem ${item.level}`;
+        row.innerHTML=
+          `<div class="left"><i class="dot"></i>`+
+          `<span>${item.label}</span></div>`+
+          `<small>${item.score}%</small>`;
+        grid.appendChild(row);
+      }
+    }
+
+    const warnEl=el("fiRigAuditWarnings");
+    if(warnEl){
+      const msgs=report.warnings.length
+        ?report.warnings
+        :["All major anatomical hinge checks passed."];
+      warnEl.innerHTML=
+        "<b>Audit:</b><br>"+
+        msgs.slice(0,12).map(x=>"• "+x).join("<br>");
+    }
+
+    const approve=el("fiRigAuditApprove");
+    if(approve){
+      approve.disabled=report.score<55 || report.bad>2;
+      approve.textContent=
+        report.valid
+          ?"Approve Geometry + Protected Rebind"
+          :"Review / Fix Geometry Before Continuing";
+    }
+
+    return report;
+  }
+
+  function fiOpenRigAudit(){
+    fiRigAuditState.approved=false;
+    fiRigAuditState.source=sourceName||"";
+    fiRenderRigAudit();
+    el("fiRigAuditOverlay")?.classList.add("open");
+    el("fiRigAuditFixDock")?.classList.remove("open");
+
+    if(typeof status==="function"){
+      status(
+        "Rig Geometry Audit: verify anatomical hinges before body-part binding."
+      );
+    }
+  }
+
+  function fiCloseRigAudit(){
+    el("fiRigAuditOverlay")?.classList.remove("open");
+  }
+
+  function fiFixRigFromAudit(){
+    fiCloseRigAudit();
+    el("fiRigAuditFixDock")?.classList.add("open");
+
+    if(typeof setMode==="function")setMode("joint");
+    if(el("showBones"))el("showBones").checked=true;
+    if(typeof draw==="function")draw();
+
+    const report=fiRenderRigAudit();
+    const issue=report.items.find(x=>x.level!=="ok");
+
+    if(el("fiRigAuditFixText")){
+      el("fiRigAuditFixText").textContent=
+        issue
+          ?`Inspect ${issue.label} first. Drag the corresponding joint(s), then Review Audit.`
+          :"Adjust any hinge you do not like, then Review Audit.";
+    }
+
+    if(typeof status==="function"){
+      status(
+        "Rig Geometry Fix Mode active. Drag joints to the actual anatomical hinge points."
+      );
+    }
+  }
+
+  function fiApplyProtectedRebind(){
+    // Record per-part production behavior.
+    const rigidParts=[
+      "torso","head",
+      "left_upper_arm","left_forearm","left_hand",
+      "right_upper_arm","right_forearm","right_hand",
+      "left_thigh","left_shin","left_foot",
+      "right_thigh","right_shin","right_foot"
+    ];
+
+    if(anatomy()==="tail")rigidParts.push("tail");
+
+    for(const name of rigidParts){
+      rig.parts[name]=rig.parts[name]||{};
+      rig.parts[name].fiBindMode=
+        ["left_hand","right_hand","left_foot","right_foot","head"].includes(name)
+          ?"rigid_extremity"
+          :name==="torso"
+            ?"rigid_core"
+            :"rigid_hinge";
+      rig.parts[name].fiProtected=true;
+    }
+
+    // Use rigid sprite pieces and ONLY a small localized seam mesh.
+    // This protects armor, skull knee guards, bracers, and other hard details.
+    if(el("preserveSprite"))el("preserveSprite").checked=true;
+    if(el("rigidTorso"))el("rigidTorso").checked=true;
+    if(el("protectAccessories"))el("protectAccessories").checked=true;
+    if(el("safeMesh"))el("safeMesh").checked=true;
+
+    if(el("enableUnifiedMesh"))el("enableUnifiedMesh").checked=false;
+    if(el("unifiedMeshMode"))el("unifiedMeshMode").value="legacy";
+
+    if(el("skinRenderMode"))el("skinRenderMode").value="rigid";
+    if(el("enableWeightedSkin"))el("enableWeightedSkin").checked=false;
+
+    if(el("useJointMesh"))el("useJointMesh").checked=true;
+    if(el("jointDeform"))el("jointDeform").value="42";
+    if(el("jointDeformV"))el("jointDeformV").textContent="42";
+
+    if(el("meshRadius"))el("meshRadius").value="7";
+    if(el("meshRadiusV"))el("meshRadiusV").textContent="7";
+
+    if(el("maxMeshStretch"))el("maxMeshStretch").value="128";
+    if(el("maxMeshStretchV"))el("maxMeshStretchV").textContent="128";
+
+    if(el("fiRebindBadge")){
+      el("fiRebindBadge").textContent="PROTECTED";
+      el("fiRebindBadge").style.color="#62e7ad";
+      el("fiRebindBadge").style.borderColor="#245b43";
+    }
+
+    autoTraceCache.dirty=true;
+
+    try{
+      localStorage.setItem(
+        "fatal_instinct_v263_protected_rebind",
+        JSON.stringify({
+          source:sourceName,
+          mode:"armored_sprite_safe",
+          rigid_parts:rigidParts,
+          joint_deform:42,
+          mesh_radius:7,
+          max_mesh_stretch:128,
+          time:Date.now()
+        })
+      );
+    }catch(e){}
+
+    return true;
+  }
+
+  function fiApproveRigAudit(){
+    const report=fiRenderRigAudit();
+
+    if(report.score<55 || report.bad>2){
+      if(typeof status==="function"){
+        status(
+          "Geometry Audit BLOCKED: fix the red hinge checks before continuing."
+        );
+      }
+      fiOpenRigAudit();
+      return false;
+    }
+
+    if(!report.valid){
+      const go=window.confirm(
+        `Geometry score is ${report.score}% with ${report.warn} warning(s). `+
+        `Apply Protected Rebind and continue anyway?`
+      );
+      if(!go){
+        fiOpenRigAudit();
+        return false;
+      }
+    }
+
+    fiRigAuditState.approved=true;
+    fiRigAuditState.source=sourceName||"";
+    fiApplyProtectedRebind();
+    fiCloseRigAudit();
+    el("fiRigAuditFixDock")?.classList.remove("open");
+
+    try{
+      localStorage.setItem(
+        "fatal_instinct_v263_geometry_audit",
+        JSON.stringify({
+          source:sourceName,
+          score:report.score,
+          bad:report.bad,
+          warn:report.warn,
+          approved:true,
+          time:Date.now()
+        })
+      );
+    }catch(e){}
+
+    // Now and only now may body-part extraction continue.
+    let separated=false;
+    try{
+      if(typeof autoTraceAndBind==="function"){
+        autoTraceAndBind();
+        separated=true;
+      }
+    }catch(e){
+      console.error(e);
+    }
+
+    try{
+      if(typeof v23MapUniversalSkeleton==="function"){
+        v23MapUniversalSkeleton();
+      }
+    }catch(e){}
+
+    if(el("fiAutopilotHandoff")){
+      el("fiAutopilotHandoff").classList.add("open");
+    }
+
+    if(el("fiAutopilotHandoffText")){
+      el("fiAutopilotHandoffText").textContent=
+        separated
+          ?`Rig Geometry APPROVED at ${report.score}%. `+
+           `Protected rigid-part binding is active. `+
+           `Body-Part Approval is now required.`
+          :"Geometry approved and Protected Rebind applied. "+
+           "Run Auto Trace & Bind to continue.";
+    }
+
+    if(typeof refreshProductionPreflight==="function"){
+      try{refreshProductionPreflight();}catch(e){}
+    }
+
+    if(typeof v242SaveCheckpoint==="function"){
+      try{v242SaveCheckpoint(true);}catch(e){}
+    }
+
+    if(typeof status==="function"){
+      status(
+        `RIG GEOMETRY APPROVED ${report.score}%. `+
+        `Protected Rebind ACTIVE. Body-part separation started.`
+      );
+    }
+
+    return true;
+  }
+
+  el("fiRigAuditFix")?.addEventListener("click",fiFixRigFromAudit);
+  el("fiRigAuditRerun")?.addEventListener("click",()=>{
+    fiRenderRigAudit();
+    if(typeof draw==="function")draw();
+  });
+  el("fiRigAuditApprove")?.addEventListener("click",fiApproveRigAudit);
+  el("fiRigAuditReviewDock")?.addEventListener("click",fiOpenRigAudit);
+
+  canvas?.addEventListener("pointerup",()=>{
+    if(el("fiRigAuditFixDock")?.classList.contains("open")){
+      setTimeout(fiRenderRigAudit,25);
+    }
+  });
+
+  window.FIRigGeometryAudit={
+    open:fiOpenRigAudit,
+    analyze:fiRigGeometryAudit,
+    render:fiRenderRigAudit,
+    approve:fiApproveRigAudit,
+    applyProtectedRebind:fiApplyProtectedRebind,
+    state:fiRigAuditState
+  };
+
+
   window.FIRigApprovalGate={
     autoRig,review:openGate,fix:fixRig,approve:approveRig,analyze:analyzeRig,state:gate
   };
@@ -7112,7 +7795,7 @@ window.FI_WASM_BASE64="AGFzbQEAAAABFgRgAAF/YAN/f30Bf2ACf38BfWAAAX0DEhEAAAAAAAECA
 </script>
 <script id="fiV26TypedRuntime">
 "use strict";
-/* Fatal Instinct Sprite Walker V26.2
+/* Fatal Instinct Sprite Walker V26.3
  * Typed browser runtime for C++ WebAssembly motion analysis/correction.
  */
 const FI_JOINTS = [
@@ -7276,7 +7959,7 @@ window.fiInferMotionType = fiInferMotionType;
 
 </script>
 <script id="fiV26Controller">
-/* Fatal Instinct Sprite Walker V26.2 - unified TypeScript/C++ WASM controller */
+/* Fatal Instinct Sprite Walker V26.3 - unified TypeScript/C++ WASM controller */
 (()=>{
   const runtime=new window.FISpriteWalkerRuntime();
   const button=document.getElementById("cppAutoCorrect");
@@ -7368,7 +8051,7 @@ window.fiInferMotionType = fiInferMotionType;
 
 <script>
 /* ============================================================
-   FATAL INSTINCT V26.2 — BODY-PART APPROVAL GATE
+   FATAL INSTINCT V26.3 — BODY-PART APPROVAL GATE
    Prevents textured sprite animation/render until body-part
    extraction has been visually reviewed and approved.
    ============================================================ */
@@ -7629,7 +8312,7 @@ window.fiInferMotionType = fiInferMotionType;
     }
     if(el("fiAutopilotHandoffText")){
       el("fiAutopilotHandoffText").textContent=
-        `Rig and body parts APPROVED. ${report.required}/${report.required} required textures are present. Motion generation and C++ WASM correction are unlocked.`;
+        `Rig geometry + Protected Rebind + body parts APPROVED. ${report.required}/${report.required} required textures are present. Motion generation and C++ WASM correction are unlocked.`;
     }
 
     if(typeof status==="function"){
@@ -7745,7 +8428,7 @@ window.fiInferMotionType = fiInferMotionType;
 
 
 <script>
-/* V26.2 grounding/session reset guard */
+/* V26.3 grounding/session reset guard */
 (function(){
   const src=document.getElementById("sourceFile");
 
