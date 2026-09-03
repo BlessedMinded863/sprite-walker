@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Progressive Motion Sketch Engine v27.1</title>
+<title>Progressive Motion Sketch Engine v28</title>
 <style>
 :root{
   --bg:#101114; --panel:#17191f; --panel2:#1f222a; --line:#343844;
@@ -76,8 +76,8 @@ canvas{display:block;width:100%;height:100%;background:linear-gradient(#151821 0
 <body>
 <header>
   <div>
-    <strong>Progressive Motion Sketch Engine v27.1</strong>
-    <span class="badge">Image Import + AI Assist + Motion Memory</span>
+    <strong>Progressive Motion Sketch Engine v28</strong>
+    <span class="badge">Rig Binding + Image Import + AI Assist</span>
   </div>
   <div class="top-actions">
     <label for="characterUpload" style="display:inline-flex;align-items:center;gap:6px;background:#292d36;color:white;border:1px solid #414653;border-radius:8px;padding:8px 11px;cursor:pointer">
@@ -86,6 +86,8 @@ canvas{display:block;width:100%;height:100%;background:linear-gradient(#151821 0
     <input id="characterUpload" type="file" accept="image/png,image/jpeg,image/webp" style="display:none">
     <button id="fitCharacter">Fit Character</button>
     <button id="toggleCharacter">Character: ON</button>
+    <button id="bindMode">Bind Mode: OFF</button>
+    <button id="autoBind">Auto Bind</button>
     <button id="newFrame">+ Add Frame</button>
     <button id="duplicateFrame">Duplicate</button>
     <button id="approveFrame">Approve Frame</button>
@@ -112,7 +114,8 @@ canvas{display:block;width:100%;height:100%;background:linear-gradient(#151821 0
       <button id="imgRight">Image →</button>
       <button id="imgUp">↑ Image</button>
       <button id="imgDown">↓ Image</button>
-      <span class="hint">Load a transparent PNG if possible. Use the image controls to line the rig up over the character.</span>
+      <button id="resetBinding">Reset Binding</button>
+      <span class="hint" id="bindHint">Load a transparent PNG if possible. Turn Bind Mode ON to assign image regions to the rig.</span>
     </div>
   </div>
 
@@ -127,6 +130,35 @@ canvas{display:block;width:100%;height:100%;background:linear-gradient(#151821 0
       <div class="score-card"><small>Continuity</small><b id="continuityScore">100%</b></div>
       <div class="score-card"><small>Foot Placement</small><b id="footScore">100%</b></div>
       <div class="score-card"><small>Character Lock</small><b id="identityScore">100%</b></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="assistant-panel">
+  <div class="panel-title">
+    <b>CHARACTER RIG BINDING</b>
+    <span class="badge" id="bindStatus">UNBOUND</span>
+  </div>
+  <div class="grid2">
+    <div class="block">
+      <b>Binding Workflow</b>
+      <div class="analysis-list">
+        <div class="analysis-item"><b>1. Import</b><div class="reason">Load the character image and align it to the skeleton.</div></div>
+        <div class="analysis-item"><b>2. Auto Bind</b><div class="reason">Create default body-region anchors from the joint layout.</div></div>
+        <div class="analysis-item"><b>3. Bind Mode</b><div class="reason">Click a joint, then drag its region radius to fine-tune what part of the artwork follows that joint.</div></div>
+        <div class="analysis-item"><b>4. Pose</b><div class="reason">Move joints. The preview renderer warps the imported artwork using the bound regions.</div></div>
+      </div>
+    </div>
+    <div class="block">
+      <b>Selected Binding</b>
+      <div class="metric"><span>Joint</span><span id="selectedBindJoint">None</span></div>
+      <div class="metric"><span>Radius</span><span id="selectedBindRadius">—</span></div>
+      <div class="controls" style="padding-left:0;border-top:0">
+        <button id="radiusMinus">Radius -</button>
+        <button id="radiusPlus">Radius +</button>
+      </div>
+      <div class="hint">This is a lightweight region-warp system for testing. It preserves the original image while moving local areas around each joint.</div>
     </div>
   </div>
 </section>
@@ -247,6 +279,10 @@ let frames=initialFrames();
 let characterImage=null;
 let characterVisible=true;
 let imageTransform={x:0,y:0,scale:1};
+let bindMode=false;
+let selectedBindJoint=null;
+let bindMap={};
+let restPose=basePose();
 let current=0,dragging=null,groundLock=true,onion=true,masterOverlay=false,comparePreview=false;
 let playing=false,slow=false,stageMotion=false,playIndex=0,finalApproved=false,candidatePoses=[];
 let approvedHistory=JSON.parse(localStorage.getItem("pmse_approved_history")||"[]");
@@ -386,6 +422,86 @@ function autoCorrectCurrent(){
 }
 
 
+
+function ensureBinding(){
+ if(Object.keys(bindMap).length) return;
+ JOINTS.forEach(j=>{
+   let r=28;
+   if(j==="head") r=42;
+   else if(j==="pelvis"||j==="neck") r=36;
+   else if(j.includes("shoulder")||j.includes("hip")) r=34;
+   else if(j.includes("wrist")||j.includes("ankle")) r=24;
+   bindMap[j]={radius:r};
+ });
+}
+function imagePlacement(canvas){
+ if(!characterImage) return null;
+ const iw=characterImage.naturalWidth||characterImage.width;
+ const ih=characterImage.naturalHeight||characterImage.height;
+ const maxW=canvas.width*0.52, maxH=canvas.height*0.82;
+ const baseScale=Math.min(maxW/iw,maxH/ih);
+ const s=baseScale*imageTransform.scale;
+ const w=iw*s,h=ih*s;
+ const x=(canvas.width-w)/2+imageTransform.x;
+ const y=(canvas.height-h)*0.78+imageTransform.y;
+ return {iw,ih,s,w,h,x,y};
+}
+function canvasToImagePoint(canvas,pt){
+ const pl=imagePlacement(canvas);
+ if(!pl) return {x:0,y:0};
+ return {x:(pt.x-pl.x)/pl.s,y:(pt.y-pl.y)/pl.s};
+}
+function jointCanvasToImage(canvas,jointPt){
+ return canvasToImagePoint(canvas,jointPt);
+}
+function drawBoundCharacter(ctx, canvas, pose, alpha=1){
+ if(!characterImage || !characterVisible){return false;}
+ ensureBinding();
+ const pl=imagePlacement(canvas);
+ if(!pl) return false;
+
+ // base image
+ ctx.save();
+ ctx.globalAlpha=alpha;
+ ctx.imageSmoothingEnabled=false;
+ ctx.drawImage(characterImage,pl.x,pl.y,pl.w,pl.h);
+ ctx.restore();
+
+ // local region warps: copy circular patches from rest-joint areas and redraw at posed joint areas
+ JOINTS.forEach(j=>{
+   const rest=restPose[j], cur=pose[j], cfg=bindMap[j];
+   if(!cfg) return;
+   const restImg=jointCanvasToImage(canvas,rest);
+   const curImg=jointCanvasToImage(canvas,cur);
+   const radImg=cfg.radius/pl.s;
+   const sx=restImg.x-radImg, sy=restImg.y-radImg, sw=radImg*2, sh=radImg*2;
+   const dx=pl.x+(curImg.x-radImg)*pl.s, dy=pl.y+(curImg.y-radImg)*pl.s, dw=cfg.radius*2, dh=cfg.radius*2;
+
+   ctx.save();
+   ctx.globalAlpha=alpha;
+   ctx.beginPath();
+   ctx.arc(pl.x+curImg.x*pl.s,pl.y+curImg.y*pl.s,cfg.radius,0,Math.PI*2);
+   ctx.clip();
+   try{ctx.drawImage(characterImage,sx,sy,sw,sh,dx,dy,dw,dh);}catch(e){}
+   ctx.restore();
+ });
+ return true;
+}
+function drawBindRegions(ctx,pose){
+ if(!bindMode) return;
+ ensureBinding();
+ ctx.save();
+ JOINTS.forEach(j=>{
+   let cfg=bindMap[j],p=pose[j];
+   ctx.beginPath();
+   ctx.strokeStyle=j===selectedBindJoint?"#ffca5f":"#66d17a";
+   ctx.lineWidth=j===selectedBindJoint?3:1.5;
+   ctx.globalAlpha=j===selectedBindJoint?.95:.45;
+   ctx.arc(p.x,p.y,cfg.radius,0,Math.PI*2);
+   ctx.stroke();
+ });
+ ctx.restore();
+}
 function drawCharacterImage(ctx, canvas, alpha=1){
  if(!characterImage || !characterVisible) return;
  const iw=characterImage.naturalWidth||characterImage.width;
@@ -427,13 +543,18 @@ function clear(ctx,canvas){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fil
 function render(){
  document.getElementById("frameLabel").textContent=`Frame ${current+1}`;
  clear(rc,rig);clear(sc,spr);
- drawCharacterImage(rc,rig,.72);
- drawCharacterImage(sc,spr,.92);
+ drawCharacterImage(rc,rig,.52);
+ if(characterImage && Object.keys(bindMap).length){
+   drawBoundCharacter(sc,spr,frames[current].pose,.96);
+ } else {
+   drawCharacterImage(sc,spr,.92);
+ }
  if(onion&&frames.length>1)drawSkeleton(rc,frames[(current-1+frames.length)%frames.length].pose,.18);
  if(masterOverlay&&master&&master.frames&&master.frames[current])drawSkeleton(rc,master.frames[current].pose,.45,true);
  drawSkeleton(rc,frames[current].pose,1);
+ drawBindRegions(rc,frames[current].pose);
  if(masterOverlay&&master&&master.frames&&master.frames[current])drawSprite(sc,master.frames[current].pose,0,1,.22,true);
- drawSprite(sc,frames[current].pose);
+ if(!characterImage) drawSprite(sc,frames[current].pose);
 
  const s=scoreFrame(current);
  [["anatomyScore","anatomy"],["continuityScore","continuity"],["footScore","foot"],["identityScore","identity"]].forEach(([id,k])=>{
@@ -465,6 +586,40 @@ function renderCandidates(){
    let d=document.createElement("div");d.className="candidate";
    d.innerHTML=`<b>${c.name} — ${Math.round(s.overall)}%</b><div class="reason">${c.reason}</div><div class="reason" style="margin-top:6px">Anatomy ${Math.round(s.anatomy)} · Continuity ${Math.round(s.continuity)} · Foot ${Math.round(s.foot)}</div>`;
    d.onclick=()=>{frames[current].pose=clone(c.pose);frames[current].approved=false;frames[current].rejected=false;finalApproved=false;candidatePoses=[];
+
+function updateBindUI(){
+ document.getElementById("bindStatus").textContent=Object.keys(bindMap).length?"BOUND":"UNBOUND";
+ document.getElementById("selectedBindJoint").textContent=selectedBindJoint||"None";
+ document.getElementById("selectedBindRadius").textContent=selectedBindJoint&&bindMap[selectedBindJoint]?`${Math.round(bindMap[selectedBindJoint].radius)} px`:"—";
+ document.getElementById("bindHint").textContent=bindMode
+   ?"Bind Mode ON: tap a joint to select its artwork region, then adjust the radius."
+   :"Bind Mode OFF: drag joints normally to pose the character.";
+}
+document.getElementById("bindMode").onclick=e=>{
+ bindMode=!bindMode;
+ e.target.textContent=`Bind Mode: ${bindMode?"ON":"OFF"}`;
+ updateBindUI();render();
+};
+document.getElementById("autoBind").onclick=()=>{
+ if(!characterImage){alert("Add a character image first.");return}
+ bindMap={};ensureBinding();selectedBindJoint="pelvis";updateBindUI();render();
+};
+document.getElementById("resetBinding").onclick=()=>{
+ bindMap={};selectedBindJoint=null;updateBindUI();render();
+};
+document.getElementById("radiusMinus").onclick=()=>{
+ if(!selectedBindJoint)return;
+ ensureBinding();
+ bindMap[selectedBindJoint].radius=clamp(bindMap[selectedBindJoint].radius-4,10,90);
+ updateBindUI();render();
+};
+document.getElementById("radiusPlus").onclick=()=>{
+ if(!selectedBindJoint)return;
+ ensureBinding();
+ bindMap[selectedBindJoint].radius=clamp(bindMap[selectedBindJoint].radius+4,10,90);
+ updateBindUI();render();
+};
+
 document.getElementById("characterUpload").addEventListener("change",e=>{
  const file=e.target.files&&e.target.files[0];
  if(!file)return;
@@ -474,7 +629,9 @@ document.getElementById("characterUpload").addEventListener("change",e=>{
    characterImage=img;
    characterVisible=true;
    imageTransform={x:0,y:0,scale:1};
+   bindMap={};ensureBinding();
    document.getElementById("toggleCharacter").textContent="Character: ON";
+   updateBindUI();
    render();
  };
  img.src=url;
@@ -492,7 +649,7 @@ document.getElementById("imgRight").onclick=()=>{imageTransform.x+=8;render()};
 document.getElementById("imgUp").onclick=()=>{imageTransform.y-=8;render()};
 document.getElementById("imgDown").onclick=()=>{imageTransform.y+=8;render()};
 
-renderCandidates();render();};
+updateBindUI();renderCandidates();render();};
    wrap.appendChild(d);
  });
 }
@@ -531,7 +688,7 @@ function renderPreviewStatic(){
    if(characterImage && characterVisible){
      pc.save();
      pc.translate(-110,0);
-     drawCharacterImage(pc,prev,.95);
+     drawBoundCharacter(pc,prev,frames[current].pose,.95);
      pc.restore();
    } else {
      drawSprite(pc,frames[current].pose,90,.62);
@@ -543,6 +700,12 @@ function canvasPoint(canvas,e){const r=canvas.getBoundingClientRect();return {x:
 rig.addEventListener("pointerdown",e=>{
  const q=canvasPoint(rig,e),p=frames[current].pose;let best=null,bd=999;
  JOINTS.forEach(j=>{let d=dist(q,p[j]);if(d<bd){bd=d;best=j}});
+ if(bindMode && bd<50){
+   selectedBindJoint=best;
+   updateBindUI();
+   render();
+   return;
+ }
  if(bd<28){dragging=best;rig.setPointerCapture(e.pointerId);finalApproved=false;frames[current].approved=false;frames[current].rejected=false;render()}
 });
 rig.addEventListener("pointermove",e=>{
@@ -609,12 +772,7 @@ function animate(){
  if(characterImage && characterVisible){
    pc.save();
    pc.translate(travel-110,0);
-   drawCharacterImage(pc,prev,.95);
-   pc.restore();
-   pc.save();
-   pc.translate(travel*0.75-40,-55);
-   pc.scale(.72,.72);
-   drawSkeleton(pc,p,.55,false);
+   drawBoundCharacter(pc,prev,p,.95);
    pc.restore();
  } else {
    if(comparePreview&&master&&master.frames&&master.frames[idx])drawSprite(pc,master.frames[idx].pose,40+travel,.55,.22,true);
@@ -623,6 +781,40 @@ function animate(){
  playIndex=(playIndex+1)%frames.length;
  setTimeout(animate,slow?260:110);
 }
+
+
+function updateBindUI(){
+ document.getElementById("bindStatus").textContent=Object.keys(bindMap).length?"BOUND":"UNBOUND";
+ document.getElementById("selectedBindJoint").textContent=selectedBindJoint||"None";
+ document.getElementById("selectedBindRadius").textContent=selectedBindJoint&&bindMap[selectedBindJoint]?`${Math.round(bindMap[selectedBindJoint].radius)} px`:"—";
+ document.getElementById("bindHint").textContent=bindMode
+   ?"Bind Mode ON: tap a joint to select its artwork region, then adjust the radius."
+   :"Bind Mode OFF: drag joints normally to pose the character.";
+}
+document.getElementById("bindMode").onclick=e=>{
+ bindMode=!bindMode;
+ e.target.textContent=`Bind Mode: ${bindMode?"ON":"OFF"}`;
+ updateBindUI();render();
+};
+document.getElementById("autoBind").onclick=()=>{
+ if(!characterImage){alert("Add a character image first.");return}
+ bindMap={};ensureBinding();selectedBindJoint="pelvis";updateBindUI();render();
+};
+document.getElementById("resetBinding").onclick=()=>{
+ bindMap={};selectedBindJoint=null;updateBindUI();render();
+};
+document.getElementById("radiusMinus").onclick=()=>{
+ if(!selectedBindJoint)return;
+ ensureBinding();
+ bindMap[selectedBindJoint].radius=clamp(bindMap[selectedBindJoint].radius-4,10,90);
+ updateBindUI();render();
+};
+document.getElementById("radiusPlus").onclick=()=>{
+ if(!selectedBindJoint)return;
+ ensureBinding();
+ bindMap[selectedBindJoint].radius=clamp(bindMap[selectedBindJoint].radius+4,10,90);
+ updateBindUI();render();
+};
 
 document.getElementById("characterUpload").addEventListener("change",e=>{
  const file=e.target.files&&e.target.files[0];
@@ -633,7 +825,9 @@ document.getElementById("characterUpload").addEventListener("change",e=>{
    characterImage=img;
    characterVisible=true;
    imageTransform={x:0,y:0,scale:1};
+   bindMap={};ensureBinding();
    document.getElementById("toggleCharacter").textContent="Character: ON";
+   updateBindUI();
    render();
  };
  img.src=url;
@@ -651,7 +845,7 @@ document.getElementById("imgRight").onclick=()=>{imageTransform.x+=8;render()};
 document.getElementById("imgUp").onclick=()=>{imageTransform.y-=8;render()};
 document.getElementById("imgDown").onclick=()=>{imageTransform.y+=8;render()};
 
-renderCandidates();render();
+updateBindUI();renderCandidates();render();
 </script>
 </body>
 </html>
