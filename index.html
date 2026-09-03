@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Progressive Motion Sketch Engine v28.1</title>
+<title>Progressive Motion Sketch Engine v27.3 Bound Pose Review</title>
 <style>
 :root{
   --bg:#101114; --panel:#17191f; --panel2:#1f222a; --line:#343844;
@@ -76,18 +76,18 @@ canvas{display:block;width:100%;height:100%;background:linear-gradient(#151821 0
 <body>
 <header>
   <div>
-    <strong>Progressive Motion Sketch Engine v28.1</strong>
-    <span class="badge">True Joint Manipulation + Rig Binding</span>
+    <strong>Progressive Motion Sketch Engine v27.3 Bound Pose Review</strong>
+    <span class="badge">Bound Artwork • Joint Editor • Live Pose Review</span>
   </div>
   <div class="top-actions">
     <label for="characterUpload" style="display:inline-flex;align-items:center;gap:6px;background:#292d36;color:white;border:1px solid #414653;border-radius:8px;padding:8px 11px;cursor:pointer">
       Add Character Image
     </label>
     <input id="characterUpload" type="file" accept="image/png,image/jpeg,image/webp" style="display:none">
-    <button id="fitCharacter">Fit Character</button>
     <button id="toggleCharacter">Character: ON</button>
-    <button id="bindMode">Bind Mode: OFF</button>
-    <button id="autoBind">Auto Bind</button>
+    <button id="bindArtwork" class="primary">Bind Artwork</button>
+    <button id="unbindArtwork">Unbind</button>
+    <button id="resetCharacter">Reset Character</button>
     <button id="newFrame">+ Add Frame</button>
     <button id="duplicateFrame">Duplicate</button>
     <button id="approveFrame">Approve Frame</button>
@@ -108,14 +108,13 @@ canvas{display:block;width:100%;height:100%;background:linear-gradient(#151821 0
       <button id="onion">Onion Skin: ON</button>
       <button id="masterOverlay">Master Overlay: OFF</button>
       <button id="resetPose">Reset Pose</button>
-      <button id="imgSmaller">Image -</button>
-      <button id="imgLarger">Image +</button>
-      <button id="imgLeft">← Image</button>
-      <button id="imgRight">Image →</button>
-      <button id="imgUp">↑ Image</button>
-      <button id="imgDown">↓ Image</button>
-      <button id="resetBinding">Reset Binding</button>
-      <span class="hint" id="bindHint">Load a transparent PNG, Auto Bind, turn Bind Mode OFF, then drag a joint. The matching artwork region should physically leave its old position and follow the joint.</span>
+      <button id="charSmaller">Char -</button>
+      <button id="charLarger">Char +</button>
+      <button id="charLeft">← Char</button>
+      <button id="charRight">Char →</button>
+      <button id="charUp">↑ Char</button>
+      <button id="charDown">↓ Char</button>
+      <span class="hint">v27 controls preserved. Import a character, align it to the rig, then drag joints exactly as before.</span>
     </div>
   </div>
 
@@ -135,35 +134,38 @@ canvas{display:block;width:100%;height:100%;background:linear-gradient(#151821 0
 </section>
 
 
+
 <section class="assistant-panel">
   <div class="panel-title">
-    <b>CHARACTER RIG BINDING</b>
-    <span class="badge" id="bindStatus">UNBOUND</span>
+    <b>BOUND CHARACTER / LIVE POSE REVIEW</b>
+    <span class="badge" id="characterStatus">NO IMAGE</span>
   </div>
   <div class="grid2">
     <div class="block">
       <b>Binding Workflow</b>
       <div class="analysis-list">
-        <div class="analysis-item"><b>1. Import</b><div class="reason">Load the character image and align it to the skeleton.</div></div>
-        <div class="analysis-item"><b>2. Auto Bind</b><div class="reason">Create default body-region anchors from the joint layout.</div></div>
-        <div class="analysis-item"><b>3. Bind Mode</b><div class="reason">Click a joint, then drag its region radius to fine-tune what part of the artwork follows that joint.</div></div>
-        <div class="analysis-item"><b>4. Pose</b><div class="reason">Move joints. The preview renderer warps the imported artwork using the bound regions.</div></div>
+        <div class="analysis-item"><b>1. Import + Align</b><div class="reason">Load the transparent character PNG and place it under the v27 skeleton.</div></div>
+        <div class="analysis-item"><b>2. Bind Artwork</b><div class="reason">Captures the current rig as the artwork's neutral/rest pose.</div></div>
+        <div class="analysis-item"><b>3. Pose on Left</b><div class="reason">Drag the same v27 joints. The right-side character now deforms from that shared pose data.</div></div>
+        <div class="analysis-item"><b>4. Review + Grade</b><div class="reason">Use the existing v27 grading, A/B/C, memory, master comparison, preview, and approval workflow.</div></div>
       </div>
     </div>
     <div class="block">
-      <b>Selected Binding</b>
-      <div class="metric"><span>Joint</span><span id="selectedBindJoint">None</span></div>
-      <div class="metric"><span>Radius</span><span id="selectedBindRadius">—</span></div>
+      <b>Deformation Controls</b>
+      <div class="metric"><span>Status</span><span id="bindStateLabel">Not Bound</span></div>
+      <div class="metric"><span>Renderer</span><span>Bone Segments</span></div>
       <div class="controls" style="padding-left:0;border-top:0">
-        <button id="radiusMinus">Radius -</button>
-        <button id="radiusPlus">Radius +</button>
-        <button id="testMove">Test Selected Joint</button>
+        <button id="limbNarrower">Limb Width -</button>
+        <button id="limbWider">Limb Width +</button>
+        <button id="torsoNarrower">Torso Width -</button>
+        <button id="torsoWider">Torso Width +</button>
       </div>
-      <div class="hint">v28.1 now removes moved regions from their original location before redrawing them at the new joint position. If a selected region is too small, increase its Radius.</div>
+      <div class="hint">
+        Arms and legs are warped bone-by-bone. Head and torso are transformed separately so the pose review follows the left-side joint editor instead of remaining a static reference image.
+      </div>
     </div>
   </div>
 </section>
-
 <section class="assistant-panel">
   <div class="panel-title">
     <b>AI MOTION ASSISTANT</b>
@@ -175,7 +177,7 @@ canvas{display:block;width:100%;height:100%;background:linear-gradient(#151821 0
   </div>
   <div class="grid2">
     <div class="block">
-      <div class="hint">Pose candidates are derived from neighboring frames, the current motion direction, and the approved master baseline when available. Imported character art is currently used as the visual reference layer while the rig controls pose data.</div>
+      <div class="hint">Pose candidates are derived from neighboring frames, the current motion direction, and the approved master baseline when available.</div>
       <div class="candidates" id="candidates"></div>
     </div>
     <div class="block">
@@ -279,11 +281,12 @@ function initialFrames(){
 let frames=initialFrames();
 let characterImage=null;
 let characterVisible=true;
-let imageTransform={x:0,y:0,scale:1};
-let bindMode=false;
-let selectedBindJoint=null;
-let bindMap={};
-let restPose=basePose();
+let characterTransform={x:0,y:0,scale:1};
+let artworkBound=false;
+let bindRestPose=null;
+let bindSourceCanvas=null;
+let limbHalfWidth=24;
+let torsoHalfWidth=50;
 let current=0,dragging=null,groundLock=true,onion=true,masterOverlay=false,comparePreview=false;
 let playing=false,slow=false,stageMotion=false,playIndex=0,finalApproved=false,candidatePoses=[];
 let approvedHistory=JSON.parse(localStorage.getItem("pmse_approved_history")||"[]");
@@ -424,149 +427,135 @@ function autoCorrectCurrent(){
 
 
 
-function ensureBinding(){
- if(Object.keys(bindMap).length) return;
- JOINTS.forEach(j=>{
-   let r=28;
-   if(j==="head") r=42;
-   else if(j==="pelvis"||j==="neck") r=36;
-   else if(j.includes("shoulder")||j.includes("hip")) r=34;
-   else if(j.includes("wrist")||j.includes("ankle")) r=24;
-   bindMap[j]={radius:r};
- });
-}
-function imagePlacement(canvas){
+function characterPlacement(canvas){
  if(!characterImage) return null;
  const iw=characterImage.naturalWidth||characterImage.width;
  const ih=characterImage.naturalHeight||characterImage.height;
- const maxW=canvas.width*0.52, maxH=canvas.height*0.82;
+ const maxW=canvas.width*.48, maxH=canvas.height*.78;
  const baseScale=Math.min(maxW/iw,maxH/ih);
- const s=baseScale*imageTransform.scale;
+ const s=baseScale*characterTransform.scale;
  const w=iw*s,h=ih*s;
- const x=(canvas.width-w)/2+imageTransform.x;
- const y=(canvas.height-h)*0.78+imageTransform.y;
- return {iw,ih,s,w,h,x,y};
+ const x=(canvas.width-w)/2+characterTransform.x;
+ const y=(canvas.height-h)*.76+characterTransform.y;
+ return {x,y,w,h};
 }
-function canvasToImagePoint(canvas,pt){
- const pl=imagePlacement(canvas);
- if(!pl) return {x:0,y:0};
- return {x:(pt.x-pl.x)/pl.s,y:(pt.y-pl.y)/pl.s};
-}
-function jointCanvasToImage(canvas,jointPt){
- return canvasToImagePoint(canvas,jointPt);
-}
-function drawBoundCharacter(ctx, canvas, pose, alpha=1){
- if(!characterImage || !characterVisible){return false;}
- ensureBinding();
- const pl=imagePlacement(canvas);
- if(!pl) return false;
-
- // Build a temporary source canvas containing the scaled character.
- const layer=document.createElement("canvas");
- layer.width=canvas.width;
- layer.height=canvas.height;
- const lc=layer.getContext("2d");
- lc.imageSmoothingEnabled=false;
- lc.drawImage(characterImage,pl.x,pl.y,pl.w,pl.h);
-
- // Remove original joint regions that have moved.
- // This prevents the stationary character from remaining visible underneath.
- lc.save();
- lc.globalCompositeOperation="destination-out";
- JOINTS.forEach(j=>{
-   const rest=restPose[j], cur=pose[j], cfg=bindMap[j];
-   if(!cfg) return;
-   const move=dist(rest,cur);
-   if(move<1.5) return;
-   lc.beginPath();
-   lc.arc(rest.x,rest.y,cfg.radius+3,0,Math.PI*2);
-   lc.fill();
- });
- lc.restore();
-
- // Draw the remaining stationary character.
- ctx.save();
- ctx.globalAlpha=alpha;
- ctx.drawImage(layer,0,0);
- ctx.restore();
-
- // Redraw each moved body region at its posed joint location.
- JOINTS.forEach(j=>{
-   const rest=restPose[j], cur=pose[j], cfg=bindMap[j];
-   if(!cfg) return;
-
-   const move=dist(rest,cur);
-   if(move<1.5) return;
-
-   const srcImg=jointCanvasToImage(canvas,rest);
-   const radImg=cfg.radius/pl.s;
-   const sx=srcImg.x-radImg;
-   const sy=srcImg.y-radImg;
-   const sw=radImg*2;
-   const sh=radImg*2;
-
-   ctx.save();
-   ctx.globalAlpha=alpha;
-   ctx.beginPath();
-   ctx.arc(cur.x,cur.y,cfg.radius,0,Math.PI*2);
-   ctx.clip();
-
-   try{
-     ctx.drawImage(
-       characterImage,
-       sx,sy,sw,sh,
-       cur.x-cfg.radius,cur.y-cfg.radius,
-       cfg.radius*2,cfg.radius*2
-     );
-   }catch(e){}
-   ctx.restore();
-
-   // Visual connector between rest and current position while manipulating.
-   if(dragging===j){
-     ctx.save();
-     ctx.strokeStyle="#ffca5f";
-     ctx.lineWidth=2;
-     ctx.globalAlpha=.8;
-     ctx.setLineDash([6,5]);
-     ctx.beginPath();
-     ctx.moveTo(rest.x,rest.y);
-     ctx.lineTo(cur.x,cur.y);
-     ctx.stroke();
-     ctx.restore();
-   }
- });
- return true;
-}
-function drawBindRegions(ctx,pose){
- if(!bindMode) return;
- ensureBinding();
- ctx.save();
- JOINTS.forEach(j=>{
-   let cfg=bindMap[j],p=pose[j];
-   ctx.beginPath();
-   ctx.strokeStyle=j===selectedBindJoint?"#ffca5f":"#66d17a";
-   ctx.lineWidth=j===selectedBindJoint?3:1.5;
-   ctx.globalAlpha=j===selectedBindJoint?.95:.45;
-   ctx.arc(p.x,p.y,cfg.radius,0,Math.PI*2);
-   ctx.stroke();
- });
- ctx.restore();
-}
-function drawCharacterImage(ctx, canvas, alpha=1){
- if(!characterImage || !characterVisible) return;
- const iw=characterImage.naturalWidth||characterImage.width;
- const ih=characterImage.naturalHeight||characterImage.height;
- const maxW=canvas.width*0.52, maxH=canvas.height*0.82;
- const baseScale=Math.min(maxW/iw,maxH/ih);
- const s=baseScale*imageTransform.scale;
- const w=iw*s,h=ih*s;
- const x=(canvas.width-w)/2+imageTransform.x;
- const y=(canvas.height-h)*0.78+imageTransform.y;
+function drawCharacter(ctx,canvas,pose=null,alpha=1){
+ if(!characterImage||!characterVisible)return;
+ const pl=characterPlacement(canvas);
+ if(!pl)return;
  ctx.save();
  ctx.globalAlpha=alpha;
  ctx.imageSmoothingEnabled=false;
- ctx.drawImage(characterImage,x,y,w,h);
+ ctx.drawImage(characterImage,pl.x,pl.y,pl.w,pl.h);
  ctx.restore();
+}
+function buildBindSource(){
+ if(!characterImage) return;
+ bindSourceCanvas=document.createElement("canvas");
+ bindSourceCanvas.width=rig.width;
+ bindSourceCanvas.height=rig.height;
+ const bc=bindSourceCanvas.getContext("2d");
+ bc.clearRect(0,0,bindSourceCanvas.width,bindSourceCanvas.height);
+ const pl=characterPlacement(rig);
+ bc.imageSmoothingEnabled=false;
+ bc.drawImage(characterImage,pl.x,pl.y,pl.w,pl.h);
+}
+function segmentTransform(ctx, ra, rb, ca, cb){
+ const rdx=rb.x-ra.x, rdy=rb.y-ra.y;
+ const cdx=cb.x-ca.x, cdy=cb.y-ca.y;
+ const rlen=Math.max(1,Math.hypot(rdx,rdy));
+ const clen=Math.max(1,Math.hypot(cdx,cdy));
+ const rang=Math.atan2(rdy,rdx), cang=Math.atan2(cdy,cdx);
+ ctx.translate(ca.x,ca.y);
+ ctx.rotate(cang);
+ ctx.scale(clen/rlen,1);
+ ctx.rotate(-rang);
+ ctx.translate(-ra.x,-ra.y);
+}
+function capsulePath(ctx,a,b,r){
+ const ang=Math.atan2(b.y-a.y,b.x-a.x);
+ const nx=Math.cos(ang+Math.PI/2)*r;
+ const ny=Math.sin(ang+Math.PI/2)*r;
+ ctx.beginPath();
+ ctx.moveTo(a.x+nx,a.y+ny);
+ ctx.lineTo(b.x+nx,b.y+ny);
+ ctx.arc(b.x,b.y,r,ang+Math.PI/2,ang-Math.PI/2);
+ ctx.lineTo(a.x-nx,a.y-ny);
+ ctx.arc(a.x,a.y,r,ang-Math.PI/2,ang+Math.PI/2);
+ ctx.closePath();
+}
+function drawWarpedSegment(ctx, restPose, pose, a, b, width, alpha=1){
+ if(!bindSourceCanvas)return;
+ ctx.save();
+ ctx.globalAlpha=alpha;
+ segmentTransform(ctx,restPose[a],restPose[b],pose[a],pose[b]);
+ capsulePath(ctx,restPose[a],restPose[b],width);
+ ctx.clip();
+ ctx.drawImage(bindSourceCanvas,0,0);
+ ctx.restore();
+}
+function drawWarpedHead(ctx,restPose,pose,alpha=1){
+ if(!bindSourceCanvas)return;
+ const a=restPose.neck,b=restPose.head,ca=pose.neck,cb=pose.head;
+ ctx.save();
+ ctx.globalAlpha=alpha;
+ segmentTransform(ctx,a,b,ca,cb);
+ ctx.beginPath();
+ ctx.ellipse(b.x,b.y,32,42,0,0,Math.PI*2);
+ ctx.clip();
+ ctx.drawImage(bindSourceCanvas,0,0);
+ ctx.restore();
+}
+function drawWarpedTorso(ctx,restPose,pose,alpha=1){
+ if(!bindSourceCanvas)return;
+ const ra=restPose.neck, rb=restPose.pelvis;
+ const ca=pose.neck, cb=pose.pelvis;
+ ctx.save();
+ ctx.globalAlpha=alpha;
+ segmentTransform(ctx,ra,rb,ca,cb);
+ const topY=ra.y-18, botY=rb.y+28;
+ ctx.beginPath();
+ ctx.moveTo(ra.x-torsoHalfWidth,topY);
+ ctx.lineTo(ra.x+torsoHalfWidth,topY);
+ ctx.lineTo(rb.x+torsoHalfWidth*.72,botY);
+ ctx.lineTo(rb.x-torsoHalfWidth*.72,botY);
+ ctx.closePath();
+ ctx.clip();
+ ctx.drawImage(bindSourceCanvas,0,0);
+ ctx.restore();
+}
+function drawBoundCharacter(ctx,canvas,pose,alpha=1){
+ if(!characterImage||!characterVisible)return false;
+ if(!artworkBound||!bindRestPose||!bindSourceCanvas){
+   drawCharacter(ctx,canvas,pose,alpha);
+   return false;
+ }
+
+ // Preserve background/core silhouette first at low opacity to reduce holes.
+ ctx.save();
+ ctx.globalAlpha=alpha*.18;
+ ctx.drawImage(bindSourceCanvas,0,0);
+ ctx.restore();
+
+ // Torso and head.
+ drawWarpedTorso(ctx,bindRestPose,pose,alpha);
+ drawWarpedHead(ctx,bindRestPose,pose,alpha);
+
+ // Back limbs first.
+ const back=[
+   ["shoulderR","elbowR"],["elbowR","wristR"],
+   ["hipR","kneeR"],["kneeR","ankleR"]
+ ];
+ back.forEach(([a,b])=>drawWarpedSegment(ctx,bindRestPose,pose,a,b,limbHalfWidth,alpha));
+
+ // Front limbs.
+ const front=[
+   ["shoulderL","elbowL"],["elbowL","wristL"],
+   ["hipL","kneeL"],["kneeL","ankleL"]
+ ];
+ front.forEach(([a,b])=>drawWarpedSegment(ctx,bindRestPose,pose,a,b,limbHalfWidth,alpha));
+
+ return true;
 }
 function drawSkeleton(ctx,p,alpha=1,masterStyle=false){
  ctx.save();ctx.globalAlpha=alpha;
@@ -593,16 +582,11 @@ function clear(ctx,canvas){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fil
 function render(){
  document.getElementById("frameLabel").textContent=`Frame ${current+1}`;
  clear(rc,rig);clear(sc,spr);
- drawCharacterImage(rc,rig,.52);
- if(characterImage && Object.keys(bindMap).length){
-   drawBoundCharacter(sc,spr,frames[current].pose,.96);
- } else {
-   drawCharacterImage(sc,spr,.92);
- }
+ drawCharacter(rc,rig,frames[current].pose,.50);
+ drawBoundCharacter(sc,spr,frames[current].pose,.96);
  if(onion&&frames.length>1)drawSkeleton(rc,frames[(current-1+frames.length)%frames.length].pose,.18);
  if(masterOverlay&&master&&master.frames&&master.frames[current])drawSkeleton(rc,master.frames[current].pose,.45,true);
  drawSkeleton(rc,frames[current].pose,1);
- drawBindRegions(rc,frames[current].pose);
  if(masterOverlay&&master&&master.frames&&master.frames[current])drawSprite(sc,master.frames[current].pose,0,1,.22,true);
  if(!characterImage) drawSprite(sc,frames[current].pose);
 
@@ -637,57 +621,12 @@ function renderCandidates(){
    d.innerHTML=`<b>${c.name} — ${Math.round(s.overall)}%</b><div class="reason">${c.reason}</div><div class="reason" style="margin-top:6px">Anatomy ${Math.round(s.anatomy)} · Continuity ${Math.round(s.continuity)} · Foot ${Math.round(s.foot)}</div>`;
    d.onclick=()=>{frames[current].pose=clone(c.pose);frames[current].approved=false;frames[current].rejected=false;finalApproved=false;candidatePoses=[];
 
-function updateBindUI(){
- document.getElementById("bindStatus").textContent=Object.keys(bindMap).length?"BOUND":"UNBOUND";
- document.getElementById("selectedBindJoint").textContent=selectedBindJoint||"None";
- document.getElementById("selectedBindRadius").textContent=selectedBindJoint&&bindMap[selectedBindJoint]?`${Math.round(bindMap[selectedBindJoint].radius)} px`:"—";
- document.getElementById("bindHint").textContent=bindMode
-   ?"Bind Mode ON: tap a joint to select its artwork region, then adjust the radius."
-   :"Bind Mode OFF: drag joints normally to pose the character.";
+function updateCharacterStatus(){
+ const status=document.getElementById("characterStatus");
+ status.textContent=!characterImage?"NO IMAGE":(artworkBound?"ARTWORK BOUND":"IMAGE LOADED");
+ const b=document.getElementById("bindStateLabel");
+ if(b)b.textContent=artworkBound?"Bound to Current Rig":"Not Bound";
 }
-document.getElementById("bindMode").onclick=e=>{
- bindMode=!bindMode;
- e.target.textContent=`Bind Mode: ${bindMode?"ON":"OFF"}`;
- updateBindUI();render();
-};
-document.getElementById("autoBind").onclick=()=>{
- if(!characterImage){alert("Add a character image first.");return}
- bindMap={};ensureBinding();selectedBindJoint="pelvis";updateBindUI();render();
-};
-document.getElementById("resetBinding").onclick=()=>{
- bindMap={};selectedBindJoint=null;updateBindUI();render();
-};
-document.getElementById("radiusMinus").onclick=()=>{
- if(!selectedBindJoint)return;
- ensureBinding();
- bindMap[selectedBindJoint].radius=clamp(bindMap[selectedBindJoint].radius-4,10,90);
- updateBindUI();render();
-};
-
-document.getElementById("testMove").onclick=()=>{
- if(!selectedBindJoint){
-   alert("Select a joint in Bind Mode first.");
-   return;
- }
- bindMode=false;
- document.getElementById("bindMode").textContent="Bind Mode: OFF";
- const p=frames[current].pose[selectedBindJoint];
- p.x+=24;
- if(selectedBindJoint.includes("knee")||selectedBindJoint.includes("ankle")) p.y-=10;
- frames[current].approved=false;
- frames[current].rejected=false;
- finalApproved=false;
- updateBindUI();
- render();
-};
-
-document.getElementById("radiusPlus").onclick=()=>{
- if(!selectedBindJoint)return;
- ensureBinding();
- bindMap[selectedBindJoint].radius=clamp(bindMap[selectedBindJoint].radius+4,10,90);
- updateBindUI();render();
-};
-
 document.getElementById("characterUpload").addEventListener("change",e=>{
  const file=e.target.files&&e.target.files[0];
  if(!file)return;
@@ -696,28 +635,50 @@ document.getElementById("characterUpload").addEventListener("change",e=>{
  img.onload=()=>{
    characterImage=img;
    characterVisible=true;
-   imageTransform={x:0,y:0,scale:1};
-   bindMap={};ensureBinding();
+   characterTransform={x:0,y:0,scale:1};
+   artworkBound=false;
+   bindRestPose=null;
+   bindSourceCanvas=null;
    document.getElementById("toggleCharacter").textContent="Character: ON";
-   updateBindUI();
+   updateCharacterStatus();
    render();
  };
  img.src=url;
 });
-document.getElementById("fitCharacter").onclick=()=>{imageTransform={x:0,y:0,scale:1};render()};
 document.getElementById("toggleCharacter").onclick=e=>{
  characterVisible=!characterVisible;
  e.target.textContent=`Character: ${characterVisible?"ON":"OFF"}`;
  render();
 };
-document.getElementById("imgSmaller").onclick=()=>{imageTransform.scale=clamp(imageTransform.scale-.05,.2,3);render()};
-document.getElementById("imgLarger").onclick=()=>{imageTransform.scale=clamp(imageTransform.scale+.05,.2,3);render()};
-document.getElementById("imgLeft").onclick=()=>{imageTransform.x-=8;render()};
-document.getElementById("imgRight").onclick=()=>{imageTransform.x+=8;render()};
-document.getElementById("imgUp").onclick=()=>{imageTransform.y-=8;render()};
-document.getElementById("imgDown").onclick=()=>{imageTransform.y+=8;render()};
+document.getElementById("bindArtwork").onclick=()=>{
+ if(!characterImage){alert("Add a character image first.");return;}
+ bindRestPose=clone(frames[current].pose);
+ buildBindSource();
+ artworkBound=true;
+ updateCharacterStatus();
+ render();
+};
+document.getElementById("unbindArtwork").onclick=()=>{
+ artworkBound=false;bindRestPose=null;bindSourceCanvas=null;
+ updateCharacterStatus();render();
+};
+document.getElementById("resetCharacter").onclick=()=>{
+ characterTransform={x:0,y:0,scale:1};
+ artworkBound=false;bindRestPose=null;bindSourceCanvas=null;
+ updateCharacterStatus();render();
+};
+document.getElementById("charSmaller").onclick=()=>{characterTransform.scale=clamp(characterTransform.scale-.05,.2,3);if(artworkBound){buildBindSource()}render()};
+document.getElementById("charLarger").onclick=()=>{characterTransform.scale=clamp(characterTransform.scale+.05,.2,3);if(artworkBound){buildBindSource()}render()};
+document.getElementById("charLeft").onclick=()=>{characterTransform.x-=8;if(artworkBound){buildBindSource()}render()};
+document.getElementById("charRight").onclick=()=>{characterTransform.x+=8;if(artworkBound){buildBindSource()}render()};
+document.getElementById("charUp").onclick=()=>{characterTransform.y-=8;if(artworkBound){buildBindSource()}render()};
+document.getElementById("charDown").onclick=()=>{characterTransform.y+=8;if(artworkBound){buildBindSource()}render()};
+document.getElementById("limbNarrower").onclick=()=>{limbHalfWidth=clamp(limbHalfWidth-3,10,60);render()};
+document.getElementById("limbWider").onclick=()=>{limbHalfWidth=clamp(limbHalfWidth+3,10,60);render()};
+document.getElementById("torsoNarrower").onclick=()=>{torsoHalfWidth=clamp(torsoHalfWidth-4,25,100);render()};
+document.getElementById("torsoWider").onclick=()=>{torsoHalfWidth=clamp(torsoHalfWidth+4,25,100);render()};
 
-updateBindUI();renderCandidates();render();};
+updateCharacterStatus();renderCandidates();render();};
    wrap.appendChild(d);
  });
 }
@@ -753,10 +714,11 @@ function renderPreviewStatic(){
  document.getElementById("analysisText").textContent=ws.overall>=90?"Strong cycle. Review visually before final approval.":ws.overall>=75?"Usable foundation. Refine weak transitions before locking the master.":"Cycle needs correction. Focus on red/yellow metrics.";
  if(!playing){
    clear(pc,prev);
-   if(characterImage && characterVisible){
+   if(characterImage){
      pc.save();
-     pc.translate(-110,0);
-     drawBoundCharacter(pc,prev,frames[current].pose,.95);
+     pc.translate(-105,0);
+     if(artworkBound) drawBoundCharacter(pc,prev,frames[current].pose,.95);
+     else drawCharacter(pc,prev,frames[current].pose,.95);
      pc.restore();
    } else {
      drawSprite(pc,frames[current].pose,90,.62);
@@ -768,12 +730,6 @@ function canvasPoint(canvas,e){const r=canvas.getBoundingClientRect();return {x:
 rig.addEventListener("pointerdown",e=>{
  const q=canvasPoint(rig,e),p=frames[current].pose;let best=null,bd=999;
  JOINTS.forEach(j=>{let d=dist(q,p[j]);if(d<bd){bd=d;best=j}});
- if(bindMode && bd<50){
-   selectedBindJoint=best;
-   updateBindUI();
-   render();
-   return;
- }
  if(bd<28){dragging=best;rig.setPointerCapture(e.pointerId);finalApproved=false;frames[current].approved=false;frames[current].rejected=false;render()}
 });
 rig.addEventListener("pointermove",e=>{
@@ -837,10 +793,11 @@ function animate(){
  clear(pc,prev);
  const idx=playIndex%frames.length,p=frames[idx].pose;
  const travel=stageMotion?idx*(260/Math.max(1,frames.length-1)):0;
- if(characterImage && characterVisible){
+ if(characterImage){
    pc.save();
-   pc.translate(travel-110,0);
-   drawBoundCharacter(pc,prev,p,.95);
+   pc.translate(travel-105,0);
+   if(artworkBound) drawBoundCharacter(pc,prev,p,.95);
+   else drawCharacter(pc,prev,p,.95);
    pc.restore();
  } else {
    if(comparePreview&&master&&master.frames&&master.frames[idx])drawSprite(pc,master.frames[idx].pose,40+travel,.55,.22,true);
@@ -850,58 +807,11 @@ function animate(){
  setTimeout(animate,slow?260:110);
 }
 
-
-function updateBindUI(){
- document.getElementById("bindStatus").textContent=Object.keys(bindMap).length?"BOUND":"UNBOUND";
- document.getElementById("selectedBindJoint").textContent=selectedBindJoint||"None";
- document.getElementById("selectedBindRadius").textContent=selectedBindJoint&&bindMap[selectedBindJoint]?`${Math.round(bindMap[selectedBindJoint].radius)} px`:"—";
- document.getElementById("bindHint").textContent=bindMode
-   ?"Bind Mode ON: tap a joint to select its artwork region, then adjust the radius."
-   :"Bind Mode OFF: drag joints normally to pose the character.";
+function updateCharacterStatus(){
+ const status=document.getElementById("characterStatus");
+ status.textContent=characterImage?"IMAGE LOADED":"NO IMAGE";
+ 
 }
-document.getElementById("bindMode").onclick=e=>{
- bindMode=!bindMode;
- e.target.textContent=`Bind Mode: ${bindMode?"ON":"OFF"}`;
- updateBindUI();render();
-};
-document.getElementById("autoBind").onclick=()=>{
- if(!characterImage){alert("Add a character image first.");return}
- bindMap={};ensureBinding();selectedBindJoint="pelvis";updateBindUI();render();
-};
-document.getElementById("resetBinding").onclick=()=>{
- bindMap={};selectedBindJoint=null;updateBindUI();render();
-};
-document.getElementById("radiusMinus").onclick=()=>{
- if(!selectedBindJoint)return;
- ensureBinding();
- bindMap[selectedBindJoint].radius=clamp(bindMap[selectedBindJoint].radius-4,10,90);
- updateBindUI();render();
-};
-
-document.getElementById("testMove").onclick=()=>{
- if(!selectedBindJoint){
-   alert("Select a joint in Bind Mode first.");
-   return;
- }
- bindMode=false;
- document.getElementById("bindMode").textContent="Bind Mode: OFF";
- const p=frames[current].pose[selectedBindJoint];
- p.x+=24;
- if(selectedBindJoint.includes("knee")||selectedBindJoint.includes("ankle")) p.y-=10;
- frames[current].approved=false;
- frames[current].rejected=false;
- finalApproved=false;
- updateBindUI();
- render();
-};
-
-document.getElementById("radiusPlus").onclick=()=>{
- if(!selectedBindJoint)return;
- ensureBinding();
- bindMap[selectedBindJoint].radius=clamp(bindMap[selectedBindJoint].radius+4,10,90);
- updateBindUI();render();
-};
-
 document.getElementById("characterUpload").addEventListener("change",e=>{
  const file=e.target.files&&e.target.files[0];
  if(!file)return;
@@ -910,28 +820,38 @@ document.getElementById("characterUpload").addEventListener("change",e=>{
  img.onload=()=>{
    characterImage=img;
    characterVisible=true;
-   imageTransform={x:0,y:0,scale:1};
-   bindMap={};ensureBinding();
+   characterTransform={x:0,y:0,scale:1};
    document.getElementById("toggleCharacter").textContent="Character: ON";
-   updateBindUI();
+   updateCharacterStatus();
    render();
  };
  img.src=url;
 });
-document.getElementById("fitCharacter").onclick=()=>{imageTransform={x:0,y:0,scale:1};render()};
 document.getElementById("toggleCharacter").onclick=e=>{
  characterVisible=!characterVisible;
  e.target.textContent=`Character: ${characterVisible?"ON":"OFF"}`;
  render();
 };
-document.getElementById("imgSmaller").onclick=()=>{imageTransform.scale=clamp(imageTransform.scale-.05,.2,3);render()};
-document.getElementById("imgLarger").onclick=()=>{imageTransform.scale=clamp(imageTransform.scale+.05,.2,3);render()};
-document.getElementById("imgLeft").onclick=()=>{imageTransform.x-=8;render()};
-document.getElementById("imgRight").onclick=()=>{imageTransform.x+=8;render()};
-document.getElementById("imgUp").onclick=()=>{imageTransform.y-=8;render()};
-document.getElementById("imgDown").onclick=()=>{imageTransform.y+=8;render()};
+document.getElementById("resetCharacter").onclick=()=>{
+ characterTransform={x:0,y:0,scale:1};
+ characterMode="reference";
+ updateCharacterStatus();
+ render();
+};
+document.getElementById("modeReference").onclick=()=>{
+ characterMode="reference";updateCharacterStatus();render();
+};
+document.getElementById("modeAttached").onclick=()=>{
+ characterMode="attached";updateCharacterStatus();render();
+};
+document.getElementById("charSmaller").onclick=()=>{characterTransform.scale=clamp(characterTransform.scale-.05,.2,3);render()};
+document.getElementById("charLarger").onclick=()=>{characterTransform.scale=clamp(characterTransform.scale+.05,.2,3);render()};
+document.getElementById("charLeft").onclick=()=>{characterTransform.x-=8;render()};
+document.getElementById("charRight").onclick=()=>{characterTransform.x+=8;render()};
+document.getElementById("charUp").onclick=()=>{characterTransform.y-=8;render()};
+document.getElementById("charDown").onclick=()=>{characterTransform.y+=8;render()};
 
-updateBindUI();renderCandidates();render();
+updateCharacterStatus();renderCandidates();render();
 </script>
 </body>
 </html>
