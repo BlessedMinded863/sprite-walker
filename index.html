@@ -148,7 +148,7 @@
 
 
 /* ============================================================
-   FATAL INSTINCT V27.1 — BODY-PART APPROVAL GATE
+   FATAL INSTINCT V27.3 — BODY-PART APPROVAL GATE
    ============================================================ */
 .fiPartsGateOverlay{position:fixed;inset:0;z-index:99995;background:rgba(3,6,10,.86);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center;padding:10px env(safe-area-inset-right) calc(10px + env(safe-area-inset-bottom)) env(safe-area-inset-left)}
 .fiPartsGateOverlay.open{display:flex}
@@ -192,7 +192,7 @@
 
 
 /* ============================================================
-   FATAL INSTINCT V27.1 — RIG GEOMETRY AUDIT + PROTECTED REBIND
+   FATAL INSTINCT V27.3 — RIG GEOMETRY AUDIT + PROTECTED REBIND
    ============================================================ */
 .fiAuditOverlay{
   position:fixed;inset:0;z-index:99993;
@@ -400,7 +400,7 @@
 
 
 /* ============================================================
-   FATAL INSTINCT V27.1 — ALWAYS-VISIBLE PRODUCTION WIZARD
+   FATAL INSTINCT V27.3 — ALWAYS-VISIBLE PRODUCTION WIZARD
    ============================================================ */
 .fiWizard{
   border:1px solid #344154;
@@ -477,6 +477,28 @@
   .fiWizardHead{align-items:flex-start}
 }
 
+
+.fiMemoryIntelligence{
+  display:flex;align-items:center;justify-content:space-between;gap:9px;
+  border:1px solid #2b4257;border-radius:10px;background:#0a1118;
+  padding:8px 9px;margin-bottom:8px
+}
+.fiMemoryIntelligence div{min-width:0}
+.fiMemoryIntelligence b{display:block;font-size:10px}
+.fiMemoryIntelligence span{
+  display:block;color:var(--muted);font-size:8px;margin-top:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+.fiMemoryIntelligence strong{
+  flex:0 0 auto;font-size:8px;border:1px solid #2e7355;
+  color:#79e2ad;background:#112b20;border-radius:999px;padding:4px 6px
+}
+.fiMemoryIntelligence.restored{border-color:#2e7355;background:#0c1914}
+.fiMemoryIntelligence.learning{border-color:#645828;background:#18150b}
+.fiMemoryIntelligence.learning strong{
+  border-color:#806c2b;color:#f2d46e;background:#2a230d
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
@@ -507,7 +529,7 @@ setTimeout(()=>{
 </style>
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V27.1</span></h1><div class="sub">Production Engine • TypeScript Runtime • Browser C++ WebAssembly • Rig Approval Gate</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V27.3</span></h1><div class="sub">Production Engine • Unified Module Intelligence • TypeScript • Browser C++ WebAssembly</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -547,6 +569,15 @@ setTimeout(()=>{
       <p>Every production gate stays visible. Completed stages turn green.</p>
     </div>
     <span class="fiWizardCurrent" id="fiWizardCurrent">STEP 1 / 11</span>
+  </div>
+
+  
+  <div class="fiMemoryIntelligence" id="fiMemoryIntelligence">
+    <div>
+      <b>Memory Intelligence</b>
+      <span id="fiMemoryIntelligenceText">Scanning character memory…</span>
+    </div>
+    <strong id="fiMemoryIntelligenceBadge">UNIFIED</strong>
   </div>
 
   <div class="fiWizardSteps" id="fiWizardSteps"></div>
@@ -2680,7 +2711,7 @@ function autoTraceAndBind(){
     $("showBones").checked=false;
     $("showSprite").checked=true;
     $("traceRegionSelect").value="all";
-    status(`V27.1 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Body-Part Approval is required.`);
+    status(`V27.3 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Body-Part Approval is required.`);
     draw();
     if(window.FIBodyPartsGate && typeof window.FIBodyPartsGate.reviewAfterBind==="function"){
       window.FIBodyPartsGate.reviewAfterBind();
@@ -4670,9 +4701,9 @@ async function v242ResumePreviousTest(){
       const imageOK=await v242RestoreImage();
       $("checkpointBadge").textContent="SAFE RESUME";
       $("checkpointText").textContent=imageOK?
-        "Character + rig restored in Safe Boot. Motion state intentionally not loaded.":
+        "Character + rig restored in Safe Boot. Heavy motion cache intentionally isolated; V27.3 durable Character Intelligence remains available.":
         "Rig restored in Safe Boot. Reload character image if needed.";
-      $("aiDecision").textContent="Safe Boot active. Re-run locomotion validation from the current rig.";
+      $("aiDecision").textContent="Safe Boot isolates heavy caches. V27.3 Character Intelligence still restores durable rig and approved motion knowledge.";
     }
     return ok;
   }
@@ -4803,7 +4834,7 @@ function v256ValidateProtectedCandidate(beforeState,beforeScore,afterScore,targe
   const damage=v256LockedDamage(beforeScore.metrics,afterScore.metrics);
   const overallDrop=(beforeScore?.score??0)-(afterScore?.score??0);
 
-  // V27.1: NEVER accept a correction that lowers total motion quality.
+  // V27.3: NEVER accept a correction that lowers total motion quality.
   if(overallDrop>0.01){
     v25RestoreMotionState(beforeState);
 
@@ -5628,7 +5659,7 @@ function v25ScoreMotion(){
     );
   }
 
-  // V27.1: FINAL POSE grounding is authoritative.
+  // V27.3: FINAL POSE grounding is authoritative.
   const v2563Ground=v2563MeasureGrounding();
 
   metric.feet=v2563Ground.score;
@@ -5818,11 +5849,11 @@ function v25GenerateCorrectivePass(passNum,targetKey){
 async function v25RunSelfCorrection(){
   if(v25Motion.running||!$("v25Enabled")?.checked)return;
 
-  // V27.1: fresh support/contact anchors for every correction run.
+  // V27.3: fresh support/contact anchors for every correction run.
   v255ResetContactLocks();
   v253ResetFootLocks();
   v2562LastFootDrift=0;
-  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V27.1 protected-channel correction started.";
+  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V27.3 protected-channel correction started.";
   const target=+$("v25TargetQuality").value||92,maxPasses=+$("v25MaxPasses").value||12,minImprove=+$("v25MinImprove").value||.5;
   let base=v25ScoreMotion();v251UpdateDiagnostics(base);v25Motion.currentScore=base.score;v25Motion.bestScore=base.score;
   v25Motion.bestCorrectives=JSON.parse(JSON.stringify(v23.correctives||[]));v25Motion.bestFinalCorrections=JSON.parse(JSON.stringify(v252FinalCorrections||{}));v25Motion.bestControls=v242CaptureControls();v25Motion.history=[{pass:0,score:base.score,metrics:base.metrics}];
@@ -7413,10 +7444,16 @@ $("generate").addEventListener("click",()=>setTimeout(()=>{refreshProductionPref
 
 v23SetState("Idle");v23DrawTimeline();v23ApplyBlendTree();
 detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFrameMs();resize();
-</script>
+
+/* ============================================================
+   FATAL INSTINCT V27.3 — UNIFIED MODULE BRIDGE
+   All production intelligence now executes in the SAME ES module
+   as Sprite Walker core state. This fixes access to:
+   source, sourceName, rig, buildPose, autoTraceAndBind,
+   currentMotionPackage, loadNativeMotion, checkpoints and metrics.
+   ============================================================ */
 
 
-<script>
 /* ============================================================
    FATAL INSTINCT V25.7.0
    MASTER SPRITE AUTO-RIG + HUMAN APPROVAL GATE
@@ -7597,6 +7634,11 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
       try{v242SaveCheckpoint(true);}catch(e){}
     }
 
+    window.FICharacterIntelligence?.learn?.(
+      "rig_approved",
+      {rigScore:result.score}
+    );
+
     if(el("fiRigApprovalBehavior")?.value==="continue"){
       if(
         window.FIRigGeometryAudit &&
@@ -7613,18 +7655,49 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
     }
   }
 
-  function waitForLoadedMaster(fileName){
+  function waitForLoadedMaster(fileName,previousSource){
     let tries=0;
+
     const tick=()=>{
-      if(source&&sourceName===fileName){gate.lastSource=fileName;autoRig();return;}
-      if(++tries<60)setTimeout(tick,100);
-      else if(typeof status==="function")status("Master sprite loaded, but Auto-Rig could not start automatically. Press Re-run Auto-Rig.");
+      const freshImage=
+        !!source &&
+        source!==previousSource &&
+        sourceName===fileName &&
+        source.complete!==false;
+
+      if(freshImage){
+        gate.lastSource=fileName;
+
+        if(
+          window.FICharacterIntelligence &&
+          typeof window.FICharacterIntelligence.onMasterReady==="function"
+        ){
+          window.FICharacterIntelligence.onMasterReady(fileName);
+        }else{
+          autoRig();
+        }
+        return;
+      }
+
+      if(++tries<100){
+        setTimeout(tick,80);
+      }else if(typeof status==="function"){
+        status(
+          "Master sprite loaded, but the automation handoff timed out. "+
+          "Press Continue: Auto-Rig."
+        );
+      }
     };
-    setTimeout(tick,60);
+
+    setTimeout(tick,40);
   }
 
   el("imageInput")?.addEventListener("change",e=>{
-    const f=e.target.files?.[0];if(f)waitForLoadedMaster(f.name);
+    const f=e.target.files?.[0];
+    if(!f)return;
+
+    const previousSource=source;
+    waitForLoadedMaster(f.name,previousSource);
   });
   el("fiRigFix")?.addEventListener("click",fixRig);
   el("fiRigRerun")?.addEventListener("click",autoRig);
@@ -7633,14 +7706,24 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
   el("fiRigReview")?.addEventListener("click",openGate);
   el("fiRigAnatomy")?.addEventListener("change",()=>{if(anatomy()==="no-tail")parkTail();refreshReview();if(typeof draw==="function")draw();});
   el("fiRigShowBones")?.addEventListener("change",()=>{if(el("showBones"))el("showBones").checked=el("fiRigShowBones").checked;if(typeof draw==="function")draw();});
-  canvas?.addEventListener("pointerup",()=>{if(gate.state==="fixing")setTimeout(refreshReview,20);});
+  canvas?.addEventListener("pointerup",()=>{
+    if(gate.state==="fixing"){
+      setTimeout(()=>{
+        const review=refreshReview();
+        window.FICharacterIntelligence?.learn?.(
+          "rig_edit",
+          {rigScore:review.score}
+        );
+      },20);
+    }
+  });
 
   // The old Seed Rig button now enters the same approval gate, so every route is protected.
   el("seedRig")?.addEventListener("click",()=>setTimeout(()=>{if(source){if(anatomy()==="no-tail")parkTail();openGate();}},30));
 
 
   /* ============================================================
-     FATAL INSTINCT V27.1 — RIG GEOMETRY AUDIT
+     FATAL INSTINCT V27.3 — RIG GEOMETRY AUDIT
      + PROTECTED REBIND / RIGID-PART LOCK
      ============================================================ */
   const fiRigAuditState={
@@ -8008,6 +8091,11 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
 
     autoTraceCache.dirty=true;
 
+    window.FICharacterIntelligence?.learn?.(
+      "protected_rebind",
+      {protectedRebind:true}
+    );
+
     try{
       localStorage.setItem(
         "fatal_instinct_v263_protected_rebind",
@@ -8072,6 +8160,14 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
     if(typeof v242SaveCheckpoint==="function"){
       try{v242SaveCheckpoint(true);}catch(e){}
     }
+
+    window.FICharacterIntelligence?.learn?.(
+      "geometry_approved",
+      {
+        geometryScore:report.score,
+        geometryReport:report
+      }
+    );
 
     if(
       window.FIProgressiveSketch &&
@@ -9332,6 +9428,14 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
     fiSketchState.source=sourceName||"";
     fiSketchSaveMemory();
 
+    window.FICharacterIntelligence?.learn?.(
+      "motion_approved",
+      {
+        motionType:fiSketchState.motion,
+        motionQuality:Number.isFinite(after)?after:null
+      }
+    );
+
     el("fiSketchOverlay")?.classList.remove("open");
     fiSketchState.open=false;
 
@@ -9593,8 +9697,503 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
 
 
 
+
   /* ============================================================
-     FATAL INSTINCT V27.1 — PRODUCTION WIZARD
+     FATAL INSTINCT V27.3 — CHARACTER MEMORY INTELLIGENCE
+     Durable lightweight learning shared by Auto-Rig, rig review,
+     geometry, progressive motion, protected rebind, and parts.
+     ============================================================ */
+
+  const FI_INTELLIGENCE_KEY=
+    "fatal_instinct_v27_character_intelligence_v1";
+
+  const fiIntelligenceState={
+    active:true,
+    profile:null,
+    profileKey:"",
+    sourceSignature:"",
+    sourceName:"",
+    restored:false,
+    migrated:false,
+    lastAction:"Initializing",
+    matchType:"none"
+  };
+
+  function fiIntelligenceClone(value){
+    try{return JSON.parse(JSON.stringify(value));}
+    catch(e){return null;}
+  }
+
+  function fiIntelligenceNormalizeName(value){
+    return String(value||"")
+      .replace(/\.[^.]+$/,"")
+      .trim().toLowerCase()
+      .replace(/[^a-z0-9]+/g,"_")
+      .replace(/^_+|_+$/g,"") || "fighter";
+  }
+
+  function fiIntelligenceHashString(text){
+    let h=2166136261>>>0;
+    for(let i=0;i<text.length;i++){
+      h^=text.charCodeAt(i);
+      h=Math.imul(h,16777619)>>>0;
+    }
+    return h.toString(16).padStart(8,"0");
+  }
+
+  function fiIntelligenceVisualSignature(){
+    if(!source)return "";
+    try{
+      const c=document.createElement("canvas");
+      c.width=16;c.height=16;
+      const g=c.getContext("2d",{willReadFrequently:true});
+      if(!g)return `${source.width}x${source.height}`;
+
+      g.clearRect(0,0,16,16);
+      g.drawImage(source,0,0,16,16);
+      const data=g.getImageData(0,0,16,16).data;
+      let compact="";
+
+      for(let i=0;i<data.length;i+=4){
+        const a=data[i+3];
+        const lum=Math.round(
+          (data[i]*.2126+data[i+1]*.7152+data[i+2]*.0722)/32
+        );
+        compact+=(a>24?"1":"0")+
+          Math.max(0,Math.min(7,lum)).toString(8);
+      }
+
+      return `${source.width}x${source.height}_`+
+        fiIntelligenceHashString(compact);
+    }catch(e){
+      return `${source.width}x${source.height}`;
+    }
+  }
+
+  function fiIntelligenceStore(){
+    try{
+      const parsed=JSON.parse(
+        localStorage.getItem(FI_INTELLIGENCE_KEY)||"null"
+      );
+      if(
+        parsed &&
+        parsed.format==="fatal-instinct-character-intelligence" &&
+        parsed.profiles
+      )return parsed;
+    }catch(e){}
+
+    return{
+      format:"fatal-instinct-character-intelligence",
+      version:1,
+      profiles:{},
+      aliases:{},
+      updatedAt:Date.now()
+    };
+  }
+
+  function fiIntelligenceWriteStore(store){
+    try{
+      store.updatedAt=Date.now();
+      localStorage.setItem(FI_INTELLIGENCE_KEY,JSON.stringify(store));
+      return true;
+    }catch(e){
+      console.warn("Character Intelligence save failed:",e);
+      return false;
+    }
+  }
+
+  function fiIntelligenceAliasKeys(){
+    const keys=[];
+    if(sourceName){
+      keys.push("file:"+fiIntelligenceNormalizeName(sourceName));
+    }
+    const character=el("characterName")?.value;
+    if(character){
+      keys.push("character:"+fiIntelligenceNormalizeName(character));
+    }
+    if(source?.width&&source?.height){
+      keys.push(`size:${source.width}x${source.height}`);
+    }
+    return [...new Set(keys)];
+  }
+
+  function fiIntelligenceFindProfile(){
+    const store=fiIntelligenceStore();
+    const sig=fiIntelligenceVisualSignature();
+
+    if(sig&&store.profiles[sig]){
+      return{key:sig,profile:store.profiles[sig],matchType:"visual"};
+    }
+
+    for(const alias of fiIntelligenceAliasKeys()){
+      const key=store.aliases[alias];
+      if(key&&store.profiles[key]){
+        return{
+          key,
+          profile:store.profiles[key],
+          matchType:alias.startsWith("file:")?"filename":"alias"
+        };
+      }
+    }
+    return null;
+  }
+
+  function fiIntelligenceLegacyRig(){
+    // Read the old checkpoint directly so Safe Boot can remain enabled
+    // while durable rig knowledge is still reused.
+    try{
+      const d=JSON.parse(
+        localStorage.getItem(V242_CHECKPOINT_KEY)||"null"
+      );
+      const joints=d?.rig?.joints;
+      const savedName=d?.sourceName||"";
+
+      if(
+        joints &&
+        Object.keys(joints).length>=14 &&
+        (
+          !savedName ||
+          !sourceName ||
+          fiIntelligenceNormalizeName(savedName)===
+            fiIntelligenceNormalizeName(sourceName)
+        )
+      ){
+        return{
+          rig:fiIntelligenceClone(d.rig),
+          sourceName:savedName,
+          stage:"legacy_checkpoint",
+          fromLegacy:true
+        };
+      }
+    }catch(e){}
+
+    for(const key of[
+      "fatal_instinct_v263_rig_approval",
+      "fatal_instinct_v257_rig_approval"
+    ]){
+      try{
+        const d=JSON.parse(localStorage.getItem(key)||"null");
+        if(
+          d?.joints &&
+          Object.keys(d.joints).length>=14 &&
+          (
+            !d.source ||
+            !sourceName ||
+            fiIntelligenceNormalizeName(d.source)===
+              fiIntelligenceNormalizeName(sourceName)
+          )
+        ){
+          return{
+            rig:{joints:fiIntelligenceClone(d.joints),parts:{}},
+            sourceName:d.source||"",
+            stage:"legacy_rig_approval",
+            rigScore:d.score??null,
+            fromLegacy:true
+          };
+        }
+      }catch(e){}
+    }
+    return null;
+  }
+
+  function fiIntelligenceCreateProfile(){
+    const signature=
+      fiIntelligenceVisualSignature() ||
+      ("file_"+fiIntelligenceNormalizeName(sourceName));
+
+    return{
+      key:signature,
+      sourceSignature:signature,
+      sourceName:sourceName||"",
+      characterName:el("characterName")?.value||"",
+      anatomy:anatomy(),
+      bestRigJoints:null,
+      rigScore:null,
+      geometryScore:null,
+      geometryReport:null,
+      partsScore:null,
+      protectedRebind:false,
+      motions:{},
+      stage:"master_loaded",
+      history:[],
+      createdAt:Date.now(),
+      updatedAt:Date.now()
+    };
+  }
+
+  function fiIntelligenceAttachAliases(store,key){
+    for(const alias of fiIntelligenceAliasKeys()){
+      store.aliases[alias]=key;
+    }
+  }
+
+  function fiIntelligenceLearn(stage,details={}){
+    if(!source)return false;
+
+    const store=fiIntelligenceStore();
+    const key=
+      fiIntelligenceState.profileKey ||
+      fiIntelligenceVisualSignature() ||
+      ("file_"+fiIntelligenceNormalizeName(sourceName));
+
+    let profile=store.profiles[key]||fiIntelligenceCreateProfile();
+
+    profile.sourceSignature=
+      fiIntelligenceVisualSignature()||profile.sourceSignature;
+    profile.sourceName=sourceName||profile.sourceName;
+    profile.characterName=
+      el("characterName")?.value||profile.characterName;
+    profile.anatomy=anatomy();
+    profile.stage=stage;
+    profile.updatedAt=Date.now();
+
+    if(rig?.joints&&Object.keys(rig.joints).length>=14){
+      profile.bestRigJoints=fiIntelligenceClone(rig.joints);
+    }
+
+    if(details.rigScore!=null)profile.rigScore=details.rigScore;
+
+    if(details.geometryScore!=null){
+      profile.geometryScore=details.geometryScore;
+      profile.geometryReport=fiIntelligenceClone(
+        details.geometryReport||null
+      );
+    }
+
+    if(details.partsScore!=null)profile.partsScore=details.partsScore;
+    if(details.protectedRebind!=null){
+      profile.protectedRebind=!!details.protectedRebind;
+    }
+
+    if(details.motionType){
+      profile.motions=profile.motions||{};
+      const old=profile.motions[details.motionType];
+      const q=Number(details.motionQuality);
+      const oldQ=Number(old?.quality);
+
+      if(
+        !old ||
+        !Number.isFinite(oldQ) ||
+        (Number.isFinite(q)&&q>=oldQ)
+      ){
+        profile.motions[details.motionType]={
+          quality:Number.isFinite(q)?q:null,
+          memoryKey:
+            typeof fiSketchMemoryKey==="function"
+              ?fiSketchMemoryKey()
+              :null,
+          time:Date.now()
+        };
+      }
+    }
+
+    profile.history=Array.isArray(profile.history)
+      ?profile.history
+      :[];
+
+    profile.history.push({
+      stage,
+      time:Date.now(),
+      rigScore:details.rigScore??null,
+      geometryScore:details.geometryScore??null,
+      motionType:details.motionType??null,
+      motionQuality:details.motionQuality??null,
+      partsScore:details.partsScore??null
+    });
+
+    profile.history=profile.history.slice(-12);
+
+    store.profiles[key]=profile;
+    fiIntelligenceAttachAliases(store,key);
+
+    if(!fiIntelligenceWriteStore(store))return false;
+
+    fiIntelligenceState.profile=profile;
+    fiIntelligenceState.profileKey=key;
+    fiIntelligenceState.sourceSignature=profile.sourceSignature||"";
+    fiIntelligenceState.sourceName=profile.sourceName||"";
+    fiIntelligenceState.lastAction=`Learned ${stage}`;
+
+    fiIntelligenceUpdateUI("learning");
+    return true;
+  }
+
+  function fiIntelligenceRestoreRig(profile,matchType){
+    const joints=profile?.bestRigJoints||profile?.rig?.joints;
+
+    if(!joints||Object.keys(joints).length<14)return false;
+
+    // Restore learned joint geometry only. Never revive stale texture masks.
+    rig.parts={};
+    rig.joints=fiIntelligenceClone(joints);
+
+    if(profile.anatomy&&el("fiRigAnatomy")){
+      el("fiRigAnatomy").value=profile.anatomy;
+    }
+
+    if(anatomy()==="no-tail")parkTail();
+
+    gate.approved=false;
+    gate.state="review";
+    fiRigAuditState.approved=false;
+    fiRigAuditState.score=0;
+    fiRigAuditState.report=null;
+
+    fiSketchState.approved=false;
+    fiSketchState.approvedFrames=[];
+    fiSketchState.corrected=false;
+    fiSketchState.frames=[];
+
+    if(el("showBones"))el("showBones").checked=true;
+    if(el("showSprite"))el("showSprite").checked=true;
+    if(typeof setMode==="function")setMode("joint");
+    if(typeof draw==="function")draw();
+
+    fiIntelligenceState.restored=true;
+    fiIntelligenceState.matchType=matchType||"memory";
+    return true;
+  }
+
+  function fiIntelligenceMigrateLegacy(legacy){
+    if(!legacy?.rig?.joints)return null;
+
+    const profile=fiIntelligenceCreateProfile();
+    profile.bestRigJoints=fiIntelligenceClone(legacy.rig.joints);
+    profile.rigScore=legacy.rigScore??null;
+    profile.stage="migrated_legacy_rig";
+    profile.history.push({
+      stage:"migrated_legacy_rig",
+      time:Date.now(),
+      source:legacy.stage||"legacy"
+    });
+
+    const store=fiIntelligenceStore();
+    store.profiles[profile.key]=profile;
+    fiIntelligenceAttachAliases(store,profile.key);
+    fiIntelligenceWriteStore(store);
+
+    fiIntelligenceState.migrated=true;
+
+    return{key:profile.key,profile,matchType:"legacy"};
+  }
+
+  function fiIntelligenceUpdateUI(mode=null){
+    const wrap=el("fiMemoryIntelligence");
+    const text=el("fiMemoryIntelligenceText");
+    const badge=el("fiMemoryIntelligenceBadge");
+    if(!wrap||!text||!badge)return;
+
+    wrap.classList.remove("restored","learning");
+    if(mode==="learning")wrap.classList.add("learning");
+    else if(fiIntelligenceState.restored)wrap.classList.add("restored");
+
+    if(fiIntelligenceState.restored){
+      const p=fiIntelligenceState.profile;
+      const bits=[];
+      if(Number.isFinite(Number(p?.rigScore))){
+        bits.push(`rig ${Number(p.rigScore).toFixed(0)}%`);
+      }
+      if(Number.isFinite(Number(p?.geometryScore))){
+        bits.push(`geometry ${Number(p.geometryScore).toFixed(0)}%`);
+      }
+
+      text.textContent=
+        `Matched ${fiIntelligenceState.matchType} memory. `+
+        `Learned rig restored${bits.length?" • "+bits.join(" • "):""}. `+
+        `Approval is still required.`;
+
+      badge.textContent=fiIntelligenceState.migrated
+        ?"MIGRATED"
+        :"RESTORED";
+      return;
+    }
+
+    if(fiIntelligenceState.profile){
+      text.textContent=
+        `Learning ${fiIntelligenceState.profile.sourceName||"character"} • `+
+        `${fiIntelligenceState.lastAction}.`;
+      badge.textContent="LEARNING";
+      return;
+    }
+
+    text.textContent=
+      "No matching learned character yet. Fresh Auto-Rig will be remembered after approval.";
+    badge.textContent="NEW";
+  }
+
+  function fiIntelligenceOnMasterReady(fileName){
+    fiIntelligenceState.sourceName=fileName||sourceName||"";
+    fiIntelligenceState.sourceSignature=fiIntelligenceVisualSignature();
+    fiIntelligenceState.restored=false;
+    fiIntelligenceState.migrated=false;
+    fiIntelligenceState.matchType="none";
+
+    let found=fiIntelligenceFindProfile();
+
+    if(!found){
+      const legacy=fiIntelligenceLegacyRig();
+      if(legacy)found=fiIntelligenceMigrateLegacy(legacy);
+    }
+
+    if(found&&fiIntelligenceRestoreRig(found.profile,found.matchType)){
+      fiIntelligenceState.profile=found.profile;
+      fiIntelligenceState.profileKey=found.key;
+      fiIntelligenceState.lastAction="Restored learned rig";
+      fiIntelligenceUpdateUI();
+
+      if(typeof v242SaveCheckpoint==="function"){
+        try{v242SaveCheckpoint(true);}catch(e){}
+      }
+
+      openGate();
+
+      if(typeof status==="function"){
+        status(
+          `MEMORY INTELLIGENCE: restored learned rig for ${fileName}. `+
+          `Review/approve it before automation continues.`
+        );
+      }
+
+      if(typeof fiWizardRender==="function"){
+        setTimeout(fiWizardRender,60);
+      }
+
+      return{restored:true,profile:found.profile};
+    }
+
+    const profile=fiIntelligenceCreateProfile();
+    fiIntelligenceState.profile=profile;
+    fiIntelligenceState.profileKey=profile.key;
+    fiIntelligenceState.lastAction="Fresh Auto-Rig";
+    fiIntelligenceUpdateUI();
+
+    autoRig();
+
+    if(typeof status==="function"){
+      status(
+        `MEMORY INTELLIGENCE: no learned rig matched ${fileName}. `+
+        `Fresh Auto-Rig generated. Approve it and the system will remember it.`
+      );
+    }
+
+    return{restored:false,profile};
+  }
+
+  window.FICharacterIntelligence={
+    onMasterReady:fiIntelligenceOnMasterReady,
+    learn:fiIntelligenceLearn,
+    find:fiIntelligenceFindProfile,
+    visualSignature:fiIntelligenceVisualSignature,
+    updateUI:fiIntelligenceUpdateUI,
+    get state(){return fiIntelligenceState;}
+  };
+
+  setTimeout(fiIntelligenceUpdateUI,80);
+
+
+
+  /* ============================================================
+     FATAL INSTINCT V27.3 — PRODUCTION WIZARD
      ============================================================ */
   let fiWizardExported=false;
 
@@ -9726,7 +10325,17 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
           el("imageInput")?.click();
           return;
         }
-        window.FIRigApprovalGate?.autoRig?.();
+
+        if(
+          window.FICharacterIntelligence &&
+          typeof window.FICharacterIntelligence.onMasterReady==="function"
+        ){
+          window.FICharacterIntelligence.onMasterReady(
+            sourceName||"character"
+          );
+        }else{
+          window.FIRigApprovalGate?.autoRig?.();
+        }
         break;
 
       case 2:
@@ -9902,179 +10511,8 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
     autoRig,review:openGate,fix:fixRig,approve:approveRig,analyze:analyzeRig,state:gate
   };
 })();
-</script>
 
-
-<script id="fiV26EmbeddedWasm">
-window.FI_WASM_BASE64="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";
-</script>
-<script id="fiV26TypedRuntime">
-"use strict";
-/* Fatal Instinct Sprite Walker V27.1
- * Typed browser runtime for C++ WebAssembly motion analysis/correction.
- */
-const FI_JOINTS = [
-    "pelvis", "neck",
-    "left_shoulder", "left_elbow", "left_wrist",
-    "right_shoulder", "right_elbow", "right_wrist",
-    "left_hip", "left_knee", "left_ankle", "left_toe",
-    "right_hip", "right_knee", "right_ankle", "right_toe",
-    "tail_base", "tail_tip"
-];
-function fiMotionTypeCode(type) {
-    switch (type) {
-        case "walk": return 1;
-        case "punch": return 2;
-        case "kick": return 3;
-        case "slash": return 4;
-        default: return 0;
-    }
-}
-function fiInferMotionType(motion) {
-    const n = String(motion.name || "").toLowerCase();
-    if (n.includes("walk"))
-        return "walk";
-    if (n.includes("punch") || n.includes("jab") || n.includes("cross") || n.includes("hook"))
-        return "punch";
-    if (n.includes("kick"))
-        return "kick";
-    if (n.includes("slash") || n.includes("claw"))
-        return "slash";
-    return "generic";
-}
-function fiDecodeBase64(base64) {
-    const raw = atob(base64.replace(/\s+/g, ""));
-    const bytes = new Uint8Array(raw.length);
-    for (let i = 0; i < raw.length; i++)
-        bytes[i] = raw.charCodeAt(i);
-    return bytes;
-}
-class FIWasmMotionEngine {
-    constructor(wasm) {
-        this.wasm = wasm;
-    }
-    static async fromBase64(base64) {
-        const bytes = fiDecodeBase64(base64);
-        const result = await WebAssembly.instantiate(bytes, {});
-        const exports = result.instance.exports;
-        if (!exports.memory || typeof exports.fi_process !== "function") {
-            throw new Error("Fatal Instinct WASM exports are incomplete.");
-        }
-        if (exports.fi_joint_count() !== FI_JOINTS.length) {
-            throw new Error(`WASM joint count mismatch: ${exports.fi_joint_count()} != ${FI_JOINTS.length}`);
-        }
-        return new FIWasmMotionEngine(exports);
-    }
-    get version() { return this.wasm.fi_version(); }
-    get maxFrames() { return this.wasm.fi_max_frames(); }
-    correct(source, requestedType = "auto", targetQuality = 88) {
-        if (!source || source.format !== "fatal-instinct-motion") {
-            throw new Error("This is not a Fatal Instinct native motion package.");
-        }
-        if (!Array.isArray(source.samples) || source.samples.length < 2) {
-            throw new Error("Motion needs at least two frames.");
-        }
-        if (source.samples.length > this.maxFrames) {
-            throw new Error(`Browser C++ engine supports up to ${this.maxFrames} frames per pass.`);
-        }
-        const type = requestedType === "auto" ? fiInferMotionType(source) : requestedType;
-        const frameCount = source.samples.length;
-        const floatsRequired = frameCount * FI_JOINTS.length * 2;
-        if (floatsRequired > this.wasm.fi_buffer_capacity()) {
-            throw new Error("Motion exceeds C++ WebAssembly buffer capacity.");
-        }
-        const ptr = this.wasm.fi_buffer_ptr();
-        const view = new Float32Array(this.wasm.memory.buffer, ptr, floatsRequired);
-        let k = 0;
-        for (let f = 0; f < frameCount; f++) {
-            const sample = source.samples[f];
-            for (const joint of FI_JOINTS) {
-                const p = sample[joint];
-                if (!p || !Number.isFinite(p[0]) || !Number.isFinite(p[1])) {
-                    throw new Error(`Frame ${f + 1} is missing valid ${joint} coordinates.`);
-                }
-                view[k++] = p[0];
-                view[k++] = p[1];
-            }
-        }
-        const rc = this.wasm.fi_process(frameCount, fiMotionTypeCode(type), targetQuality);
-        if (rc < 0)
-            throw new Error(`C++ WebAssembly engine rejected motion (${rc}).`);
-        const samples = source.samples.map((original, frame) => {
-            const next = { ...original };
-            for (let j = 0; j < FI_JOINTS.length; j++) {
-                const base = frame * FI_JOINTS.length * 2 + j * 2;
-                next[FI_JOINTS[j]] = [view[base], view[base + 1]];
-            }
-            return next;
-        });
-        const before = this.wasm.fi_quality_before();
-        const after = this.wasm.fi_quality_after();
-        const report = {
-            backend: "browser-wasm",
-            engine_version: this.version,
-            motion_type: type,
-            quality_before: before,
-            quality_after: after,
-            grounding_after: this.wasm.fi_grounding(),
-            foot_lock_after: this.wasm.fi_foot_lock(),
-            limb_after: this.wasm.fi_limb_integrity(),
-            continuity_after: this.wasm.fi_continuity(),
-            opposition_after: this.wasm.fi_opposition(),
-            joint_edits: this.wasm.fi_joint_edits(),
-            iterations: this.wasm.fi_iterations(),
-            improved: !!this.wasm.fi_improved(),
-            pass: after >= targetQuality
-        };
-        const oldName = String(source.name || "Fatal Instinct Motion").replace(/ \[C\+\+ WASM Corrected\]$/i, "");
-        const motion = {
-            ...source,
-            name: `${oldName} [C++ WASM Corrected]`,
-            frames: frameCount,
-            samples,
-            cpp_motion_core: report,
-            contacts_recompute_required: true
-        };
-        delete motion.contacts;
-        return { motion, report };
-    }
-}
-class FISpriteWalkerRuntime {
-    constructor() {
-        this.state = {
-            engine: null,
-            backend: "loading",
-            lastError: null
-        };
-    }
-    async boot(base64) {
-        try {
-            this.state.engine = await FIWasmMotionEngine.fromBase64(base64);
-            this.state.backend = "browser-wasm";
-            this.state.lastError = null;
-            return true;
-        }
-        catch (error) {
-            this.state.engine = null;
-            this.state.backend = "offline";
-            this.state.lastError = error instanceof Error ? error.message : String(error);
-            return false;
-        }
-    }
-    correct(motion, type, target = 88) {
-        if (!this.state.engine)
-            throw new Error("Browser C++ WebAssembly engine is not loaded.");
-        return this.state.engine.correct(motion, type, target);
-    }
-}
-window.FI_JOINTS = FI_JOINTS;
-window.FIWasmMotionEngine = FIWasmMotionEngine;
-window.FISpriteWalkerRuntime = FISpriteWalkerRuntime;
-window.fiInferMotionType = fiInferMotionType;
-
-</script>
-<script id="fiV26Controller">
-/* Fatal Instinct Sprite Walker V27.1 - unified TypeScript/C++ WASM controller */
+/* Fatal Instinct Sprite Walker V27.3 - unified TypeScript/C++ WASM controller */
 (()=>{
   const runtime=new window.FISpriteWalkerRuntime();
   const button=document.getElementById("cppAutoCorrect");
@@ -10160,13 +10598,9 @@ window.fiInferMotionType = fiInferMotionType;
   if(button)button.addEventListener("click",correctCurrentMotion);
   setTimeout(boot,80);
 })();
-</script>
 
-
-
-<script>
 /* ============================================================
-   FATAL INSTINCT V27.1 — BODY-PART APPROVAL GATE
+   FATAL INSTINCT V27.3 — BODY-PART APPROVAL GATE
    Prevents textured sprite animation/render until body-part
    extraction has been visually reviewed and approved.
    ============================================================ */
@@ -10411,6 +10845,11 @@ window.fiInferMotionType = fiInferMotionType;
     el("fiPartsFixDock")?.classList.remove("open");
     render(report);
 
+    window.FICharacterIntelligence?.learn?.(
+      "parts_approved",
+      {partsScore:report.score}
+    );
+
     try{
       localStorage.setItem("fatal_instinct_v261_parts_approval",JSON.stringify({
         source:state.sourceName,
@@ -10539,13 +10978,10 @@ window.fiInferMotionType = fiInferMotionType;
     get report(){return state.lastReport;}
   };
 })();
-</script>
 
-
-<script>
-/* V27.1 grounding/session reset guard */
+/* V27.3 grounding/session reset guard */
 (function(){
-  const src=document.getElementById("sourceFile");
+  const src=document.getElementById("imageInput");
 
   if(src){
     src.addEventListener("change",()=>{
@@ -10566,6 +11002,187 @@ window.fiInferMotionType = fiInferMotionType;
   }
 })();
 </script>
+
+
+
+
+
+<script id="fiV26EmbeddedWasm">
+window.FI_WASM_BASE64="AGFzbQEAAAABFgRgAAF/YAN/f30Bf2ACf38BfWAAAX0DEhEAAAAAAAECAwMDAwMDAwAAAAUEAQEEBAYIAX8BQaCZBQsHkgIRBm1lbW9yeQIACmZpX3ZlcnNpb24AAA1maV9tYXhfZnJhbWVzAAEOZmlfam9pbnRfY291bnQAAg1maV9idWZmZXJfcHRyAAMSZmlfYnVmZmVyX2NhcGFjaXR5AAQKZmlfcHJvY2VzcwAFEWZpX3F1YWxpdHlfYmVmb3JlAAcQZmlfcXVhbGl0eV9hZnRlcgAIDGZpX2dyb3VuZGluZwAJDGZpX2Zvb3RfbG9jawAKEWZpX2xpbWJfaW50ZWdyaXR5AAsNZmlfY29udGludWl0eQAMDWZpX29wcG9zaXRpb24ADQ5maV9qb2ludF9lZGl0cwAODWZpX2l0ZXJhdGlvbnMADwtmaV9pbXByb3ZlZAAQCvNTEQUAQagUCwUAQcAACwQAQRILCABBwIiAgAALBQBBgBILzkMKAX8NfRJ/AX0EfwF9BH8BfQF/An1BfyEDAkAgAEG/f2pBQUkNAEEAQQA2AsTQgIAAQQBBADYCwNCAgABBAEEAOgDI0ICAAEMAAAAAIQRDAAAAACEFAkBBACoC2IiAgAAiBkEAKgLQiICAAJMiByAHlEEAKgLciICAACIIQQAqAtSIgIAAkyIHIAeUkiIHQwAAAABfDQAgB0MAAIA/IAdDAACAP14bIgkgByAJlZJDAAAAP5QiCSAHIAmVkkMAAAA/lCIJIAcgCZWSQwAAAD+UIgkgByAJlZJDAAAAP5QiCSAHIAmVkkMAAAA/lCIJIAcgCZWSQwAAAD+UIgkgByAJlZJDAAAAP5QhBQtBACAFOAKAmYGAAAJAQQAqAuCIgIAAIAaTIgcgB5RBACoC5IiAgAAgCJMiByAHlJIiB0MAAAAAXw0AIAdDAACAPyAHQwAAgD9eGyIGIAcgBpWSQwAAAD+UIgYgByAGlZJDAAAAP5QiBiAHIAaVkkMAAAA/lCIGIAcgBpWSQwAAAD+UIgYgByAGlZJDAAAAP5QiBiAHIAaVkkMAAAA/lCIGIAcgBpWSQwAAAD+UIQQLQQAgBDgChJmBgABDAAAAACEKQwAAAAAhCwJAQQAqAvCIgIAAIgZBACoC6IiAgACTIgcgB5RBACoC9IiAgAAiCEEAKgLsiICAAJMiByAHlJIiB0MAAAAAXw0AIAdDAACAPyAHQwAAgD9eGyIJIAcgCZWSQwAAAD+UIgkgByAJlZJDAAAAP5QiCSAHIAmVkkMAAAA/lCIJIAcgCZWSQwAAAD+UIgkgByAJlZJDAAAAP5QiCSAHIAmVkkMAAAA/lCIJIAcgCZWSQwAAAD+UIQsLQQAgCzgCiJmBgAACQEEAKgL4iICAACAGkyIHIAeUQQAqAvyIgIAAIAiTIgcgB5SSIgdDAAAAAF8NACAHQwAAgD8gB0MAAIA/XhsiBiAHIAaVkkMAAAA/lCIGIAcgBpWSQwAAAD+UIgYgByAGlZJDAAAAP5QiBiAHIAaVkkMAAAA/lCIGIAcgBpWSQwAAAD+UIgYgByAGlZJDAAAAP5QiBiAHIAaVkkMAAAA/lCEKC0EAIAo4AoyZgYAAQwAAAAAhDEMAAAAAIQ0CQEEAKgKIiYCAACIGQQAqAoCJgIAAkyIHIAeUQQAqAoyJgIAAIghBACoChImAgACTIgcgB5SSIgdDAAAAAF8NACAHQwAAgD8gB0MAAIA/XhsiCSAHIAmVkkMAAAA/lCIJIAcgCZWSQwAAAD+UIgkgByAJlZJDAAAAP5QiCSAHIAmVkkMAAAA/lCIJIAcgCZWSQwAAAD+UIgkgByAJlZJDAAAAP5QiCSAHIAmVkkMAAAA/lCENC0EAIA04ApCZgYAAAkBBACoCkImAgAAgBpMiByAHlEEAKgKUiYCAACAIkyIHIAeUkiIHQwAAAABfDQAgB0MAAIA/IAdDAACAP14bIgYgByAGlZJDAAAAP5QiBiAHIAaVkkMAAAA/lCIGIAcgBpWSQwAAAD+UIgYgByAGlZJDAAAAP5QiBiAHIAaVkkMAAAA/lCIGIAcgBpWSQwAAAD+UIgYgByAGlZJDAAAAP5QhDAtBACAMOAKUmYGAAEMAAAAAIQ5DAAAAACEPAkBBACoCqImAgAAiBkEAKgKgiYCAAJMiByAHlEEAKgKsiYCAACIIQQAqAqSJgIAAkyIHIAeUkiIHQwAAAABfDQAgB0MAAIA/IAdDAACAP14bIgkgByAJlZJDAAAAP5QiCSAHIAmVkkMAAAA/lCIJIAcgCZWSQwAAAD+UIgkgByAJlZJDAAAAP5QiCSAHIAmVkkMAAAA/lCIJIAcgCZWSQwAAAD+UIgkgByAJlZJDAAAAP5QhDwtBACAPOAKYmYGAAAJAQQAqArCJgIAAIAaTIgcgB5RBACoCtImAgAAgCJMiByAHlJIiB0MAAAAAXw0AIAdDAACAPyAHQwAAgD9eGyIGIAcgBpWSQwAAAD+UIgYgByAGlZJDAAAAP5QiBiAHIAaVkkMAAAA/lCIGIAcgBpWSQwAAAD+UIgYgByAGlZJDAAAAP5QiBiAHIAaVkkMAAAA/lCIGIAcgBpWSQwAAAD+UIQ4LQQAgDjgCnJmBgAACQCAFQwrXozxdRQ0AQQBBiq6P5QM2AoCZgYAAQwrXozwhBQsCQCAEQwrXozxdRQ0AQQBBiq6P5QM2AoSZgYAAQwrXozwhBAsCQCALQwrXozxdRQ0AQQBBiq6P5QM2AoiZgYAAQwrXozwhCwsCQCAKQwrXozxdRQ0AQQBBiq6P5QM2AoyZgYAAQwrXozwhCgsCQCANQwrXozxdRQ0AQQBBiq6P5QM2ApCZgYAAQwrXozwhDQsCQCAMQwrXozxdRQ0AQQBBiq6P5QM2ApSZgYAAQwrXozwhDAsCQCAPQwrXozxdRQ0AQQBBiq6P5QM2ApiZgYAAQwrXozwhDwsCQCAOQwrXozxdRQ0AQQBBiq6P5QM2ApyZgYAAQwrXozwhDgtBACAAIAEQhoCAgAAiEDgC0NCAgABBACAQOALM0ICAAAJAAkAgECACYEUNACAQIQcMAQsgAEEkbCERIABBJGwiA0FcaiESIANBAnQiA0GUiICAAGohEyADQaSIgIAAaiEUIANBkIiAgABqIRUgA0GgiICAAGohFiADQfSHgIAAaiEXIANBhIiAgABqIRggA0Hwh4CAAGohGSADQYCIgIAAaiEaIANB3IeAgABqIRsgA0Hsh4CAAGohHCADQdiHgIAAaiEdIANB6IeAgABqIR4gA0HEh4CAAGohHyADQdSHgIAAaiEgIANBwIeAgABqISEgA0HQh4CAAGohIiAAsyEjIAFBfmohJEEAISVBACEmA0BBACEDIBEhJwNAIANB4NCAgABqIANBwIiAgABqKgIAOAIAIANB5NCAgABqIANBxIiAgABqKgIAOAIAIANB6NCAgABqIANByIiAgABqKgIAOAIAIANB7NCAgABqIANBzIiAgABqKgIAOAIAIANBEGohAyAnQXxqIicNAAtDAAAAACEHQZSJgIAAIQMgACEnA0AgByADQQhqKgIAIgYgA0EoaioCACIIIAYgCF4bIgYgAyoCACIIIAYgCF4bIgYgA0EgaioCACIIIAYgCF4bkiEHIANBkAFqIQMgJ0F/aiInDQALIAcgI5UhKEHAiICAACEDIAAhJwNAAkBDCtcjvkMK1yM+ICggA0HcAGoiKSoCACIGIANB/ABqIioqAgAiCCAGIAheGyIHIANB1ABqIisqAgAiCSAHIAleGyIHIANB9ABqIiwqAgAiLSAHIC1eG5MiByAHQwrXIz5eGyAHQwrXI75dGyIHjCAHIAdDAAAAAF0bQ28SAztdDQAgA0EEaiIuIAcgLioCAJI4AgAgA0EMaiIuIAcgLioCAJI4AgAgA0EUaiIuIAcgLioCAJI4AgAgA0EcaiIuIAcgLioCAJI4AgAgA0EkaiIuIAcgLioCAJI4AgAgA0EsaiIuIAcgLioCAJI4AgAgA0E0aiIuIAcgLioCAJI4AgAgA0E8aiIuIAcgLioCAJI4AgAgA0HEAGoiLiAHIC4qAgCSOAIAIANBzABqIi4qAgAhLyApIAYgB5I4AgAgKyAJIAeSOAIAIC4gByAvkjgCACADQeQAaiIpIAcgKSoCAJI4AgAgA0HsAGoiKSoCACEGICogCCAHkjgCACAsIC0gB5I4AgAgKSAHIAaSOAIAIANBhAFqIikgByApKgIAkjgCACADQYwBaiIpIAcgKSoCAJI4AgBBACAmQRJqIiY2AsDQgIAACyADQZABaiEDICdBf2oiJw0AC0MAAAAAIQdBlImAgAAhAyAAIScDQCAHIANBCGoqAgAiBiADQShqKgIAIgggBiAIXhsiBiADKgIAIgggBiAIXhsiBiADQSBqKgIAIgggBiAIXhuSIQcgA0GQAWohAyAnQX9qIicNAAsgByAjlSEHQQEhJ0GoioCAACEDA0ACQCADQfR+aioCACAHkyIGjCAGIAZDAAAAAF0bQ65HYT1dRQ0AIANBBGoqAgAgB5MiBowgBiAGQwAAAABdG0OuR2E9XUUNACADQfB+aioCAEOF61E/lCADKgIAIgZD7FE4PpSSIgggBpMiBowgBiAGQwAAAABdG0NvEoM6XkUNACADIAg4AgBBACAmQQFqIiY2AsDQgIAACyADQZABaiEDIAAgJ0EBaiInRw0AC0EBISdByIqAgAAhAwNAAkAgA0H0fmoqAgAgB5MiBowgBiAGQwAAAABdG0OuR2E9XUUNACADQQRqKgIAIAeTIgaMIAYgBkMAAAAAXRtDrkdhPV1FDQAgA0HwfmoqAgBDhetRP5QgAyoCACIGQ+xROD6UkiIIIAaTIgaMIAYgBkMAAAAAXRtDbxKDOl5FDQAgAyAIOAIAQQAgJkEBaiImNgLA0ICAAAsgA0GQAWohAyAAICdBAWoiJ0cNAAtBwIiAgAAhAyAAIScDQAJAAkAgA0EYaiIpKgIAIgggA0EQaioCACIokyIJIAmUIANBHGoiKioCACItIANBFGoqAgAiL5MiBiAGlJIiB0MAAAAAXw0AIAdDAACAPyAHQwAAgD9eGyIwIAcgMJWSQwAAAD+UIjAgByAwlZJDAAAAP5QiMCAHIDCVkkMAAAA/lCIwIAcgMJWSQwAAAD+UIjAgByAwlZJDAAAAP5QiMCAHIDCVkkMAAAA/lCIwIAcgMJWSQwAAAD+UIgdDF7fROF0NACAGIAUgB5UiB5QgL5IgLZNDj8L1PpQgLZIhBgJAAkAgCSAHlCAokiAIk0OPwvU+lCAIkiIJIAiTIgeMIAcgB0MAAAAAXRtDbxIDOl4NACAGIC2TIgeMIAcgB0MAAAAAXRtDbxIDOl5FDQELQQAgJkEBaiImNgLA0ICAAAsgKiAGOAIAICkgCTgCAAwBCyAtIQYgCCEJCwJAIANBIGoiKSoCACIoIAmTIgggCJQgA0EkaiIqKgIAIi8gBpMiLSAtlJIiB0MAAAAAXw0AIAdDAACAPyAHQwAAgD9eGyIwIAcgMJWSQwAAAD+UIjAgByAwlZJDAAAAP5QiMCAHIDCVkkMAAAA/lCIwIAcgMJWSQwAAAD+UIjAgByAwlZJDAAAAP5QiMCAHIDCVkkMAAAA/lCIwIAcgMJWSQwAAAD+UIgdDF7fROF0NACAtIAQgB5UiB5QgBpIgL5NDj8L1PpQgL5IhBgJAAkAgCCAHlCAJkiAok0OPwvU+lCAokiIIICiTIgeMIAcgB0MAAAAAXRtDbxIDOl4NACAGIC+TIgeMIAcgB0MAAAAAXRtDbxIDOl5FDQELQQAgJkEBaiImNgLA0ICAAAsgKiAGOAIAICkgCDgCAAsCQAJAIANBMGoiKSoCACIIIANBKGoqAgAiKJMiCSAJlCADQTRqIioqAgAiLSADQSxqKgIAIi+TIgYgBpSSIgdDAAAAAF8NACAHQwAAgD8gB0MAAIA/XhsiMCAHIDCVkkMAAAA/lCIwIAcgMJWSQwAAAD+UIjAgByAwlZJDAAAAP5QiMCAHIDCVkkMAAAA/lCIwIAcgMJWSQwAAAD+UIjAgByAwlZJDAAAAP5QiMCAHIDCVkkMAAAA/lCIHQxe30ThdDQAgBiALIAeVIgeUIC+SIC2TQ4/C9T6UIC2SIQYCQAJAIAkgB5QgKJIgCJNDj8L1PpQgCJIiCSAIkyIHjCAHIAdDAAAAAF0bQ28SAzpeDQAgBiAtkyIHjCAHIAdDAAAAAF0bQ28SAzpeRQ0BC0EAICZBAWoiJjYCwNCAgAALICogBjgCACApIAk4AgAMAQsgLSEGIAghCQsCQCADQThqIikqAgAiKCAJkyIIIAiUIANBPGoiKioCACIvIAaTIi0gLZSSIgdDAAAAAF8NACAHQwAAgD8gB0MAAIA/XhsiMCAHIDCVkkMAAAA/lCIwIAcgMJWSQwAAAD+UIjAgByAwlZJDAAAAP5QiMCAHIDCVkkMAAAA/lCIwIAcgMJWSQwAAAD+UIjAgByAwlZJDAAAAP5QiMCAHIDCVkkMAAAA/lCIHQxe30ThdDQAgLSAKIAeVIgeUIAaSIC+TQ4/C9T6UIC+SIQYCQAJAIAggB5QgCZIgKJNDj8L1PpQgKJIiCCAokyIHjCAHIAdDAAAAAF0bQ28SAzpeDQAgBiAvkyIHjCAHIAdDAAAAAF0bQ28SAzpeRQ0BC0EAICZBAWoiJjYCwNCAgAALICogBjgCACApIAg4AgALAkACQCADQcgAaiIpKgIAIgggA0HAAGoqAgAiKJMiCSAJlCADQcwAaiIqKgIAIi0gA0HEAGoqAgAiL5MiBiAGlJIiB0MAAAAAXw0AIAdDAACAPyAHQwAAgD9eGyIwIAcgMJWSQwAAAD+UIjAgByAwlZJDAAAAP5QiMCAHIDCVkkMAAAA/lCIwIAcgMJWSQwAAAD+UIjAgByAwlZJDAAAAP5QiMCAHIDCVkkMAAAA/lCIwIAcgMJWSQwAAAD+UIgdDF7fROF0NACAGIA0gB5UiB5QgL5IgLZNDuB4FP5QgLZIhBgJAAkAgCSAHlCAokiAIk0O4HgU/lCAIkiIJIAiTIgeMIAcgB0MAAAAAXRtDbxIDOl4NACAGIC2TIgeMIAcgB0MAAAAAXRtDbxIDOl5FDQELQQAgJkEBaiImNgLA0ICAAAsgKiAGOAIAICkgCTgCAAwBCyAtIQYgCCEJCwJAIANB0ABqIikqAgAiKCAJkyIIIAiUIANB1ABqIioqAgAiLyAGkyItIC2UkiIHQwAAAABfDQAgB0MAAIA/IAdDAACAP14bIjAgByAwlZJDAAAAP5QiMCAHIDCVkkMAAAA/lCIwIAcgMJWSQwAAAD+UIjAgByAwlZJDAAAAP5QiMCAHIDCVkkMAAAA/lCIwIAcgMJWSQwAAAD+UIjAgByAwlZJDAAAAP5QiB0MXt9E4XQ0AIC0gDCAHlSIHlCAGkiAvk0O4HgU/lCAvkiEGAkACQCAIIAeUIAmSICiTQ7geBT+UICiSIgggKJMiB4wgByAHQwAAAABdG0NvEgM6Xg0AIAYgL5MiB4wgByAHQwAAAABdG0NvEgM6XkUNAQtBACAmQQFqIiY2AsDQgIAACyAqIAY4AgAgKSAIOAIACwJAAkAgA0HoAGoiKSoCACIIIANB4ABqKgIAIiiTIgkgCZQgA0HsAGoiKioCACItIANB5ABqKgIAIi+TIgYgBpSSIgdDAAAAAF8NACAHQwAAgD8gB0MAAIA/XhsiMCAHIDCVkkMAAAA/lCIwIAcgMJWSQwAAAD+UIjAgByAwlZJDAAAAP5QiMCAHIDCVkkMAAAA/lCIwIAcgMJWSQwAAAD+UIjAgByAwlZJDAAAAP5QiMCAHIDCVkkMAAAA/lCIHQxe30ThdDQAgBiAPIAeVIgeUIC+SIC2TQ7geBT+UIC2SIQYCQAJAIAkgB5QgKJIgCJNDuB4FP5QgCJIiCSAIkyIHjCAHIAdDAAAAAF0bQ28SAzpeDQAgBiAtkyIHjCAHIAdDAAAAAF0bQ28SAzpeRQ0BC0EAICZBAWoiJjYCwNCAgAALICogBjgCACApIAk4AgAMAQsgLSEGIAghCQsCQCADQfAAaiIpKgIAIiggCZMiCCAIlCADQfQAaiIqKgIAIi8gBpMiLSAtlJIiB0MAAAAAXw0AIAdDAACAPyAHQwAAgD9eGyIwIAcgMJWSQwAAAD+UIjAgByAwlZJDAAAAP5QiMCAHIDCVkkMAAAA/lCIwIAcgMJWSQwAAAD+UIjAgByAwlZJDAAAAP5QiMCAHIDCVkkMAAAA/lCIwIAcgMJWSQwAAAD+UIgdDF7fROF0NACAtIA4gB5UiB5QgBpIgL5NDuB4FP5QgL5IhBgJAAkAgCCAHlCAJkiAok0O4HgU/lCAokiIIICiTIgeMIAcgB0MAAAAAXRtDbxIDOl4NACAGIC+TIgeMIAcgB0MAAAAAXRtDbxIDOl5FDQELQQAgJkEBaiImNgLA0ICAAAsgKiAGOAIAICkgCDgCAAsgA0GQAWohAyAnQX9qIicNAAtBASEsQcCIgIAAISsDQEEEIScDQAJAICsgJ2oiA0GMAWoiKSoCACADQXxqKgIAIgmTIgYgBpQgA0GQAWoiKioCACADKgIAIi2TIgggCJSSIgdDAAAAAF8NACAHQwAAgD8gB0MAAIA/XhsiKCAHICiVkkMAAAA/lCIoIAcgKJWSQwAAAD+UIiggByAolZJDAAAAP5QiKCAHICiVkkMAAAA/lCIoIAcgKJWSQwAAAD+UIiggByAolZJDAAAAP5QiKCAHICiVkkMAAAA/lCIHQz0K1z5eRQ0AIAdDF7fROF5FDQBBACAmQQFqIiY2AsDQgIAAICogCEM9Ctc+IAeVIgeUIC2SOAIAICkgBiAHlCAJkjgCAAsgJ0EIaiInQZQBRw0ACyArQZABaiErICxBAWoiLCAARw0ACwJAIAFBAUcNAEH4iICAACEDIAAhJwNAAkAgA0EYaioCACADQThqKgIAkyIHjCAHIAdDAAAAAF0bIgZDj8L1PF0NACAHIAMqAgAiCCADQWhqIikqAgAiCZOUQwAAAABdRQ0AQQAgJkECaiImNgLA0ICAACApIAggCZJDAAAAP5QiCEMAAIA/QwAAgL8gB0MAAAAAXhtDCtcjPUOuR2E+IAZDKVyPPpQiByAHQ65HYT5eGyAHQwrXIz1dG5QiB5M4AgAgAyAHIAiSOAIACyADQZABaiEDICdBf2oiJw0ACwsCQCABQQJIDQACQAJAAkACQCAkDgMAAQIEC0MAAAAAIQZDAAAAACEIAkAgIioCACAhKgIAkyIHIAeUICAqAgAgHyoCAJMiByAHlJIiB0MAAAAAXw0AIAdDAACAPyAHQwAAgD9eGyIIIAcgCJWSQwAAAD+UIgggByAIlZJDAAAAP5QiCCAHIAiVkkMAAAA/lCIIIAcgCJWSQwAAAD+UIgggByAIlZJDAAAAP5QiCCAHIAiVkkMAAAA/lCIIIAcgCJWSQwAAAD+UIQgLAkAgHioCACAdKgIAkyIHIAeUIBwqAgAgGyoCAJMiByAHlJIiB0MAAAAAXw0AIAdDAACAPyAHQwAAgD9eGyIGIAcgBpWSQwAAAD+UIgYgByAGlZJDAAAAP5QiBiAHIAaVkkMAAAA/lCIGIAcgBpWSQwAAAD+UIgYgByAGlZJDAAAAP5QiBiAHIAaVkkMAAAA/lCIGIAcgBpWSQwAAAD+UIQYLQwAAgD9DAACAv0EOQQggBiAIYCIDGyASakECdEHAiICAAGoiJyoCACIGQQpBBCADGyASakECdEHAiICAAGoqAgAiCJMiB0MAAAAAYBsgB4wgByAHQwAAAABdGyIHQ7geBT8gB0O4HgU/XhuUIAiSIgggBpMiB4wgByAHQwAAAABdG0NvEgM7XkUNAyAnIAg4AgAMAgtDAAAAACEGQwAAAAAhCAJAIBoqAgAgGSoCAJMiByAHlCAYKgIAIBcqAgCTIgcgB5SSIgdDAAAAAF8NACAHQwAAgD8gB0MAAIA/XhsiCCAHIAiVkkMAAAA/lCIIIAcgCJWSQwAAAD+UIgggByAIlZJDAAAAP5QiCCAHIAiVkkMAAAA/lCIIIAcgCJWSQwAAAD+UIgggByAIlZJDAAAAP5QiCCAHIAiVkkMAAAA/lCEICwJAIBYqAgAgFSoCAJMiByAHlCAUKgIAIBMqAgCTIgcgB5SSIgdDAAAAAF8NACAHQwAAgD8gB0MAAIA/XhsiBiAHIAaVkkMAAAA/lCIGIAcgBpWSQwAAAD+UIgYgByAGlZJDAAAAP5QiBiAHIAaVkkMAAAA/lCIGIAcgBpWSQwAAAD+UIgYgByAGlZJDAAAAP5QiBiAHIAaVkkMAAAA/lCEGC0EcQRQgBiAIYCIDGyASakECdCInQcCIgIAAaiIpKgIAQRhBECADGyASakECdCIDQcCIgIAAaioCACIJkyIGIAaUICdBxIiAgABqIicqAgAgA0HEiICAAGoiAyoCAJMiCCAIlJIiB0MAAAAAXw0CIAdDAACAPyAHQwAAgD9eGyItIAcgLZWSQwAAAD+UIi0gByAtlZJDAAAAP5QiLSAHIC2VkkMAAAA/lCItIAcgLZWSQwAAAD+UIi0gByAtlZJDAAAAP5QiLSAHIC2VkkMAAAA/lCItIAcgLZWSQwAAAD+UIgdDbxKDOl5FDQIgKSAGIAdD7FE4PyAHQ+xROD9eGyAHlSIHlCAJkjgCACAnIAggB5QgAyoCAJI4AgAMAQtDAAAAACEGQwAAAAAhCAJAICIqAgAgISoCAJMiByAHlCAgKgIAIB8qAgCTIgcgB5SSIgdDAAAAAF8NACAHQwAAgD8gB0MAAIA/XhsiCCAHIAiVkkMAAAA/lCIIIAcgCJWSQwAAAD+UIgggByAIlZJDAAAAP5QiCCAHIAiVkkMAAAA/lCIIIAcgCJWSQwAAAD+UIgggByAIlZJDAAAAP5QiCCAHIAiVkkMAAAA/lCEICwJAIB4qAgAgHSoCAJMiByAHlCAcKgIAIBsqAgCTIgcgB5SSIgdDAAAAAF8NACAHQwAAgD8gB0MAAIA/XhsiBiAHIAaVkkMAAAA/lCIGIAcgBpWSQwAAAD+UIgYgByAGlZJDAAAAP5QiBiAHIAaVkkMAAAA/lCIGIAcgBpWSQwAAAD+UIgYgByAGlZJDAAAAP5QiBiAHIAaVkkMAAAA/lCEGC0EOQQggBiAIYCIDGyASakECdCInQcCIgIAAaiIpKgIAQQpBBCADGyASakECdCIDQcCIgIAAaioCACIJkyIGIAaUICdBxIiAgABqIicqAgAgA0HEiICAAGoiAyoCAJMiCCAIlJIiB0MAAAAAXw0BIAdDAACAPyAHQwAAgD9eGyItIAcgLZWSQwAAAD+UIi0gByAtlZJDAAAAP5QiLSAHIC2VkkMAAAA/lCItIAcgLZWSQwAAAD+UIi0gByAtlZJDAAAAP5QiLSAHIC2VkkMAAAA/lCItIAcgLZWSQwAAAD+UIgdDbxKDOl5FDQEgKSAGIAdDUrgePyAHQ1K4Hj9eGyAHlSIHlCAJkjgCACAnIAggB5QgAyoCAJI4AgALQQAgJkEBaiImNgLA0ICAAAsgACABEIaAgIAAIQdBACAlQQFqIgM2AsTQgIAAAkAgB0MK1yM8kiAQXUUNAEEAIQMDQCADQcCIgIAAaiADQeDQgIAAaioCADgCACADQcSIgIAAaiADQeTQgIAAaioCADgCACADQciIgIAAaiADQejQgIAAaioCADgCACADQcyIgIAAaiADQezQgIAAaioCADgCACADQRBqIQMgEUF8aiIRDQALQQAgACABEIaAgIAAIgc4AtDQgIAADAILQQAgBzgC0NCAgAAgByAQQwrXozySXkUNAUEAQQE6AMjQgIAAICVBBksNASADISUgByEQIAcgAmBFDQALCwJAIAdDAADIQpRDAAAAP5IiB4tDAAAAT11FDQAgB6gPC0GAgICAeCEDCyADC4gPBAF9An8FfQN/AkACQCAAQQFIDQBDAAAAACECQZSJgIAAIQMgACEEA0AgAiADQQhqKgIAIgUgA0EoaioCACIGIAUgBl4bIgUgAyoCACIGIAUgBl4bIgUgA0EgaioCACIGIAUgBl4bkiECIANBkAFqIQMgBEF/aiIEDQALIAIgALMiB5UhCEGUiYCAACEDIAAhBEMAAAAAIQUDQCAFIANBCGoqAgAiAiADQShqKgIAIgYgAiAGXhsiAiADKgIAIgYgAiAGXhsiAiADQSBqKgIAIgYgAiAGXhsgCJMiAowgAiACQwAAAABdG5IhBSADQZABaiEDIARBf2oiBA0ADAILCyAAsyEHQwAAAAAhBQtDAAAAACECQQBDAAAAAEMAAMhCIAUgB5VDAADSw5RDAADIQpIiBSAFQwAAyEJeGyAFQwAAAABdGyIJOALgmIGAAAJAAkAgAEEBSA0AQZSJgIAAIQMgACEEA0AgAiADQQhqKgIAIgUgA0EoaioCACIGIAUgBl4bIgUgAyoCACIGIAUgBl4bIgUgA0EgaioCACIGIAUgBl4bkiECIANBkAFqIQMgBEF/aiIEDQALQwAAyEIhBwJAIABBAUYNACACIACzlSECIABBf2ohCkEAIQRBqIqAgAAhA0MAAAAAIQYDQAJAIANB9H5qKgIAIAKTIgWMIAUgBUMAAAAAXRtDj8J1PV1FDQAgA0EEaioCACACkyIFjCAFIAVDAAAAAF0bQ4/CdT1dRQ0AIAYgAyoCACADQfB+aioCAJMiBYwgBSAFQwAAAABdG5IhBiAEQQFqIQQLIANBkAFqIQMgCkF/aiIKDQALIABBf2ohCkHIioCAACEDA0ACQCADQfR+aioCACACkyIFjCAFIAVDAAAAAF0bQ4/CdT1dRQ0AIANBBGoqAgAgApMiBYwgBSAFQwAAAABdG0OPwnU9XUUNACAGIAMqAgAgA0HwfmoqAgCTIgWMIAUgBUMAAAAAXRuSIQYgBEEBaiEECyADQZABaiEDIApBf2oiCg0ACyAERQ0AQwAAAABDAADIQiAGIASylUMAALTDlEMAAMhCkiICIAJDAADIQl4bIAJDAAAAAF0bIQcLQQAhC0EAIAc4AuSYgYAAQwAAAAAhBgNAIAtBJGwhBEFgIQMDQEMAAAAAIQUCQCADQcCIgIAAaigCAEEBdCAEakECdCIKQcCIgIAAaioCACADQaCIgIAAaigCAEEBdCAEakECdCIMQcCIgIAAaioCAJMiAiAClCAKQcSIgIAAaioCACAMQcSIgIAAaioCAJMiAiAClJIiAkMAAAAAXw0AIAJDAACAPyACQwAAgD9eGyIFIAIgBZWSQwAAAD+UIgUgAiAFlZJDAAAAP5QiBSACIAWVkkMAAAA/lCIFIAIgBZWSQwAAAD+UIgUgAiAFlZJDAAAAP5QiBSACIAWVkkMAAAA/lCIFIAIgBZWSQwAAAD+UIQULIAYgBSADQaCZgYAAaioCACIIkyICjCACIAJDAAAAAF0bIAiVkiEGIANBBGoiAw0ACyALQQFqIgsgAEcNAAsgB0Ncj0I+lCEIIABBA3SyIQIMAQtBAEGAgKCWBDYC5JiBgABDAAAAACECQwAAmEEhCEMAAAAAIQYLQQBDAAAAAEMAAMhCIAYgApVDAACCw5RDAADIQpIiAiACQwAAyEJeGyACQwAAAABdGyIHOALomIGAAEMAAAAAIQJDAAAAACEGAkAgAEECSA0AQwAAAAAhBkHAiICAACEKQQEhDANAQQQhBANAQwAAAAAhBQJAIAogBGoiA0GMAWoqAgAgA0F8aioCAJMiAiAClCADQZABaioCACADKgIAkyICIAKUkiICQwAAAABfDQAgAkMAAIA/IAJDAACAP14bIgUgAiAFlZJDAAAAP5QiBSACIAWVkkMAAAA/lCIFIAIgBZWSQwAAAD+UIgUgAiAFlZJDAAAAP5QiBSACIAWVkkMAAAA/lCIFIAIgBZWSQwAAAD+UIgUgAiAFlZJDAAAAP5QhBQsgBiAFQ3sUrr6SkiAGIAVDexSuPl4bIQYgBEEIaiIEQZQBRw0ACyAKQZABaiEKIAxBAWoiDCAARw0ACyAAQRJsQW5qsiECC0EAQwAAAABDAADIQiAGIAKVQwAAlsOUQwAAyEKSIgIgAkMAAMhCXhsgAkMAAAAAXRsiBjgC7JiBgABDAADIQkMAALRCIAFBAUciAxshAgJAIABBAUgNACADDQBBACEKQfiIgIAAIQNBACEEA0ACQCADQRhqKgIAIANBOGoqAgCTIgKMIAIgAkMAAAAAXRtDj8L1PF0NACADKgIAIANBaGoqAgCTIgWMIAUgBUMAAAAAXRtDj8L1PF0NACAEQQFqIQQgCiACIAWUQwAAAABeaiEKCyADQZABaiEDIABBf2oiAA0ACwJAIAQNAEMAALRCIQIMAQsgCrJDAADIQpQgBLKVIQILQQAgAjgC8JiBgABDAAAAAEMAAMhCIAJDuB4FPpQgBkOuR2E+lCAHQx+Faz6UIAlDH4VrPpQgCJKSkpIiAiACQwAAyEJeGyACQwAAAABdGwsLAEEAKgLM0ICAAAsLAEEAKgLQ0ICAAAsLAEEAKgLgmIGAAAsLAEEAKgLkmIGAAAsLAEEAKgLomIGAAAsLAEEAKgLsmIGAAAsLAEEAKgLwmIGAAAsLAEEAKALA0ICAAAsLAEEAKALE0ICAAAsLAEEALQDI0ICAAAsLRwEAQYAIC0ACAAAAAwAAAAUAAAAGAAAACAAAAAkAAAAMAAAADQAAAAMAAAAEAAAABgAAAAcAAAAJAAAACgAAAA0AAAAOAAAAAMoCBG5hbWUAFBNmaV9tb3Rpb25fY29yZS53YXNtAYwCEQAKZmlfdmVyc2lvbgENZmlfbWF4X2ZyYW1lcwIOZmlfam9pbnRfY291bnQDDWZpX2J1ZmZlcl9wdHIEEmZpX2J1ZmZlcl9jYXBhY2l0eQUKZmlfcHJvY2VzcwYRcXVhbGl0eShpbnQsIGludCkHEWZpX3F1YWxpdHlfYmVmb3JlCBBmaV9xdWFsaXR5X2FmdGVyCQxmaV9ncm91bmRpbmcKDGZpX2Zvb3RfbG9jawsRZmlfbGltYl9pbnRlZ3JpdHkMDWZpX2NvbnRpbnVpdHkNDWZpX29wcG9zaXRpb24ODmZpX2pvaW50X2VkaXRzDw1maV9pdGVyYXRpb25zEAtmaV9pbXByb3ZlZAcSAQAPX19zdGFja19wb2ludGVyCQoBAAcucm9kYXRhAH8JcHJvZHVjZXJzAQxwcm9jZXNzZWQtYnkBBWNsYW5nXzE3LjAuMCAoaHR0cHM6Ly9naXRodWIuY29tL3N3aWZ0bGFuZy9sbHZtLXByb2plY3QuZ2l0IDEwOTk5YjZkMDM0ZmUzMThmM2Q1NmM4M2JkZGI2NTcyNTkzYThiYjApAEkPdGFyZ2V0X2ZlYXR1cmVzBCsKbXVsdGl2YWx1ZSsPbXV0YWJsZS1nbG9iYWxzKw9yZWZlcmVuY2UtdHlwZXMrCHNpZ24tZXh0";
+</script>
+<script id="fiV26TypedRuntime">
+"use strict";
+/* Fatal Instinct Sprite Walker V27.3
+ * Typed browser runtime for C++ WebAssembly motion analysis/correction.
+ */
+const FI_JOINTS = [
+    "pelvis", "neck",
+    "left_shoulder", "left_elbow", "left_wrist",
+    "right_shoulder", "right_elbow", "right_wrist",
+    "left_hip", "left_knee", "left_ankle", "left_toe",
+    "right_hip", "right_knee", "right_ankle", "right_toe",
+    "tail_base", "tail_tip"
+];
+function fiMotionTypeCode(type) {
+    switch (type) {
+        case "walk": return 1;
+        case "punch": return 2;
+        case "kick": return 3;
+        case "slash": return 4;
+        default: return 0;
+    }
+}
+function fiInferMotionType(motion) {
+    const n = String(motion.name || "").toLowerCase();
+    if (n.includes("walk"))
+        return "walk";
+    if (n.includes("punch") || n.includes("jab") || n.includes("cross") || n.includes("hook"))
+        return "punch";
+    if (n.includes("kick"))
+        return "kick";
+    if (n.includes("slash") || n.includes("claw"))
+        return "slash";
+    return "generic";
+}
+function fiDecodeBase64(base64) {
+    const raw = atob(base64.replace(/\s+/g, ""));
+    const bytes = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; i++)
+        bytes[i] = raw.charCodeAt(i);
+    return bytes;
+}
+class FIWasmMotionEngine {
+    constructor(wasm) {
+        this.wasm = wasm;
+    }
+    static async fromBase64(base64) {
+        const bytes = fiDecodeBase64(base64);
+        const result = await WebAssembly.instantiate(bytes, {});
+        const exports = result.instance.exports;
+        if (!exports.memory || typeof exports.fi_process !== "function") {
+            throw new Error("Fatal Instinct WASM exports are incomplete.");
+        }
+        if (exports.fi_joint_count() !== FI_JOINTS.length) {
+            throw new Error(`WASM joint count mismatch: ${exports.fi_joint_count()} != ${FI_JOINTS.length}`);
+        }
+        return new FIWasmMotionEngine(exports);
+    }
+    get version() { return this.wasm.fi_version(); }
+    get maxFrames() { return this.wasm.fi_max_frames(); }
+    correct(source, requestedType = "auto", targetQuality = 88) {
+        if (!source || source.format !== "fatal-instinct-motion") {
+            throw new Error("This is not a Fatal Instinct native motion package.");
+        }
+        if (!Array.isArray(source.samples) || source.samples.length < 2) {
+            throw new Error("Motion needs at least two frames.");
+        }
+        if (source.samples.length > this.maxFrames) {
+            throw new Error(`Browser C++ engine supports up to ${this.maxFrames} frames per pass.`);
+        }
+        const type = requestedType === "auto" ? fiInferMotionType(source) : requestedType;
+        const frameCount = source.samples.length;
+        const floatsRequired = frameCount * FI_JOINTS.length * 2;
+        if (floatsRequired > this.wasm.fi_buffer_capacity()) {
+            throw new Error("Motion exceeds C++ WebAssembly buffer capacity.");
+        }
+        const ptr = this.wasm.fi_buffer_ptr();
+        const view = new Float32Array(this.wasm.memory.buffer, ptr, floatsRequired);
+        let k = 0;
+        for (let f = 0; f < frameCount; f++) {
+            const sample = source.samples[f];
+            for (const joint of FI_JOINTS) {
+                const p = sample[joint];
+                if (!p || !Number.isFinite(p[0]) || !Number.isFinite(p[1])) {
+                    throw new Error(`Frame ${f + 1} is missing valid ${joint} coordinates.`);
+                }
+                view[k++] = p[0];
+                view[k++] = p[1];
+            }
+        }
+        const rc = this.wasm.fi_process(frameCount, fiMotionTypeCode(type), targetQuality);
+        if (rc < 0)
+            throw new Error(`C++ WebAssembly engine rejected motion (${rc}).`);
+        const samples = source.samples.map((original, frame) => {
+            const next = { ...original };
+            for (let j = 0; j < FI_JOINTS.length; j++) {
+                const base = frame * FI_JOINTS.length * 2 + j * 2;
+                next[FI_JOINTS[j]] = [view[base], view[base + 1]];
+            }
+            return next;
+        });
+        const before = this.wasm.fi_quality_before();
+        const after = this.wasm.fi_quality_after();
+        const report = {
+            backend: "browser-wasm",
+            engine_version: this.version,
+            motion_type: type,
+            quality_before: before,
+            quality_after: after,
+            grounding_after: this.wasm.fi_grounding(),
+            foot_lock_after: this.wasm.fi_foot_lock(),
+            limb_after: this.wasm.fi_limb_integrity(),
+            continuity_after: this.wasm.fi_continuity(),
+            opposition_after: this.wasm.fi_opposition(),
+            joint_edits: this.wasm.fi_joint_edits(),
+            iterations: this.wasm.fi_iterations(),
+            improved: !!this.wasm.fi_improved(),
+            pass: after >= targetQuality
+        };
+        const oldName = String(source.name || "Fatal Instinct Motion").replace(/ \[C\+\+ WASM Corrected\]$/i, "");
+        const motion = {
+            ...source,
+            name: `${oldName} [C++ WASM Corrected]`,
+            frames: frameCount,
+            samples,
+            cpp_motion_core: report,
+            contacts_recompute_required: true
+        };
+        delete motion.contacts;
+        return { motion, report };
+    }
+}
+class FISpriteWalkerRuntime {
+    constructor() {
+        this.state = {
+            engine: null,
+            backend: "loading",
+            lastError: null
+        };
+    }
+    async boot(base64) {
+        try {
+            this.state.engine = await FIWasmMotionEngine.fromBase64(base64);
+            this.state.backend = "browser-wasm";
+            this.state.lastError = null;
+            return true;
+        }
+        catch (error) {
+            this.state.engine = null;
+            this.state.backend = "offline";
+            this.state.lastError = error instanceof Error ? error.message : String(error);
+            return false;
+        }
+    }
+    correct(motion, type, target = 88) {
+        if (!this.state.engine)
+            throw new Error("Browser C++ WebAssembly engine is not loaded.");
+        return this.state.engine.correct(motion, type, target);
+    }
+}
+window.FI_JOINTS = FI_JOINTS;
+window.FIWasmMotionEngine = FIWasmMotionEngine;
+window.FISpriteWalkerRuntime = FISpriteWalkerRuntime;
+window.fiInferMotionType = fiInferMotionType;
+
+</script>
+
+
+
+
+
+
+
+
 
 </body>
 </html>
