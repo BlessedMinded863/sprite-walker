@@ -148,7 +148,7 @@
 
 
 /* ============================================================
-   FATAL INSTINCT V26.3 — BODY-PART APPROVAL GATE
+   FATAL INSTINCT V27.0 — BODY-PART APPROVAL GATE
    ============================================================ */
 .fiPartsGateOverlay{position:fixed;inset:0;z-index:99995;background:rgba(3,6,10,.86);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center;padding:10px env(safe-area-inset-right) calc(10px + env(safe-area-inset-bottom)) env(safe-area-inset-left)}
 .fiPartsGateOverlay.open{display:flex}
@@ -192,7 +192,7 @@
 
 
 /* ============================================================
-   FATAL INSTINCT V26.3 — RIG GEOMETRY AUDIT + PROTECTED REBIND
+   FATAL INSTINCT V27.0 — RIG GEOMETRY AUDIT + PROTECTED REBIND
    ============================================================ */
 .fiAuditOverlay{
   position:fixed;inset:0;z-index:99993;
@@ -287,6 +287,117 @@
   .fiRebindRows{grid-template-columns:repeat(3,1fr)}
 }
 
+
+/* ============================================================
+   FATAL INSTINCT V27 — PROGRESSIVE MOTION SKETCH ENGINE
+   ============================================================ */
+.fiSketchOverlay{
+  position:fixed;inset:0;z-index:99991;
+  background:rgba(3,6,10,.90);backdrop-filter:blur(9px);
+  display:none;align-items:flex-end;justify-content:center;
+  padding:10px env(safe-area-inset-right)
+          calc(10px + env(safe-area-inset-bottom))
+          env(safe-area-inset-left)
+}
+.fiSketchOverlay.open{display:flex}
+.fiSketchCard{
+  width:min(900px,100%);max-height:94vh;overflow:auto;
+  background:#0f151e;border:1px solid #364154;border-radius:22px;
+  padding:14px;box-shadow:0 24px 80px rgba(0,0,0,.62)
+}
+.fiSketchHead{
+  display:flex;justify-content:space-between;gap:12px;align-items:flex-start
+}
+.fiSketchHead h2{font-size:20px;margin:0 0 5px}
+.fiSketchHead p{
+  font-size:11px;color:var(--muted);margin:0;line-height:1.45
+}
+.fiSketchScore{
+  min-width:100px;text-align:center;border:1px solid var(--line);
+  background:#0a1017;border-radius:15px;padding:9px
+}
+.fiSketchScore b{display:block;font-size:24px}
+.fiSketchScore span{font-size:9px;color:var(--muted)}
+.fiSketchControls{
+  display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:11px
+}
+.fiSketchControls label{
+  background:#0a1017;border:1px solid #293445;border-radius:10px;
+  padding:7px;font-size:10px;color:var(--muted)
+}
+.fiSketchControls select{
+  width:100%;margin-top:4px;min-height:36px
+}
+.fiSketchStages{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:9px 0
+}
+.fiSketchStages button{
+  min-height:40px;font-size:10px;border-color:#2d3a4d
+}
+.fiSketchStages button.active{
+  border-color:#5a7ea5;background:#17283a;color:#b8dcff;font-weight:700
+}
+.fiSketchCanvasWrap{
+  border:1px solid #2a3749;border-radius:14px;background:#070b10;
+  padding:7px;position:relative
+}
+#fiSketchCanvas{
+  display:block;width:100%;height:auto;max-height:52vh;
+  border-radius:9px;touch-action:none;background:#090e14
+}
+.fiSketchHint{
+  position:absolute;left:12px;bottom:12px;
+  background:rgba(5,9,14,.82);border:1px solid #29384a;
+  color:#aebdca;border-radius:8px;padding:5px 7px;font-size:9px;
+  pointer-events:none
+}
+.fiSketchFrames{
+  display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-top:8px
+}
+.fiSketchFrame{
+  min-width:0;padding:7px 2px;border-radius:8px;font-size:9px;
+  border:1px solid #2a3545;background:#0b1118;color:#a9b4c0
+}
+.fiSketchFrame.active{
+  background:#172a3d;border-color:#5b84aa;color:#c8e6ff;font-weight:700
+}
+.fiSketchMetrics{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px
+}
+.fiSketchMetric{
+  background:#0a1017;border:1px solid #293445;border-radius:9px;padding:7px
+}
+.fiSketchMetric small{display:block;color:var(--muted);font-size:8px}
+.fiSketchMetric b{font-size:12px}
+.fiSketchStatus{
+  margin-top:8px;background:#0a1017;border:1px solid #293445;
+  border-radius:10px;padding:8px;font-size:10px;color:var(--muted);
+  line-height:1.45
+}
+.fiSketchActions{
+  display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px
+}
+.fiSketchActions button{min-height:44px}
+.fiSketchActions .correct{
+  background:#172f47;border-color:#356a94;color:#acd9ff;font-weight:700
+}
+.fiSketchActions .approve{
+  background:#143b2a;border-color:#2e7c57;color:#a9efca;font-weight:700
+}
+.fiSketchActions .approve:disabled{opacity:.38;filter:grayscale(1)}
+.fiSketchMemory{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  margin-top:8px;border:1px solid #27384c;border-radius:10px;
+  padding:7px 9px;background:#0a1017;font-size:10px
+}
+.fiSketchMemory span{color:var(--muted)}
+.fiSketchMemory b{color:#a8d9ff}
+@media(min-width:700px){
+  .fiSketchOverlay{align-items:center}
+  .fiSketchControls{grid-template-columns:repeat(4,1fr)}
+  .fiSketchActions{grid-template-columns:repeat(4,1fr)}
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
@@ -317,7 +428,7 @@ setTimeout(()=>{
 </style>
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V26.3</span></h1><div class="sub">Production Engine • TypeScript Runtime • Browser C++ WebAssembly • Rig Approval Gate</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V27.0</span></h1><div class="sub">Production Engine • TypeScript Runtime • Browser C++ WebAssembly • Rig Approval Gate</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -352,19 +463,19 @@ setTimeout(()=>{
 <div class="fiGateBanner" id="fiGateBanner">
   <div>
     <b>Master Sprite Autopilot</b>
-    <div class="fiGateSub" id="fiGateBannerText">Load a master sprite. V26 will auto-rig it, stop for approval, then use the typed browser engine for production.</div>
+    <div class="fiGateSub" id="fiGateBannerText">Load a master sprite. V27 auto-rigs, audits geometry, sketches motion, runs C++ correction, then binds artwork.</div>
   </div>
   <span class="fiGateStage" id="fiGateStageBadge">WAITING</span>
 </div>
 
 <div class="fiAutopilotHandoff" id="fiAutopilotHandoff">
-  <h3>Rig approved — automation unlocked</h3>
+  <h3>Motion approved — artwork automation unlocked</h3>
   <p id="fiAutopilotHandoffText">Body-part separation is ready. The approved rig is now protected from being replaced unless you deliberately re-run Auto-Rig.</p>
   <div class="fiPipelineMini">
     <span class="done">MASTER ✓</span>
     <span class="done">RIG ✓</span>
-    <span class="done">PARTS ✓</span>
-    <span class="next">MOTION →</span>
+    <span class="done">SKETCH ✓</span>
+    <span class="next">ARTWORK →</span>
   </div>
 </div>
 
@@ -484,6 +595,101 @@ setTimeout(()=>{
     <span id="fiRigAuditFixText">Drag the flagged joints, then run the audit again.</span>
   </div>
   <button id="fiRigAuditReviewDock">Review Audit</button>
+</div>
+
+
+
+<div class="fiSketchOverlay" id="fiSketchOverlay" role="dialog" aria-modal="true" aria-labelledby="fiSketchTitle">
+  <div class="fiSketchCard">
+    <div class="fiSketchHead">
+      <div>
+        <h2 id="fiSketchTitle">Progressive Motion Sketch Engine</h2>
+        <p>
+          Motion is solved before finished sprite artwork is bound.
+          Drag any yellow joint to fix the selected sketch frame.
+        </p>
+      </div>
+      <div class="fiSketchScore">
+        <b id="fiSketchQuality">--</b>
+        <span>C++ MOTION QUALITY</span>
+      </div>
+    </div>
+
+    <div class="fiSketchControls">
+      <label>
+        Motion
+        <select id="fiSketchMotion">
+          <option value="walk">Walk</option>
+          <option value="idle">Idle</option>
+          <option value="punch">Punch</option>
+          <option value="kick">Kick</option>
+          <option value="slash">Slash</option>
+        </select>
+      </label>
+
+      <label>
+        Facing
+        <select id="fiSketchFacing">
+          <option value="right">Right</option>
+          <option value="left">Left</option>
+        </select>
+      </label>
+
+      <label>
+        Quality Target
+        <select id="fiSketchTarget">
+          <option value="82">82</option>
+          <option value="88" selected>88</option>
+          <option value="92">92</option>
+          <option value="95">95</option>
+        </select>
+      </label>
+
+      <label>
+        Onion Skin
+        <select id="fiSketchOnion">
+          <option value="on" selected>Previous Frame</option>
+          <option value="off">Off</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="fiSketchStages">
+      <button id="fiSketchStageSkeleton" type="button" class="active">1 · Skeleton</button>
+      <button id="fiSketchStageVolume" type="button">2 · Volume</button>
+      <button id="fiSketchStageSilhouette" type="button">3 · Silhouette</button>
+    </div>
+
+    <div class="fiSketchCanvasWrap">
+      <canvas id="fiSketchCanvas" width="760" height="520"></canvas>
+      <div class="fiSketchHint">Drag joints • Tap a frame below • Artwork remains untouched</div>
+    </div>
+
+    <div class="fiSketchFrames" id="fiSketchFrames"></div>
+
+    <div class="fiSketchMetrics">
+      <div class="fiSketchMetric"><small>FRAME</small><b id="fiSketchFrameReadout">1 / 8</b></div>
+      <div class="fiSketchMetric"><small>BEFORE</small><b id="fiSketchBefore">--</b></div>
+      <div class="fiSketchMetric"><small>AFTER</small><b id="fiSketchAfter">--</b></div>
+      <div class="fiSketchMetric"><small>EDITS</small><b id="fiSketchEdits">--</b></div>
+    </div>
+
+    <div class="fiSketchMemory">
+      <span>Character Motion Memory</span>
+      <b id="fiSketchMemoryBadge">NEW MOTION</b>
+    </div>
+
+    <div class="fiSketchStatus" id="fiSketchStatus">
+      Generate the motion sketch. C++ WebAssembly will correct the sketch before artwork binding.
+    </div>
+
+    <div class="fiSketchActions">
+      <button id="fiSketchGenerate" type="button">Generate / Regenerate</button>
+      <button id="fiSketchPlay" type="button">Play Sketch</button>
+      <button id="fiSketchCorrect" type="button" class="correct">C++ Correct Sketch</button>
+      <button id="fiSketchApprove" type="button" class="approve" disabled>Approve Motion + Bind Artwork</button>
+    </div>
+  </div>
 </div>
 
 
@@ -2002,6 +2208,47 @@ function scaledWalkValues(){const m=legMetrics();if(!m) return null;return{metri
 function requiredReadyForWalk(){const need=["pelvis","neck","left_shoulder","right_shoulder","left_hip","left_knee","left_ankle","left_toe","right_hip","right_knee","right_ankle","right_toe"];for(const j of need) if(!joint(j)) return{ok:false,msg:"Missing required joint: "+j};return{ok:true};}
 function buildPose(i,skipAutoRepair=false){
  const ready=requiredReadyForWalk(); if(!ready.ok) return{error:ready.msg};
+
+ const approvedSketch=
+   window.FIProgressiveSketch &&
+   typeof window.FIProgressiveSketch.getApprovedPose==="function"
+     ? window.FIProgressiveSketch.getApprovedPose(i)
+     : null;
+
+ if(approvedSketch){
+   const pose={};
+   for(const [name,p] of Object.entries(approvedSketch)){
+     if(Array.isArray(p)&&p.length>=2){
+       pose[name]=[p[0],p[1]];
+     }
+   }
+
+   const orig=rig.joints||{};
+   const metrics=legMetrics();
+
+   let torsoM=matrixIdentity();
+   if(
+     orig.pelvis&&orig.neck&&
+     pose.pelvis&&pose.neck
+   ){
+     torsoM=matrixFromTwoPoints(
+       orig.pelvis,
+       orig.neck,
+       pose.pelvis,
+       pose.neck
+     );
+   }
+
+   return{
+     pose,
+     torsoM,
+     phaseName:
+       window.FIProgressiveSketch.frameName(i)||
+       WALK_NAMES[i]||
+       `Frame ${i+1}`,
+     metrics
+   };
+ }
  const scaled=scaledWalkValues(); if(!scaled) return{error:"Could not measure leg bones."};
  const {metrics,stridePx,stepPx,bobPx,pelvisShiftPx}=scaled;
  const leanScale=(+$("lean").value)/2.0, armScale=(+$("arm").value)/12.0, tailSwing=(+$("tail").value);
@@ -2333,7 +2580,7 @@ function autoTraceAndBind(){
     $("showBones").checked=false;
     $("showSprite").checked=true;
     $("traceRegionSelect").value="all";
-    status(`V26.3 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Body-Part Approval is required.`);
+    status(`V27.0 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Body-Part Approval is required.`);
     draw();
     if(window.FIBodyPartsGate && typeof window.FIBodyPartsGate.reviewAfterBind==="function"){
       window.FIBodyPartsGate.reviewAfterBind();
@@ -4456,7 +4703,7 @@ function v256ValidateProtectedCandidate(beforeState,beforeScore,afterScore,targe
   const damage=v256LockedDamage(beforeScore.metrics,afterScore.metrics);
   const overallDrop=(beforeScore?.score??0)-(afterScore?.score??0);
 
-  // V26.3: NEVER accept a correction that lowers total motion quality.
+  // V27.0: NEVER accept a correction that lowers total motion quality.
   if(overallDrop>0.01){
     v25RestoreMotionState(beforeState);
 
@@ -5281,7 +5528,7 @@ function v25ScoreMotion(){
     );
   }
 
-  // V26.3: FINAL POSE grounding is authoritative.
+  // V27.0: FINAL POSE grounding is authoritative.
   const v2563Ground=v2563MeasureGrounding();
 
   metric.feet=v2563Ground.score;
@@ -5471,11 +5718,11 @@ function v25GenerateCorrectivePass(passNum,targetKey){
 async function v25RunSelfCorrection(){
   if(v25Motion.running||!$("v25Enabled")?.checked)return;
 
-  // V26.3: fresh support/contact anchors for every correction run.
+  // V27.0: fresh support/contact anchors for every correction run.
   v255ResetContactLocks();
   v253ResetFootLocks();
   v2562LastFootDrift=0;
-  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V26.3 protected-channel correction started.";
+  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V27.0 protected-channel correction started.";
   const target=+$("v25TargetQuality").value||92,maxPasses=+$("v25MaxPasses").value||12,minImprove=+$("v25MinImprove").value||.5;
   let base=v25ScoreMotion();v251UpdateDiagnostics(base);v25Motion.currentScore=base.score;v25Motion.bestScore=base.score;
   v25Motion.bestCorrectives=JSON.parse(JSON.stringify(v23.correctives||[]));v25Motion.bestFinalCorrections=JSON.parse(JSON.stringify(v252FinalCorrections||{}));v25Motion.bestControls=v242CaptureControls();v25Motion.history=[{pass:0,score:base.score,metrics:base.metrics}];
@@ -6786,7 +7033,15 @@ function currentMotionPackage(){
   if(!samples)return null;
   return {
     format:"fatal-instinct-motion",version:2,
-    name:$("motionSource").value==="imported"?(importedMotion.name||"Imported Motion"):"Fatal Instinct Authored Walk",
+    name:$("motionSource").value==="imported"
+      ?(importedMotion.name||"Imported Motion")
+      :(
+        window.FIProgressiveSketch &&
+        typeof window.FIProgressiveSketch.motionName==="function" &&
+        window.FIProgressiveSketch.motionName()
+          ?window.FIProgressiveSketch.motionName()
+          :"Fatal Instinct Authored Walk"
+       ),
     frames:samples.length,loop:true,projection:$("projection").value,
     profile:$("retargetProfile").value,preview_speed_percent:+$("animationSpeed").value,frame_ms:animationFrameMs(),constraint_solver:{enabled:$("enableConstraints").checked,iterations:+$("constraintIterations").value,limb_lock:+$("limbLengthLock").value,plant_pin:+$("plantPin").value,body_anchor:+$("bodyAnchor").value,spine_stability:+$("spineStability").value,max_reach:+$("maxReach").value},weighted_skin:{enabled:$("enableWeightedSkin").checked,mode:$("skinRenderMode").value,blend_radius:+$("skinBlendRadius").value,influence:+$("boneInfluence").value,mesh_grid:+$("weightedMeshGrid").value,joint_blend:+$("weightJointBlend").value},pole_targets:{knees:$("poleKnees").checked,elbows:$("poleElbows").checked,strength:+$("poleStrength").value,distance:+$("poleDistance").value},walk_normalizer:{enabled:$("walkNormalize").checked,max_pelvis_drop:+$("maxPelvisDrop").value,max_knee_lift:+$("maxKneeLift").value,height_floor:+$("standingHeightFloor").value,stride_scale:+$("walkStrideScale").value,plant_straight:+$("plantLegStraight").value,pelvis_smoothing:+$("pelvisSmooth").value},unified_mesh:{enabled:$("enableUnifiedMesh").checked,mode:$("unifiedMeshMode").value,columns:+$("unifiedCols").value,padding:+$("unifiedPadding").value,falloff:+$("unifiedFalloff").value,joint_seal:+$("jointSealStrength").value,accessory_rigid:+$("unifiedAccessoryRigid").value},ultimate_animation:v23CaptureGraphSnapshot(),ai_production_director:v24Snapshot(),contacts:analyzeContacts(),samples
   };
@@ -6953,7 +7208,12 @@ function renderFrames(){
       const clipName=(importedMotion.name||"Imported Motion").split("/").pop().replace(/\.fbx$/i,"");
       t.textContent=`Frame ${i+1} • ${clipName}`;
     }else{
-      t.textContent=`Frame ${i+1} • ${WALK_NAMES[i]}`;
+      const sketchLabel=
+        window.FIProgressiveSketch &&
+        typeof window.FIProgressiveSketch.frameName==="function"
+          ? window.FIProgressiveSketch.frameName(i)
+          : null;
+      t.textContent=`Frame ${i+1} • ${sketchLabel||WALK_NAMES[i]}`;
     }
     card.append(c,t);strip.appendChild(card);
   });
@@ -7280,7 +7540,7 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
 
 
   /* ============================================================
-     FATAL INSTINCT V26.3 — RIG GEOMETRY AUDIT
+     FATAL INSTINCT V27.0 — RIG GEOMETRY AUDIT
      + PROTECTED REBIND / RIGID-PART LOCK
      ============================================================ */
   const fiRigAuditState={
@@ -7682,7 +7942,7 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
     if(!report.valid){
       const go=window.confirm(
         `Geometry score is ${report.score}% with ${report.warn} warning(s). `+
-        `Apply Protected Rebind and continue anyway?`
+        `Send this rig to Progressive Motion Sketch anyway?`
       );
       if(!go){
         fiOpenRigAudit();
@@ -7692,13 +7952,12 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
 
     fiRigAuditState.approved=true;
     fiRigAuditState.source=sourceName||"";
-    fiApplyProtectedRebind();
     fiCloseRigAudit();
     el("fiRigAuditFixDock")?.classList.remove("open");
 
     try{
       localStorage.setItem(
-        "fatal_instinct_v263_geometry_audit",
+        "fatal_instinct_v27_geometry_audit",
         JSON.stringify({
           source:sourceName,
           score:report.score,
@@ -7710,49 +7969,23 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
       );
     }catch(e){}
 
-    // Now and only now may body-part extraction continue.
-    let separated=false;
-    try{
-      if(typeof autoTraceAndBind==="function"){
-        autoTraceAndBind();
-        separated=true;
-      }
-    }catch(e){
-      console.error(e);
-    }
-
-    try{
-      if(typeof v23MapUniversalSkeleton==="function"){
-        v23MapUniversalSkeleton();
-      }
-    }catch(e){}
-
-    if(el("fiAutopilotHandoff")){
-      el("fiAutopilotHandoff").classList.add("open");
-    }
-
-    if(el("fiAutopilotHandoffText")){
-      el("fiAutopilotHandoffText").textContent=
-        separated
-          ?`Rig Geometry APPROVED at ${report.score}%. `+
-           `Protected rigid-part binding is active. `+
-           `Body-Part Approval is now required.`
-          :"Geometry approved and Protected Rebind applied. "+
-           "Run Auto Trace & Bind to continue.";
-    }
-
-    if(typeof refreshProductionPreflight==="function"){
-      try{refreshProductionPreflight();}catch(e){}
-    }
-
     if(typeof v242SaveCheckpoint==="function"){
       try{v242SaveCheckpoint(true);}catch(e){}
+    }
+
+    if(
+      window.FIProgressiveSketch &&
+      typeof window.FIProgressiveSketch.open==="function"
+    ){
+      window.FIProgressiveSketch.open();
+    }else if(typeof status==="function"){
+      status("Geometry approved, but Progressive Motion Sketch failed to initialize.");
     }
 
     if(typeof status==="function"){
       status(
         `RIG GEOMETRY APPROVED ${report.score}%. `+
-        `Protected Rebind ACTIVE. Body-part separation started.`
+        `Progressive Motion Sketch is now required before artwork binding.`
       );
     }
 
@@ -7783,6 +8016,1482 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
   };
 
 
+
+  /* ============================================================
+     FATAL INSTINCT V27 — PROGRESSIVE MOTION SKETCH ENGINE
+     Motion first. Artwork second.
+     ============================================================ */
+  const fiSketchState={
+    open:false,
+    stage:"skeleton",
+    motion:"walk",
+    facing:"right",
+    frames:[],
+    approvedFrames:[],
+    corrected:false,
+    approved:false,
+    report:null,
+    frame:0,
+    playing:false,
+    timer:null,
+    dragJoint:null,
+    source:"",
+    memoryLoaded:false
+  };
+
+  const FI_SKETCH_PHASES={
+    walk:["Contact","Down","Passing","High Step","Opposite Contact","Opposite Down","Opposite Passing","Opposite High Step"],
+    idle:["Settle","Rise","Neutral","Breath","Settle","Rise","Neutral","Breath"],
+    punch:["Guard","Load","Drive","Extension","Impact","Recoil","Recover","Guard"],
+    kick:["Guard","Load","Chamber","Drive","Extension","Impact","Recover","Guard"],
+    slash:["Guard","Load","Wind-up","Drive","Contact","Follow-through","Recover","Guard"]
+  };
+
+  const FI_SKETCH_BONES=[
+    ["pelvis","neck"],
+    ["left_shoulder","left_elbow"],
+    ["left_elbow","left_wrist"],
+    ["right_shoulder","right_elbow"],
+    ["right_elbow","right_wrist"],
+    ["left_hip","left_knee"],
+    ["left_knee","left_ankle"],
+    ["left_ankle","left_toe"],
+    ["right_hip","right_knee"],
+    ["right_knee","right_ankle"],
+    ["right_ankle","right_toe"],
+    ["tail_base","tail_tip"]
+  ];
+
+  function fiSketchCharacterKey(){
+    const raw=
+      el("characterName")?.value ||
+      sourceName ||
+      "fighter";
+    return String(raw)
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g,"_")
+      .replace(/^_+|_+$/g,"") ||
+      "fighter";
+  }
+
+  function fiSketchMemoryKey(){
+    return `fatal_instinct_v27_motion_memory_${fiSketchCharacterKey()}_${fiSketchState.motion}`;
+  }
+
+  function fiClonePose(pose){
+    const out={};
+    for(const [name,p] of Object.entries(pose||{})){
+      if(Array.isArray(p)&&p.length>=2){
+        out[name]=[p[0],p[1]];
+      }
+    }
+    return out;
+  }
+
+  function fiBasePose(){
+    return fiClonePose(rig.joints||{});
+  }
+
+  function fiSketchAllJoints(){
+    return Array.isArray(window.FI_JOINTS)
+      ?window.FI_JOINTS
+      :JOINTS;
+  }
+
+  function fiSketchEnsureComplete(pose){
+    const out=fiClonePose(pose);
+    const pelvis=out.pelvis||rig.joints?.pelvis||[0,0];
+
+    for(const name of fiSketchAllJoints()){
+      if(!out[name]){
+        if(name==="tail_base"||name==="tail_tip"){
+          out[name]=[pelvis[0],pelvis[1]];
+        }else if(rig.joints?.[name]){
+          out[name]=[rig.joints[name][0],rig.joints[name][1]];
+        }else{
+          out[name]=[pelvis[0],pelvis[1]];
+        }
+      }
+    }
+
+    return out;
+  }
+
+  function fiLerpPoint(a,b,t){
+    return[
+      a[0]+(b[0]-a[0])*t,
+      a[1]+(b[1]-a[1])*t
+    ];
+  }
+
+  function fiMovePose(pose,dx,dy,names=null){
+    const list=names||Object.keys(pose);
+    for(const name of list){
+      if(pose[name]){
+        pose[name][0]+=dx;
+        pose[name][1]+=dy;
+      }
+    }
+  }
+
+  function fiMoveChain(pose,names,dx,dy){
+    for(const name of names){
+      if(pose[name]){
+        pose[name][0]+=dx;
+        pose[name][1]+=dy;
+      }
+    }
+  }
+
+  function fiSolveSketchArm(pose,side,target){
+    const s=pose[`${side}_shoulder`];
+    const e=pose[`${side}_elbow`];
+    const w=pose[`${side}_wrist`];
+
+    if(!s||!e||!w)return;
+
+    const bend=
+      Math.sign(crossZ(s,w,e)) ||
+      (side==="left"?1:-1);
+
+    const solved=twoBoneIK(
+      s,
+      e,
+      w,
+      target,
+      bend
+    );
+
+    pose[`${side}_elbow`]=solved.knee;
+    pose[`${side}_wrist`]=solved.ankle;
+  }
+
+  function fiSolveSketchLeg(pose,side,targetAnkle,targetToe=null){
+    const h=pose[`${side}_hip`];
+    const k=pose[`${side}_knee`];
+    const a=pose[`${side}_ankle`];
+    const t=pose[`${side}_toe`];
+
+    if(!h||!k||!a)return;
+
+    const bend=
+      Math.sign(crossZ(h,a,k)) ||
+      (side==="left"?1:-1);
+
+    const solved=twoBoneIK(
+      h,
+      k,
+      a,
+      targetAnkle,
+      bend
+    );
+
+    pose[`${side}_knee`]=solved.knee;
+    pose[`${side}_ankle`]=solved.ankle;
+
+    if(t){
+      if(targetToe){
+        pose[`${side}_toe`]=targetToe;
+      }else{
+        const delta=[
+          solved.ankle[0]-a[0],
+          solved.ankle[1]-a[1]
+        ];
+        pose[`${side}_toe`]=[
+          t[0]+delta[0],
+          t[1]+delta[1]
+        ];
+      }
+    }
+  }
+
+  function fiGenerateWalkSketch(){
+    const frames=[];
+
+    // Use the battle-tested authored gait math, but only its joint poses.
+    for(let i=0;i<8;i++){
+      const built=buildPose(i,true);
+      if(built.error){
+        throw new Error(built.error);
+      }
+      frames.push(fiSketchEnsureComplete(built.pose));
+    }
+
+    return frames;
+  }
+
+  function fiGenerateIdleSketch(){
+    const base=fiSketchEnsureComplete(fiBasePose());
+    const leg=legMetrics()?.avgLeg||120;
+    const frames=[];
+    const bob=[0,1.2,2.0,1.1,0,-1.0,-1.6,-0.8];
+
+    for(let i=0;i<8;i++){
+      const p=fiClonePose(base);
+      const dy=bob[i]*leg*.0075;
+
+      fiMovePose(p,0,dy);
+
+      const sway=Math.sin((i/8)*Math.PI*2)*leg*.008;
+
+      if(p.left_wrist)p.left_wrist[0]-=sway;
+      if(p.right_wrist)p.right_wrist[0]+=sway;
+
+      frames.push(fiSketchEnsureComplete(p));
+    }
+
+    return frames;
+  }
+
+  function fiGeneratePunchSketch(){
+    const base=fiSketchEnsureComplete(fiBasePose());
+    const leg=legMetrics()?.avgLeg||120;
+    const dir=fiSketchState.facing==="right"?1:-1;
+    const phase=[0,.12,.38,.72,1,.68,.28,.05];
+    const frames=[];
+
+    for(let i=0;i<8;i++){
+      const p=fiClonePose(base);
+      const q=phase[i];
+
+      // Weight transfer into the strike.
+      const rootShift=dir*leg*.055*q;
+      fiMovePose(
+        p,
+        rootShift,
+        leg*.008*Math.sin(q*Math.PI),
+        [
+          "pelvis","neck",
+          "left_shoulder","right_shoulder",
+          "left_hip","right_hip",
+          "tail_base","tail_tip"
+        ]
+      );
+
+      const s=p.right_shoulder;
+      const w0=base.right_wrist;
+      const armLen=
+        fiDist(base.right_shoulder,base.right_elbow)+
+        fiDist(base.right_elbow,base.right_wrist);
+
+      if(s&&w0){
+        const full=[
+          s[0]+dir*armLen*.94,
+          s[1]+leg*.015
+        ];
+        fiSolveSketchArm(
+          p,
+          "right",
+          fiLerpPoint(w0,full,q)
+        );
+      }
+
+      // Guard hand counters slightly.
+      if(p.left_wrist){
+        p.left_wrist[0]-=dir*leg*.025*q;
+        p.left_wrist[1]-=leg*.012*q;
+      }
+
+      frames.push(fiSketchEnsureComplete(p));
+    }
+
+    return frames;
+  }
+
+  function fiGenerateKickSketch(){
+    const base=fiSketchEnsureComplete(fiBasePose());
+    const leg=legMetrics()?.avgLeg||120;
+    const dir=fiSketchState.facing==="right"?1:-1;
+    const phase=[0,.10,.32,.62,1,.78,.34,.06];
+    const frames=[];
+
+    for(let i=0;i<8;i++){
+      const p=fiClonePose(base);
+      const q=phase[i];
+
+      // Support side receives the weight.
+      fiMoveChain(
+        p,
+        ["pelvis","neck","left_shoulder","right_shoulder","left_hip","right_hip"],
+        -dir*leg*.035*q,
+        -leg*.012*q
+      );
+
+      const hip=p.right_hip;
+      const ankle0=base.right_ankle;
+      const toe0=base.right_toe;
+
+      if(hip&&ankle0){
+        const fullAnkle=[
+          hip[0]+dir*leg*.78,
+          hip[1]+leg*.52
+        ];
+        const target=fiLerpPoint(
+          ankle0,
+          fullAnkle,
+          q
+        );
+
+        let targetToe=null;
+
+        if(toe0){
+          const footVec=[
+            toe0[0]-ankle0[0],
+            toe0[1]-ankle0[1]
+          ];
+          targetToe=[
+            target[0]+dir*Math.abs(footVec[0]||leg*.12),
+            target[1]+footVec[1]*.25
+          ];
+        }
+
+        fiSolveSketchLeg(
+          p,
+          "right",
+          target,
+          targetToe
+        );
+      }
+
+      // Arms counter the kicking leg.
+      if(p.left_wrist)p.left_wrist[0]+=dir*leg*.055*q;
+      if(p.right_wrist)p.right_wrist[0]-=dir*leg*.035*q;
+
+      frames.push(fiSketchEnsureComplete(p));
+    }
+
+    return frames;
+  }
+
+  function fiGenerateSlashSketch(){
+    const base=fiSketchEnsureComplete(fiBasePose());
+    const leg=legMetrics()?.avgLeg||120;
+    const dir=fiSketchState.facing==="right"?1:-1;
+    const phase=[0,.12,.36,.68,1,.76,.36,.06];
+    const frames=[];
+
+    for(let i=0;i<8;i++){
+      const p=fiClonePose(base);
+      const q=phase[i];
+
+      const s=p.right_shoulder;
+      const w0=base.right_wrist;
+      const armLen=
+        fiDist(base.right_shoulder,base.right_elbow)+
+        fiDist(base.right_elbow,base.right_wrist);
+
+      if(s&&w0){
+        const wind=[
+          s[0]-dir*armLen*.28,
+          s[1]-leg*.22
+        ];
+        const contact=[
+          s[0]+dir*armLen*.80,
+          s[1]+leg*.24
+        ];
+
+        let target;
+
+        if(q<.38){
+          target=fiLerpPoint(
+            w0,
+            wind,
+            q/.38
+          );
+        }else{
+          target=fiLerpPoint(
+            wind,
+            contact,
+            (q-.38)/.62
+          );
+        }
+
+        fiSolveSketchArm(
+          p,
+          "right",
+          target
+        );
+      }
+
+      fiMovePose(
+        p,
+        dir*leg*.035*q,
+        0,
+        ["pelvis","neck","left_shoulder","right_shoulder"]
+      );
+
+      frames.push(fiSketchEnsureComplete(p));
+    }
+
+    return frames;
+  }
+
+  function fiGenerateSketchFrames(){
+    fiSketchState.motion=el("fiSketchMotion")?.value||"walk";
+    fiSketchState.facing=el("fiSketchFacing")?.value||"right";
+    fiSketchState.approved=false;
+    fiSketchState.corrected=false;
+    fiSketchState.report=null;
+    fiSketchState.approvedFrames=[];
+    fiSketchState.frame=0;
+
+    switch(fiSketchState.motion){
+      case "idle":
+        fiSketchState.frames=fiGenerateIdleSketch();
+        break;
+      case "punch":
+        fiSketchState.frames=fiGeneratePunchSketch();
+        break;
+      case "kick":
+        fiSketchState.frames=fiGenerateKickSketch();
+        break;
+      case "slash":
+        fiSketchState.frames=fiGenerateSlashSketch();
+        break;
+      default:
+        fiSketchState.frames=fiGenerateWalkSketch();
+        break;
+    }
+
+    fiSketchState.frames=
+      fiSketchState.frames.map(fiSketchEnsureComplete);
+
+    fiSketchRefreshMemoryBadge();
+    fiSketchBuildFrameButtons();
+    fiSketchUpdateReport(null);
+    fiSketchDraw();
+
+    if(el("fiSketchStatus")){
+      el("fiSketchStatus").textContent=
+        `${fiSketchState.motion.toUpperCase()} sketch generated. `+
+        `Review the skeleton, volume and silhouette stages, then run C++ correction.`;
+    }
+
+    if(el("fiSketchApprove")){
+      el("fiSketchApprove").disabled=true;
+    }
+
+    return fiSketchState.frames;
+  }
+
+  function fiSketchFrameNames(){
+    return FI_SKETCH_PHASES[fiSketchState.motion]||FI_SKETCH_PHASES.walk;
+  }
+
+  function fiSketchFrameName(i){
+    return fiSketchFrameNames()[i]||`Frame ${i+1}`;
+  }
+
+  function fiSketchMotionName(){
+    if(!fiSketchState.approved)return null;
+
+    const c=
+      el("characterName")?.value ||
+      String(sourceName||"Fighter").replace(/\.[^.]+$/,"");
+
+    const type=
+      fiSketchState.motion.charAt(0).toUpperCase()+
+      fiSketchState.motion.slice(1);
+
+    return `${c} ${type} V27`;
+  }
+
+  function fiSketchBounds(){
+    const frames=fiSketchState.frames;
+    const pts=[];
+
+    for(const pose of frames){
+      for(const p of Object.values(pose||{})){
+        if(Array.isArray(p)&&Number.isFinite(p[0])&&Number.isFinite(p[1])){
+          pts.push(p);
+        }
+      }
+    }
+
+    if(!pts.length){
+      return{
+        minX:0,minY:0,maxX:source?.width||400,maxY:source?.height||500
+      };
+    }
+
+    let minX=Math.min(...pts.map(p=>p[0]));
+    let maxX=Math.max(...pts.map(p=>p[0]));
+    let minY=Math.min(...pts.map(p=>p[1]));
+    let maxY=Math.max(...pts.map(p=>p[1]));
+
+    const pad=Math.max(25,(maxY-minY)*.12);
+
+    return{
+      minX:minX-pad,
+      minY:minY-pad,
+      maxX:maxX+pad,
+      maxY:maxY+pad
+    };
+  }
+
+  function fiSketchTransform(){
+    const c=el("fiSketchCanvas");
+    const b=fiSketchBounds();
+    const w=Math.max(1,b.maxX-b.minX);
+    const h=Math.max(1,b.maxY-b.minY);
+    const scale=Math.min(
+      (c.width-42)/w,
+      (c.height-42)/h
+    );
+
+    const ox=(c.width-w*scale)/2-b.minX*scale;
+    const oy=(c.height-h*scale)/2-b.minY*scale;
+
+    return{
+      scale,ox,oy,
+      toCanvas:p=>[
+        p[0]*scale+ox,
+        p[1]*scale+oy
+      ],
+      toWorld:(x,y)=>[
+        (x-ox)/scale,
+        (y-oy)/scale
+      ]
+    };
+  }
+
+  function fiSketchDrawBone(ctx,T,a,b,color,width,alpha=1){
+    if(!a||!b)return;
+    const p=T.toCanvas(a),q=T.toCanvas(b);
+    ctx.save();
+    ctx.globalAlpha=alpha;
+    ctx.strokeStyle=color;
+    ctx.lineWidth=width;
+    ctx.lineCap="round";
+    ctx.beginPath();
+    ctx.moveTo(p[0],p[1]);
+    ctx.lineTo(q[0],q[1]);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function fiSketchDrawJoint(ctx,T,name,p,color="#ffd75a",alpha=1){
+    if(!p)return;
+    const q=T.toCanvas(p);
+    ctx.save();
+    ctx.globalAlpha=alpha;
+    ctx.fillStyle="#091018";
+    ctx.strokeStyle=color;
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.arc(q[0],q[1],5.5,0,Math.PI*2);
+    ctx.fill();
+    ctx.stroke();
+
+    if(alpha>.8){
+      ctx.fillStyle="#dce7f1";
+      ctx.font="9px -apple-system, sans-serif";
+      ctx.fillText(
+        name.replace("left_","L ").replace("right_","R "),
+        q[0]+7,
+        q[1]-6
+      );
+    }
+    ctx.restore();
+  }
+
+  function fiSketchCapsule(ctx,T,a,b,width,color,alpha){
+    fiSketchDrawBone(
+      ctx,T,a,b,color,width*T.scale,alpha
+    );
+  }
+
+  function fiSketchDrawVolumes(ctx,T,pose,filled=false,alpha=1){
+    const leg=legMetrics()?.avgLeg||120;
+    const s=T.scale;
+    const line=filled?"rgba(128,165,197,.60)":"rgba(125,166,202,.28)";
+    const edge=filled?"rgba(196,220,238,.72)":"rgba(174,203,226,.42)";
+
+    ctx.save();
+    ctx.globalAlpha=alpha;
+
+    // torso mass
+    if(
+      pose.left_shoulder&&pose.right_shoulder&&
+      pose.left_hip&&pose.right_hip
+    ){
+      const pts=[
+        pose.left_shoulder,
+        pose.right_shoulder,
+        pose.right_hip,
+        pose.left_hip
+      ].map(T.toCanvas);
+
+      ctx.fillStyle=line;
+      ctx.strokeStyle=edge;
+      ctx.lineWidth=2;
+      ctx.beginPath();
+      ctx.moveTo(pts[0][0],pts[0][1]);
+      for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);
+      ctx.closePath();
+      if(filled)ctx.fill();
+      ctx.stroke();
+    }
+
+    // head volume around neck
+    if(pose.neck){
+      const n=T.toCanvas(pose.neck);
+      ctx.fillStyle=line;
+      ctx.strokeStyle=edge;
+      ctx.lineWidth=2;
+      ctx.beginPath();
+      ctx.ellipse(
+        n[0],
+        n[1]-leg*.16*s,
+        leg*.14*s,
+        leg*.18*s,
+        0,0,Math.PI*2
+      );
+      if(filled)ctx.fill();
+      ctx.stroke();
+    }
+
+    const capsule=(a,b,w)=>{
+      if(!pose[a]||!pose[b])return;
+      fiSketchCapsule(
+        ctx,T,pose[a],pose[b],
+        leg*w,
+        filled?"rgba(135,172,201,.55)":"rgba(126,164,194,.24)",
+        1
+      );
+    };
+
+    capsule("left_shoulder","left_elbow",.18);
+    capsule("left_elbow","left_wrist",.15);
+    capsule("right_shoulder","right_elbow",.18);
+    capsule("right_elbow","right_wrist",.15);
+    capsule("left_hip","left_knee",.20);
+    capsule("left_knee","left_ankle",.18);
+    capsule("right_hip","right_knee",.20);
+    capsule("right_knee","right_ankle",.18);
+    capsule("left_ankle","left_toe",.13);
+    capsule("right_ankle","right_toe",.13);
+
+    ctx.restore();
+  }
+
+  function fiSketchDrawPose(ctx,T,pose,opts={}){
+    const{
+      alpha=1,
+      onion=false,
+      selected=true
+    }=opts;
+
+    if(fiSketchState.stage==="volume"){
+      fiSketchDrawVolumes(ctx,T,pose,false,alpha);
+    }else if(fiSketchState.stage==="silhouette"){
+      fiSketchDrawVolumes(ctx,T,pose,true,alpha);
+    }
+
+    for(const [a,b] of FI_SKETCH_BONES){
+      fiSketchDrawBone(
+        ctx,T,
+        pose[a],pose[b],
+        onion?"#536a7f":"#8cb7db",
+        onion?2:3,
+        alpha
+      );
+    }
+
+    if(pose.pelvis&&pose.left_shoulder){
+      fiSketchDrawBone(ctx,T,pose.pelvis,pose.left_shoulder,"#516e89",2,alpha);
+    }
+    if(pose.pelvis&&pose.right_shoulder){
+      fiSketchDrawBone(ctx,T,pose.pelvis,pose.right_shoulder,"#516e89",2,alpha);
+    }
+    if(pose.pelvis&&pose.left_hip){
+      fiSketchDrawBone(ctx,T,pose.pelvis,pose.left_hip,"#516e89",2,alpha);
+    }
+    if(pose.pelvis&&pose.right_hip){
+      fiSketchDrawBone(ctx,T,pose.pelvis,pose.right_hip,"#516e89",2,alpha);
+    }
+
+    if(selected){
+      for(const name of JOINTS){
+        if(pose[name]){
+          fiSketchDrawJoint(
+            ctx,T,name,pose[name],"#ffd75a",alpha
+          );
+        }
+      }
+    }
+  }
+
+  function fiSketchDraw(){
+    const c=el("fiSketchCanvas");
+    if(!c)return;
+    const ctx=c.getContext("2d");
+
+    ctx.clearRect(0,0,c.width,c.height);
+
+    const grd=ctx.createLinearGradient(0,0,0,c.height);
+    grd.addColorStop(0,"#0b121b");
+    grd.addColorStop(1,"#070a0e");
+    ctx.fillStyle=grd;
+    ctx.fillRect(0,0,c.width,c.height);
+
+    // subtle drawing grid
+    ctx.strokeStyle="rgba(108,135,158,.08)";
+    ctx.lineWidth=1;
+    for(let x=20;x<c.width;x+=40){
+      ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,c.height);ctx.stroke();
+    }
+    for(let y=20;y<c.height;y+=40){
+      ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(c.width,y);ctx.stroke();
+    }
+
+    if(!fiSketchState.frames.length){
+      ctx.fillStyle="#8b9cac";
+      ctx.font="16px -apple-system, sans-serif";
+      ctx.fillText("Generate a motion sketch to begin.",24,40);
+      return;
+    }
+
+    const T=fiSketchTransform();
+    const pose=fiSketchState.frames[fiSketchState.frame];
+
+    if(
+      el("fiSketchOnion")?.value==="on" &&
+      fiSketchState.frame>0
+    ){
+      fiSketchDrawPose(
+        ctx,T,
+        fiSketchState.frames[fiSketchState.frame-1],
+        {alpha:.20,onion:true,selected:false}
+      );
+    }
+
+    fiSketchDrawPose(
+      ctx,T,pose,
+      {alpha:1,onion:false,selected:true}
+    );
+
+    ctx.fillStyle="#b8c7d5";
+    ctx.font="600 13px -apple-system, sans-serif";
+    ctx.fillText(
+      `${fiSketchState.motion.toUpperCase()} · `+
+      `${fiSketchFrameName(fiSketchState.frame)}`,
+      16,24
+    );
+
+    if(el("fiSketchFrameReadout")){
+      el("fiSketchFrameReadout").textContent=
+        `${fiSketchState.frame+1} / 8`;
+    }
+
+    fiSketchRefreshFrameButtons();
+  }
+
+  function fiSketchSetStage(stage){
+    fiSketchState.stage=stage;
+
+    for(const [id,value] of[
+      ["fiSketchStageSkeleton","skeleton"],
+      ["fiSketchStageVolume","volume"],
+      ["fiSketchStageSilhouette","silhouette"]
+    ]){
+      el(id)?.classList.toggle(
+        "active",
+        stage===value
+      );
+    }
+
+    fiSketchDraw();
+  }
+
+  function fiSketchBuildFrameButtons(){
+    const host=el("fiSketchFrames");
+    if(!host)return;
+
+    host.innerHTML="";
+
+    for(let i=0;i<8;i++){
+      const b=document.createElement("button");
+      b.type="button";
+      b.className="fiSketchFrame";
+      b.textContent=String(i+1);
+      b.title=fiSketchFrameName(i);
+      b.addEventListener("click",()=>{
+        fiSketchState.frame=i;
+        fiSketchDraw();
+      });
+      host.appendChild(b);
+    }
+
+    fiSketchRefreshFrameButtons();
+  }
+
+  function fiSketchRefreshFrameButtons(){
+    const host=el("fiSketchFrames");
+    if(!host)return;
+
+    [...host.children].forEach((b,i)=>{
+      b.classList.toggle(
+        "active",
+        i===fiSketchState.frame
+      );
+    });
+  }
+
+  function fiSketchStop(){
+    fiSketchState.playing=false;
+
+    if(fiSketchState.timer){
+      clearInterval(fiSketchState.timer);
+      fiSketchState.timer=null;
+    }
+
+    if(el("fiSketchPlay")){
+      el("fiSketchPlay").textContent="Play Sketch";
+    }
+  }
+
+  function fiSketchPlay(){
+    if(fiSketchState.playing){
+      fiSketchStop();
+      return;
+    }
+
+    if(!fiSketchState.frames.length){
+      fiGenerateSketchFrames();
+    }
+
+    fiSketchState.playing=true;
+
+    if(el("fiSketchPlay")){
+      el("fiSketchPlay").textContent="Pause Sketch";
+    }
+
+    fiSketchState.timer=setInterval(()=>{
+      fiSketchState.frame=(fiSketchState.frame+1)%8;
+      fiSketchDraw();
+    },Math.max(70,animationFrameMs()));
+  }
+
+  function fiSketchToMotion(){
+    const m=legMetrics();
+    if(!m||!rig.joints?.pelvis){
+      throw new Error("Leg scale or pelvis is unavailable.");
+    }
+
+    const root=rig.joints.pelvis;
+    const leg=Math.max(1,m.avgLeg);
+    const samples=[];
+
+    for(const rawPose of fiSketchState.frames){
+      const pose=fiSketchEnsureComplete(rawPose);
+      const sample={};
+
+      for(const name of fiSketchAllJoints()){
+        const p=pose[name]||root;
+        sample[name]=[
+          (p[0]-root[0])/leg,
+          (p[1]-root[1])/leg
+        ];
+      }
+
+      samples.push(sample);
+    }
+
+    return{
+      format:"fatal-instinct-motion",
+      version:2,
+      name:
+        `${el("characterName")?.value||"Fighter"} `+
+        `${fiSketchState.motion} Progressive Sketch`,
+      frames:8,
+      loop:true,
+      projection:"side",
+      frame_ms:animationFrameMs(),
+      progressive_sketch:{
+        version:1,
+        stage:fiSketchState.stage,
+        facing:fiSketchState.facing
+      },
+      samples
+    };
+  }
+
+  function fiSketchFromCorrectedMotion(motion){
+    const m=legMetrics();
+    const root=rig.joints?.pelvis;
+    if(!m||!root)throw new Error("Cannot retarget corrected sketch.");
+
+    const leg=Math.max(1,m.avgLeg);
+
+    return motion.samples.map(sample=>{
+      const pose={};
+
+      for(const name of fiSketchAllJoints()){
+        const p=sample[name]||[0,0];
+        pose[name]=[
+          root[0]+p[0]*leg,
+          root[1]+p[1]*leg
+        ];
+      }
+
+      return fiSketchEnsureComplete(pose);
+    });
+  }
+
+  function fiSketchCppType(){
+    if(fiSketchState.motion==="idle")return "generic";
+    return fiSketchState.motion;
+  }
+
+  function fiSketchUpdateReport(report){
+    fiSketchState.report=report||null;
+
+    const before=Number(report?.quality_before);
+    const after=Number(report?.quality_after);
+    const edits=Number(report?.joint_edits);
+
+    if(el("fiSketchBefore")){
+      el("fiSketchBefore").textContent=
+        Number.isFinite(before)?before.toFixed(1):"--";
+    }
+
+    if(el("fiSketchAfter")){
+      el("fiSketchAfter").textContent=
+        Number.isFinite(after)?after.toFixed(1):"--";
+    }
+
+    if(el("fiSketchEdits")){
+      el("fiSketchEdits").textContent=
+        Number.isFinite(edits)?String(edits):"--";
+    }
+
+    if(el("fiSketchQuality")){
+      el("fiSketchQuality").textContent=
+        Number.isFinite(after)
+          ?after.toFixed(1)+"%"
+          :"--";
+      el("fiSketchQuality").style.color=
+        Number.isFinite(after)
+          ?after>=88?"#62e7ad":after>=75?"#f2cc60":"#ff7b72"
+          :"#d6e0e8";
+    }
+  }
+
+  async function fiSketchCorrect(){
+    fiSketchStop();
+
+    if(!fiSketchState.frames.length){
+      fiGenerateSketchFrames();
+    }
+
+    const runtime=window.FIV26Runtime;
+
+    if(
+      !runtime ||
+      runtime.state?.backend!=="browser-wasm" ||
+      !runtime.state?.engine
+    ){
+      if(el("fiSketchStatus")){
+        el("fiSketchStatus").textContent=
+          "C++ WebAssembly is still loading or offline. Wait for C++ WASM ONLINE, then try again.";
+      }
+      if(typeof status==="function"){
+        status("V27 sketch correction waiting for C++ WASM.");
+      }
+      return false;
+    }
+
+    const button=el("fiSketchCorrect");
+    if(button)button.disabled=true;
+
+    try{
+      const motion=fiSketchToMotion();
+      const target=+(el("fiSketchTarget")?.value||88);
+
+      if(el("fiSketchStatus")){
+        el("fiSketchStatus").textContent=
+          "C++ is analyzing grounding, limb integrity, continuity and motion readability on the sketch…";
+      }
+
+      const result=runtime.correct(
+        motion,
+        fiSketchCppType(),
+        target
+      );
+
+      const before=Number(result.report?.quality_before);
+      const after=Number(result.report?.quality_after);
+
+      // Protected rule: never keep a worse C++ result.
+      if(
+        Number.isFinite(before)&&
+        Number.isFinite(after)&&
+        after+0.01<before
+      ){
+        throw new Error(
+          `Protected rollback rejected ${before.toFixed(1)} → ${after.toFixed(1)}.`
+        );
+      }
+
+      fiSketchState.frames=
+        fiSketchFromCorrectedMotion(result.motion);
+      fiSketchState.corrected=true;
+      fiSketchUpdateReport(result.report);
+      fiSketchSetStage("silhouette");
+      fiSketchDraw();
+
+      const pass=
+        Number.isFinite(after)&&
+        after>=Math.min(target,88);
+
+      if(el("fiSketchApprove")){
+        el("fiSketchApprove").disabled=
+          !(Number.isFinite(after)&&after>=72);
+      }
+
+      if(el("fiSketchStatus")){
+        el("fiSketchStatus").textContent=
+          `C++ correction complete: `+
+          `${Number.isFinite(before)?before.toFixed(1):"--"} → `+
+          `${Number.isFinite(after)?after.toFixed(1):"--"}. `+
+          `${pass?"Target reached.":"Review the corrected sketch before approval."}`;
+      }
+
+      if(typeof status==="function"){
+        status(
+          `V27 C++ sketch correction complete: `+
+          `${Number.isFinite(before)?before.toFixed(1):"--"} → `+
+          `${Number.isFinite(after)?after.toFixed(1):"--"}.`
+        );
+      }
+
+      return true;
+    }catch(err){
+      console.error("V27 progressive sketch correction:",err);
+
+      if(el("fiSketchStatus")){
+        el("fiSketchStatus").textContent=
+          `Correction stopped: ${err.message||err}`;
+      }
+
+      if(typeof status==="function"){
+        status(`V27 sketch correction stopped: ${err.message||err}`);
+      }
+
+      return false;
+    }finally{
+      if(button)button.disabled=false;
+    }
+  }
+
+  function fiSketchSaveMemory(){
+    try{
+      const motion=fiSketchToMotion();
+
+      localStorage.setItem(
+        fiSketchMemoryKey(),
+        JSON.stringify({
+          format:"fatal-instinct-progressive-memory",
+          version:1,
+          character:fiSketchCharacterKey(),
+          motion_type:fiSketchState.motion,
+          facing:fiSketchState.facing,
+          quality_after:fiSketchState.report?.quality_after??null,
+          report:fiSketchState.report,
+          samples:motion.samples,
+          time:Date.now()
+        })
+      );
+
+      return true;
+    }catch(e){
+      return false;
+    }
+  }
+
+  function fiSketchReadMemory(){
+    try{
+      const raw=localStorage.getItem(fiSketchMemoryKey());
+      if(!raw)return null;
+
+      const data=JSON.parse(raw);
+
+      if(
+        data?.format!=="fatal-instinct-progressive-memory" ||
+        !Array.isArray(data.samples) ||
+        data.samples.length!==8
+      ){
+        return null;
+      }
+
+      return data;
+    }catch(e){
+      return null;
+    }
+  }
+
+  function fiSketchRefreshMemoryBadge(){
+    const data=fiSketchReadMemory();
+    fiSketchState.memoryLoaded=!!data;
+
+    if(el("fiSketchMemoryBadge")){
+      if(data){
+        const q=Number(data.quality_after);
+        el("fiSketchMemoryBadge").textContent=
+          Number.isFinite(q)
+            ?`MEMORY ${q.toFixed(1)}%`
+            :"MEMORY FOUND";
+        el("fiSketchMemoryBadge").style.color="#62e7ad";
+      }else{
+        el("fiSketchMemoryBadge").textContent="NEW MOTION";
+        el("fiSketchMemoryBadge").style.color="#a8d9ff";
+      }
+    }
+  }
+
+  function fiSketchUseMemoryIfBetter(){
+    const data=fiSketchReadMemory();
+    if(!data)return false;
+
+    const m=legMetrics();
+    const root=rig.joints?.pelvis;
+    if(!m||!root)return false;
+
+    const leg=Math.max(1,m.avgLeg);
+    const frames=data.samples.map(sample=>{
+      const pose={};
+
+      for(const name of fiSketchAllJoints()){
+        const p=sample[name]||[0,0];
+        pose[name]=[
+          root[0]+p[0]*leg,
+          root[1]+p[1]*leg
+        ];
+      }
+
+      return fiSketchEnsureComplete(pose);
+    });
+
+    fiSketchState.frames=frames;
+    fiSketchState.report=data.report||{
+      quality_before:data.quality_after,
+      quality_after:data.quality_after,
+      joint_edits:0,
+      improved:false,
+      pass:true
+    };
+    fiSketchState.corrected=true;
+    fiSketchUpdateReport(fiSketchState.report);
+
+    if(el("fiSketchApprove")){
+      el("fiSketchApprove").disabled=false;
+    }
+
+    if(el("fiSketchStatus")){
+      el("fiSketchStatus").textContent=
+        "Character Motion Memory loaded a previously approved motion seed. Review it or regenerate a fresh sketch.";
+    }
+
+    return true;
+  }
+
+  function fiSketchApprove(){
+    fiSketchStop();
+
+    if(!fiSketchState.corrected||!fiSketchState.frames.length){
+      if(typeof status==="function"){
+        status("Run C++ Correct Sketch before approving motion.");
+      }
+      return false;
+    }
+
+    const after=Number(fiSketchState.report?.quality_after);
+
+    if(Number.isFinite(after)&&after<75){
+      if(typeof status==="function"){
+        status(
+          `Sketch quality ${after.toFixed(1)}% is below the V27 approval floor. Fix/regenerate first.`
+        );
+      }
+      return false;
+    }
+
+    if(Number.isFinite(after)&&after<88){
+      const go=window.confirm(
+        `C++ quality is ${after.toFixed(1)}%, below the preferred 88%. `+
+        `Approve this motion anyway?`
+      );
+      if(!go)return false;
+    }
+
+    fiSketchState.approved=true;
+    fiSketchState.approvedFrames=
+      fiSketchState.frames.map(fiClonePose);
+    fiSketchState.source=sourceName||"";
+    fiSketchSaveMemory();
+
+    el("fiSketchOverlay")?.classList.remove("open");
+    fiSketchState.open=false;
+
+    // NOW bind finished artwork.
+    if(
+      window.FIRigGeometryAudit &&
+      typeof window.FIRigGeometryAudit.applyProtectedRebind==="function"
+    ){
+      window.FIRigGeometryAudit.applyProtectedRebind();
+    }
+
+    let separated=false;
+
+    try{
+      if(typeof autoTraceAndBind==="function"){
+        autoTraceAndBind();
+        separated=true;
+      }
+    }catch(e){
+      console.error(e);
+    }
+
+    try{
+      if(typeof v23MapUniversalSkeleton==="function"){
+        v23MapUniversalSkeleton();
+      }
+    }catch(e){}
+
+    if(el("fiAutopilotHandoff")){
+      el("fiAutopilotHandoff").classList.add("open");
+    }
+
+    if(el("fiAutopilotHandoffText")){
+      el("fiAutopilotHandoffText").textContent=
+        separated
+          ?`V27 motion sketch APPROVED. `+
+           `Protected Rebind is active and finished artwork separation has started. `+
+           `Body-Part Approval is next.`
+          :"Motion approved. Protected Rebind is active. Run Auto Trace & Bind to continue.";
+    }
+
+    if(typeof refreshProductionPreflight==="function"){
+      try{refreshProductionPreflight();}catch(e){}
+    }
+
+    if(typeof v242SaveCheckpoint==="function"){
+      try{v242SaveCheckpoint(true);}catch(e){}
+    }
+
+    if(typeof status==="function"){
+      status(
+        `V27 MOTION APPROVED${Number.isFinite(after)?` at ${after.toFixed(1)}%`:""}. `+
+        `Protected artwork binding started.`
+      );
+    }
+
+    return true;
+  }
+
+  function fiSketchOpen(){
+    fiSketchState.open=true;
+    fiSketchState.source=sourceName||"";
+    fiSketchState.approved=false;
+    fiSketchState.approvedFrames=[];
+    fiSketchState.motion=el("fiSketchMotion")?.value||"walk";
+    fiSketchState.facing=el("fiSketchFacing")?.value||"right";
+
+    el("fiSketchOverlay")?.classList.add("open");
+    fiSketchRefreshMemoryBadge();
+
+    if(!fiSketchUseMemoryIfBetter()){
+      fiGenerateSketchFrames();
+    }else{
+      fiSketchBuildFrameButtons();
+      fiSketchDraw();
+    }
+
+    if(typeof status==="function"){
+      status(
+        "V27 Progressive Motion Sketch: solve and approve motion before artwork binding."
+      );
+    }
+  }
+
+  function fiSketchGetApprovedPose(i){
+    if(
+      !fiSketchState.approved ||
+      !fiSketchState.approvedFrames.length
+    ){
+      return null;
+    }
+
+    const pose=fiSketchState.approvedFrames[i%fiSketchState.approvedFrames.length];
+    return pose?fiClonePose(pose):null;
+  }
+
+  // Pointer editing on the selected frame.
+  function fiSketchPointerWorld(ev){
+    const c=el("fiSketchCanvas");
+    const r=c.getBoundingClientRect();
+    const x=(ev.clientX-r.left)*(c.width/r.width);
+    const y=(ev.clientY-r.top)*(c.height/r.height);
+    const T=fiSketchTransform();
+
+    return{
+      canvas:[x,y],
+      world:T.toWorld(x,y),
+      T
+    };
+  }
+
+  function fiSketchNearestJoint(ev){
+    if(!fiSketchState.frames.length)return null;
+
+    const info=fiSketchPointerWorld(ev);
+    const pose=fiSketchState.frames[fiSketchState.frame];
+    let best=null;
+    let bestD=18;
+
+    for(const name of JOINTS){
+      const p=pose[name];
+      if(!p)continue;
+
+      const q=info.T.toCanvas(p);
+      const d=Math.hypot(
+        q[0]-info.canvas[0],
+        q[1]-info.canvas[1]
+      );
+
+      if(d<bestD){
+        bestD=d;
+        best=name;
+      }
+    }
+
+    return best;
+  }
+
+  function fiSketchDragJoint(name,target){
+    const pose=fiSketchState.frames[fiSketchState.frame];
+    if(!pose?.[name])return;
+
+    const old=pose[name];
+    const dx=target[0]-old[0];
+    const dy=target[1]-old[1];
+
+    const subtree={
+      pelvis:JOINTS,
+      left_shoulder:["left_shoulder","left_elbow","left_wrist"],
+      right_shoulder:["right_shoulder","right_elbow","right_wrist"],
+      left_hip:["left_hip","left_knee","left_ankle","left_toe"],
+      right_hip:["right_hip","right_knee","right_ankle","right_toe"],
+      left_elbow:["left_elbow","left_wrist"],
+      right_elbow:["right_elbow","right_wrist"],
+      left_ankle:["left_ankle","left_toe"],
+      right_ankle:["right_ankle","right_toe"],
+      tail_base:["tail_base","tail_tip"]
+    };
+
+    if(subtree[name]){
+      fiMoveChain(
+        pose,
+        subtree[name],
+        dx,dy
+      );
+    }else{
+      pose[name]=[target[0],target[1]];
+    }
+
+    fiSketchState.corrected=false;
+    fiSketchState.approved=false;
+    fiSketchUpdateReport(null);
+
+    if(el("fiSketchApprove")){
+      el("fiSketchApprove").disabled=true;
+    }
+
+    if(el("fiSketchStatus")){
+      el("fiSketchStatus").textContent=
+        `${name.replaceAll("_"," ")} adjusted on frame ${fiSketchState.frame+1}. `+
+        `Run C++ Correct Sketch again before approval.`;
+    }
+
+    fiSketchDraw();
+  }
+
+  const fiSketchCanvas=el("fiSketchCanvas");
+
+  fiSketchCanvas?.addEventListener("pointerdown",ev=>{
+    const joint=fiSketchNearestJoint(ev);
+    if(!joint)return;
+
+    fiSketchState.dragJoint=joint;
+    fiSketchCanvas.setPointerCapture?.(ev.pointerId);
+    ev.preventDefault();
+  });
+
+  fiSketchCanvas?.addEventListener("pointermove",ev=>{
+    if(!fiSketchState.dragJoint)return;
+
+    const info=fiSketchPointerWorld(ev);
+
+    fiSketchDragJoint(
+      fiSketchState.dragJoint,
+      info.world
+    );
+
+    ev.preventDefault();
+  });
+
+  const fiSketchEndDrag=ev=>{
+    if(fiSketchState.dragJoint){
+      fiSketchState.dragJoint=null;
+      fiSketchCanvas?.releasePointerCapture?.(ev.pointerId);
+    }
+  };
+
+  fiSketchCanvas?.addEventListener("pointerup",fiSketchEndDrag);
+  fiSketchCanvas?.addEventListener("pointercancel",fiSketchEndDrag);
+
+  el("fiSketchGenerate")?.addEventListener("click",()=>{
+    fiSketchStop();
+    fiGenerateSketchFrames();
+  });
+
+  el("fiSketchPlay")?.addEventListener("click",fiSketchPlay);
+  el("fiSketchCorrect")?.addEventListener("click",fiSketchCorrect);
+  el("fiSketchApprove")?.addEventListener("click",fiSketchApprove);
+
+  el("fiSketchMotion")?.addEventListener("change",()=>{
+    fiSketchStop();
+    fiSketchState.motion=el("fiSketchMotion").value;
+    fiSketchRefreshMemoryBadge();
+    fiGenerateSketchFrames();
+  });
+
+  el("fiSketchFacing")?.addEventListener("change",()=>{
+    fiSketchStop();
+    fiSketchState.facing=el("fiSketchFacing").value;
+    fiGenerateSketchFrames();
+  });
+
+  el("fiSketchOnion")?.addEventListener("change",fiSketchDraw);
+
+  el("fiSketchStageSkeleton")?.addEventListener("click",()=>fiSketchSetStage("skeleton"));
+  el("fiSketchStageVolume")?.addEventListener("click",()=>fiSketchSetStage("volume"));
+  el("fiSketchStageSilhouette")?.addEventListener("click",()=>fiSketchSetStage("silhouette"));
+
+  window.FIProgressiveSketch={
+    open:fiSketchOpen,
+    generate:fiGenerateSketchFrames,
+    correct:fiSketchCorrect,
+    approve:fiSketchApprove,
+    getApprovedPose:fiSketchGetApprovedPose,
+    frameName:fiSketchFrameName,
+    motionName:fiSketchMotionName,
+    get state(){return fiSketchState;}
+  };
+
+
   window.FIRigApprovalGate={
     autoRig,review:openGate,fix:fixRig,approve:approveRig,analyze:analyzeRig,state:gate
   };
@@ -7795,7 +9504,7 @@ window.FI_WASM_BASE64="AGFzbQEAAAABFgRgAAF/YAN/f30Bf2ACf38BfWAAAX0DEhEAAAAAAAECA
 </script>
 <script id="fiV26TypedRuntime">
 "use strict";
-/* Fatal Instinct Sprite Walker V26.3
+/* Fatal Instinct Sprite Walker V27.0
  * Typed browser runtime for C++ WebAssembly motion analysis/correction.
  */
 const FI_JOINTS = [
@@ -7959,7 +9668,7 @@ window.fiInferMotionType = fiInferMotionType;
 
 </script>
 <script id="fiV26Controller">
-/* Fatal Instinct Sprite Walker V26.3 - unified TypeScript/C++ WASM controller */
+/* Fatal Instinct Sprite Walker V27.0 - unified TypeScript/C++ WASM controller */
 (()=>{
   const runtime=new window.FISpriteWalkerRuntime();
   const button=document.getElementById("cppAutoCorrect");
@@ -8051,7 +9760,7 @@ window.fiInferMotionType = fiInferMotionType;
 
 <script>
 /* ============================================================
-   FATAL INSTINCT V26.3 — BODY-PART APPROVAL GATE
+   FATAL INSTINCT V27.0 — BODY-PART APPROVAL GATE
    Prevents textured sprite animation/render until body-part
    extraction has been visually reviewed and approved.
    ============================================================ */
@@ -8428,7 +10137,7 @@ window.fiInferMotionType = fiInferMotionType;
 
 
 <script>
-/* V26.3 grounding/session reset guard */
+/* V27.0 grounding/session reset guard */
 (function(){
   const src=document.getElementById("sourceFile");
 
