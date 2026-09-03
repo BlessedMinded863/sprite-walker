@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Progressive Motion Sketch Engine v27</title>
+<title>Progressive Motion Sketch Engine v27.1</title>
 <style>
 :root{
   --bg:#101114; --panel:#17191f; --panel2:#1f222a; --line:#343844;
@@ -76,10 +76,16 @@ canvas{display:block;width:100%;height:100%;background:linear-gradient(#151821 0
 <body>
 <header>
   <div>
-    <strong>Progressive Motion Sketch Engine v27</strong>
-    <span class="badge">AI Assist + Motion Memory</span>
+    <strong>Progressive Motion Sketch Engine v27.1</strong>
+    <span class="badge">Image Import + AI Assist + Motion Memory</span>
   </div>
   <div class="top-actions">
+    <label for="characterUpload" style="display:inline-flex;align-items:center;gap:6px;background:#292d36;color:white;border:1px solid #414653;border-radius:8px;padding:8px 11px;cursor:pointer">
+      Add Character Image
+    </label>
+    <input id="characterUpload" type="file" accept="image/png,image/jpeg,image/webp" style="display:none">
+    <button id="fitCharacter">Fit Character</button>
+    <button id="toggleCharacter">Character: ON</button>
     <button id="newFrame">+ Add Frame</button>
     <button id="duplicateFrame">Duplicate</button>
     <button id="approveFrame">Approve Frame</button>
@@ -100,7 +106,13 @@ canvas{display:block;width:100%;height:100%;background:linear-gradient(#151821 0
       <button id="onion">Onion Skin: ON</button>
       <button id="masterOverlay">Master Overlay: OFF</button>
       <button id="resetPose">Reset Pose</button>
-      <span class="hint">Drag joints directly. Editing an approved frame unlocks it.</span>
+      <button id="imgSmaller">Image -</button>
+      <button id="imgLarger">Image +</button>
+      <button id="imgLeft">← Image</button>
+      <button id="imgRight">Image →</button>
+      <button id="imgUp">↑ Image</button>
+      <button id="imgDown">↓ Image</button>
+      <span class="hint">Load a transparent PNG if possible. Use the image controls to line the rig up over the character.</span>
     </div>
   </div>
 
@@ -130,7 +142,7 @@ canvas{display:block;width:100%;height:100%;background:linear-gradient(#151821 0
   </div>
   <div class="grid2">
     <div class="block">
-      <div class="hint">Pose candidates are derived from neighboring frames, the current motion direction, and the approved master baseline when available.</div>
+      <div class="hint">Pose candidates are derived from neighboring frames, the current motion direction, and the approved master baseline when available. Imported character art is currently used as the visual reference layer while the rig controls pose data.</div>
       <div class="candidates" id="candidates"></div>
     </div>
     <div class="block">
@@ -232,6 +244,9 @@ function initialFrames(){
 }
 
 let frames=initialFrames();
+let characterImage=null;
+let characterVisible=true;
+let imageTransform={x:0,y:0,scale:1};
 let current=0,dragging=null,groundLock=true,onion=true,masterOverlay=false,comparePreview=false;
 let playing=false,slow=false,stageMotion=false,playIndex=0,finalApproved=false,candidatePoses=[];
 let approvedHistory=JSON.parse(localStorage.getItem("pmse_approved_history")||"[]");
@@ -370,6 +385,23 @@ function autoCorrectCurrent(){
  render();
 }
 
+
+function drawCharacterImage(ctx, canvas, alpha=1){
+ if(!characterImage || !characterVisible) return;
+ const iw=characterImage.naturalWidth||characterImage.width;
+ const ih=characterImage.naturalHeight||characterImage.height;
+ const maxW=canvas.width*0.52, maxH=canvas.height*0.82;
+ const baseScale=Math.min(maxW/iw,maxH/ih);
+ const s=baseScale*imageTransform.scale;
+ const w=iw*s,h=ih*s;
+ const x=(canvas.width-w)/2+imageTransform.x;
+ const y=(canvas.height-h)*0.78+imageTransform.y;
+ ctx.save();
+ ctx.globalAlpha=alpha;
+ ctx.imageSmoothingEnabled=false;
+ ctx.drawImage(characterImage,x,y,w,h);
+ ctx.restore();
+}
 function drawSkeleton(ctx,p,alpha=1,masterStyle=false){
  ctx.save();ctx.globalAlpha=alpha;
  ctx.strokeStyle=masterStyle?"#66d17a":"#aab2c0";ctx.lineWidth=masterStyle?3:6;ctx.lineCap="round";
@@ -395,6 +427,8 @@ function clear(ctx,canvas){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fil
 function render(){
  document.getElementById("frameLabel").textContent=`Frame ${current+1}`;
  clear(rc,rig);clear(sc,spr);
+ drawCharacterImage(rc,rig,.72);
+ drawCharacterImage(sc,spr,.92);
  if(onion&&frames.length>1)drawSkeleton(rc,frames[(current-1+frames.length)%frames.length].pose,.18);
  if(masterOverlay&&master&&master.frames&&master.frames[current])drawSkeleton(rc,master.frames[current].pose,.45,true);
  drawSkeleton(rc,frames[current].pose,1);
@@ -430,7 +464,35 @@ function renderCandidates(){
    const s=scoreFrame(current,c.pose);
    let d=document.createElement("div");d.className="candidate";
    d.innerHTML=`<b>${c.name} — ${Math.round(s.overall)}%</b><div class="reason">${c.reason}</div><div class="reason" style="margin-top:6px">Anatomy ${Math.round(s.anatomy)} · Continuity ${Math.round(s.continuity)} · Foot ${Math.round(s.foot)}</div>`;
-   d.onclick=()=>{frames[current].pose=clone(c.pose);frames[current].approved=false;frames[current].rejected=false;finalApproved=false;candidatePoses=[];renderCandidates();render();};
+   d.onclick=()=>{frames[current].pose=clone(c.pose);frames[current].approved=false;frames[current].rejected=false;finalApproved=false;candidatePoses=[];
+document.getElementById("characterUpload").addEventListener("change",e=>{
+ const file=e.target.files&&e.target.files[0];
+ if(!file)return;
+ const url=URL.createObjectURL(file);
+ const img=new Image();
+ img.onload=()=>{
+   characterImage=img;
+   characterVisible=true;
+   imageTransform={x:0,y:0,scale:1};
+   document.getElementById("toggleCharacter").textContent="Character: ON";
+   render();
+ };
+ img.src=url;
+});
+document.getElementById("fitCharacter").onclick=()=>{imageTransform={x:0,y:0,scale:1};render()};
+document.getElementById("toggleCharacter").onclick=e=>{
+ characterVisible=!characterVisible;
+ e.target.textContent=`Character: ${characterVisible?"ON":"OFF"}`;
+ render();
+};
+document.getElementById("imgSmaller").onclick=()=>{imageTransform.scale=clamp(imageTransform.scale-.05,.2,3);render()};
+document.getElementById("imgLarger").onclick=()=>{imageTransform.scale=clamp(imageTransform.scale+.05,.2,3);render()};
+document.getElementById("imgLeft").onclick=()=>{imageTransform.x-=8;render()};
+document.getElementById("imgRight").onclick=()=>{imageTransform.x+=8;render()};
+document.getElementById("imgUp").onclick=()=>{imageTransform.y-=8;render()};
+document.getElementById("imgDown").onclick=()=>{imageTransform.y+=8;render()};
+
+renderCandidates();render();};
    wrap.appendChild(d);
  });
 }
@@ -465,7 +527,15 @@ function renderPreviewStatic(){
  const badge=document.getElementById("approvalBadge");badge.textContent=finalApproved?"MASTER APPROVED":"WORK IN PROGRESS";badge.style.borderColor=finalApproved?"#34764a":"#3c424f";
  document.getElementById("analysisText").textContent=ws.overall>=90?"Strong cycle. Review visually before final approval.":ws.overall>=75?"Usable foundation. Refine weak transitions before locking the master.":"Cycle needs correction. Focus on red/yellow metrics.";
  if(!playing){
-   clear(pc,prev);drawSprite(pc,frames[current].pose,90,.62);
+   clear(pc,prev);
+   if(characterImage && characterVisible){
+     pc.save();
+     pc.translate(-110,0);
+     drawCharacterImage(pc,prev,.95);
+     pc.restore();
+   } else {
+     drawSprite(pc,frames[current].pose,90,.62);
+   }
    if(comparePreview&&master&&master.frames&&master.frames[current])drawSprite(pc,master.frames[current].pose,90,.62,.25,true);
  }
 }
@@ -536,11 +606,51 @@ function animate(){
  clear(pc,prev);
  const idx=playIndex%frames.length,p=frames[idx].pose;
  const travel=stageMotion?idx*(260/Math.max(1,frames.length-1)):0;
- if(comparePreview&&master&&master.frames&&master.frames[idx])drawSprite(pc,master.frames[idx].pose,40+travel,.55,.22,true);
- drawSprite(pc,p,40+travel,.55);
+ if(characterImage && characterVisible){
+   pc.save();
+   pc.translate(travel-110,0);
+   drawCharacterImage(pc,prev,.95);
+   pc.restore();
+   pc.save();
+   pc.translate(travel*0.75-40,-55);
+   pc.scale(.72,.72);
+   drawSkeleton(pc,p,.55,false);
+   pc.restore();
+ } else {
+   if(comparePreview&&master&&master.frames&&master.frames[idx])drawSprite(pc,master.frames[idx].pose,40+travel,.55,.22,true);
+   drawSprite(pc,p,40+travel,.55);
+ }
  playIndex=(playIndex+1)%frames.length;
  setTimeout(animate,slow?260:110);
 }
+
+document.getElementById("characterUpload").addEventListener("change",e=>{
+ const file=e.target.files&&e.target.files[0];
+ if(!file)return;
+ const url=URL.createObjectURL(file);
+ const img=new Image();
+ img.onload=()=>{
+   characterImage=img;
+   characterVisible=true;
+   imageTransform={x:0,y:0,scale:1};
+   document.getElementById("toggleCharacter").textContent="Character: ON";
+   render();
+ };
+ img.src=url;
+});
+document.getElementById("fitCharacter").onclick=()=>{imageTransform={x:0,y:0,scale:1};render()};
+document.getElementById("toggleCharacter").onclick=e=>{
+ characterVisible=!characterVisible;
+ e.target.textContent=`Character: ${characterVisible?"ON":"OFF"}`;
+ render();
+};
+document.getElementById("imgSmaller").onclick=()=>{imageTransform.scale=clamp(imageTransform.scale-.05,.2,3);render()};
+document.getElementById("imgLarger").onclick=()=>{imageTransform.scale=clamp(imageTransform.scale+.05,.2,3);render()};
+document.getElementById("imgLeft").onclick=()=>{imageTransform.x-=8;render()};
+document.getElementById("imgRight").onclick=()=>{imageTransform.x+=8;render()};
+document.getElementById("imgUp").onclick=()=>{imageTransform.y-=8;render()};
+document.getElementById("imgDown").onclick=()=>{imageTransform.y+=8;render()};
+
 renderCandidates();render();
 </script>
 </body>
