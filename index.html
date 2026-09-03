@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Progressive Motion Sketch Engine v28</title>
+<title>Progressive Motion Sketch Engine v28.1</title>
 <style>
 :root{
   --bg:#101114; --panel:#17191f; --panel2:#1f222a; --line:#343844;
@@ -76,8 +76,8 @@ canvas{display:block;width:100%;height:100%;background:linear-gradient(#151821 0
 <body>
 <header>
   <div>
-    <strong>Progressive Motion Sketch Engine v28</strong>
-    <span class="badge">Rig Binding + Image Import + AI Assist</span>
+    <strong>Progressive Motion Sketch Engine v28.1</strong>
+    <span class="badge">True Joint Manipulation + Rig Binding</span>
   </div>
   <div class="top-actions">
     <label for="characterUpload" style="display:inline-flex;align-items:center;gap:6px;background:#292d36;color:white;border:1px solid #414653;border-radius:8px;padding:8px 11px;cursor:pointer">
@@ -115,7 +115,7 @@ canvas{display:block;width:100%;height:100%;background:linear-gradient(#151821 0
       <button id="imgUp">↑ Image</button>
       <button id="imgDown">↓ Image</button>
       <button id="resetBinding">Reset Binding</button>
-      <span class="hint" id="bindHint">Load a transparent PNG if possible. Turn Bind Mode ON to assign image regions to the rig.</span>
+      <span class="hint" id="bindHint">Load a transparent PNG, Auto Bind, turn Bind Mode OFF, then drag a joint. The matching artwork region should physically leave its old position and follow the joint.</span>
     </div>
   </div>
 
@@ -157,8 +157,9 @@ canvas{display:block;width:100%;height:100%;background:linear-gradient(#151821 0
       <div class="controls" style="padding-left:0;border-top:0">
         <button id="radiusMinus">Radius -</button>
         <button id="radiusPlus">Radius +</button>
+        <button id="testMove">Test Selected Joint</button>
       </div>
-      <div class="hint">This is a lightweight region-warp system for testing. It preserves the original image while moving local areas around each joint.</div>
+      <div class="hint">v28.1 now removes moved regions from their original location before redrawing them at the new joint position. If a selected region is too small, increase its Radius.</div>
     </div>
   </div>
 </section>
@@ -460,30 +461,79 @@ function drawBoundCharacter(ctx, canvas, pose, alpha=1){
  const pl=imagePlacement(canvas);
  if(!pl) return false;
 
- // base image
- ctx.save();
- ctx.globalAlpha=alpha;
- ctx.imageSmoothingEnabled=false;
- ctx.drawImage(characterImage,pl.x,pl.y,pl.w,pl.h);
- ctx.restore();
+ // Build a temporary source canvas containing the scaled character.
+ const layer=document.createElement("canvas");
+ layer.width=canvas.width;
+ layer.height=canvas.height;
+ const lc=layer.getContext("2d");
+ lc.imageSmoothingEnabled=false;
+ lc.drawImage(characterImage,pl.x,pl.y,pl.w,pl.h);
 
- // local region warps: copy circular patches from rest-joint areas and redraw at posed joint areas
+ // Remove original joint regions that have moved.
+ // This prevents the stationary character from remaining visible underneath.
+ lc.save();
+ lc.globalCompositeOperation="destination-out";
  JOINTS.forEach(j=>{
    const rest=restPose[j], cur=pose[j], cfg=bindMap[j];
    if(!cfg) return;
-   const restImg=jointCanvasToImage(canvas,rest);
-   const curImg=jointCanvasToImage(canvas,cur);
+   const move=dist(rest,cur);
+   if(move<1.5) return;
+   lc.beginPath();
+   lc.arc(rest.x,rest.y,cfg.radius+3,0,Math.PI*2);
+   lc.fill();
+ });
+ lc.restore();
+
+ // Draw the remaining stationary character.
+ ctx.save();
+ ctx.globalAlpha=alpha;
+ ctx.drawImage(layer,0,0);
+ ctx.restore();
+
+ // Redraw each moved body region at its posed joint location.
+ JOINTS.forEach(j=>{
+   const rest=restPose[j], cur=pose[j], cfg=bindMap[j];
+   if(!cfg) return;
+
+   const move=dist(rest,cur);
+   if(move<1.5) return;
+
+   const srcImg=jointCanvasToImage(canvas,rest);
    const radImg=cfg.radius/pl.s;
-   const sx=restImg.x-radImg, sy=restImg.y-radImg, sw=radImg*2, sh=radImg*2;
-   const dx=pl.x+(curImg.x-radImg)*pl.s, dy=pl.y+(curImg.y-radImg)*pl.s, dw=cfg.radius*2, dh=cfg.radius*2;
+   const sx=srcImg.x-radImg;
+   const sy=srcImg.y-radImg;
+   const sw=radImg*2;
+   const sh=radImg*2;
 
    ctx.save();
    ctx.globalAlpha=alpha;
    ctx.beginPath();
-   ctx.arc(pl.x+curImg.x*pl.s,pl.y+curImg.y*pl.s,cfg.radius,0,Math.PI*2);
+   ctx.arc(cur.x,cur.y,cfg.radius,0,Math.PI*2);
    ctx.clip();
-   try{ctx.drawImage(characterImage,sx,sy,sw,sh,dx,dy,dw,dh);}catch(e){}
+
+   try{
+     ctx.drawImage(
+       characterImage,
+       sx,sy,sw,sh,
+       cur.x-cfg.radius,cur.y-cfg.radius,
+       cfg.radius*2,cfg.radius*2
+     );
+   }catch(e){}
    ctx.restore();
+
+   // Visual connector between rest and current position while manipulating.
+   if(dragging===j){
+     ctx.save();
+     ctx.strokeStyle="#ffca5f";
+     ctx.lineWidth=2;
+     ctx.globalAlpha=.8;
+     ctx.setLineDash([6,5]);
+     ctx.beginPath();
+     ctx.moveTo(rest.x,rest.y);
+     ctx.lineTo(cur.x,cur.y);
+     ctx.stroke();
+     ctx.restore();
+   }
  });
  return true;
 }
@@ -613,6 +663,24 @@ document.getElementById("radiusMinus").onclick=()=>{
  bindMap[selectedBindJoint].radius=clamp(bindMap[selectedBindJoint].radius-4,10,90);
  updateBindUI();render();
 };
+
+document.getElementById("testMove").onclick=()=>{
+ if(!selectedBindJoint){
+   alert("Select a joint in Bind Mode first.");
+   return;
+ }
+ bindMode=false;
+ document.getElementById("bindMode").textContent="Bind Mode: OFF";
+ const p=frames[current].pose[selectedBindJoint];
+ p.x+=24;
+ if(selectedBindJoint.includes("knee")||selectedBindJoint.includes("ankle")) p.y-=10;
+ frames[current].approved=false;
+ frames[current].rejected=false;
+ finalApproved=false;
+ updateBindUI();
+ render();
+};
+
 document.getElementById("radiusPlus").onclick=()=>{
  if(!selectedBindJoint)return;
  ensureBinding();
@@ -809,6 +877,24 @@ document.getElementById("radiusMinus").onclick=()=>{
  bindMap[selectedBindJoint].radius=clamp(bindMap[selectedBindJoint].radius-4,10,90);
  updateBindUI();render();
 };
+
+document.getElementById("testMove").onclick=()=>{
+ if(!selectedBindJoint){
+   alert("Select a joint in Bind Mode first.");
+   return;
+ }
+ bindMode=false;
+ document.getElementById("bindMode").textContent="Bind Mode: OFF";
+ const p=frames[current].pose[selectedBindJoint];
+ p.x+=24;
+ if(selectedBindJoint.includes("knee")||selectedBindJoint.includes("ankle")) p.y-=10;
+ frames[current].approved=false;
+ frames[current].rejected=false;
+ finalApproved=false;
+ updateBindUI();
+ render();
+};
+
 document.getElementById("radiusPlus").onclick=()=>{
  if(!selectedBindJoint)return;
  ensureBinding();
