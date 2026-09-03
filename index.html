@@ -148,7 +148,7 @@
 
 
 /* ============================================================
-   FATAL INSTINCT V27.0 — BODY-PART APPROVAL GATE
+   FATAL INSTINCT V27.1 — BODY-PART APPROVAL GATE
    ============================================================ */
 .fiPartsGateOverlay{position:fixed;inset:0;z-index:99995;background:rgba(3,6,10,.86);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center;padding:10px env(safe-area-inset-right) calc(10px + env(safe-area-inset-bottom)) env(safe-area-inset-left)}
 .fiPartsGateOverlay.open{display:flex}
@@ -192,7 +192,7 @@
 
 
 /* ============================================================
-   FATAL INSTINCT V27.0 — RIG GEOMETRY AUDIT + PROTECTED REBIND
+   FATAL INSTINCT V27.1 — RIG GEOMETRY AUDIT + PROTECTED REBIND
    ============================================================ */
 .fiAuditOverlay{
   position:fixed;inset:0;z-index:99993;
@@ -398,6 +398,85 @@
   .fiSketchActions{grid-template-columns:repeat(4,1fr)}
 }
 
+
+/* ============================================================
+   FATAL INSTINCT V27.1 — ALWAYS-VISIBLE PRODUCTION WIZARD
+   ============================================================ */
+.fiWizard{
+  border:1px solid #344154;
+  border-radius:16px;
+  background:#0c121a;
+  padding:11px;
+  margin:10px 0 12px
+}
+.fiWizardHead{
+  display:flex;justify-content:space-between;gap:10px;
+  align-items:center;margin-bottom:9px
+}
+.fiWizardHead h3{margin:0;font-size:14px}
+.fiWizardHead p{margin:2px 0 0;font-size:10px;color:var(--muted)}
+.fiWizardCurrent{
+  white-space:nowrap;border:1px solid #31526c;border-radius:999px;
+  padding:5px 8px;font-size:9px;color:#a9d7ff;background:#101d29
+}
+.fiWizardSteps{
+  display:grid;grid-template-columns:1fr 1fr;gap:6px
+}
+.fiWizardStep{
+  min-width:0;display:grid;grid-template-columns:25px 1fr auto;
+  gap:7px;align-items:center;border:1px solid #283443;
+  border-radius:10px;background:#0a1017;padding:7px
+}
+.fiWizardNum{
+  width:24px;height:24px;border-radius:50%;
+  display:grid;place-items:center;border:1px solid #3a4656;
+  color:#8e9aa7;font-size:9px;font-weight:800
+}
+.fiWizardText{min-width:0}
+.fiWizardText b{
+  display:block;font-size:10px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis
+}
+.fiWizardText span{
+  display:block;color:var(--muted);font-size:8px;margin-top:2px
+}
+.fiWizardState{
+  font-size:8px;padding:4px 5px;border-radius:999px;
+  border:1px solid #344154;color:#93a0ad
+}
+.fiWizardStep.done{border-color:#245b43}
+.fiWizardStep.done .fiWizardNum{
+  border-color:#2c7a57;background:#133526;color:#80e6b1
+}
+.fiWizardStep.done .fiWizardState{
+  border-color:#245b43;color:#7ee7ad
+}
+.fiWizardStep.current{
+  border-color:#3d6f98;background:#102132
+}
+.fiWizardStep.current .fiWizardNum{
+  border-color:#4a84b2;background:#17344c;color:#c3e6ff
+}
+.fiWizardStep.current .fiWizardState{
+  border-color:#3d6f98;color:#9ed5ff
+}
+.fiWizardStep.locked{opacity:.58}
+.fiWizardFooter{
+  display:grid;grid-template-columns:1fr auto;gap:7px;margin-top:9px
+}
+.fiWizardFooter button{min-height:42px}
+.fiWizardContinue{
+  background:#183a56!important;border-color:#3b75a0!important;
+  color:#bfe3ff!important;font-weight:800
+}
+.fiWizardStep button{
+  min-height:30px;padding:4px 6px;font-size:8px
+}
+@media(max-width:560px){
+  .fiWizardSteps{grid-template-columns:1fr}
+  .fiWizardHead{align-items:flex-start}
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
@@ -428,7 +507,7 @@ setTimeout(()=>{
 </style>
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V27.0</span></h1><div class="sub">Production Engine • TypeScript Runtime • Browser C++ WebAssembly • Rig Approval Gate</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V27.1</span></h1><div class="sub">Production Engine • TypeScript Runtime • Browser C++ WebAssembly • Rig Approval Gate</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -459,6 +538,27 @@ setTimeout(()=>{
 <button id="quickProduction" class="primary">Build Production Walk</button>
 <button id="exportCharacterPack">Export Character Pack</button>
 </div>
+
+
+<div class="fiWizard" id="fiProductionWizard">
+  <div class="fiWizardHead">
+    <div>
+      <h3>Fatal Instinct Production Wizard</h3>
+      <p>Every production gate stays visible. Completed stages turn green.</p>
+    </div>
+    <span class="fiWizardCurrent" id="fiWizardCurrent">STEP 1 / 11</span>
+  </div>
+
+  <div class="fiWizardSteps" id="fiWizardSteps"></div>
+
+  <div class="fiWizardFooter">
+    <button type="button" id="fiWizardContinue" class="fiWizardContinue">
+      Continue Current Step
+    </button>
+    <button type="button" id="fiWizardRefresh">Refresh</button>
+  </div>
+</div>
+
 
 <div class="fiGateBanner" id="fiGateBanner">
   <div>
@@ -2580,7 +2680,7 @@ function autoTraceAndBind(){
     $("showBones").checked=false;
     $("showSprite").checked=true;
     $("traceRegionSelect").value="all";
-    status(`V27.0 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Body-Part Approval is required.`);
+    status(`V27.1 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Body-Part Approval is required.`);
     draw();
     if(window.FIBodyPartsGate && typeof window.FIBodyPartsGate.reviewAfterBind==="function"){
       window.FIBodyPartsGate.reviewAfterBind();
@@ -4703,7 +4803,7 @@ function v256ValidateProtectedCandidate(beforeState,beforeScore,afterScore,targe
   const damage=v256LockedDamage(beforeScore.metrics,afterScore.metrics);
   const overallDrop=(beforeScore?.score??0)-(afterScore?.score??0);
 
-  // V27.0: NEVER accept a correction that lowers total motion quality.
+  // V27.1: NEVER accept a correction that lowers total motion quality.
   if(overallDrop>0.01){
     v25RestoreMotionState(beforeState);
 
@@ -5528,7 +5628,7 @@ function v25ScoreMotion(){
     );
   }
 
-  // V27.0: FINAL POSE grounding is authoritative.
+  // V27.1: FINAL POSE grounding is authoritative.
   const v2563Ground=v2563MeasureGrounding();
 
   metric.feet=v2563Ground.score;
@@ -5718,11 +5818,11 @@ function v25GenerateCorrectivePass(passNum,targetKey){
 async function v25RunSelfCorrection(){
   if(v25Motion.running||!$("v25Enabled")?.checked)return;
 
-  // V27.0: fresh support/contact anchors for every correction run.
+  // V27.1: fresh support/contact anchors for every correction run.
   v255ResetContactLocks();
   v253ResetFootLocks();
   v2562LastFootDrift=0;
-  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V27.0 protected-channel correction started.";
+  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V27.1 protected-channel correction started.";
   const target=+$("v25TargetQuality").value||92,maxPasses=+$("v25MaxPasses").value||12,minImprove=+$("v25MinImprove").value||.5;
   let base=v25ScoreMotion();v251UpdateDiagnostics(base);v25Motion.currentScore=base.score;v25Motion.bestScore=base.score;
   v25Motion.bestCorrectives=JSON.parse(JSON.stringify(v23.correctives||[]));v25Motion.bestFinalCorrections=JSON.parse(JSON.stringify(v252FinalCorrections||{}));v25Motion.bestControls=v242CaptureControls();v25Motion.history=[{pass:0,score:base.score,metrics:base.metrics}];
@@ -7540,7 +7640,7 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
 
 
   /* ============================================================
-     FATAL INSTINCT V27.0 — RIG GEOMETRY AUDIT
+     FATAL INSTINCT V27.1 — RIG GEOMETRY AUDIT
      + PROTECTED REBIND / RIGID-PART LOCK
      ============================================================ */
   const fiRigAuditState={
@@ -9492,6 +9592,312 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
   };
 
 
+
+  /* ============================================================
+     FATAL INSTINCT V27.1 — PRODUCTION WIZARD
+     ============================================================ */
+  let fiWizardExported=false;
+
+  const FI_WIZARD_STEPS=[
+    {
+      id:"master",
+      name:"Master Sprite",
+      sub:"Load character artwork"
+    },
+    {
+      id:"autorRig",
+      name:"Auto-Rig",
+      sub:"Place FI skeleton"
+    },
+    {
+      id:"rigReview",
+      name:"Rig Review",
+      sub:"Approve or fix joints"
+    },
+    {
+      id:"rigAudit",
+      name:"Rig Geometry Audit",
+      sub:"Validate anatomical hinges"
+    },
+    {
+      id:"sketch",
+      name:"Progressive Sketch",
+      sub:"Skeleton → volume → silhouette"
+    },
+    {
+      id:"cpp",
+      name:"C++ Correct",
+      sub:"WASM motion correction"
+    },
+    {
+      id:"motionReview",
+      name:"Motion Approval",
+      sub:"Approve corrected sketch"
+    },
+    {
+      id:"rebind",
+      name:"Protected Rebind",
+      sub:"Lock rigid sprite pieces"
+    },
+    {
+      id:"parts",
+      name:"Body-Part Review",
+      sub:"Verify every texture region"
+    },
+    {
+      id:"render",
+      name:"Final Render",
+      sub:"Generate 8 sprite frames"
+    },
+    {
+      id:"export",
+      name:"SNES / Export",
+      sub:"Validate + export character pack"
+    }
+  ];
+
+  function fiWizardState(){
+    const jointsCount=
+      rig?.joints
+        ?Object.keys(rig.joints).filter(k=>Array.isArray(rig.joints[k])).length
+        :0;
+
+    const hasRig=jointsCount>=14;
+
+    const rigApproved=
+      !!window.FIRigApprovalGate?.state?.approved;
+
+    const auditApproved=
+      !!window.FIRigGeometryAudit?.state?.approved;
+
+    const sketchState=
+      window.FIProgressiveSketch?.state;
+
+    const sketchReady=
+      !!(sketchState && Array.isArray(sketchState.frames) && sketchState.frames.length===8);
+
+    const corrected=
+      !!sketchState?.corrected;
+
+    const motionApproved=
+      !!sketchState?.approved;
+
+    const protectedRebind=
+      !!Object.values(rig?.parts||{}).some(
+        p=>p && p.fiProtected===true
+      );
+
+    const partsApproved=
+      !!window.FIBodyPartsGate?.approved;
+
+    const rendered=
+      Array.isArray(frames) &&
+      frames.length===FRAME_COUNT;
+
+    const done=[
+      !!source,
+      hasRig,
+      rigApproved,
+      auditApproved,
+      sketchReady,
+      corrected,
+      motionApproved,
+      protectedRebind,
+      partsApproved,
+      rendered,
+      fiWizardExported
+    ];
+
+    let current=done.findIndex(v=>!v);
+    if(current<0)current=10;
+
+    return{done,current};
+  }
+
+  function fiWizardAction(index){
+    switch(index){
+      case 0:
+        el("imageInput")?.click();
+        break;
+
+      case 1:
+        if(!source){
+          status("Step 1 first: load a master sprite.");
+          el("imageInput")?.click();
+          return;
+        }
+        window.FIRigApprovalGate?.autoRig?.();
+        break;
+
+      case 2:
+        if(!source){
+          status("Load a master sprite first.");
+          return;
+        }
+        if(!rig?.joints || Object.keys(rig.joints).length<10){
+          window.FIRigApprovalGate?.autoRig?.();
+          return;
+        }
+        window.FIRigApprovalGate?.review?.();
+        break;
+
+      case 3:
+        if(!window.FIRigApprovalGate?.state?.approved){
+          window.FIRigApprovalGate?.review?.();
+          status("Approve the rig before Geometry Audit.");
+          return;
+        }
+        window.FIRigGeometryAudit?.open?.();
+        break;
+
+      case 4:
+        if(!window.FIRigGeometryAudit?.state?.approved){
+          window.FIRigGeometryAudit?.open?.();
+          status("Approve Rig Geometry before sketch generation.");
+          return;
+        }
+        window.FIProgressiveSketch?.open?.();
+        break;
+
+      case 5:
+        if(!window.FIProgressiveSketch?.state?.frames?.length){
+          window.FIProgressiveSketch?.open?.();
+          return;
+        }
+        window.FIProgressiveSketch?.correct?.();
+        break;
+
+      case 6:
+        window.FIProgressiveSketch?.open?.();
+        status("Review the corrected sketch, then tap Approve Motion + Bind Artwork.");
+        break;
+
+      case 7:
+        if(!window.FIProgressiveSketch?.state?.approved){
+          window.FIProgressiveSketch?.open?.();
+          status("Motion must be approved before Protected Rebind.");
+          return;
+        }
+        window.FIRigGeometryAudit?.applyProtectedRebind?.();
+        if(typeof autoTraceAndBind==="function")autoTraceAndBind();
+        status("Protected Rebind applied. Body-part extraction started.");
+        break;
+
+      case 8:
+        if(!Object.values(rig?.parts||{}).some(p=>p?.fiProtected)){
+          status("Protected Rebind must run before Body-Part Review.");
+          return;
+        }
+        window.FIBodyPartsGate?.open?.();
+        break;
+
+      case 9:
+        if(!window.FIBodyPartsGate?.approved){
+          window.FIBodyPartsGate?.open?.();
+          status("Approve the body parts before final rendering.");
+          return;
+        }
+        el("generate")?.click();
+        break;
+
+      case 10:
+        if(!(Array.isArray(frames)&&frames.length===FRAME_COUNT)){
+          status("Generate all 8 frames before SNES/export.");
+          return;
+        }
+        el("exportCharacterPack")?.click();
+        break;
+    }
+
+    setTimeout(fiWizardRender,80);
+  }
+
+  function fiWizardRender(){
+    const host=el("fiWizardSteps");
+    if(!host)return;
+
+    const state=fiWizardState();
+    host.innerHTML="";
+
+    FI_WIZARD_STEPS.forEach((step,i)=>{
+      const done=state.done[i];
+      const current=i===state.current;
+
+      const row=document.createElement("div");
+      row.className=
+        "fiWizardStep "+
+        (done?"done":current?"current":"locked");
+
+      const number=document.createElement("div");
+      number.className="fiWizardNum";
+      number.textContent=done?"✓":String(i+1);
+
+      const text=document.createElement("div");
+      text.className="fiWizardText";
+      text.innerHTML=
+        `<b>${step.name}</b><span>${step.sub}</span>`;
+
+      const action=document.createElement("div");
+
+      if(done){
+        const badge=document.createElement("span");
+        badge.className="fiWizardState";
+        badge.textContent="DONE";
+        action.appendChild(badge);
+      }else if(current){
+        const b=document.createElement("button");
+        b.type="button";
+        b.textContent="OPEN";
+        b.addEventListener("click",()=>fiWizardAction(i));
+        action.appendChild(b);
+      }else{
+        const badge=document.createElement("span");
+        badge.className="fiWizardState";
+        badge.textContent="LOCKED";
+        action.appendChild(badge);
+      }
+
+      row.append(number,text,action);
+      host.appendChild(row);
+    });
+
+    if(el("fiWizardCurrent")){
+      el("fiWizardCurrent").textContent=
+        `STEP ${Math.min(state.current+1,11)} / 11 · `+
+        FI_WIZARD_STEPS[state.current].name.toUpperCase();
+    }
+
+    if(el("fiWizardContinue")){
+      el("fiWizardContinue").textContent=
+        state.done.every(Boolean)
+          ?"Production Complete"
+          :`Continue: ${FI_WIZARD_STEPS[state.current].name}`;
+      el("fiWizardContinue").disabled=
+        state.done.every(Boolean);
+    }
+  }
+
+  el("fiWizardContinue")?.addEventListener("click",()=>{
+    const state=fiWizardState();
+    if(!state.done.every(Boolean)){
+      fiWizardAction(state.current);
+    }
+  });
+
+  el("fiWizardRefresh")?.addEventListener("click",fiWizardRender);
+
+  el("exportCharacterPack")?.addEventListener("click",()=>{
+    if(Array.isArray(frames)&&frames.length===FRAME_COUNT){
+      fiWizardExported=true;
+      setTimeout(fiWizardRender,100);
+    }
+  });
+
+  // Keep the roadmap synchronized with modal approvals and automatic stages.
+  setInterval(fiWizardRender,600);
+  setTimeout(fiWizardRender,50);
+
+
   window.FIRigApprovalGate={
     autoRig,review:openGate,fix:fixRig,approve:approveRig,analyze:analyzeRig,state:gate
   };
@@ -9504,7 +9910,7 @@ window.FI_WASM_BASE64="AGFzbQEAAAABFgRgAAF/YAN/f30Bf2ACf38BfWAAAX0DEhEAAAAAAAECA
 </script>
 <script id="fiV26TypedRuntime">
 "use strict";
-/* Fatal Instinct Sprite Walker V27.0
+/* Fatal Instinct Sprite Walker V27.1
  * Typed browser runtime for C++ WebAssembly motion analysis/correction.
  */
 const FI_JOINTS = [
@@ -9668,7 +10074,7 @@ window.fiInferMotionType = fiInferMotionType;
 
 </script>
 <script id="fiV26Controller">
-/* Fatal Instinct Sprite Walker V27.0 - unified TypeScript/C++ WASM controller */
+/* Fatal Instinct Sprite Walker V27.1 - unified TypeScript/C++ WASM controller */
 (()=>{
   const runtime=new window.FISpriteWalkerRuntime();
   const button=document.getElementById("cppAutoCorrect");
@@ -9760,7 +10166,7 @@ window.fiInferMotionType = fiInferMotionType;
 
 <script>
 /* ============================================================
-   FATAL INSTINCT V27.0 — BODY-PART APPROVAL GATE
+   FATAL INSTINCT V27.1 — BODY-PART APPROVAL GATE
    Prevents textured sprite animation/render until body-part
    extraction has been visually reviewed and approved.
    ============================================================ */
@@ -10137,7 +10543,7 @@ window.fiInferMotionType = fiInferMotionType;
 
 
 <script>
-/* V27.0 grounding/session reset guard */
+/* V27.1 grounding/session reset guard */
 (function(){
   const src=document.getElementById("sourceFile");
 
