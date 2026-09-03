@@ -148,7 +148,7 @@
 
 
 /* ============================================================
-   FATAL INSTINCT V27.3 — BODY-PART APPROVAL GATE
+   FATAL INSTINCT V27.4 — BODY-PART APPROVAL GATE
    ============================================================ */
 .fiPartsGateOverlay{position:fixed;inset:0;z-index:99995;background:rgba(3,6,10,.86);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center;padding:10px env(safe-area-inset-right) calc(10px + env(safe-area-inset-bottom)) env(safe-area-inset-left)}
 .fiPartsGateOverlay.open{display:flex}
@@ -192,7 +192,7 @@
 
 
 /* ============================================================
-   FATAL INSTINCT V27.3 — RIG GEOMETRY AUDIT + PROTECTED REBIND
+   FATAL INSTINCT V27.4 — RIG GEOMETRY AUDIT + PROTECTED REBIND
    ============================================================ */
 .fiAuditOverlay{
   position:fixed;inset:0;z-index:99993;
@@ -400,7 +400,7 @@
 
 
 /* ============================================================
-   FATAL INSTINCT V27.3 — ALWAYS-VISIBLE PRODUCTION WIZARD
+   FATAL INSTINCT V27.4 — ALWAYS-VISIBLE PRODUCTION WIZARD
    ============================================================ */
 .fiWizard{
   border:1px solid #344154;
@@ -499,6 +499,63 @@
   border-color:#806c2b;color:#f2d46e;background:#2a230d
 }
 
+
+/* ============================================================
+   FATAL INSTINCT V27.4 — GHOST OVERLAY MOTION MODE
+   ============================================================ */
+.fiGhostPanel{
+  border:1px solid #31475d;border-radius:12px;background:#091119;
+  padding:9px;margin:8px 0
+}
+.fiGhostHead{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:9px;margin-bottom:8px
+}
+.fiGhostHead div{min-width:0}
+.fiGhostHead b{display:block;font-size:11px}
+.fiGhostHead span{
+  display:block;color:var(--muted);font-size:8px;margin-top:2px
+}
+.fiGhostHead strong{
+  flex:0 0 auto;font-size:8px;border:1px solid #2f7558;
+  color:#7ce5b1;background:#102a20;border-radius:999px;padding:4px 6px
+}
+.fiGhostControls{
+  display:grid;grid-template-columns:1fr 1fr;gap:6px
+}
+.fiGhostControls label{
+  min-width:0;background:#0b151e;border:1px solid #26384a;
+  border-radius:9px;padding:6px;font-size:9px;color:var(--muted)
+}
+.fiGhostControls select{
+  width:100%;min-height:34px;margin-top:4px
+}
+.fiGhostOpacityLabel{
+  display:grid!important;
+  grid-template-columns:1fr auto;
+  column-gap:6px;align-items:center
+}
+.fiGhostOpacityLabel input{
+  grid-column:1 / -1;width:100%;margin-top:5px
+}
+.fiGhostOpacityLabel span{
+  font-size:9px;color:#b9d9f3
+}
+.fiGhostLegend{
+  display:flex;flex-wrap:wrap;gap:10px;margin-top:7px;
+  color:var(--muted);font-size:8px
+}
+.fiGhostLegend span{display:flex;align-items:center;gap:4px}
+.fiGhostDot{
+  width:7px;height:7px;border-radius:50%;display:inline-block
+}
+.fiGhostDot.current{background:#a7d7ff}
+.fiGhostDot.onion{background:#576f83}
+.fiGhostDot.path{background:#e3bf63}
+@media(min-width:700px){
+  .fiGhostControls{grid-template-columns:repeat(4,1fr)}
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
@@ -529,7 +586,7 @@ setTimeout(()=>{
 </style>
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V27.3</span></h1><div class="sub">Production Engine • Unified Module Intelligence • TypeScript • Browser C++ WebAssembly</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V27.4</span></h1><div class="sub">Production Engine • Unified Module Intelligence • TypeScript • Browser C++ WebAssembly</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -736,7 +793,7 @@ setTimeout(()=>{
       <div>
         <h2 id="fiSketchTitle">Progressive Motion Sketch Engine</h2>
         <p>
-          Motion is solved before finished sprite artwork is bound.
+          Motion is solved with a transparent rig-attached character reference before finished sprite artwork is bound.
           Drag any yellow joint to fix the selected sketch frame.
         </p>
       </div>
@@ -791,9 +848,60 @@ setTimeout(()=>{
       <button id="fiSketchStageSilhouette" type="button">3 · Silhouette</button>
     </div>
 
+
+    <div class="fiGhostPanel" id="fiGhostPanel">
+      <div class="fiGhostHead">
+        <div>
+          <b>Ghost Overlay Motion Mode</b>
+          <span>Transparent master artwork follows the sketch rig while you pose.</span>
+        </div>
+        <strong id="fiGhostBadge">RIG-ATTACHED</strong>
+      </div>
+
+      <div class="fiGhostControls">
+        <label>
+          Character Overlay
+          <select id="fiGhostEnabled">
+            <option value="on" selected>On</option>
+            <option value="off">Off</option>
+          </select>
+        </label>
+
+        <label>
+          View
+          <select id="fiGhostView">
+            <option value="both" selected>Ghost + Rig</option>
+            <option value="ghost">Ghost + Joints</option>
+            <option value="rig">Rig Only</option>
+          </select>
+        </label>
+
+        <label class="fiGhostOpacityLabel">
+          Opacity
+          <input id="fiGhostOpacity" type="range" min="10" max="85" step="1" value="42">
+          <span id="fiGhostOpacityValue">42%</span>
+        </label>
+
+        <label>
+          Motion Guides
+          <select id="fiGhostGuides">
+            <option value="on" selected>Feet + Center</option>
+            <option value="off">Off</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="fiGhostLegend">
+        <span><i class="fiGhostDot current"></i>Current ghost skin</span>
+        <span><i class="fiGhostDot onion"></i>Previous ghost frame</span>
+        <span><i class="fiGhostDot path"></i>Motion path</span>
+      </div>
+    </div>
+
+
     <div class="fiSketchCanvasWrap">
       <canvas id="fiSketchCanvas" width="760" height="520"></canvas>
-      <div class="fiSketchHint">Drag joints • Tap a frame below • Artwork remains untouched</div>
+      <div class="fiSketchHint">Drag joints • Transparent character follows the rig • Tap a frame below</div>
     </div>
 
     <div class="fiSketchFrames" id="fiSketchFrames"></div>
@@ -2711,7 +2819,7 @@ function autoTraceAndBind(){
     $("showBones").checked=false;
     $("showSprite").checked=true;
     $("traceRegionSelect").value="all";
-    status(`V27.3 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Body-Part Approval is required.`);
+    status(`V27.4 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Body-Part Approval is required.`);
     draw();
     if(window.FIBodyPartsGate && typeof window.FIBodyPartsGate.reviewAfterBind==="function"){
       window.FIBodyPartsGate.reviewAfterBind();
@@ -4701,9 +4809,9 @@ async function v242ResumePreviousTest(){
       const imageOK=await v242RestoreImage();
       $("checkpointBadge").textContent="SAFE RESUME";
       $("checkpointText").textContent=imageOK?
-        "Character + rig restored in Safe Boot. Heavy motion cache intentionally isolated; V27.3 durable Character Intelligence remains available.":
+        "Character + rig restored in Safe Boot. Heavy motion cache intentionally isolated; V27.4 durable Character Intelligence remains available.":
         "Rig restored in Safe Boot. Reload character image if needed.";
-      $("aiDecision").textContent="Safe Boot isolates heavy caches. V27.3 Character Intelligence still restores durable rig and approved motion knowledge.";
+      $("aiDecision").textContent="Safe Boot isolates heavy caches. V27.4 Character Intelligence still restores durable rig and approved motion knowledge.";
     }
     return ok;
   }
@@ -4834,7 +4942,7 @@ function v256ValidateProtectedCandidate(beforeState,beforeScore,afterScore,targe
   const damage=v256LockedDamage(beforeScore.metrics,afterScore.metrics);
   const overallDrop=(beforeScore?.score??0)-(afterScore?.score??0);
 
-  // V27.3: NEVER accept a correction that lowers total motion quality.
+  // V27.4: NEVER accept a correction that lowers total motion quality.
   if(overallDrop>0.01){
     v25RestoreMotionState(beforeState);
 
@@ -5659,7 +5767,7 @@ function v25ScoreMotion(){
     );
   }
 
-  // V27.3: FINAL POSE grounding is authoritative.
+  // V27.4: FINAL POSE grounding is authoritative.
   const v2563Ground=v2563MeasureGrounding();
 
   metric.feet=v2563Ground.score;
@@ -5849,11 +5957,11 @@ function v25GenerateCorrectivePass(passNum,targetKey){
 async function v25RunSelfCorrection(){
   if(v25Motion.running||!$("v25Enabled")?.checked)return;
 
-  // V27.3: fresh support/contact anchors for every correction run.
+  // V27.4: fresh support/contact anchors for every correction run.
   v255ResetContactLocks();
   v253ResetFootLocks();
   v2562LastFootDrift=0;
-  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V27.3 protected-channel correction started.";
+  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V27.4 protected-channel correction started.";
   const target=+$("v25TargetQuality").value||92,maxPasses=+$("v25MaxPasses").value||12,minImprove=+$("v25MinImprove").value||.5;
   let base=v25ScoreMotion();v251UpdateDiagnostics(base);v25Motion.currentScore=base.score;v25Motion.bestScore=base.score;
   v25Motion.bestCorrectives=JSON.parse(JSON.stringify(v23.correctives||[]));v25Motion.bestFinalCorrections=JSON.parse(JSON.stringify(v252FinalCorrections||{}));v25Motion.bestControls=v242CaptureControls();v25Motion.history=[{pass:0,score:base.score,metrics:base.metrics}];
@@ -7446,7 +7554,7 @@ v23SetState("Idle");v23DrawTimeline();v23ApplyBlendTree();
 detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFrameMs();resize();
 
 /* ============================================================
-   FATAL INSTINCT V27.3 — UNIFIED MODULE BRIDGE
+   FATAL INSTINCT V27.4 — UNIFIED MODULE BRIDGE
    All production intelligence now executes in the SAME ES module
    as Sprite Walker core state. This fixes access to:
    source, sourceName, rig, buildPose, autoTraceAndBind,
@@ -7668,6 +7776,9 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
       if(freshImage){
         gate.lastSource=fileName;
 
+        fiGhostTextureState.source=null;
+        fiGhostTextureState.canvas=null;
+
         if(
           window.FICharacterIntelligence &&
           typeof window.FICharacterIntelligence.onMasterReady==="function"
@@ -7723,7 +7834,7 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
 
 
   /* ============================================================
-     FATAL INSTINCT V27.3 — RIG GEOMETRY AUDIT
+     FATAL INSTINCT V27.4 — RIG GEOMETRY AUDIT
      + PROTECTED REBIND / RIGID-PART LOCK
      ============================================================ */
   const fiRigAuditState={
@@ -8232,8 +8343,23 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
     timer:null,
     dragJoint:null,
     source:"",
-    memoryLoaded:false
+    memoryLoaded:false,
+    ghost:{
+      enabled:true,
+      view:"both",
+      opacity:0.42,
+      guides:true
+    }
   };
+
+  const fiGhostTextureState={
+    source:null,
+    canvas:null,
+    scale:1,
+    backgroundRemoved:false
+  };
+
+  let fiGhostMemoryTimer=null;
 
   const FI_SKETCH_PHASES={
     walk:["Contact","Down","Passing","High Step","Opposite Contact","Opposite Down","Opposite Passing","Opposite High Step"],
@@ -8693,6 +8819,856 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
     return `${c} ${type} V27`;
   }
 
+
+  /* ============================================================
+     V27.4 — RIG-ATTACHED TRANSPARENT CHARACTER OVERLAY
+     The master artwork is rendered as rigid clipped regions bound
+     to the approved base rig. It is a motion-drawing reference only;
+     final production binding still occurs after sketch approval.
+     ============================================================ */
+
+  function fiGhostClamp(v,min,max){
+    return Math.max(min,Math.min(max,v));
+  }
+
+  function fiGhostSettings(){
+    return{
+      enabled:
+        (el("fiGhostEnabled")?.value||"on")==="on",
+      view:
+        el("fiGhostView")?.value||"both",
+      opacity:
+        fiGhostClamp(
+          +(el("fiGhostOpacity")?.value||42)/100,
+          .10,.85
+        ),
+      guides:
+        (el("fiGhostGuides")?.value||"on")==="on"
+    };
+  }
+
+  function fiGhostSyncState(){
+    const s=fiGhostSettings();
+    fiSketchState.ghost={
+      enabled:s.enabled,
+      view:s.view,
+      opacity:s.opacity,
+      guides:s.guides
+    };
+
+    if(el("fiGhostOpacityValue")){
+      el("fiGhostOpacityValue").textContent=
+        `${Math.round(s.opacity*100)}%`;
+    }
+
+    if(el("fiGhostBadge")){
+      el("fiGhostBadge").textContent=
+        source&&rig?.joints
+          ?"RIG-ATTACHED"
+          :"WAITING";
+      el("fiGhostBadge").style.color=
+        source&&rig?.joints
+          ?"#7ce5b1"
+          :"#f0c96d";
+    }
+
+    return s;
+  }
+
+  function fiGhostSavePreferences(){
+    const settings=fiGhostSyncState();
+
+    if(fiGhostMemoryTimer){
+      clearTimeout(fiGhostMemoryTimer);
+    }
+
+    fiGhostMemoryTimer=setTimeout(()=>{
+      try{
+        localStorage.setItem(
+          "fatal_instinct_v274_ghost_overlay",
+          JSON.stringify(settings)
+        );
+      }catch(e){}
+
+      window.FICharacterIntelligence?.learn?.(
+        "ghost_overlay",
+        {ghostSettings:settings}
+      );
+    },260);
+
+    return settings;
+  }
+
+  function fiGhostRestorePreferences(){
+    let saved=null;
+
+    try{
+      const profile=
+        window.FICharacterIntelligence?.state?.profile;
+
+      if(profile?.ghostSettings){
+        saved=profile.ghostSettings;
+      }
+
+      if(!saved){
+        saved=JSON.parse(
+          localStorage.getItem(
+            "fatal_instinct_v274_ghost_overlay"
+          )||"null"
+        );
+      }
+    }catch(e){}
+
+    if(saved){
+      if(el("fiGhostEnabled")){
+        el("fiGhostEnabled").value=
+          saved.enabled===false?"off":"on";
+      }
+
+      if(el("fiGhostView")){
+        el("fiGhostView").value=
+          ["both","ghost","rig"].includes(saved.view)
+            ?saved.view
+            :"both";
+      }
+
+      if(el("fiGhostOpacity")){
+        el("fiGhostOpacity").value=
+          String(
+            Math.round(
+              fiGhostClamp(
+                Number(saved.opacity)||.42,
+                .10,.85
+              )*100
+            )
+          );
+      }
+
+      if(el("fiGhostGuides")){
+        el("fiGhostGuides").value=
+          saved.guides===false?"off":"on";
+      }
+    }
+
+    fiGhostSyncState();
+  }
+
+  function fiGhostCornerBackground(data,w,h){
+    const samples=[];
+    const radius=Math.max(1,Math.round(Math.min(w,h)*.035));
+
+    const collect=(x0,y0)=>{
+      for(let y=y0;y<Math.min(h,y0+radius);y+=Math.max(1,Math.floor(radius/4))){
+        for(let x=x0;x<Math.min(w,x0+radius);x+=Math.max(1,Math.floor(radius/4))){
+          const i=(y*w+x)*4;
+          samples.push([
+            data[i],
+            data[i+1],
+            data[i+2],
+            data[i+3]
+          ]);
+        }
+      }
+    };
+
+    collect(0,0);
+    collect(Math.max(0,w-radius),0);
+    collect(0,Math.max(0,h-radius));
+    collect(Math.max(0,w-radius),Math.max(0,h-radius));
+
+    if(!samples.length)return null;
+
+    const avg=[0,0,0,0];
+
+    for(const p of samples){
+      avg[0]+=p[0];
+      avg[1]+=p[1];
+      avg[2]+=p[2];
+      avg[3]+=p[3];
+    }
+
+    for(let i=0;i<4;i++){
+      avg[i]/=samples.length;
+    }
+
+    // Already-transparent backgrounds need no flood removal.
+    if(avg[3]<80)return null;
+
+    // Require corner colors to be reasonably consistent.
+    let spread=0;
+    for(const p of samples){
+      spread=Math.max(
+        spread,
+        Math.abs(p[0]-avg[0]),
+        Math.abs(p[1]-avg[1]),
+        Math.abs(p[2]-avg[2])
+      );
+    }
+
+    return spread<=32
+      ?avg
+      :null;
+  }
+
+  function fiGhostRemoveConnectedBackground(ctx,w,h){
+    try{
+      const img=ctx.getImageData(0,0,w,h);
+      const data=img.data;
+      const bg=fiGhostCornerBackground(data,w,h);
+
+      if(!bg)return false;
+
+      const visited=new Uint8Array(w*h);
+      const queue=new Int32Array(w*h);
+      let head=0,tail=0;
+
+      const tolerance=22;
+
+      const matches=i=>{
+        const p=i*4;
+        if(data[p+3]<12)return true;
+
+        const dr=data[p]-bg[0];
+        const dg=data[p+1]-bg[1];
+        const db=data[p+2]-bg[2];
+
+        return Math.sqrt(
+          dr*dr+dg*dg+db*db
+        )<=tolerance;
+      };
+
+      const push=i=>{
+        if(i<0||i>=w*h||visited[i]||!matches(i))return;
+        visited[i]=1;
+        queue[tail++]=i;
+      };
+
+      for(let x=0;x<w;x++){
+        push(x);
+        push((h-1)*w+x);
+      }
+
+      for(let y=0;y<h;y++){
+        push(y*w);
+        push(y*w+w-1);
+      }
+
+      while(head<tail){
+        const i=queue[head++];
+        const x=i%w;
+        const y=(i/w)|0;
+
+        data[i*4+3]=0;
+
+        if(x>0)push(i-1);
+        if(x<w-1)push(i+1);
+        if(y>0)push(i-w);
+        if(y<h-1)push(i+w);
+      }
+
+      ctx.putImageData(img,0,0);
+      return true;
+    }catch(e){
+      console.warn("Ghost background cleanup skipped:",e);
+      return false;
+    }
+  }
+
+  function fiGhostTexture(){
+    if(!source)return null;
+
+    if(
+      fiGhostTextureState.source===source &&
+      fiGhostTextureState.canvas
+    ){
+      return fiGhostTextureState;
+    }
+
+    const maxDim=820;
+    const scale=Math.min(
+      1,
+      maxDim/Math.max(
+        source.width||1,
+        source.height||1
+      )
+    );
+
+    const c=document.createElement("canvas");
+    c.width=Math.max(1,Math.round(source.width*scale));
+    c.height=Math.max(1,Math.round(source.height*scale));
+
+    const g=c.getContext(
+      "2d",
+      {willReadFrequently:true}
+    );
+
+    g.imageSmoothingEnabled=true;
+    g.clearRect(0,0,c.width,c.height);
+    g.drawImage(source,0,0,c.width,c.height);
+
+    const removed=
+      fiGhostRemoveConnectedBackground(
+        g,c.width,c.height
+      );
+
+    fiGhostTextureState.source=source;
+    fiGhostTextureState.canvas=c;
+    fiGhostTextureState.scale=scale;
+    fiGhostTextureState.backgroundRemoved=removed;
+
+    return fiGhostTextureState;
+  }
+
+  function fiGhostBaseLeg(){
+    return legMetrics()?.avgLeg||
+      Math.max(80,(source?.height||480)*.30);
+  }
+
+  function fiGhostCapsulePath(ctx,a,b,r){
+    const dx=b[0]-a[0];
+    const dy=b[1]-a[1];
+    const len=Math.hypot(dx,dy)||1;
+    const nx=-dy/len*r;
+    const ny= dx/len*r;
+    const ang=Math.atan2(dy,dx);
+
+    ctx.beginPath();
+    ctx.moveTo(a[0]+nx,a[1]+ny);
+    ctx.lineTo(b[0]+nx,b[1]+ny);
+    ctx.arc(
+      b[0],b[1],r,
+      ang+Math.PI/2,
+      ang-Math.PI/2,
+      false
+    );
+    ctx.lineTo(a[0]-nx,a[1]-ny);
+    ctx.arc(
+      a[0],a[1],r,
+      ang-Math.PI/2,
+      ang+Math.PI/2,
+      false
+    );
+    ctx.closePath();
+  }
+
+  function fiGhostApplyWorldTransform(ctx,T){
+    ctx.setTransform(
+      T.scale,0,0,T.scale,
+      T.ox,T.oy
+    );
+  }
+
+  function fiGhostDrawImageUnderCurrentTransform(ctx,texture){
+    const s=texture.scale||1;
+    ctx.save();
+    ctx.scale(1/s,1/s);
+    ctx.drawImage(texture.canvas,0,0);
+    ctx.restore();
+  }
+
+  function fiGhostDrawRigidRegion(
+    ctx,T,
+    baseA,baseB,
+    targetA,targetB,
+    clipBuilder,
+    alpha
+  ){
+    const texture=fiGhostTexture();
+
+    if(
+      !texture ||
+      !baseA||!baseB||
+      !targetA||!targetB
+    )return;
+
+    const bv=[
+      baseB[0]-baseA[0],
+      baseB[1]-baseA[1]
+    ];
+
+    const tv=[
+      targetB[0]-targetA[0],
+      targetB[1]-targetA[1]
+    ];
+
+    const bl=Math.hypot(bv[0],bv[1])||1;
+    const tl=Math.hypot(tv[0],tv[1])||bl;
+
+    const angle=
+      Math.atan2(tv[1],tv[0])-
+      Math.atan2(bv[1],bv[0]);
+
+    const scale=
+      fiGhostClamp(tl/bl,.82,1.18);
+
+    ctx.save();
+    fiGhostApplyWorldTransform(ctx,T);
+
+    ctx.translate(
+      targetA[0],
+      targetA[1]
+    );
+    ctx.rotate(angle);
+    ctx.scale(scale,scale);
+    ctx.translate(
+      -baseA[0],
+      -baseA[1]
+    );
+
+    clipBuilder(ctx);
+
+    ctx.clip();
+    ctx.globalAlpha=alpha;
+    ctx.imageSmoothingEnabled=true;
+
+    fiGhostDrawImageUnderCurrentTransform(
+      ctx,
+      texture
+    );
+
+    ctx.restore();
+  }
+
+  function fiGhostDrawSegment(
+    ctx,T,
+    basePose,targetPose,
+    aName,bName,
+    radius,
+    alpha
+  ){
+    const a0=basePose[aName];
+    const b0=basePose[bName];
+    const a1=targetPose[aName];
+    const b1=targetPose[bName];
+
+    if(!a0||!b0||!a1||!b1)return;
+
+    fiGhostDrawRigidRegion(
+      ctx,T,
+      a0,b0,
+      a1,b1,
+      clipCtx=>{
+        fiGhostCapsulePath(
+          clipCtx,
+          a0,b0,
+          radius
+        );
+      },
+      alpha
+    );
+  }
+
+  function fiGhostDrawCirclePart(
+    ctx,T,
+    basePose,targetPose,
+    anchorName,parentName,
+    radius,
+    alpha
+  ){
+    const a0=basePose[parentName]||basePose[anchorName];
+    const b0=basePose[anchorName];
+    const a1=targetPose[parentName]||targetPose[anchorName];
+    const b1=targetPose[anchorName];
+
+    if(!a0||!b0||!a1||!b1)return;
+
+    fiGhostDrawRigidRegion(
+      ctx,T,
+      a0,b0,
+      a1,b1,
+      clipCtx=>{
+        clipCtx.beginPath();
+        clipCtx.arc(
+          b0[0],b0[1],
+          radius,
+          0,Math.PI*2
+        );
+        clipCtx.closePath();
+      },
+      alpha
+    );
+  }
+
+  function fiGhostDrawTorso(
+    ctx,T,
+    basePose,targetPose,
+    alpha
+  ){
+    const a0=basePose.pelvis;
+    const b0=basePose.neck;
+    const a1=targetPose.pelvis;
+    const b1=targetPose.neck;
+
+    if(!a0||!b0||!a1||!b1)return;
+
+    const leg=fiGhostBaseLeg();
+
+    fiGhostDrawRigidRegion(
+      ctx,T,
+      a0,b0,
+      a1,b1,
+      clipCtx=>{
+        const pts=[
+          basePose.left_shoulder,
+          basePose.right_shoulder,
+          basePose.right_hip,
+          basePose.left_hip
+        ].filter(Boolean);
+
+        if(pts.length<4){
+          clipCtx.beginPath();
+          clipCtx.ellipse(
+            (a0[0]+b0[0])/2,
+            (a0[1]+b0[1])/2,
+            leg*.42,
+            leg*.55,
+            0,0,Math.PI*2
+          );
+          return;
+        }
+
+        const minX=Math.min(...pts.map(p=>p[0]))-leg*.34;
+        const maxX=Math.max(...pts.map(p=>p[0]))+leg*.34;
+        const minY=Math.min(...pts.map(p=>p[1]))-leg*.28;
+        const maxY=Math.max(...pts.map(p=>p[1]))+leg*.23;
+
+        clipCtx.beginPath();
+        clipCtx.roundRect(
+          minX,minY,
+          maxX-minX,
+          maxY-minY,
+          leg*.15
+        );
+      },
+      alpha
+    );
+  }
+
+  function fiGhostDrawHead(
+    ctx,T,
+    basePose,targetPose,
+    alpha
+  ){
+    const a0=basePose.pelvis;
+    const b0=basePose.neck;
+    const a1=targetPose.pelvis;
+    const b1=targetPose.neck;
+
+    if(!a0||!b0||!a1||!b1)return;
+
+    const leg=fiGhostBaseLeg();
+
+    fiGhostDrawRigidRegion(
+      ctx,T,
+      a0,b0,
+      a1,b1,
+      clipCtx=>{
+        const neck=b0;
+        const torso=[
+          b0[0]-a0[0],
+          b0[1]-a0[1]
+        ];
+        const len=Math.hypot(torso[0],torso[1])||1;
+        const ux=torso[0]/len;
+        const uy=torso[1]/len;
+
+        const cx=
+          neck[0]+ux*leg*.19;
+        const cy=
+          neck[1]+uy*leg*.19;
+
+        clipCtx.beginPath();
+        clipCtx.ellipse(
+          cx,cy,
+          leg*.24,
+          leg*.27,
+          0,0,Math.PI*2
+        );
+      },
+      alpha
+    );
+  }
+
+  function fiGhostDrawWholeAnchor(
+    ctx,T,
+    basePose,targetPose,
+    alpha
+  ){
+    const texture=fiGhostTexture();
+    const a0=basePose.pelvis;
+    const b0=basePose.neck;
+    const a1=targetPose.pelvis;
+    const b1=targetPose.neck;
+
+    if(
+      !texture||
+      !a0||!b0||!a1||!b1
+    )return;
+
+    const bv=[
+      b0[0]-a0[0],
+      b0[1]-a0[1]
+    ];
+    const tv=[
+      b1[0]-a1[0],
+      b1[1]-a1[1]
+    ];
+    const bl=Math.hypot(...bv)||1;
+    const tl=Math.hypot(...tv)||bl;
+    const angle=
+      Math.atan2(tv[1],tv[0])-
+      Math.atan2(bv[1],bv[0]);
+    const scale=
+      fiGhostClamp(tl/bl,.90,1.10);
+
+    ctx.save();
+    fiGhostApplyWorldTransform(ctx,T);
+    ctx.translate(a1[0],a1[1]);
+    ctx.rotate(angle);
+    ctx.scale(scale,scale);
+    ctx.translate(-a0[0],-a0[1]);
+    ctx.globalAlpha=alpha;
+    ctx.imageSmoothingEnabled=true;
+
+    fiGhostDrawImageUnderCurrentTransform(
+      ctx,
+      texture
+    );
+
+    ctx.restore();
+  }
+
+  function fiGhostDrawCharacter(
+    ctx,T,pose,
+    alpha=0.42
+  ){
+    if(
+      !source ||
+      !rig?.joints ||
+      !pose
+    )return;
+
+    const base=rig.joints;
+    const leg=fiGhostBaseLeg();
+
+    // Very light whole-character anchor keeps armor, hair, cloth and
+    // accessories visible without letting it dominate the articulated pieces.
+    fiGhostDrawWholeAnchor(
+      ctx,T,
+      base,pose,
+      alpha*.16
+    );
+
+    // Core masses.
+    fiGhostDrawTorso(
+      ctx,T,
+      base,pose,
+      alpha*.92
+    );
+
+    fiGhostDrawHead(
+      ctx,T,
+      base,pose,
+      alpha
+    );
+
+    // Arms.
+    fiGhostDrawSegment(
+      ctx,T,base,pose,
+      "left_shoulder","left_elbow",
+      leg*.16,alpha
+    );
+    fiGhostDrawSegment(
+      ctx,T,base,pose,
+      "left_elbow","left_wrist",
+      leg*.14,alpha
+    );
+    fiGhostDrawCirclePart(
+      ctx,T,base,pose,
+      "left_wrist","left_elbow",
+      leg*.13,alpha
+    );
+
+    fiGhostDrawSegment(
+      ctx,T,base,pose,
+      "right_shoulder","right_elbow",
+      leg*.16,alpha
+    );
+    fiGhostDrawSegment(
+      ctx,T,base,pose,
+      "right_elbow","right_wrist",
+      leg*.14,alpha
+    );
+    fiGhostDrawCirclePart(
+      ctx,T,base,pose,
+      "right_wrist","right_elbow",
+      leg*.13,alpha
+    );
+
+    // Legs.
+    fiGhostDrawSegment(
+      ctx,T,base,pose,
+      "left_hip","left_knee",
+      leg*.18,alpha
+    );
+    fiGhostDrawSegment(
+      ctx,T,base,pose,
+      "left_knee","left_ankle",
+      leg*.17,alpha
+    );
+    fiGhostDrawSegment(
+      ctx,T,base,pose,
+      "left_ankle","left_toe",
+      leg*.15,alpha
+    );
+
+    fiGhostDrawSegment(
+      ctx,T,base,pose,
+      "right_hip","right_knee",
+      leg*.18,alpha
+    );
+    fiGhostDrawSegment(
+      ctx,T,base,pose,
+      "right_knee","right_ankle",
+      leg*.17,alpha
+    );
+    fiGhostDrawSegment(
+      ctx,T,base,pose,
+      "right_ankle","right_toe",
+      leg*.15,alpha
+    );
+
+    if(
+      anatomy()==="tail" &&
+      base.tail_base&&base.tail_tip &&
+      pose.tail_base&&pose.tail_tip
+    ){
+      fiGhostDrawSegment(
+        ctx,T,base,pose,
+        "tail_base","tail_tip",
+        leg*.12,alpha
+      );
+    }
+  }
+
+  function fiGhostDrawPath(
+    ctx,T,
+    points,
+    color,
+    dash=[]
+  ){
+    const good=points.filter(Boolean);
+    if(good.length<2)return;
+
+    ctx.save();
+    ctx.strokeStyle=color;
+    ctx.lineWidth=1.5;
+    ctx.setLineDash(dash);
+    ctx.beginPath();
+
+    good.forEach((p,i)=>{
+      const q=T.toCanvas(p);
+      if(i===0)ctx.moveTo(q[0],q[1]);
+      else ctx.lineTo(q[0],q[1]);
+    });
+
+    ctx.stroke();
+
+    for(const p of good){
+      const q=T.toCanvas(p);
+      ctx.fillStyle=color;
+      ctx.beginPath();
+      ctx.arc(q[0],q[1],2.5,0,Math.PI*2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+  }
+
+  function fiGhostDrawMotionGuides(
+    ctx,T
+  ){
+    if(!fiSketchState.frames.length)return;
+
+    const pelvis=
+      fiSketchState.frames.map(p=>p.pelvis);
+    const leftFoot=
+      fiSketchState.frames.map(
+        p=>p.left_ankle
+      );
+    const rightFoot=
+      fiSketchState.frames.map(
+        p=>p.right_ankle
+      );
+
+    fiGhostDrawPath(
+      ctx,T,
+      pelvis,
+      "rgba(227,191,99,.72)",
+      [5,4]
+    );
+
+    fiGhostDrawPath(
+      ctx,T,
+      leftFoot,
+      "rgba(104,178,235,.72)"
+    );
+
+    fiGhostDrawPath(
+      ctx,T,
+      rightFoot,
+      "rgba(236,133,155,.72)"
+    );
+
+    // Ground guide based on the lowest current feet/toes.
+    const p=
+      fiSketchState.frames[
+        fiSketchState.frame
+      ];
+
+    const feet=[
+      p?.left_ankle,
+      p?.left_toe,
+      p?.right_ankle,
+      p?.right_toe
+    ].filter(Boolean);
+
+    if(feet.length){
+      const gy=Math.max(...feet.map(x=>x[1]));
+      const b=fiSketchBounds();
+
+      const a=T.toCanvas([b.minX,gy]);
+      const z=T.toCanvas([b.maxX,gy]);
+
+      ctx.save();
+      ctx.strokeStyle="rgba(137,189,144,.42)";
+      ctx.lineWidth=1;
+      ctx.setLineDash([7,5]);
+      ctx.beginPath();
+      ctx.moveTo(a[0],a[1]);
+      ctx.lineTo(z[0],z[1]);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  function fiGhostDrawJointsOnly(
+    ctx,T,pose
+  ){
+    for(const name of JOINTS){
+      if(pose[name]){
+        fiSketchDrawJoint(
+          ctx,T,
+          name,
+          pose[name],
+          "#ffd75a",
+          1
+        );
+      }
+    }
+  }
+
+
   function fiSketchBounds(){
     const frames=fiSketchState.frames;
     const pts=[];
@@ -8951,22 +9927,57 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
 
     const T=fiSketchTransform();
     const pose=fiSketchState.frames[fiSketchState.frame];
+    const ghost=fiGhostSyncState();
+
+    if(ghost.guides){
+      fiGhostDrawMotionGuides(ctx,T);
+    }
+
+    if(
+      ghost.enabled &&
+      ghost.view!=="rig"
+    ){
+      if(
+        el("fiSketchOnion")?.value==="on" &&
+        fiSketchState.frame>0
+      ){
+        fiGhostDrawCharacter(
+          ctx,T,
+          fiSketchState.frames[fiSketchState.frame-1],
+          ghost.opacity*.22
+        );
+      }
+
+      fiGhostDrawCharacter(
+        ctx,T,
+        pose,
+        ghost.opacity
+      );
+    }
 
     if(
       el("fiSketchOnion")?.value==="on" &&
-      fiSketchState.frame>0
+      fiSketchState.frame>0 &&
+      ghost.view!=="ghost"
     ){
       fiSketchDrawPose(
         ctx,T,
         fiSketchState.frames[fiSketchState.frame-1],
-        {alpha:.20,onion:true,selected:false}
+        {alpha:.18,onion:true,selected:false}
       );
     }
 
-    fiSketchDrawPose(
-      ctx,T,pose,
-      {alpha:1,onion:false,selected:true}
-    );
+    if(ghost.view==="ghost"){
+      // Keep editable joint handles visible even in character-only view.
+      fiGhostDrawJointsOnly(
+        ctx,T,pose
+      );
+    }else{
+      fiSketchDrawPose(
+        ctx,T,pose,
+        {alpha:1,onion:false,selected:true}
+      );
+    }
 
     ctx.fillStyle="#b8c7d5";
     ctx.font="600 13px -apple-system, sans-serif";
@@ -9505,6 +10516,8 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
 
     el("fiSketchOverlay")?.classList.add("open");
     fiSketchRefreshMemoryBadge();
+    fiGhostRestorePreferences();
+    fiGhostTexture();
 
     if(!fiSketchUseMemoryIfBetter()){
       fiGenerateSketchFrames();
@@ -9680,6 +10693,22 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
 
   el("fiSketchOnion")?.addEventListener("change",fiSketchDraw);
 
+  for(const id of[
+    "fiGhostEnabled",
+    "fiGhostView",
+    "fiGhostGuides"
+  ]){
+    el(id)?.addEventListener("change",()=>{
+      fiGhostSavePreferences();
+      fiSketchDraw();
+    });
+  }
+
+  el("fiGhostOpacity")?.addEventListener("input",()=>{
+    fiGhostSavePreferences();
+    fiSketchDraw();
+  });
+
   el("fiSketchStageSkeleton")?.addEventListener("click",()=>fiSketchSetStage("skeleton"));
   el("fiSketchStageVolume")?.addEventListener("click",()=>fiSketchSetStage("volume"));
   el("fiSketchStageSilhouette")?.addEventListener("click",()=>fiSketchSetStage("silhouette"));
@@ -9692,6 +10721,12 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
     getApprovedPose:fiSketchGetApprovedPose,
     frameName:fiSketchFrameName,
     motionName:fiSketchMotionName,
+    ghost:{
+      settings:fiGhostSettings,
+      save:fiGhostSavePreferences,
+      restore:fiGhostRestorePreferences,
+      texture:fiGhostTexture
+    },
     get state(){return fiSketchState;}
   };
 
@@ -9699,7 +10734,7 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
 
 
   /* ============================================================
-     FATAL INSTINCT V27.3 — CHARACTER MEMORY INTELLIGENCE
+     FATAL INSTINCT V27.4 — CHARACTER MEMORY INTELLIGENCE
      Durable lightweight learning shared by Auto-Rig, rig review,
      geometry, progressive motion, protected rebind, and parts.
      ============================================================ */
@@ -9913,6 +10948,7 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
       geometryReport:null,
       partsScore:null,
       protectedRebind:false,
+      ghostSettings:null,
       motions:{},
       stage:"master_loaded",
       history:[],
@@ -9963,6 +10999,11 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
     if(details.partsScore!=null)profile.partsScore=details.partsScore;
     if(details.protectedRebind!=null){
       profile.protectedRebind=!!details.protectedRebind;
+    }
+
+    if(details.ghostSettings){
+      profile.ghostSettings=
+        fiIntelligenceClone(details.ghostSettings);
     }
 
     if(details.motionType){
@@ -10193,7 +11234,7 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
 
 
   /* ============================================================
-     FATAL INSTINCT V27.3 — PRODUCTION WIZARD
+     FATAL INSTINCT V27.4 — PRODUCTION WIZARD
      ============================================================ */
   let fiWizardExported=false;
 
@@ -10221,7 +11262,7 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
     {
       id:"sketch",
       name:"Progressive Sketch",
-      sub:"Skeleton → volume → silhouette"
+      sub:"Ghost skin + skeleton → volume → silhouette"
     },
     {
       id:"cpp",
@@ -10512,7 +11553,7 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
   };
 })();
 
-/* Fatal Instinct Sprite Walker V27.3 - unified TypeScript/C++ WASM controller */
+/* Fatal Instinct Sprite Walker V27.4 - unified TypeScript/C++ WASM controller */
 (()=>{
   const runtime=new window.FISpriteWalkerRuntime();
   const button=document.getElementById("cppAutoCorrect");
@@ -10600,7 +11641,7 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
 })();
 
 /* ============================================================
-   FATAL INSTINCT V27.3 — BODY-PART APPROVAL GATE
+   FATAL INSTINCT V27.4 — BODY-PART APPROVAL GATE
    Prevents textured sprite animation/render until body-part
    extraction has been visually reviewed and approved.
    ============================================================ */
@@ -10979,7 +12020,7 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
   };
 })();
 
-/* V27.3 grounding/session reset guard */
+/* V27.4 grounding/session reset guard */
 (function(){
   const src=document.getElementById("imageInput");
 
@@ -11012,7 +12053,7 @@ window.FI_WASM_BASE64="AGFzbQEAAAABFgRgAAF/YAN/f30Bf2ACf38BfWAAAX0DEhEAAAAAAAECA
 </script>
 <script id="fiV26TypedRuntime">
 "use strict";
-/* Fatal Instinct Sprite Walker V27.3
+/* Fatal Instinct Sprite Walker V27.4
  * Typed browser runtime for C++ WebAssembly motion analysis/correction.
  */
 const FI_JOINTS = [
