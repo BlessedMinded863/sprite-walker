@@ -146,6 +146,50 @@
 .fiAutopilotHandoff{display:none;background:#101a17;border:1px solid #285942;border-radius:15px;padding:12px;margin:10px 0}.fiAutopilotHandoff.open{display:block}.fiAutopilotHandoff h3{margin:0 0 5px;font-size:14px}.fiAutopilotHandoff p{margin:0 0 9px;font-size:11px;color:var(--muted);line-height:1.45}.fiPipelineMini{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px}.fiPipelineMini span{font-size:9px;text-align:center;padding:6px 4px;border-radius:8px;background:#0c1119;border:1px solid #283243;color:var(--muted)}.fiPipelineMini span.done{color:var(--green);border-color:#245b43}.fiPipelineMini span.next{color:#f2cc60;border-color:#735f20}
 @media(min-width:700px){.fiRigGateOverlay{align-items:center}.fiJointReview{grid-template-columns:repeat(3,1fr)}.fiGateActions{grid-template-columns:repeat(3,1fr)}.fiGateActions .wide{grid-column:auto}}
 
+
+/* ============================================================
+   FATAL INSTINCT V26.1 — BODY-PART APPROVAL GATE
+   ============================================================ */
+.fiPartsGateOverlay{position:fixed;inset:0;z-index:99995;background:rgba(3,6,10,.86);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center;padding:10px env(safe-area-inset-right) calc(10px + env(safe-area-inset-bottom)) env(safe-area-inset-left)}
+.fiPartsGateOverlay.open{display:flex}
+.fiPartsGateCard{width:min(820px,100%);max-height:92vh;overflow:auto;background:#10151e;border:1px solid #364154;border-radius:22px;padding:16px;box-shadow:0 24px 80px rgba(0,0,0,.62)}
+.fiPartsGateHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.fiPartsGateHead h2{font-size:20px;margin:0 0 5px}
+.fiPartsGateHead p{font-size:12px;color:var(--muted);margin:0;line-height:1.45}
+.fiPartsConfidence{min-width:90px;text-align:center;border:1px solid var(--line);background:#0b1017;border-radius:15px;padding:9px}
+.fiPartsConfidence b{display:block;font-size:25px}
+.fiPartsConfidence span{font-size:10px;color:var(--muted)}
+.fiPartsSummary{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0}
+.fiPartsSummary div{background:#0b1017;border:1px solid var(--line);border-radius:11px;padding:8px;text-align:center}
+.fiPartsSummary small{display:block;color:var(--muted);font-size:9px}
+.fiPartsSummary b{font-size:17px}
+.fiPartReview{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0}
+.fiPartCheck{display:flex;justify-content:space-between;gap:8px;align-items:center;background:#0b1017;border:1px solid #2b3442;border-radius:10px;padding:8px 9px;font-size:11px}
+.fiPartCheck span{display:flex;align-items:center;gap:7px;min-width:0}
+.fiPartCheck .dot{width:8px;height:8px;border-radius:50%;background:#768390;flex:0 0 auto}
+.fiPartCheck small{color:var(--muted);white-space:nowrap}
+.fiPartCheck.ok{border-color:#245b43}.fiPartCheck.ok .dot{background:#3fb950}
+.fiPartCheck.warn{border-color:#735f20}.fiPartCheck.warn .dot{background:#d29922}
+.fiPartCheck.bad{border-color:#7d2e33}.fiPartCheck.bad .dot{background:#f85149}
+.fiPartsWarnings{background:#0c1119;border:1px solid #2a3442;border-radius:12px;padding:10px;font-size:11px;color:var(--muted);line-height:1.5;max-height:135px;overflow:auto}
+.fiPartsActions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}
+.fiPartsActions button{min-height:44px}
+.fiPartsActions .fiPartsApprove{background:#153d2c;border-color:#2d7f58;color:#a8f0cb;font-weight:700}
+.fiPartsActions .fiPartsRepair{background:#1b3045;border-color:#32648c;color:#a7d8ff}
+.fiPartsActions .fiPartsRebind{background:#3b2e10;border-color:#806921;color:#ffe08a}
+.fiPartsActions .fiPartsApprove:disabled{opacity:.38;filter:grayscale(1);cursor:not-allowed}
+.fiPartsFixDock{position:fixed;z-index:99994;left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right));bottom:calc(10px + env(safe-area-inset-bottom));display:none;align-items:center;gap:8px;background:#101821;border:1px solid #31526c;border-radius:15px;padding:9px;box-shadow:0 18px 55px rgba(0,0,0,.48)}
+.fiPartsFixDock.open{display:flex}
+.fiPartsFixDock .text{flex:1;min-width:0}.fiPartsFixDock .text b{display:block;font-size:12px}.fiPartsFixDock .text span{display:block;font-size:10px;color:var(--muted);margin-top:2px}
+.fiPartsFixDock button{padding:8px 10px;font-size:10px}
+.fiPartsLock{margin-top:9px;padding:8px 10px;border-radius:10px;border:1px solid #2a3442;background:#0b1017;color:var(--muted);font-size:10px;line-height:1.45}
+.fiPartsLock.good{border-color:#245b43;color:#8ce3b7}
+@media(min-width:700px){
+  .fiPartsGateOverlay{align-items:center}
+  .fiPartReview{grid-template-columns:repeat(3,1fr)}
+  .fiPartsActions{grid-template-columns:repeat(3,1fr)}
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
@@ -176,7 +220,7 @@ setTimeout(()=>{
 </style>
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V26.0</span></h1><div class="sub">Production Engine • TypeScript Runtime • Browser C++ WebAssembly • Rig Approval Gate</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V26.1</span></h1><div class="sub">Production Engine • TypeScript Runtime • Browser C++ WebAssembly • Rig Approval Gate</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -287,6 +331,52 @@ setTimeout(()=>{
   <div class="text"><b>Rig Fix Mode</b><span id="fiRigFixScore">Drag joints on the sprite, then review again.</span></div>
   <button id="fiRigReview">Review</button>
   <button id="fiRigApproveDock" class="fiApprove">Approve</button>
+</div>
+
+
+
+<div class="fiPartsGateOverlay" id="fiPartsGateOverlay" role="dialog" aria-modal="true" aria-labelledby="fiPartsGateTitle">
+  <div class="fiPartsGateCard">
+    <div class="fiPartsGateHead">
+      <div>
+        <h2 id="fiPartsGateTitle">Body-Part Approval Gate</h2>
+        <p>Auto Trace &amp; Bind has separated the sprite. Every required textured body part must be present before sprite animation is unlocked.</p>
+      </div>
+      <div class="fiPartsConfidence">
+        <b id="fiPartsConfidence">--</b>
+        <span>BIND CONFIDENCE</span>
+      </div>
+    </div>
+
+    <div class="fiPartsSummary">
+      <div><small>REQUIRED</small><b id="fiPartsRequired">--</b></div>
+      <div><small>READY</small><b id="fiPartsReady">--</b></div>
+      <div><small>WARN</small><b id="fiPartsWarn">--</b></div>
+      <div><small>MISSING</small><b id="fiPartsMissing">--</b></div>
+    </div>
+
+    <div class="fiPartReview" id="fiPartReview"></div>
+    <div class="fiPartsWarnings" id="fiPartsWarnings"><b>Review:</b> waiting for body-part separation.</div>
+
+    <div class="fiPartsLock" id="fiPartsLock">
+      Production lock: sprite animation remains blocked until all required parts contain real source pixels and this gate is approved.
+    </div>
+
+    <div class="fiPartsActions">
+      <button id="fiPartsFix" class="fiPartsRepair">Inspect / Fix Parts</button>
+      <button id="fiPartsRebind" class="fiPartsRebind">Re-run Trace &amp; Bind</button>
+      <button id="fiPartsApprove" class="fiPartsApprove">Approve Parts &amp; Continue</button>
+    </div>
+  </div>
+</div>
+
+<div class="fiPartsFixDock" id="fiPartsFixDock">
+  <div class="text">
+    <b>Body-Part Fix Mode</b>
+    <span id="fiPartsFixText">Inspect colored regions. Rebind or review when ready.</span>
+  </div>
+  <button id="fiPartsReviewDock">Review</button>
+  <button id="fiPartsRebindDock">Re-bind</button>
 </div>
 
 
@@ -2091,8 +2181,11 @@ function autoTraceAndBind(){
     $("showBones").checked=false;
     $("showSprite").checked=true;
     $("traceRegionSelect").value="all";
-    status(`V18.2 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Segmentation preview turned ON automatically.`);
+    status(`V26.1 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Body-Part Approval is required.`);
     draw();
+    if(window.FIBodyPartsGate && typeof window.FIBodyPartsGate.reviewAfterBind==="function"){
+      window.FIBodyPartsGate.reviewAfterBind();
+    }
   }
 }
 $("autoTraceBind").onclick=autoTraceAndBind;
@@ -6745,10 +6838,10 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
       try{if(typeof v23MapUniversalSkeleton==="function")v23MapUniversalSkeleton();}catch(e){}
       el("fiAutopilotHandoff")?.classList.add("open");
       if(el("fiAutopilotHandoffText"))el("fiAutopilotHandoffText").textContent=separated?
-        "Rig locked. Auto Trace & Bind has started body-part separation. The next gate is motion generation/correction; this approved rig will be preserved.":
+        "Rig locked. Auto Trace & Bind has started body-part separation. Body-Part Approval is now required before motion/render production unlocks.":
         "Rig locked. The next automation stage is ready; body-part separation may still need to run.";
       if(typeof refreshProductionPreflight==="function")try{refreshProductionPreflight();}catch(e){}
-      if(typeof status==="function")status("Rig APPROVED. Body-part separation started. Ready for the next automation stage.");
+      if(typeof status==="function")status("Rig APPROVED. Body-part separation started. Waiting for Body-Part Approval.");
     }else{
       if(typeof status==="function")status("Rig APPROVED and held. Press Auto Trace & Bind when you want to continue.");
     }
@@ -6791,7 +6884,7 @@ window.FI_WASM_BASE64="AGFzbQEAAAABFgRgAAF/YAN/f30Bf2ACf38BfWAAAX0DEhEAAAAAAAECA
 </script>
 <script id="fiV26TypedRuntime">
 "use strict";
-/* Fatal Instinct Sprite Walker V26.0
+/* Fatal Instinct Sprite Walker V26.1
  * Typed browser runtime for C++ WebAssembly motion analysis/correction.
  */
 const FI_JOINTS = [
@@ -6955,7 +7048,7 @@ window.fiInferMotionType = fiInferMotionType;
 
 </script>
 <script id="fiV26Controller">
-/* Fatal Instinct Sprite Walker V26.0 - unified TypeScript/C++ WASM controller */
+/* Fatal Instinct Sprite Walker V26.1 - unified TypeScript/C++ WASM controller */
 (()=>{
   const runtime=new window.FISpriteWalkerRuntime();
   const button=document.getElementById("cppAutoCorrect");
@@ -7040,6 +7133,385 @@ window.fiInferMotionType = fiInferMotionType;
   window.FIV26Runtime=runtime;
   if(button)button.addEventListener("click",correctCurrentMotion);
   setTimeout(boot,80);
+})();
+</script>
+
+
+
+<script>
+/* ============================================================
+   FATAL INSTINCT V26.1 — BODY-PART APPROVAL GATE
+   Prevents textured sprite animation/render until body-part
+   extraction has been visually reviewed and approved.
+   ============================================================ */
+(function(){
+  "use strict";
+
+  const state={
+    approved:false,
+    sourceName:"",
+    score:0,
+    lastReport:null
+  };
+
+  const el=id=>document.getElementById(id);
+  const pretty=s=>String(s||"").replaceAll("_"," ").replace(/\b\w/g,m=>m.toUpperCase());
+
+  function anatomy(){
+    return el("fiRigAnatomy")?.value || "no-tail";
+  }
+
+  function requiredParts(){
+    const parts=[
+      "torso","head",
+      "left_upper_arm","left_forearm","left_hand",
+      "right_upper_arm","right_forearm","right_hand",
+      "left_thigh","left_shin","left_foot",
+      "right_thigh","right_shin","right_foot"
+    ];
+    if(anatomy()==="tail")parts.push("tail");
+    return parts;
+  }
+
+  function countMaskPixels(mask){
+    if(!mask || !mask.width || !mask.height)return 0;
+    try{
+      // Downsample for iPhone-friendly validation. We only need to know
+      // whether a body-part mask contains real source pixels.
+      const maxDim=160;
+      const scale=Math.min(1,maxDim/Math.max(mask.width,mask.height));
+      const w=Math.max(1,Math.round(mask.width*scale));
+      const h=Math.max(1,Math.round(mask.height*scale));
+      const c=document.createElement("canvas");
+      c.width=w;c.height=h;
+      const ctx=c.getContext("2d",{willReadFrequently:true});
+      if(!ctx)return 0;
+      ctx.imageSmoothingEnabled=false;
+      ctx.drawImage(mask,0,0,w,h);
+      const data=ctx.getImageData(0,0,w,h).data;
+      let sampled=0;
+      for(let i=3;i<data.length;i+=4)if(data[i]>20)sampled++;
+      return Math.round(sampled/(scale*scale));
+    }catch(err){
+      console.warn("Body-part mask validation fallback:",err);
+      return 0;
+    }
+  }
+
+  function analyze(){
+    if(typeof source==="undefined" || !source){
+      return {score:0,required:0,ready:0,warn:0,missing:0,items:{},messages:["Load a master sprite first."],valid:false};
+    }
+
+    try{
+      if(typeof generateAutoSegmentation==="function")generateAutoSegmentation(false);
+    }catch(err){
+      console.error("Segmentation validation failed:",err);
+    }
+
+    const names=requiredParts();
+    const items={};
+    const messages=[];
+    let ready=0,warn=0,missing=0;
+
+    const sourceArea=Math.max(1,(source.width||1)*(source.height||1));
+    const minimumPixels=Math.max(10,Math.round(sourceArea*0.00010));
+    const warningPixels=Math.max(minimumPixels+1,Math.round(sourceArea*0.00035));
+
+    for(const name of names){
+      const mask=(typeof autoTraceCache!=="undefined" && autoTraceCache?.masks) ? autoTraceCache.masks[name] : null;
+      let pixels=countMaskPixels(mask);
+
+      // Diagnostics are a useful fallback if canvas readback is unavailable.
+      if(pixels<=0 && typeof traceDiagnostics!=="undefined" && traceDiagnostics?.items?.[name]?.pixels){
+        pixels=traceDiagnostics.items[name].pixels;
+      }
+
+      const partDef=(typeof rig!=="undefined" && rig?.parts) ? rig.parts[name] : null;
+      const bound=!!(partDef && (partDef.auto || partDef.poly));
+      let level="ok";
+      let note=`${pixels.toLocaleString()} px`;
+
+      if(!mask || pixels<minimumPixels){
+        level="bad";missing++;
+        note=pixels>0?`TOO SMALL • ${pixels.toLocaleString()} px`:"MISSING TEXTURE";
+        messages.push(`${pretty(name)} has no usable textured region.`);
+      }else if(pixels<warningPixels || !bound){
+        level="warn";warn++;
+        note=!bound?`MASK FOUND • binding check`:`SMALL • ${pixels.toLocaleString()} px`;
+        messages.push(`${pretty(name)} should be inspected before approval.`);
+      }else{
+        ready++;
+      }
+
+      items[name]={name,pixels,bound,level,note};
+    }
+
+    const required=names.length;
+    const nonMissing=required-missing;
+    const coverageScore=required?nonMissing/required:0;
+    const cleanScore=required?(ready + warn*0.55)/required:0;
+    const score=Math.max(0,Math.min(100,Math.round((coverageScore*0.72+cleanScore*0.28)*100)));
+    const valid=missing===0;
+
+    if(valid && warn===0)messages.unshift("All required body parts contain usable source pixels.");
+    else if(valid)messages.unshift("All required parts exist. Review the warning regions before approval.");
+    else messages.unshift("Production is BLOCKED: one or more required textured parts are missing.");
+
+    return {score,required,ready,warn,missing,items,messages,valid};
+  }
+
+  function render(report=analyze()){
+    state.score=report.score;
+    state.lastReport=report;
+
+    if(el("fiPartsConfidence")){
+      el("fiPartsConfidence").textContent=report.score+"%";
+      el("fiPartsConfidence").style.color=report.valid?(report.warn?"#f2cc60":"#62e7ad"):"#ff7b72";
+    }
+    if(el("fiPartsRequired"))el("fiPartsRequired").textContent=report.required;
+    if(el("fiPartsReady"))el("fiPartsReady").textContent=report.ready;
+    if(el("fiPartsWarn"))el("fiPartsWarn").textContent=report.warn;
+    if(el("fiPartsMissing"))el("fiPartsMissing").textContent=report.missing;
+
+    const list=el("fiPartReview");
+    if(list){
+      list.innerHTML="";
+      for(const name of requiredParts()){
+        const item=report.items[name] || {level:"bad",note:"MISSING"};
+        const row=document.createElement("div");
+        row.className="fiPartCheck "+item.level;
+        row.innerHTML=`<span><i class="dot"></i>${pretty(name)}</span><small>${item.note}</small>`;
+        list.appendChild(row);
+      }
+    }
+
+    if(el("fiPartsWarnings")){
+      el("fiPartsWarnings").innerHTML="<b>Review:</b><br>"+report.messages.slice(0,12).map(x=>"• "+x).join("<br>");
+    }
+
+    const approve=el("fiPartsApprove");
+    if(approve){
+      approve.disabled=!report.valid;
+      approve.textContent=report.valid?"Approve Parts & Continue":"Fix Missing Parts First";
+    }
+
+    const lock=el("fiPartsLock");
+    if(lock){
+      lock.classList.toggle("good",state.approved && report.valid);
+      lock.textContent=state.approved && report.valid
+        ? "APPROVED: body-part textures are locked for production. Motion and sprite rendering are unlocked."
+        : "Production lock: sprite animation remains blocked until all required parts contain real source pixels and this gate is approved.";
+    }
+
+    return report;
+  }
+
+  function open(){
+    const report=render();
+    el("fiPartsGateOverlay")?.classList.add("open");
+    el("fiPartsFixDock")?.classList.remove("open");
+    if(typeof status==="function"){
+      status(report.valid
+        ? `Body-Part Review: ${report.ready}/${report.required} ready • ${report.warn} warning(s).`
+        : `Body-Part Review BLOCKED: ${report.missing} required textured part(s) missing.`);
+    }
+    return report;
+  }
+
+  function close(){
+    el("fiPartsGateOverlay")?.classList.remove("open");
+  }
+
+  function invalidate(reason="Body-part binding changed. Approval required again."){
+    state.approved=false;
+    state.sourceName=(typeof sourceName!=="undefined"?sourceName:"");
+    if(el("fiPartsLock")){
+      el("fiPartsLock").classList.remove("good");
+      el("fiPartsLock").textContent="Production lock: "+reason;
+    }
+  }
+
+  function fix(){
+    invalidate("Fix mode active. Review and approve the textures again before production.");
+    close();
+    el("fiPartsFixDock")?.classList.add("open");
+
+    try{
+      if(el("showAutoTrace"))el("showAutoTrace").checked=true;
+      if(el("showSprite"))el("showSprite").checked=true;
+      if(el("showBones"))el("showBones").checked=false;
+      if(typeof generateAutoSegmentation==="function")generateAutoSegmentation(false);
+      if(typeof draw==="function")draw();
+    }catch(err){console.error(err);}
+
+    const report=render();
+    const firstIssue=requiredParts().find(n=>report.items[n]?.level!=="ok");
+    if(firstIssue && el("traceRegionSelect")){
+      el("traceRegionSelect").value=firstIssue;
+      try{
+        if(typeof refreshTracePreview==="function")refreshTracePreview();
+        if(typeof draw==="function")draw();
+      }catch(err){}
+    }
+    if(el("fiPartsFixText"))el("fiPartsFixText").textContent=
+      firstIssue?`Inspect ${pretty(firstIssue)} first. Use the trace controls, then Review or Re-bind.`:
+      "Inspect colored regions, then Review or Re-bind.";
+    if(typeof status==="function")status("Body-Part Fix Mode: inspect colored extraction regions. Motion rendering remains locked.");
+  }
+
+  function rebind(){
+    invalidate("Re-binding body parts.");
+    close();
+    el("fiPartsFixDock")?.classList.remove("open");
+    if(typeof autoTraceAndBind==="function"){
+      autoTraceAndBind();
+    }else if(typeof status==="function"){
+      status("Auto Trace & Bind is unavailable.");
+    }
+  }
+
+  function approve(){
+    const report=render();
+    if(!report.valid){
+      if(typeof status==="function")status(`Cannot approve: ${report.missing} required textured part(s) are missing.`);
+      open();
+      return false;
+    }
+
+    state.approved=true;
+    state.sourceName=(typeof sourceName!=="undefined"?sourceName:"");
+    close();
+    el("fiPartsFixDock")?.classList.remove("open");
+    render(report);
+
+    try{
+      localStorage.setItem("fatal_instinct_v261_parts_approval",JSON.stringify({
+        source:state.sourceName,
+        score:report.score,
+        anatomy:anatomy(),
+        required:report.required,
+        warnings:report.warn,
+        time:Date.now()
+      }));
+    }catch(err){}
+
+    if(el("fiAutopilotHandoff")){
+      el("fiAutopilotHandoff").classList.add("open");
+    }
+    if(el("fiAutopilotHandoffText")){
+      el("fiAutopilotHandoffText").textContent=
+        `Rig and body parts APPROVED. ${report.required}/${report.required} required textures are present. Motion generation and C++ WASM correction are unlocked.`;
+    }
+
+    if(typeof status==="function"){
+      status(`BODY PARTS APPROVED at ${report.score}% confidence. Motion/render production unlocked.`);
+    }
+    return true;
+  }
+
+  function reviewAfterBind(){
+    invalidate("Auto Trace & Bind completed. Visual approval is required.");
+    // Let the tracer finish its final draw/status before the modal opens.
+    setTimeout(open,30);
+  }
+
+  function hasAnyBoundParts(){
+    try{
+      if(typeof rig==="undefined" || !rig?.parts)return false;
+      return Object.keys(rig.parts).some(k=>rig.parts[k] && (rig.parts[k].auto || rig.parts[k].poly));
+    }catch(err){return false;}
+  }
+
+  function ensureApproved(action="production"){
+    if(!hasAnyBoundParts())return true; // Skeleton-only preview remains available.
+
+    const report=analyze();
+    if(!report.valid){
+      invalidate("Required body-part textures are missing.");
+      open();
+      if(typeof status==="function")status(`Cannot start ${action}: ${report.missing} required textured part(s) missing.`);
+      return false;
+    }
+
+    const currentSource=(typeof sourceName!=="undefined"?sourceName:"");
+    if(!state.approved || state.sourceName!==currentSource){
+      invalidate("Body parts have not been approved for this master sprite.");
+      open();
+      if(typeof status==="function")status(`Approve Body Parts before ${action}.`);
+      return false;
+    }
+
+    return true;
+  }
+
+  // Wire gate controls.
+  el("fiPartsFix")?.addEventListener("click",fix);
+  el("fiPartsRebind")?.addEventListener("click",rebind);
+  el("fiPartsApprove")?.addEventListener("click",approve);
+  el("fiPartsReviewDock")?.addEventListener("click",open);
+  el("fiPartsRebindDock")?.addEventListener("click",rebind);
+
+  // Changing anatomy changes which body parts are required.
+  el("fiRigAnatomy")?.addEventListener("change",()=>{
+    invalidate("Character anatomy changed. Body-part approval must be repeated.");
+    if(el("fiPartsGateOverlay")?.classList.contains("open"))render();
+  });
+
+  // Hard production guards: no partial/ghost textured animation.
+  function guardButton(id,label){
+    const btn=el(id);
+    if(!btn || typeof btn.onclick!=="function")return;
+    const original=btn.onclick;
+    btn.onclick=function(ev){
+      if(!ensureApproved(label)){
+        ev?.preventDefault?.();
+        return false;
+      }
+      return original.call(this,ev);
+    };
+  }
+
+  // Delay until all earlier handlers have been installed.
+  setTimeout(()=>{
+    guardButton("previewRig","sprite preview");
+    guardButton("generate","sprite-frame generation");
+
+    // C++ WASM is wired with addEventListener in V26, not onclick.
+    // Capture phase blocks the existing correction handler before it runs.
+    el("cppAutoCorrect")?.addEventListener("click",(ev)=>{
+      if(!ensureApproved("C++ WASM correction")){
+        ev.preventDefault();
+        ev.stopImmediatePropagation();
+      }
+    },true);
+
+    // Extra capture guards prevent any later handler from bypassing the gate.
+    for(const [id,label] of [["previewRig","sprite preview"],["generate","sprite-frame generation"]]){
+      el(id)?.addEventListener("click",(ev)=>{
+        if(!ensureApproved(label)){
+          ev.preventDefault();
+          ev.stopImmediatePropagation();
+        }
+      },true);
+    }
+
+    // Clearing/rebuilding extraction invalidates approval immediately.
+    el("clear")?.addEventListener("click",()=>invalidate("A body part was cleared."));
+    el("rebuildTrace")?.addEventListener("click",()=>invalidate("Trace regions were rebuilt. Review again."));
+  },0);
+
+  window.FIBodyPartsGate={
+    analyze,
+    open,
+    render,
+    approve,
+    invalidate,
+    ensureApproved,
+    reviewAfterBind,
+    get approved(){return state.approved;},
+    get report(){return state.lastReport;}
+  };
 })();
 </script>
 
