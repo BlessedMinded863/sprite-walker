@@ -148,7 +148,7 @@
 
 
 /* ============================================================
-   FATAL INSTINCT V26.1 — BODY-PART APPROVAL GATE
+   FATAL INSTINCT V26.2 — BODY-PART APPROVAL GATE
    ============================================================ */
 .fiPartsGateOverlay{position:fixed;inset:0;z-index:99995;background:rgba(3,6,10,.86);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center;padding:10px env(safe-area-inset-right) calc(10px + env(safe-area-inset-bottom)) env(safe-area-inset-left)}
 .fiPartsGateOverlay.open{display:flex}
@@ -220,7 +220,7 @@ setTimeout(()=>{
 </style>
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V26.1</span></h1><div class="sub">Production Engine • TypeScript Runtime • Browser C++ WebAssembly • Rig Approval Gate</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge">V26.2</span></h1><div class="sub">Production Engine • TypeScript Runtime • Browser C++ WebAssembly • Rig Approval Gate</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -2181,7 +2181,7 @@ function autoTraceAndBind(){
     $("showBones").checked=false;
     $("showSprite").checked=true;
     $("traceRegionSelect").value="all";
-    status(`V26.1 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Body-Part Approval is required.`);
+    status(`V26.2 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Body-Part Approval is required.`);
     draw();
     if(window.FIBodyPartsGate && typeof window.FIBodyPartsGate.reviewAfterBind==="function"){
       window.FIBodyPartsGate.reviewAfterBind();
@@ -4230,7 +4230,7 @@ function v2562CaptureSupportAnchor(frame,pose){
 function v2562ApplyFinalFootLock(frame,pose,anchor=null){
   if(!$("v2562FinalFootLock")?.checked)return pose;
   const k=v2562SupportKeys(frame);
-  const saved=v255PersistentContact?.[k.side]||null;
+  const saved=v255ContactLocks?.[k.side]||null;
   const a=anchor?.ankle||saved?.ankle||null;
   const t=anchor?.toe||saved?.toe||null;
   let drift=0;
@@ -4300,15 +4300,58 @@ function v256LockedDamage(beforeMetrics,afterMetrics){
 
 function v256ValidateProtectedCandidate(beforeState,beforeScore,afterScore,targetKey){
   if(!$("v256RejectDamage")?.checked)return {ok:true,damage:[]};
+
   const damage=v256LockedDamage(beforeScore.metrics,afterScore.metrics);
+  const overallDrop=(beforeScore?.score??0)-(afterScore?.score??0);
+
+  // V26.2: NEVER accept a correction that lowers total motion quality.
+  if(overallDrop>0.01){
+    v25RestoreMotionState(beforeState);
+
+    if($("v256RollbackStatus")){
+      $("v256RollbackStatus").textContent=`TOTAL -${overallDrop.toFixed(1)}%`;
+    }
+
+    if($("v25LastImprove")){
+      $("v25LastImprove").textContent=`REJECTED -${overallDrop.toFixed(1)}%`;
+    }
+
+    v25Log(
+      `Protected rollback: rejected ${targetKey} because total quality `+
+      `${beforeScore.score}%→${afterScore.score}%.`
+    );
+
+    return {
+      ok:false,
+      damage:[{
+        key:"total",
+        before:beforeScore.score,
+        after:afterScore.score,
+        drop:overallDrop
+      }]
+    };
+  }
+
   if(damage.length){
     v25RestoreMotionState(beforeState);
-    if($("v256RollbackStatus"))$("v256RollbackStatus").textContent=
-      damage.map(d=>`${d.key} -${d.drop.toFixed(1)}%`).join(", ");
-    v25Log(`Protected rollback: rejected ${targetKey} correction because ${damage.map(d=>`${d.key} ${d.before}%→${d.after}%`).join("; ")}.`);
+
+    if($("v256RollbackStatus")){
+      $("v256RollbackStatus").textContent=
+        damage.map(d=>`${d.key} -${d.drop.toFixed(1)}%`).join(", ");
+    }
+
+    v25Log(
+      `Protected rollback: rejected ${targetKey} correction because `+
+      `${damage.map(d=>`${d.key} ${d.before}%→${d.after}%`).join("; ")}.`
+    );
+
     return {ok:false,damage};
   }
-  if($("v256RollbackStatus"))$("v256RollbackStatus").textContent="None";
+
+  if($("v256RollbackStatus")){
+    $("v256RollbackStatus").textContent="None";
+  }
+
   return {ok:true,damage:[]};
 }
 
@@ -4339,7 +4382,7 @@ function v256HierarchicalSolve(frame,pose,targetKey){
   // 5) Finally restore all solved protected channels.
   v256RestoreProtectedJoints(frame,pose);
 
-  v2562ApplyFinalFootLock(frame,pose,v2562Anchor);
+  v2562ApplyFinalFootLock(frame,pose);
 }
 
 let v255ContactLocks={
@@ -4777,7 +4820,7 @@ function v252ApplyFinalPoseLayer(frame,pose){
     if($("v252FinalPoseStatus"))$("v252FinalPoseStatus").textContent="ACTIVE";
   }
 
-  v2562ApplyFinalFootLock(frame,pose,v2562Anchor);
+  v2562ApplyFinalFootLock(frame,pose);
 }
 
 let v25Motion={
@@ -4869,7 +4912,7 @@ function v2563MeasureGrounding(){
       // Toe sample is included as a second contact consistency check when available.
       if(s.pose[toeKey]){
         const tp=s.pose[toeKey];
-        const saved=v255PersistentContact?.[g.side]?.toe;
+        const saved=v255ContactLocks?.[g.side]?.toe;
         if(saved){
           drifts.push(Math.hypot(tp[0]-saved[0],tp[1]-saved[1]));
           plantCount++;
@@ -4895,70 +4938,242 @@ function v2563MeasureGrounding(){
 
 function v25ScoreMotion(){
   const c=v24AnalyzeCurrentAnimation(),poses=[];
-  try{for(let i=0;i<8;i++){const b=buildPose(i);if(!b.error)poses.push(b.pose);}}catch(e){}
+
+  try{
+    for(let i=0;i<8;i++){
+      const b=buildPose(i);
+      if(!b.error)poses.push(b.pose);
+    }
+  }catch(e){}
+
   const orig=rig.joints,leg=legMetrics()?.avgLeg||120;
-  const metric={weight:70,torso:70,arms:70,stride:70,feet:70,heeltoe:70,continuity:70};
+
+  const metric={
+    weight:70,
+    torso:70,
+    arms:70,
+    stride:70,
+    feet:70,
+    heeltoe:70,
+    continuity:70
+  };
+
   let plantSamples=0,slideAvg=0;
+
   if(poses.length>=8){
     let px=[],py=[],nx=[],opp=[],jumps=[],slide=0,plants=0;
+
     for(let i=0;i<8;i++){
-      const p=poses[i];if(p.pelvis){px.push(p.pelvis[0]);py.push(p.pelvis[1]);}if(p.neck)nx.push(p.neck[0]);
-      if(p.left_wrist&&p.right_wrist&&orig.left_wrist&&orig.right_wrist){
+      const p=poses[i];
+
+      if(p.pelvis){
+        px.push(p.pelvis[0]);
+        py.push(p.pelvis[1]);
+      }
+
+      if(p.neck)nx.push(p.neck[0]);
+
+      if(
+        p.left_wrist&&p.right_wrist&&
+        orig.left_wrist&&orig.right_wrist
+      ){
         const ph=v253Phase(i);
         const lMove=p.left_wrist[0]-orig.left_wrist[0];
         const rMove=p.right_wrist[0]-orig.right_wrist[0];
         const expected=ph.arm;
-        if(Math.abs(expected)<0.1)opp.push(Math.abs(lMove-rMove)<leg*.08?1:0.6);
-        else{
+
+        if(Math.abs(expected)<0.1){
+          opp.push(
+            Math.abs(lMove-rMove)<leg*.08
+              ? 1
+              : 0.6
+          );
+        }else{
           const measured=lMove-rMove;
           opp.push(measured*expected>0?1:0);
         }
       }
-      if(i&&poses[i-1].pelvis&&p.pelvis)jumps.push(length(poses[i-1].pelvis,p.pelvis)/leg*100);
+
+      if(i&&poses[i-1].pelvis&&p.pelvis){
+        jumps.push(
+          length(poses[i-1].pelvis,p.pelvis)/leg*100
+        );
+      }
+
       const ph=v253Phase(i),side=ph.support;
-      if(i>0&&v253Phase(i-1).support===side&&poses[i-1][`${side}_ankle`]&&p[`${side}_ankle`]){
-        slide+=length(poses[i-1][`${side}_ankle`],p[`${side}_ankle`])/leg*100;plants++;
+
+      if(
+        i>0&&
+        v253Phase(i-1).support===side&&
+        poses[i-1][`${side}_ankle`]&&
+        p[`${side}_ankle`]
+      ){
+        slide+=
+          length(
+            poses[i-1][`${side}_ankle`],
+            p[`${side}_ankle`]
+          )/leg*100;
+        plants++;
       }
     }
+
     plantSamples=plants;
     slideAvg=plants?slide/plants:0;
-    const range=a=>a.length?Math.max(...a)-Math.min(...a):0;
-    const wt=+$("v254WeightTarget")?.value||5;metric.weight=v24ScoreClamp(100-Math.abs(range(px)/leg*100-wt)*7-Math.abs(range(py)/leg*100-2.2)*6);
-    metric.torso=v24ScoreClamp(100-Math.abs(range(nx)/leg*100-3)*8);
-    metric.arms=opp.length?v24ScoreClamp(opp.reduce((a,b)=>a+b,0)/opp.length*100):55;
+
+    const range=a=>
+      a.length
+        ? Math.max(...a)-Math.min(...a)
+        : 0;
+
+    const wt=+$("v254WeightTarget")?.value||5;
+
+    metric.weight=v24ScoreClamp(
+      100
+      -Math.abs(range(px)/leg*100-wt)*7
+      -Math.abs(range(py)/leg*100-2.2)*6
+    );
+
+    metric.torso=v24ScoreClamp(
+      100-Math.abs(range(nx)/leg*100-3)*8
+    );
+
+    metric.arms=
+      opp.length
+        ? v24ScoreClamp(
+            opp.reduce((a,b)=>a+b,0)/opp.length*100
+          )
+        : 55;
+
     let sp=0,spn=0;
+
     for(const fi of [2,6]){
       const p=poses[fi];
-      if(p?.left_ankle&&p?.right_ankle&&orig.left_hip&&orig.right_hip){
-        const ratio=length(p.left_ankle,p.right_ankle)/(length(orig.left_hip,orig.right_hip)||1);
-        const passTarget=(+$("v254PassingTarget")?.value||125)/100;sp+=Math.abs(ratio-passTarget)*24;spn++;
+
+      if(
+        p?.left_ankle&&
+        p?.right_ankle&&
+        orig.left_hip&&
+        orig.right_hip
+      ){
+        const ratio=
+          length(
+            p.left_ankle,
+            p.right_ankle
+          )/
+          (length(
+            orig.left_hip,
+            orig.right_hip
+          )||1);
+
+        const passTarget=
+          (+$("v254PassingTarget")?.value||125)/100;
+
+        sp+=Math.abs(ratio-passTarget)*24;
+        spn++;
       }
     }
-    metric.stride=v24ScoreClamp(100-(spn?sp/spn:20));
-    // V25.2: no valid plant samples is "unknown/needs detection", not catastrophic 0%.
-    metric.feet=plants?v24ScoreClamp(100-slideAvg*7.5):68;
+
+    metric.stride=v24ScoreClamp(
+      100-(spn?sp/spn:20)
+    );
+
+    // Intermediate slide is kept for diagnostics only.
+    metric.feet=
+      plants
+        ? v24ScoreClamp(100-slideAvg*7.5)
+        : 68;
+
     let he=0,hen=0;
+
     for(const fi of [0,3,4,7]){
-      const p=poses[fi],side=(fi===0||fi===3)?"left":"right";
-      if(p?.[`${side}_toe`]&&p?.[`${side}_ankle`]){
+      const p=poses[fi];
+      const side=(fi===0||fi===3)?"left":"right";
+
+      if(
+        p?.[`${side}_toe`]&&
+        p?.[`${side}_ankle`]
+      ){
         hen++;
-        if(Math.abs(p[`${side}_toe`][1]-p[`${side}_ankle`][1])/leg*100>1)he++;
+
+        if(
+          Math.abs(
+            p[`${side}_toe`][1]-
+            p[`${side}_ankle`][1]
+          )/leg*100>1
+        ){
+          he++;
+        }
       }
     }
-    metric.heeltoe=v24ScoreClamp(hen?65+(he/hen)*35:65);
-    const avg=jumps.length?jumps.reduce((a,b)=>a+b,0)/jumps.length:0,mx=jumps.length?Math.max(...jumps):0;
-    metric.continuity=v24ScoreClamp(100-Math.max(0,avg-7)*5-Math.max(0,mx-14)*4);
+
+    metric.heeltoe=v24ScoreClamp(
+      hen
+        ? 65+(he/hen)*35
+        : 65
+    );
+
+    const avg=
+      jumps.length
+        ? jumps.reduce((a,b)=>a+b,0)/jumps.length
+        : 0;
+
+    const mx=
+      jumps.length
+        ? Math.max(...jumps)
+        : 0;
+
+    metric.continuity=v24ScoreClamp(
+      100
+      -Math.max(0,avg-7)*5
+      -Math.max(0,mx-14)*4
+    );
   }
-  const locScore=v24ScoreClamp(metric.weight*.18+metric.torso*.14+metric.arms*.13+metric.stride*.15+metric.feet*.18+metric.heeltoe*.10+metric.continuity*.12);
-  const geometry=v24ScoreClamp((c.balance+c.limb+c.silhouette+c.integrity)/4);
-  
+
+  // V26.2: FINAL POSE grounding is authoritative.
   const v2563Ground=v2563MeasureGrounding();
+
+  metric.feet=v2563Ground.score;
+  plantSamples=v2563Ground.samples;
+  slideAvg=v2563Ground.avg;
+
+  const locScore=v24ScoreClamp(
+    metric.weight*.18+
+    metric.torso*.14+
+    metric.arms*.13+
+    metric.stride*.15+
+    metric.feet*.18+
+    metric.heeltoe*.10+
+    metric.continuity*.12
+  );
+
+  const geometry=v24ScoreClamp(
+    (
+      c.balance+
+      c.limb+
+      c.silhouette+
+      c.integrity
+    )/4
+  );
+
   if(typeof metrics!=="undefined"&&metrics){
     metrics.feet=v2563Ground.score;
     metrics.footSlide=v2563Ground.avg;
     metrics.plantSamples=v2563Ground.samples;
   }
-return {score:v24ScoreClamp(locScore*.82+geometry*.18),locScore,geometry,critic:c,metrics:metric,plantSamples,slideAvg:+slideAvg.toFixed(2)};
+
+  return {
+    score:v24ScoreClamp(
+      locScore*.82+
+      geometry*.18
+    ),
+    locScore,
+    geometry,
+    critic:c,
+    metrics:metric,
+    plantSamples,
+    slideAvg:+slideAvg.toFixed(2),
+    finalGrounding:v2563Ground
+  };
 }
 
 function v251UpdateDiagnostics(s){
@@ -5103,7 +5318,12 @@ function v25GenerateCorrectivePass(passNum,targetKey){
 
 async function v25RunSelfCorrection(){
   if(v25Motion.running||!$("v25Enabled")?.checked)return;
-  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V25.6 protected-channel correction started.";
+
+  // V26.2: fresh support/contact anchors for every correction run.
+  v255ResetContactLocks();
+  v253ResetFootLocks();
+  v2562LastFootDrift=0;
+  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V26.2 protected-channel correction started.";
   const target=+$("v25TargetQuality").value||92,maxPasses=+$("v25MaxPasses").value||12,minImprove=+$("v25MinImprove").value||.5;
   let base=v25ScoreMotion();v251UpdateDiagnostics(base);v25Motion.currentScore=base.score;v25Motion.bestScore=base.score;
   v25Motion.bestCorrectives=JSON.parse(JSON.stringify(v23.correctives||[]));v25Motion.bestFinalCorrections=JSON.parse(JSON.stringify(v252FinalCorrections||{}));v25Motion.bestControls=v242CaptureControls();v25Motion.history=[{pass:0,score:base.score,metrics:base.metrics}];
@@ -5161,7 +5381,15 @@ function v25RestoreBest(){
   if(v25Motion.bestScore>=0){
     $("v25CurrentQuality").textContent=v25Motion.bestScore+"%";
     $("v25BestQuality").textContent=v25Motion.bestScore+"%";
+
+    if($("v25LastImprove")){
+      $("v25LastImprove").textContent="BEST RESTORED";
+    }
+
+    const refreshed=v25ScoreMotion();
+    v251UpdateDiagnostics(refreshed);
   }
+
   v242SaveCheckpoint(true);
 }
 
@@ -6884,7 +7112,7 @@ window.FI_WASM_BASE64="AGFzbQEAAAABFgRgAAF/YAN/f30Bf2ACf38BfWAAAX0DEhEAAAAAAAECA
 </script>
 <script id="fiV26TypedRuntime">
 "use strict";
-/* Fatal Instinct Sprite Walker V26.1
+/* Fatal Instinct Sprite Walker V26.2
  * Typed browser runtime for C++ WebAssembly motion analysis/correction.
  */
 const FI_JOINTS = [
@@ -7048,7 +7276,7 @@ window.fiInferMotionType = fiInferMotionType;
 
 </script>
 <script id="fiV26Controller">
-/* Fatal Instinct Sprite Walker V26.1 - unified TypeScript/C++ WASM controller */
+/* Fatal Instinct Sprite Walker V26.2 - unified TypeScript/C++ WASM controller */
 (()=>{
   const runtime=new window.FISpriteWalkerRuntime();
   const button=document.getElementById("cppAutoCorrect");
@@ -7140,7 +7368,7 @@ window.fiInferMotionType = fiInferMotionType;
 
 <script>
 /* ============================================================
-   FATAL INSTINCT V26.1 — BODY-PART APPROVAL GATE
+   FATAL INSTINCT V26.2 — BODY-PART APPROVAL GATE
    Prevents textured sprite animation/render until body-part
    extraction has been visually reviewed and approved.
    ============================================================ */
@@ -7512,6 +7740,32 @@ window.fiInferMotionType = fiInferMotionType;
     get approved(){return state.approved;},
     get report(){return state.lastReport;}
   };
+})();
+</script>
+
+
+<script>
+/* V26.2 grounding/session reset guard */
+(function(){
+  const src=document.getElementById("sourceFile");
+
+  if(src){
+    src.addEventListener("change",()=>{
+      try{
+        if(typeof v255ResetContactLocks==="function"){
+          v255ResetContactLocks();
+        }
+
+        if(typeof v253ResetFootLocks==="function"){
+          v253ResetFootLocks();
+        }
+
+        if(typeof v2562LastFootDrift!=="undefined"){
+          v2562LastFootDrift=0;
+        }
+      }catch(e){}
+    },true);
+  }
 })();
 </script>
 
