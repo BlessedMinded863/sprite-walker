@@ -3238,6 +3238,16 @@ function v256HierarchicalSolve(frame,pose,targetKey){
     }
   }
 
+  // V29: arm-opposition and swing-leg knee lift used to only run when the
+  // per-pass optimizer picked "arms" or "heeltoe" as the single weakest
+  // scoring metric that pass -- so on any frame where those already scored
+  // acceptably (which is common, since a subtle arm swing still scores
+  // fine), they never ran at all, no matter how many passes completed.
+  // They're baseline gait mechanics, not optional per-pass targets, so they
+  // now always run whenever a full ("all") solve happens.
+  if(targetKey==="all"||targetKey==="arms")v253ApplyArmOpposition(frame,pose);
+  if(targetKey==="all"||targetKey==="heeltoe")v253ApplySwingFoot(frame,pose);
+
   // Solve legality while foot contact is pinned.
   v252ResolvePose(frame,pose);
   v255ApplyPersistentContact(frame,pose);
@@ -3512,7 +3522,9 @@ function v253ApplyWorldFootLock(i,pose){
 function v253ApplyPhasePelvis(i,pose){
   const ph=v253Phase(i),profile=v25Profile(),leg=legMetrics()?.avgLeg||120;
   if(!pose.pelvis)return;
-  const dx=ph.pelvis*leg*profile.pelvisShift*0.05;
+  // V29: real weight transfer needs a translation big enough to actually read
+  // as a shift of body mass onto the support leg, not a nudge. 0.05 -> 0.16.
+  const dx=ph.pelvis*leg*profile.pelvisShift*0.16;
   pose.pelvis[0]+=dx;
   if(pose.left_hip)pose.left_hip[0]+=dx;
   if(pose.right_hip)pose.right_hip[0]+=dx;
@@ -3520,12 +3532,31 @@ function v253ApplyPhasePelvis(i,pose){
   for(const j of ["neck","left_shoulder","right_shoulder"]){
     if(pose[j])pose[j][0]+=counter;
   }
+  v257ApplyHipRotation(i,pose,profile,leg);
+}
+
+// V29: hip rotation was never implemented -- only lateral pelvis translation
+// existed. Real gait rotates the pelvis around its vertical axis as the
+// swing leg drives forward, which (in 2.5D side view) reads as one hip
+// riding slightly ahead/higher than the other. This tilts the hip line and
+// nudges the swing-side hip forward, independent of the lateral shift above.
+function v257ApplyHipRotation(i,pose,profile,leg){
+  const ph=v253Phase(i);
+  if(!pose.pelvis||!pose.left_hip||!pose.right_hip)return;
+  const rot=profile.pelvisShift*leg*0.09*ph.pelvis;
+  const tilt=rot*0.35;
+  // Swing-forward hip leads horizontally and lifts slightly; the support
+  // hip trails and drops slightly -- a visible rotation, not just a slide.
+  pose.left_hip[0]+=rot; pose.left_hip[1]-=tilt;
+  pose.right_hip[0]-=rot; pose.right_hip[1]+=tilt;
 }
 
 function v253ApplyArmOpposition(i,pose){
   const ph=v253Phase(i),leg=legMetrics()?.avgLeg||120;
   const strength=(+$("v253ArmOpposition")?.value||82)/100;
-  const reach=leg*0.10*strength*ph.arm;
+  // V29: 0.10 -> 0.17 so the opposite-arm swing is unmistakable at a glance,
+  // matching the leg drive instead of trailing it as a minor detail.
+  const reach=leg*0.17*strength*ph.arm;
   if(pose.left_wrist)pose.left_wrist[0]+=reach;
   if(pose.left_elbow)pose.left_elbow[0]+=reach*0.55;
   if(pose.right_wrist)pose.right_wrist[0]-=reach;
@@ -3545,14 +3576,37 @@ function v253ApplyPassingStride(i,pose){
 
 function v253ApplySwingFoot(i,pose){
   const ph=v253Phase(i),side=ph.swing,leg=legMetrics()?.avgLeg||120;
-  const a=pose[`${side}_ankle`],t=pose[`${side}_toe`];
+  const a=pose[`${side}_ankle`],t=pose[`${side}_toe`],h=pose[`${side}_hip`];
   if(!a)return;
+  // V29: vertical ankle lift alone barely bends the knee, because the knee
+  // is solved geometrically from hip/ankle distance (see v243CircleKnee) --
+  // it isn't a channel you can push directly. Real knee lift means actually
+  // shortening the hip-to-ankle reach during swing (pulling the foot up and
+  // back toward the body), which forces the two-bone solve to bend the knee
+  // further to close the gap. That's what produces a visible knee drive
+  // instead of just a toe grazing upward.
   if(ph.name==="High Step"||ph.name==="Opposite High Step"){
-    a[1]-=leg*.045;
-    if(t)t[1]-=leg*.035;
+    a[1]-=leg*.09;
+    if(t)t[1]-=leg*.07;
+    if(h){
+      const dx=a[0]-h[0],dy=a[1]-h[1],d=Math.hypot(dx,dy)||1;
+      const shrink=leg*.16; // pull the ankle this much closer to the hip
+      const ux=dx/d,uy=dy/d,newD=Math.max(d-shrink,leg*.35);
+      const shift=newD-d;
+      a[0]=h[0]+ux*newD; a[1]=h[1]+uy*newD;
+      if(t){t[0]+=ux*shift;t[1]+=uy*shift;}
+    }
   }else if(ph.name==="Passing"||ph.name==="Opposite Passing"){
-    a[1]-=leg*.018;
-    if(t)t[1]-=leg*.012;
+    a[1]-=leg*.035;
+    if(t)t[1]-=leg*.022;
+    if(h){
+      const dx=a[0]-h[0],dy=a[1]-h[1],d=Math.hypot(dx,dy)||1;
+      const shrink=leg*.07;
+      const ux=dx/d,uy=dy/d,newD=Math.max(d-shrink,leg*.4);
+      const shift=newD-d;
+      a[0]=h[0]+ux*newD; a[1]=h[1]+uy*newD;
+      if(t){t[0]+=ux*shift;t[1]+=uy*shift;}
+    }
   }
 }
 
