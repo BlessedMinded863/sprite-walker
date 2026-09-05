@@ -1,0 +1,2648 @@
+lorom
+
+; ============================================================
+; FATAL INSTINCT - DUROC TRUE 2D
+; IDLE / WALK / JUMP / PUNCHES / KICK / CROUCH / BLOCK
+; DAMAGE REACTION / KO / REAL JUMP ART
+;
+; ROM BANKS
+; $04 IDLE
+; $05-$06 WALK (8 frames / 64 KiB total)
+; WALK PALETTE: transition-synced exact V25.8.5.1 pack palette at $0F8100 via DMA channel 1
+; $07 RIGHT PUNCH
+; $08 KICK
+; $09 LEFT PUNCH
+; $0A CROUCH
+; $0B BLOCK
+; $0C DAMAGE
+; $0D KO
+; $0E JUMP
+; ============================================================
+
+; RAM
+!VSTimer       = $0010
+!DurocX        = $0011
+!DurocY        = $0012
+!GroundY       = $0013
+!JumpState     = $0014
+!JumpTimer     = $0015
+!CurrentFrame  = $0016
+!IdleStep      = $0017
+!AnimTimer     = $0018
+!PendingFrame  = $0019
+!LoadChunk     = $001A
+!ActiveBuffer  = $001B
+!Facing        = $001C
+!MoveState     = $001D
+!AnimMode      = $001E
+!PendingAnim   = $001F
+!TempBase      = $0020
+!TempSrcHi     = $0021
+!ObjCount      = $0022
+!TempX         = $0023
+!TempY         = $0024
+!TempTile      = $0025
+!WalkStep      = $0026
+!PunchStep     = $0027
+!JoyNow        = $0028
+!JoyPrev       = $0029
+!OAMMode       = $002A
+!KickStep      = $002B
+!JoyLowNow     = $002C
+!JoyLowPrev    = $002D
+!HurtLeft      = $002E
+!HurtTop       = $002F
+!HurtRight     = $0030
+!HurtBottom    = $0031
+!HitActive     = $0032
+!HitLeft       = $0033
+!HitTop        = $0034
+!HitRight      = $0035
+!HitBottom     = $0036
+!AttackType    = $0037
+!HitConnected  = $0038
+!CurrentAnim   = $0039
+!OpponentX          = $003A
+!OpponentY          = $003B
+!OpponentHealth     = $003C
+!OpponentHitStun    = $003D
+!OpponentHurtLeft   = $003E
+!OpponentHurtTop    = $003F
+!OpponentHurtRight  = $0040
+!OpponentHurtBottom = $0041
+!DamageValue        = $0042
+!DurocHealth        = $0043
+!DurocHitStun       = $0044
+!OpponentKO         = $0045
+!DurocKO            = $0046
+!HUDRows       = $0047
+!HUDCols       = $0048
+!HUDHealth     = $0049
+!DummyAttackTimer   = $004A
+!DummyAttackActive  = $004B
+!DurocBlockState    = $004C
+!DurocCrouchState   = $004D
+!DurocInvulnTimer   = $004E
+!CrouchStep         = $004F
+!BlockStep          = $0050
+!BlockImpactState   = $0051
+!DamageStep         = $0052
+!KOStep             = $0053
+!JumpStep           = $0054
+!PaletteMode        = $0055   ; 0=shared Duroc palette, 1=approved Walk palette
+!OAMShadow          = $0200
+
+; CONSTANTS
+!DUROC_OBJECTS  = 42
+!WIDE_OBJECTS   = 56
+!DUROC_WIDTH    = $60
+!WIDE_WIDTH     = $80
+!IDLE_DELAY     = $0C
+!WALK_DELAY     = $04
+!PUNCH_DELAY    = $05
+!KICK_DELAY     = $05
+!CROUCH_DELAY   = $05
+!BLOCK_DELAY        = $05
+!BLOCK_IMPACT_DELAY = $06
+!DAMAGE_DELAY       = $05
+!KO_DELAY           = $07
+
+!ANIM_IDLE      = $00
+!ANIM_WALK      = $01
+!ANIM_PUNCH     = $02
+!ANIM_KICK      = $03
+!ANIM_LPUNCH    = $04
+!ANIM_CROUCH    = $05
+!ANIM_BLOCK     = $06
+!ANIM_DAMAGE    = $07
+!ANIM_KO        = $08
+!ANIM_JUMP      = $09
+
+!ATTACK_NONE    = $00
+!ATTACK_RPUNCH  = $01
+!ATTACK_LPUNCH  = $02
+!ATTACK_KICK    = $03
+
+!JOY_X          = $40
+!JOY_B          = $80
+!JOY_Y          = $40
+!JOY_UP         = $08
+!JOY_DOWN       = $04
+!JOY_LEFT       = $02
+!JOY_RIGHT      = $01
+!JOY_BLOCK      = $20
+
+!MOVE_NONE      = $00
+!MOVE_LEFT      = $01
+!MOVE_RIGHT     = $02
+!LEFT_BOUND     = $08
+!RIGHT_BOUND    = $98
+
+!DUMMY_ATTACK_DELAY  = $60
+!DUMMY_ATTACK_TIME   = $08
+!DUMMY_DAMAGE        = $08
+!BLOCK_DAMAGE        = $02
+!DUROC_HIT_STUN_TIME = $0C
+!BLOCK_STUN_TIME     = $04
+!DUROC_INVULN_TIME   = $18
+
+!HUD_SOLID_TILE  = $E0
+!HUD_BAR_TILE    = $E2
+!HUD_YELLOW_ATTR = $38
+!HUD_WHITE_ATTR  = $3A
+!HUD_RED_ATTR    = $3C
+!HUD_GREEN_ATTR  = $3E
+
+org $008000
+
+Reset:
+    sei
+    clc
+    xce
+    rep #$10
+    ldx #$1FFF
+    txs
+    sep #$20
+    phk
+    plb
+
+    lda #$80
+    sta $2100
+
+    lda #$01
+    sta $4200
+    stz $420C
+
+    lda #$01
+    sta $2105
+
+    lda #$70
+    sta $2107
+    stz $210B
+    stz $210D
+    stz $210D
+    stz $210E
+    stz $210E
+
+; TITLE PALETTE
+    stz $2121
+    stz $4300
+    lda #$22
+    sta $4301
+    lda #$00
+    sta $4302
+    lda #$F7
+    sta $4303
+    lda #$01
+    sta $4304
+    stz $4305
+    lda #$01
+    sta $4306
+    lda #$01
+    sta $420B
+
+; TITLE GFX
+    lda #$80
+    sta $2115
+    stz $2116
+    stz $2117
+    lda #$01
+    sta $4300
+    lda #$18
+    sta $4301
+    stz $4302
+    lda #$80
+    sta $4303
+    lda #$01
+    sta $4304
+    stz $4305
+    lda #$70
+    sta $4306
+    lda #$01
+    sta $420B
+
+; TITLE MAP
+    stz $2116
+    lda #$70
+    sta $2117
+    lda #$01
+    sta $4300
+    lda #$18
+    sta $4301
+    stz $4302
+    lda #$F0
+    sta $4303
+    lda #$01
+    sta $4304
+    stz $4305
+    lda #$07
+    sta $4306
+    lda #$01
+    sta $420B
+
+    lda #$01
+    sta $212C
+    stz $212D
+    lda #$0F
+    sta $2100
+
+TitleLoop:
+.TitleNotVB:
+    lda $4212
+    bmi .TitleNotVB
+.TitleVB:
+    lda $4212
+    bpl .TitleVB
+.TitleJoyBusy:
+    lda $4212
+    and #$01
+    bne .TitleJoyBusy
+    lda $4219
+    and #$10
+    beq TitleLoop
+
+LoadVS:
+    lda #$80
+    sta $2100
+
+; VS PALETTE
+    stz $2121
+    stz $4300
+    lda #$22
+    sta $4301
+    lda #$00
+    sta $4302
+    lda #$F7
+    sta $4303
+    lda #$02
+    sta $4304
+    stz $4305
+    lda #$01
+    sta $4306
+    lda #$01
+    sta $420B
+
+; VS GFX
+    lda #$80
+    sta $2115
+    stz $2116
+    stz $2117
+    lda #$01
+    sta $4300
+    lda #$18
+    sta $4301
+    stz $4302
+    lda #$80
+    sta $4303
+    lda #$02
+    sta $4304
+    stz $4305
+    lda #$70
+    sta $4306
+    lda #$01
+    sta $420B
+
+; VS MAP
+    stz $2116
+    lda #$70
+    sta $2117
+    lda #$01
+    sta $4300
+    lda #$18
+    sta $4301
+    stz $4302
+    lda #$F0
+    sta $4303
+    lda #$02
+    sta $4304
+    stz $4305
+    lda #$07
+    sta $4306
+    lda #$01
+    sta $420B
+
+    lda #$01
+    sta $212C
+    lda #$0F
+    sta $2100
+    lda #$B4
+    sta !VSTimer
+
+VSLoop:
+.VSNotVB:
+    lda $4212
+    bmi .VSNotVB
+.VSVB:
+    lda $4212
+    bpl .VSVB
+    dec !VSTimer
+    bne VSLoop
+
+LoadArena:
+    lda #$80
+    sta $2100
+
+; ARENA PALETTE
+    stz $2121
+    stz $4300
+    lda #$22
+    sta $4301
+    lda #$00
+    sta $4302
+    lda #$F7
+    sta $4303
+    lda #$03
+    sta $4304
+    stz $4305
+    lda #$01
+    sta $4306
+    lda #$01
+    sta $420B
+
+; ARENA GFX
+    lda #$80
+    sta $2115
+    stz $2116
+    stz $2117
+    lda #$01
+    sta $4300
+    lda #$18
+    sta $4301
+    stz $4302
+    lda #$80
+    sta $4303
+    lda #$03
+    sta $4304
+    stz $4305
+    lda #$70
+    sta $4306
+    lda #$01
+    sta $420B
+
+; ARENA MAP
+    stz $2116
+    lda #$70
+    sta $2117
+    lda #$01
+    sta $4300
+    lda #$18
+    sta $4301
+    stz $4302
+    lda #$F0
+    sta $4303
+    lda #$03
+    sta $4304
+    stz $4305
+    lda #$07
+    sta $4306
+    lda #$01
+    sta $420B
+
+    lda #$62
+    sta $2101
+
+    jsr LoadInitialDurocFrame
+
+    lda #$80
+    sta $2121
+    ldx #$0000
+.LoadDurocPalette:
+    lda DurocPaletteData,x
+    sta $2122
+    inx
+    cpx #$0020
+    bne .LoadDurocPalette
+
+    jsr LoadHUDPalettes
+    jsr UploadHUDTilesToBothBuffers
+
+    lda #$50
+    sta !DurocX
+    lda #$50
+    sta !DurocY
+    sta !GroundY
+
+    stz !JumpState
+    stz !JumpTimer
+    stz !Facing
+    stz !MoveState
+    stz !CurrentFrame
+    stz !IdleStep
+    stz !WalkStep
+    stz !PunchStep
+    stz !KickStep
+    stz !CrouchStep
+    stz !BlockStep
+    stz !BlockImpactState
+    stz !DamageStep
+    stz !KOStep
+    stz !JumpStep
+    stz !AnimMode
+    stz !PendingAnim
+    stz !JoyNow
+    stz !JoyPrev
+    stz !JoyLowNow
+    stz !JoyLowPrev
+
+    stz !HurtLeft
+    stz !HurtTop
+    stz !HurtRight
+    stz !HurtBottom
+    stz !HitActive
+    stz !HitLeft
+    stz !HitTop
+    stz !HitRight
+    stz !HitBottom
+    stz !AttackType
+    stz !HitConnected
+    stz !CurrentAnim
+    stz !PaletteMode
+
+    lda #$64
+    sta !DurocHealth
+    lda #$64
+    sta !OpponentHealth
+    stz !DurocHitStun
+    stz !OpponentHitStun
+    stz !DurocKO
+    stz !OpponentKO
+    stz !DurocBlockState
+    stz !DurocCrouchState
+    stz !DurocInvulnTimer
+
+    lda #$C0
+    sta !OpponentX
+    lda #$50
+    sta !OpponentY
+
+    lda #!DUMMY_ATTACK_DELAY
+    sta !DummyAttackTimer
+    stz !DummyAttackActive
+
+    lda #!IDLE_DELAY
+    sta !AnimTimer
+    stz !PendingFrame
+    lda #$FF
+    sta !LoadChunk
+    stz !ActiveBuffer
+
+    jsr UpdateDurocBoxes
+    jsr BuildOpponentHurtbox
+    jsr BuildDurocOAM
+    jsr BuildCombatHUD
+    jsr UploadOAM
+
+    lda #$11
+    sta $212C
+    stz $212D
+    lda #$0F
+    sta $2100
+
+MainLoop:
+.NotVB:
+    lda $4212
+    bmi .NotVB
+.VB:
+    lda $4212
+    bpl .VB
+.JoyBusy:
+    lda $4212
+    and #$01
+    bne .JoyBusy
+
+    lda $4219
+    sta !JoyNow
+    lda $4218
+    sta !JoyLowNow
+
+    stz !MoveState
+    stz !DurocBlockState
+    stz !DurocCrouchState
+
+    jsr UpdateDurocStatus
+
+    lda !DurocKO
+    beq .CheckHitStunLock
+    jmp .InputDone
+
+.CheckHitStunLock:
+    lda !DurocHitStun
+    beq .CheckAttackStateLock
+    jmp .InputDone
+
+.CheckAttackStateLock:
+    lda !AnimMode
+    cmp #!ANIM_PUNCH
+    beq .AttackLocked
+    cmp #!ANIM_LPUNCH
+    beq .AttackLocked
+    cmp #!ANIM_KICK
+    beq .AttackLocked
+    cmp #!ANIM_DAMAGE
+    bne .CheckBlockInput
+.AttackLocked:
+    jmp .InputDone
+
+.CheckBlockInput:
+    lda !JoyLowNow
+    and #!JOY_BLOCK
+    beq .BlockNotHeld
+    lda !JumpState
+    beq .BlockGrounded
+    jmp .InputDone
+.BlockGrounded:
+    lda #$01
+    sta !DurocBlockState
+    jmp .InputDone
+
+.BlockNotHeld:
+    lda !AnimMode
+    cmp #!ANIM_BLOCK
+    bne .CheckCrouchInput
+    jmp .InputDone
+
+.CheckCrouchInput:
+    lda !JoyNow
+    and #!JOY_DOWN
+    bne .EnterCrouch
+    lda !JoyLowNow
+    and #!JOY_DOWN
+    bne .EnterCrouch
+    lda !AnimMode
+    cmp #!ANIM_CROUCH
+    bne .AttacksUnlocked
+    jmp .InputDone
+
+.EnterCrouch:
+    lda !JumpState
+    beq .CrouchGrounded
+    jmp .InputDone
+.CrouchGrounded:
+    lda #$01
+    sta !DurocCrouchState
+    jmp .InputDone
+
+.AttacksUnlocked:
+    lda !JoyNow
+    and #!JOY_Y
+    beq .CheckLeftPunch
+    lda !JoyPrev
+    and #!JOY_Y
+    bne .CheckLeftPunch
+    lda !JumpState
+    bne .CheckLeftPunch
+    jsr StartRightPunch
+    jmp .InputDone
+
+.CheckLeftPunch:
+    lda !JoyLowNow
+    and #!JOY_X
+    beq .CheckKick
+    lda !JoyLowPrev
+    and #!JOY_X
+    bne .CheckKick
+    lda !JumpState
+    bne .CheckKick
+    jsr StartLeftPunch
+    jmp .InputDone
+
+.CheckKick:
+    lda !JoyNow
+    and #!JOY_B
+    beq .NoAttack
+    lda !JoyPrev
+    and #!JOY_B
+    bne .NoAttack
+    lda !JumpState
+    bne .NoAttack
+    jsr StartKick
+    jmp .InputDone
+
+.NoAttack:
+    lda !JoyNow
+    and #!JOY_UP
+    beq .NoJumpPress
+    lda !JumpState
+    bne .NoJumpPress
+    lda #$01
+    sta !JumpState
+    lda #$12
+    sta !JumpTimer
+    jsr StartJumpAnimation
+
+.NoJumpPress:
+    lda !JoyNow
+    and #!JOY_LEFT
+    beq .CheckRight
+    lda #!MOVE_LEFT
+    sta !MoveState
+    lda #$01
+    sta !Facing
+    lda !DurocX
+    cmp #!LEFT_BOUND
+    beq .CheckRight
+    bcc .CheckRight
+    dec !DurocX
+
+.CheckRight:
+    lda !JoyNow
+    and #!JOY_RIGHT
+    beq .InputDone
+    lda !MoveState
+    cmp #!MOVE_LEFT
+    beq .InputDone
+    lda #!MOVE_RIGHT
+    sta !MoveState
+    stz !Facing
+    lda !DurocX
+    cmp #!RIGHT_BOUND
+    bcs .InputDone
+    inc !DurocX
+
+.InputDone:
+    lda !JumpState
+    beq .JumpDone
+    cmp #$01
+    beq .JumpRising
+    cmp #$02
+    beq .JumpFalling
+    stz !JumpState
+    stz !JumpTimer
+    bra .JumpDone
+
+.JumpRising:
+    dec !DurocY
+    dec !DurocY
+    dec !JumpTimer
+    bne .JumpDone
+    lda #$02
+    sta !JumpState
+    lda #$12
+    sta !JumpTimer
+    bra .JumpDone
+
+.JumpFalling:
+    inc !DurocY
+    inc !DurocY
+    dec !JumpTimer
+    bne .JumpDone
+    lda !GroundY
+    sta !DurocY
+    stz !JumpState
+    stz !JumpTimer
+
+.JumpDone:
+    jsr ContinueFrameUpload
+    jsr UpdateDurocAnimation
+    jsr UpdateDurocBoxes
+    jsr UpdateOpponentCombat
+    jsr BuildDurocOAM
+    jsr BuildCombatHUD
+    jsr UploadOAM
+
+    lda !JoyNow
+    sta !JoyPrev
+    lda !JoyLowNow
+    sta !JoyLowPrev
+    jmp MainLoop
+
+; ============================================================
+; STATUS
+; ============================================================
+UpdateDurocStatus:
+    lda !DurocHitStun
+    beq .NoHitStun
+    dec !DurocHitStun
+.NoHitStun:
+    lda !DurocInvulnTimer
+    beq .Done
+    dec !DurocInvulnTimer
+.Done:
+    rts
+
+; ============================================================
+; STARTERS
+; ============================================================
+StartRightPunch:
+    lda #!ANIM_PUNCH
+    sta !AnimMode
+    stz !PunchStep
+    stz !HitConnected
+    lda #!PUNCH_DELAY
+    sta !AnimTimer
+    lda #!ANIM_PUNCH
+    sta !PendingAnim
+    stz !PendingFrame
+    stz !LoadChunk
+    rts
+
+StartLeftPunch:
+    lda #!ANIM_LPUNCH
+    sta !AnimMode
+    stz !PunchStep
+    stz !HitConnected
+    lda #!PUNCH_DELAY
+    sta !AnimTimer
+    lda #!ANIM_LPUNCH
+    sta !PendingAnim
+    stz !PendingFrame
+    stz !LoadChunk
+    rts
+
+StartKick:
+    lda #!ANIM_KICK
+    sta !AnimMode
+    stz !KickStep
+    stz !HitConnected
+    lda #!KICK_DELAY
+    sta !AnimTimer
+    lda #!ANIM_KICK
+    sta !PendingAnim
+    stz !PendingFrame
+    stz !LoadChunk
+    rts
+
+StartJumpAnimation:
+    lda #!ANIM_JUMP
+    sta !AnimMode
+    stz !JumpStep
+    lda #!ANIM_JUMP
+    sta !PendingAnim
+    stz !PendingFrame
+    stz !LoadChunk
+    rts
+
+StartDamageAnimation:
+    lda #!ANIM_DAMAGE
+    sta !AnimMode
+    stz !DamageStep
+    lda #!DAMAGE_DELAY
+    sta !AnimTimer
+    lda #!ANIM_DAMAGE
+    sta !PendingAnim
+    stz !PendingFrame
+    stz !LoadChunk
+    rts
+
+StartKOAnimation:
+    stz !JumpState
+    stz !JumpTimer
+    lda !GroundY
+    sta !DurocY
+    stz !MoveState
+    stz !DurocBlockState
+    stz !DurocCrouchState
+    stz !BlockStep
+    stz !CrouchStep
+    stz !BlockImpactState
+    stz !DamageStep
+    stz !JumpStep
+    stz !HitActive
+    lda #!ANIM_KO
+    sta !AnimMode
+    stz !KOStep
+    lda #!KO_DELAY
+    sta !AnimTimer
+    lda #!ANIM_KO
+    sta !PendingAnim
+    stz !PendingFrame
+    stz !LoadChunk
+    rts
+
+; ============================================================
+; ANIMATION
+; ============================================================
+UpdateDurocAnimation:
+    lda !LoadChunk
+    cmp #$FF
+    beq .Ready
+    rts
+
+.Ready:
+    lda !AnimMode
+    cmp #!ANIM_KO
+    bne .CheckBlockImpact
+    jmp .ContinueKO
+
+.CheckBlockImpact:
+    lda !BlockImpactState
+    beq .CheckDamage
+    jmp .ContinueBlockImpact
+
+.CheckDamage:
+    lda !AnimMode
+    cmp #!ANIM_DAMAGE
+    bne .CheckJump
+    jmp .ContinueDamage
+
+.CheckJump:
+    lda !JumpState
+    beq .CheckJumpExit
+    lda !AnimMode
+    cmp #!ANIM_JUMP
+    bne .JumpNeedsStart
+    jmp .ContinueJump
+
+.JumpNeedsStart:
+    jmp .WantJump
+
+.CheckJumpExit:
+    lda !AnimMode
+    cmp #!ANIM_JUMP
+    bne .CheckPunch
+    jmp .ExitJump
+
+.CheckPunch:
+    lda !AnimMode
+    cmp #!ANIM_PUNCH
+    bne .CheckLPunch
+    jmp .ContinuePunch
+.CheckLPunch:
+    cmp #!ANIM_LPUNCH
+    bne .CheckKick
+    jmp .ContinueLeftPunch
+.CheckKick:
+    cmp #!ANIM_KICK
+    bne .CheckBlock
+    jmp .ContinueKick
+
+.CheckBlock:
+    lda !DurocBlockState
+    beq .NoBlockInput
+    jmp .WantBlock
+.NoBlockInput:
+    lda !AnimMode
+    cmp #!ANIM_BLOCK
+    bne .CheckCrouch
+    jmp .ExitBlock
+
+.CheckCrouch:
+    lda !DurocCrouchState
+    beq .NoCrouchInput
+    jmp .WantCrouch
+.NoCrouchInput:
+    lda !AnimMode
+    cmp #!ANIM_CROUCH
+    bne .MovementChoice
+    jmp .ExitCrouch
+
+.MovementChoice:
+    lda !MoveState
+    beq .WantIdle
+    jmp .WantWalk
+
+.WantWalk:
+    lda !AnimMode
+    cmp #!ANIM_WALK
+    beq .ContinueWalk
+    lda #!ANIM_WALK
+    sta !AnimMode
+    stz !WalkStep
+    lda #!WALK_DELAY
+    sta !AnimTimer
+    lda #!ANIM_WALK
+    sta !PendingAnim
+    stz !PendingFrame
+    stz !LoadChunk
+    rts
+
+.ContinueWalk:
+    dec !AnimTimer
+    beq .WalkExpired
+    rts
+.WalkExpired:
+    lda #!WALK_DELAY
+    sta !AnimTimer
+    inc !WalkStep
+    lda !WalkStep
+    cmp #$08
+    bcc .WalkValid
+    stz !WalkStep
+.WalkValid:
+    lda !WalkStep
+    sta !PendingFrame
+    lda #!ANIM_WALK
+    sta !PendingAnim
+    stz !LoadChunk
+    rts
+
+.WantIdle:
+    lda !AnimMode
+    cmp #!ANIM_IDLE
+    beq .ContinueIdle
+    stz !AnimMode
+    stz !IdleStep
+    lda #!IDLE_DELAY
+    sta !AnimTimer
+    stz !PendingAnim
+    stz !PendingFrame
+    stz !LoadChunk
+    rts
+
+.ContinueIdle:
+    dec !AnimTimer
+    beq .IdleExpired
+    rts
+.IdleExpired:
+    lda #!IDLE_DELAY
+    sta !AnimTimer
+    inc !IdleStep
+    lda !IdleStep
+    cmp #$06
+    bcc .IdleValid
+    stz !IdleStep
+.IdleValid:
+    lda !IdleStep
+    tax
+    lda IdleSequence,x
+    sta !PendingFrame
+    stz !PendingAnim
+    stz !LoadChunk
+    rts
+
+.WantCrouch:
+    lda !AnimMode
+    cmp #!ANIM_CROUCH
+    beq .ContinueCrouch
+    lda #!ANIM_CROUCH
+    sta !AnimMode
+    stz !CrouchStep
+    lda #!CROUCH_DELAY
+    sta !AnimTimer
+    lda #!ANIM_CROUCH
+    sta !PendingAnim
+    stz !PendingFrame
+    stz !LoadChunk
+    rts
+
+.ContinueCrouch:
+    lda !CrouchStep
+    cmp #$03
+    bcc .CrouchCanAdvance
+    rts
+.CrouchCanAdvance:
+    dec !AnimTimer
+    beq .CrouchExpired
+    rts
+.CrouchExpired:
+    lda #!CROUCH_DELAY
+    sta !AnimTimer
+    inc !CrouchStep
+    lda !CrouchStep
+    cmp #$04
+    bcc .CrouchValid
+    lda #$03
+    sta !CrouchStep
+.CrouchValid:
+    lda !CrouchStep
+    sta !PendingFrame
+    lda #!ANIM_CROUCH
+    sta !PendingAnim
+    stz !LoadChunk
+    rts
+
+.ExitCrouch:
+    stz !CrouchStep
+    stz !AnimMode
+    stz !IdleStep
+    lda #!IDLE_DELAY
+    sta !AnimTimer
+    stz !PendingAnim
+    stz !PendingFrame
+    stz !LoadChunk
+    rts
+
+.WantBlock:
+    lda !AnimMode
+    cmp #!ANIM_BLOCK
+    beq .ContinueBlock
+    lda #!ANIM_BLOCK
+    sta !AnimMode
+    stz !BlockStep
+    lda #!BLOCK_DELAY
+    sta !AnimTimer
+    lda #!ANIM_BLOCK
+    sta !PendingAnim
+    stz !PendingFrame
+    stz !LoadChunk
+    rts
+
+.ContinueBlock:
+    lda !BlockStep
+    cmp #$01
+    bcc .BlockCanAdvance
+    rts
+.BlockCanAdvance:
+    dec !AnimTimer
+    beq .BlockExpired
+    rts
+.BlockExpired:
+    lda #!BLOCK_DELAY
+    sta !AnimTimer
+    lda #$01
+    sta !BlockStep
+    lda #$01
+    sta !PendingFrame
+    lda #!ANIM_BLOCK
+    sta !PendingAnim
+    stz !LoadChunk
+    rts
+
+.ContinueBlockImpact:
+    lda !CurrentAnim
+    cmp #!ANIM_BLOCK
+    bne .LoadBlockImpact
+    lda !CurrentFrame
+    cmp #$02
+    bne .LoadBlockImpact
+    dec !AnimTimer
+    beq .BlockImpactFinished
+    rts
+.LoadBlockImpact:
+    lda #!ANIM_BLOCK
+    sta !AnimMode
+    lda #$01
+    sta !BlockStep
+    lda #!ANIM_BLOCK
+    sta !PendingAnim
+    lda #$02
+    sta !PendingFrame
+    lda #!BLOCK_IMPACT_DELAY
+    sta !AnimTimer
+    stz !LoadChunk
+    rts
+.BlockImpactFinished:
+    stz !BlockImpactState
+    lda !JoyLowNow
+    and #!JOY_BLOCK
+    beq .ExitBlock
+    lda #!ANIM_BLOCK
+    sta !AnimMode
+    lda #$01
+    sta !BlockStep
+    lda #!ANIM_BLOCK
+    sta !PendingAnim
+    lda #$01
+    sta !PendingFrame
+    lda #!BLOCK_DELAY
+    sta !AnimTimer
+    stz !LoadChunk
+    rts
+
+.ExitBlock:
+    stz !BlockStep
+    stz !BlockImpactState
+    stz !AnimMode
+    stz !IdleStep
+    lda #!IDLE_DELAY
+    sta !AnimTimer
+    stz !PendingAnim
+    stz !PendingFrame
+    stz !LoadChunk
+    rts
+
+.ContinueDamage:
+    dec !AnimTimer
+    beq .DamageExpired
+    rts
+.DamageExpired:
+    lda !DamageStep
+    cmp #$02
+    bcs .DamageFinished
+    inc !DamageStep
+    lda #!DAMAGE_DELAY
+    sta !AnimTimer
+    lda !DamageStep
+    sta !PendingFrame
+    lda #!ANIM_DAMAGE
+    sta !PendingAnim
+    stz !LoadChunk
+    rts
+.DamageFinished:
+    stz !DamageStep
+    stz !AnimMode
+    stz !IdleStep
+    lda #!IDLE_DELAY
+    sta !AnimTimer
+    stz !PendingAnim
+    stz !PendingFrame
+    stz !LoadChunk
+    rts
+
+.ContinueKO:
+    lda !KOStep
+    cmp #$03
+    bcc .KOCanAdvance
+    rts
+.KOCanAdvance:
+    dec !AnimTimer
+    beq .KOExpired
+    rts
+.KOExpired:
+    lda #!KO_DELAY
+    sta !AnimTimer
+    inc !KOStep
+    lda !KOStep
+    cmp #$04
+    bcc .KOValid
+    lda #$03
+    sta !KOStep
+.KOValid:
+    lda !KOStep
+    sta !PendingFrame
+    lda #!ANIM_KO
+    sta !PendingAnim
+    stz !LoadChunk
+    rts
+
+; ============================================================
+; JUMP
+;
+; jump_01 = TAKEOFF
+; jump_02 = RISING
+; jump_03 = APEX / EARLY FALL
+; jump_04 = FALLING / LANDING
+; ============================================================
+.WantJump:
+    lda #!ANIM_JUMP
+    sta !AnimMode
+
+    lda !JumpState
+    cmp #$01
+    beq .WantJumpRising
+
+    ; Falling: frame 2 early, frame 3 late.
+    lda !JumpTimer
+    cmp #$0D
+    bcs .WantJumpFrame2
+
+    lda #$03
+    bra .QueueJumpFrame
+
+.WantJumpFrame2:
+    lda #$02
+    bra .QueueJumpFrame
+
+.WantJumpRising:
+    lda !JumpTimer
+    cmp #$0D
+    bcs .WantJumpFrame0
+
+    lda #$01
+    bra .QueueJumpFrame
+
+.WantJumpFrame0:
+    lda #$00
+
+.QueueJumpFrame:
+    sta !JumpStep
+    sta !PendingFrame
+    lda #!ANIM_JUMP
+    sta !PendingAnim
+    stz !LoadChunk
+    rts
+
+.ContinueJump:
+    lda !JumpState
+    bne .JumpStateActive
+    jmp .ExitJump
+
+.JumpStateActive:
+    cmp #$01
+    beq .JumpAnimRising
+
+    ; Falling state.
+    lda !JumpTimer
+    cmp #$0D
+    bcs .JumpAnimFrame2
+
+    lda #$03
+    bra .SetJumpFrameIfNeeded
+
+.JumpAnimFrame2:
+    lda #$02
+    bra .SetJumpFrameIfNeeded
+
+.JumpAnimRising:
+    lda !JumpTimer
+    cmp #$0D
+    bcs .JumpAnimFrame0
+
+    lda #$01
+    bra .SetJumpFrameIfNeeded
+
+.JumpAnimFrame0:
+    lda #$00
+
+.SetJumpFrameIfNeeded:
+    cmp !JumpStep
+    beq .JumpHold
+
+    sta !JumpStep
+    sta !PendingFrame
+    lda #!ANIM_JUMP
+    sta !PendingAnim
+    stz !LoadChunk
+
+.JumpHold:
+    rts
+
+.ExitJump:
+    stz !JumpStep
+    stz !AnimMode
+    stz !IdleStep
+    lda #!IDLE_DELAY
+    sta !AnimTimer
+    stz !PendingAnim
+    stz !PendingFrame
+    stz !LoadChunk
+    rts
+
+.ContinuePunch:
+    dec !AnimTimer
+    beq .PunchExpired
+    rts
+.PunchExpired:
+    lda #!PUNCH_DELAY
+    sta !AnimTimer
+    inc !PunchStep
+    lda !PunchStep
+    cmp #$04
+    bcc .PunchValid
+    stz !AnimMode
+    stz !PunchStep
+    stz !IdleStep
+    lda #!IDLE_DELAY
+    sta !AnimTimer
+    stz !PendingAnim
+    stz !PendingFrame
+    stz !LoadChunk
+    rts
+.PunchValid:
+    lda !PunchStep
+    sta !PendingFrame
+    lda #!ANIM_PUNCH
+    sta !PendingAnim
+    stz !LoadChunk
+    rts
+
+.ContinueLeftPunch:
+    dec !AnimTimer
+    beq .LPunchExpired
+    rts
+.LPunchExpired:
+    lda #!PUNCH_DELAY
+    sta !AnimTimer
+    inc !PunchStep
+    lda !PunchStep
+    cmp #$04
+    bcc .LPunchValid
+    stz !AnimMode
+    stz !PunchStep
+    stz !IdleStep
+    lda #!IDLE_DELAY
+    sta !AnimTimer
+    stz !PendingAnim
+    stz !PendingFrame
+    stz !LoadChunk
+    rts
+.LPunchValid:
+    lda !PunchStep
+    sta !PendingFrame
+    lda #!ANIM_LPUNCH
+    sta !PendingAnim
+    stz !LoadChunk
+    rts
+
+.ContinueKick:
+    dec !AnimTimer
+    beq .KickExpired
+    rts
+.KickExpired:
+    lda #!KICK_DELAY
+    sta !AnimTimer
+    inc !KickStep
+    lda !KickStep
+    cmp #$04
+    bcc .KickValid
+    stz !AnimMode
+    stz !KickStep
+    stz !IdleStep
+    lda #!IDLE_DELAY
+    sta !AnimTimer
+    stz !PendingAnim
+    stz !PendingFrame
+    stz !LoadChunk
+    rts
+.KickValid:
+    lda !KickStep
+    sta !PendingFrame
+    lda #!ANIM_KICK
+    sta !PendingAnim
+    stz !LoadChunk
+    rts
+
+IdleSequence:
+    db $00,$01,$02,$03,$02,$01
+
+; ============================================================
+; INITIAL FRAME / HUD PALETTES
+; ============================================================
+LoadInitialDurocFrame:
+    lda #$80
+    sta $2115
+    stz $2116
+    lda #$40
+    sta $2117
+    lda #$01
+    sta $4300
+    lda #$18
+    sta $4301
+    stz $4302
+    lda #$80
+    sta $4303
+    lda #$04
+    sta $4304
+    stz $4305
+    lda #$20
+    sta $4306
+    lda #$01
+    sta $420B
+    rts
+
+LoadHUDPalettes:
+    lda #$C1
+    sta $2121
+    lda #$FF
+    sta $2122
+    lda #$03
+    sta $2122
+    lda #$D1
+    sta $2121
+    lda #$FF
+    sta $2122
+    lda #$7F
+    sta $2122
+    lda #$E1
+    sta $2121
+    lda #$1F
+    sta $2122
+    lda #$00
+    sta $2122
+    lda #$F1
+    sta $2121
+    lda #$E0
+    sta $2122
+    lda #$03
+    sta $2122
+    rts
+
+; ============================================================
+; HUD TILE UPLOAD
+; ============================================================
+UploadHUDTilesToBothBuffers:
+    jsr UploadHUDTilesBuffer0
+    jsr UploadHUDTilesBuffer1
+    rts
+
+UploadHUDTilesToInactiveBuffer:
+    lda !ActiveBuffer
+    eor #$01
+    beq .Buffer0
+    jsr UploadHUDTilesBuffer1
+    rts
+.Buffer0:
+    jsr UploadHUDTilesBuffer0
+    rts
+
+UploadHUDTilesBuffer0:
+    lda #$80
+    sta $2115
+    stz $2116
+    lda #$4E
+    sta $2117
+    jsr UploadHUDTileRow
+    stz $2116
+    lda #$4F
+    sta $2117
+    jsr UploadHUDTileRow
+    rts
+
+UploadHUDTilesBuffer1:
+    lda #$80
+    sta $2115
+    stz $2116
+    lda #$6E
+    sta $2117
+    jsr UploadHUDTileRow
+    stz $2116
+    lda #$6F
+    sta $2117
+    jsr UploadHUDTileRow
+    rts
+
+UploadHUDTileRow:
+    lda #$01
+    sta $4300
+    lda #$18
+    sta $4301
+    stz $4302
+    lda #$80
+    sta $4303
+    lda #$0F
+    sta $4304
+    lda #$80
+    sta $4305
+    stz $4306
+    lda #$01
+    sta $420B
+    rts
+
+; ============================================================
+; FRAME DMA
+; ============================================================
+ContinueFrameUpload:
+    lda !LoadChunk
+    cmp #$FF
+    bne .Active
+    rts
+.Active:
+    lda #$80
+    sta $2115
+    stz $2116
+    lda !ActiveBuffer
+    eor #$01
+    beq .Destination0
+    lda #$60
+    bra .DestinationReady
+.Destination0:
+    lda #$40
+.DestinationReady:
+    sta !TempBase
+    lda !LoadChunk
+    asl
+    asl
+    clc
+    adc !TempBase
+    sta $2117
+
+    lda !PendingAnim
+    cmp #!ANIM_WALK
+    bne .CheckPunchSource
+    jmp .WalkSource
+.CheckPunchSource:
+    cmp #!ANIM_PUNCH
+    bne .CheckLPunchSource
+    jmp .PunchSource
+.CheckLPunchSource:
+    cmp #!ANIM_LPUNCH
+    bne .CheckKickSource
+    jmp .LPunchSource
+.CheckKickSource:
+    cmp #!ANIM_KICK
+    bne .CheckCrouchSource
+    jmp .KickSource
+.CheckCrouchSource:
+    cmp #!ANIM_CROUCH
+    bne .CheckBlockSource
+    jmp .CrouchSource
+.CheckBlockSource:
+    cmp #!ANIM_BLOCK
+    bne .CheckDamageSource
+    jmp .BlockSource
+.CheckDamageSource:
+    cmp #!ANIM_DAMAGE
+    bne .CheckKOSource
+    jmp .DamageSource
+.CheckKOSource:
+    cmp #!ANIM_KO
+    bne .CheckJumpSource
+    jmp .KOSource
+
+.CheckJumpSource:
+    cmp #!ANIM_JUMP
+    bne .IdleSource
+    jmp .JumpSource
+
+.IdleSource:
+    lda !PendingFrame
+    and #$03
+    tax
+    lda DurocIdleFrameSourceHi,x
+    sta !TempSrcHi
+    lda #$04
+    sta $4304
+    jmp .SourceSelected
+
+.WalkSource:
+    lda !PendingFrame
+    cmp #$08
+    bcc .WalkIndexValid
+    stz !PendingFrame
+.WalkIndexValid:
+    lda !PendingFrame
+    tax
+    lda DurocWalkFrameSourceHi,x
+    sta !TempSrcHi
+    lda DurocWalkFrameSourceBank,x
+    sta $4304
+    jmp .SourceSelected
+
+.PunchSource:
+    lda !PendingFrame
+    and #$03
+    tax
+    lda DurocPunchFrameSourceHi,x
+    sta !TempSrcHi
+    lda #$07
+    sta $4304
+    jmp .SourceSelected
+
+.LPunchSource:
+    lda !PendingFrame
+    and #$03
+    tax
+    lda DurocLeftPunchFrameSourceHi,x
+    sta !TempSrcHi
+    lda #$09
+    sta $4304
+    jmp .SourceSelected
+
+.KickSource:
+    lda !PendingFrame
+    and #$03
+    tax
+    lda DurocKickFrameSourceHi,x
+    sta !TempSrcHi
+    lda #$08
+    sta $4304
+    jmp .SourceSelected
+
+.CrouchSource:
+    lda !PendingFrame
+    and #$03
+    tax
+    lda DurocCrouchFrameSourceHi,x
+    sta !TempSrcHi
+    lda #$0A
+    sta $4304
+    jmp .SourceSelected
+
+.BlockSource:
+    lda !PendingFrame
+    cmp #$03
+    bcc .BlockFrameValid
+    stz !PendingFrame
+.BlockFrameValid:
+    lda !PendingFrame
+    tax
+    lda DurocBlockFrameSourceHi,x
+    sta !TempSrcHi
+    lda #$0B
+    sta $4304
+    jmp .SourceSelected
+
+.DamageSource:
+    lda !PendingFrame
+    cmp #$03
+    bcc .DamageFrameValid
+    stz !PendingFrame
+.DamageFrameValid:
+    lda !PendingFrame
+    tax
+    lda DurocDamageFrameSourceHi,x
+    sta !TempSrcHi
+    lda #$0C
+    sta $4304
+    jmp .SourceSelected
+
+.KOSource:
+    lda !PendingFrame
+    and #$03
+    tax
+    lda DurocKOFrameSourceHi,x
+    sta !TempSrcHi
+    lda #$0D
+    sta $4304
+    jmp .SourceSelected
+
+.JumpSource:
+    lda !PendingFrame
+    and #$03
+    tax
+    lda DurocJumpFrameSourceHi,x
+    sta !TempSrcHi
+    lda #$0E
+    sta $4304
+
+.SourceSelected:
+    lda !LoadChunk
+    asl
+    asl
+    asl
+    clc
+    adc !TempSrcHi
+    sta $4303
+    stz $4302
+
+    lda #$01
+    sta $4300
+    lda #$18
+    sta $4301
+    stz $4305
+    lda #$08
+    sta $4306
+    lda #$01
+    sta $420B
+
+    inc !LoadChunk
+    lda !LoadChunk
+    cmp #$04
+    bne .Return
+
+    jsr UploadHUDTilesToInactiveBuffer
+    lda #$FF
+    sta !LoadChunk
+    lda !ActiveBuffer
+    eor #$01
+    sta !ActiveBuffer
+    lda !PendingFrame
+    sta !CurrentFrame
+    lda !PendingAnim
+    sta !CurrentAnim
+    jsr UpdateDurocPaletteForCurrentAnim
+    jsr SelectOBJBuffer
+.Return:
+    rts
+
+; ============================================================
+; DUROC ANIMATION PALETTE SYNC
+; Walk Forward uses the exact palette exported with the approved
+; V25.8.5.1 4bpp pack. All other animations retain the existing
+; shared Duroc/Idle palette.
+; Called only after a complete frame upload, while in VBlank.
+; ============================================================
+UpdateDurocPaletteForCurrentAnim:
+    lda !CurrentAnim
+    cmp #!ANIM_WALK
+    beq .WantWalkPalette
+
+.WantSharedPalette:
+    lda !PaletteMode
+    beq .Done
+    stz !PaletteMode
+
+    lda #$80
+    sta $2121
+    ldx #$0000
+.SharedLoop:
+    lda DurocPaletteData,x
+    sta $2122
+    inx
+    cpx #$0020
+    bne .SharedLoop
+    rts
+
+.WantWalkPalette:
+    lda !PaletteMode
+    cmp #$01
+    beq .Done
+    lda #$01
+    sta !PaletteMode
+
+    ; --------------------------------------------------------
+    ; WALK PALETTE DMA
+    ; The previous CPU long-read loop was visually restoring
+    ; Idle correctly but produced a black Walk palette in-ROM.
+    ; Use a dedicated DMA channel so the exact 32 palette bytes
+    ; at $0F:8100 are copied directly into OBJ palette 0.
+    ; --------------------------------------------------------
+    lda #$80
+    sta $2121        ; CGRAM OBJ palette 0 ($100 byte address)
+
+    stz $4310        ; DMA mode 0: 1 register, increment source
+    lda #$22
+    sta $4311        ; B-bus destination = $2122 CGDATA
+    lda #$00
+    sta $4312        ; source low  = $00
+    lda #$81
+    sta $4313        ; source high = $81
+    lda #$0F
+    sta $4314        ; source bank = $0F
+    lda #$20
+    sta $4315        ; 32 bytes
+    stz $4316
+    lda #$02
+    sta $420B        ; start DMA channel 1
+
+.Done:
+    rts
+
+SelectOBJBuffer:
+    lda !ActiveBuffer
+    beq .Use0
+    lda #$63
+    sta $2101
+    rts
+.Use0:
+    lda #$62
+    sta $2101
+    rts
+
+; ============================================================
+; DUROC HIT / HURT BOXES
+; ============================================================
+UpdateDurocBoxes:
+    lda !DurocX
+    clc
+    adc #$10
+    sta !HurtLeft
+    lda !DurocX
+    clc
+    adc #$50
+    sta !HurtRight
+
+    lda !CurrentAnim
+    cmp #!ANIM_CROUCH
+    bne .StandingHurtbox
+    lda !DurocY
+    clc
+    adc #$30
+    sta !HurtTop
+    lda !DurocY
+    clc
+    adc #$68
+    sta !HurtBottom
+    bra .HurtboxReady
+.StandingHurtbox:
+    lda !DurocY
+    clc
+    adc #$08
+    sta !HurtTop
+    lda !DurocY
+    clc
+    adc #$68
+    sta !HurtBottom
+.HurtboxReady:
+    stz !HitActive
+    stz !HitLeft
+    stz !HitTop
+    stz !HitRight
+    stz !HitBottom
+    stz !AttackType
+
+    lda !DurocKO
+    beq .CheckHitStun
+    rts
+.CheckHitStun:
+    lda !DurocHitStun
+    beq .CheckBlock
+    rts
+.CheckBlock:
+    lda !CurrentAnim
+    cmp #!ANIM_BLOCK
+    bne .CheckCrouch
+    rts
+.CheckCrouch:
+    cmp #!ANIM_CROUCH
+    bne .CheckDamage
+    rts
+.CheckDamage:
+    cmp #!ANIM_DAMAGE
+    bne .CheckAnimation
+    rts
+
+.CheckAnimation:
+    lda !CurrentAnim
+    cmp #!ANIM_PUNCH
+    bne .CheckLPunch
+    jmp .RightPunch
+.CheckLPunch:
+    cmp #!ANIM_LPUNCH
+    bne .CheckKick
+    jmp .LeftPunch
+.CheckKick:
+    cmp #!ANIM_KICK
+    bne .Done
+    jmp .Kick
+.Done:
+    rts
+
+.RightPunch:
+    lda !CurrentFrame
+    cmp #$02
+    beq .RightPunchActive
+    rts
+.RightPunchActive:
+    lda #$01
+    sta !HitActive
+    lda #!ATTACK_RPUNCH
+    sta !AttackType
+    lda !DurocY
+    clc
+    adc #$18
+    sta !HitTop
+    lda !DurocY
+    clc
+    adc #$38
+    sta !HitBottom
+    jmp .SetForwardHitbox
+
+.LeftPunch:
+    lda !CurrentFrame
+    cmp #$02
+    beq .LeftPunchActive
+    rts
+.LeftPunchActive:
+    lda #$01
+    sta !HitActive
+    lda #!ATTACK_LPUNCH
+    sta !AttackType
+    lda !DurocY
+    clc
+    adc #$20
+    sta !HitTop
+    lda !DurocY
+    clc
+    adc #$40
+    sta !HitBottom
+    jmp .SetForwardHitbox
+
+.Kick:
+    lda !CurrentFrame
+    cmp #$02
+    beq .KickActive
+    rts
+.KickActive:
+    lda #$01
+    sta !HitActive
+    lda #!ATTACK_KICK
+    sta !AttackType
+    lda !DurocY
+    clc
+    adc #$38
+    sta !HitTop
+    lda !DurocY
+    clc
+    adc #$60
+    sta !HitBottom
+
+.SetForwardHitbox:
+    lda !Facing
+    beq .ForwardRight
+    lda !DurocX
+    cmp #$10
+    bcc .ClampLeft
+    sec
+    sbc #$10
+    sta !HitLeft
+    bra .LeftRightEdge
+.ClampLeft:
+    stz !HitLeft
+.LeftRightEdge:
+    lda !DurocX
+    clc
+    adc #$20
+    sta !HitRight
+    rts
+.ForwardRight:
+    lda !DurocX
+    clc
+    adc #$40
+    sta !HitLeft
+    lda !DurocX
+    clc
+    adc #$70
+    bcc .StoreRight
+    lda #$FF
+.StoreRight:
+    sta !HitRight
+    rts
+
+; ============================================================
+; OPPONENT COMBAT
+; ============================================================
+UpdateOpponentCombat:
+    lda !OpponentHitStun
+    beq .NotStunned
+    dec !OpponentHitStun
+    stz !DummyAttackActive
+.NotStunned:
+    jsr BuildOpponentHurtbox
+    jsr CheckDurocAttackHit
+    lda !OpponentHitStun
+    beq .CheckDummy
+    rts
+.CheckDummy:
+    jsr UpdateDummyAttack
+    rts
+
+BuildOpponentHurtbox:
+    lda !OpponentX
+    clc
+    adc #$08
+    sta !OpponentHurtLeft
+    lda !OpponentX
+    clc
+    adc #$38
+    sta !OpponentHurtRight
+    lda !OpponentY
+    clc
+    adc #$08
+    sta !OpponentHurtTop
+    lda !OpponentY
+    clc
+    adc #$68
+    sta !OpponentHurtBottom
+    rts
+
+CheckDurocAttackHit:
+    lda !HitActive
+    bne .Active
+    rts
+.Active:
+    lda !HitConnected
+    beq .CanHit
+    rts
+.CanHit:
+    lda !OpponentKO
+    beq .H1
+    rts
+.H1:
+    lda !HitRight
+    cmp !OpponentHurtLeft
+    bcs .H2
+    rts
+.H2:
+    lda !HitLeft
+    cmp !OpponentHurtRight
+    bcc .V1
+    rts
+.V1:
+    lda !HitBottom
+    cmp !OpponentHurtTop
+    bcs .V2
+    rts
+.V2:
+    lda !HitTop
+    cmp !OpponentHurtBottom
+    bcc .Hit
+    rts
+.Hit:
+    jsr ApplyDurocDamage
+    rts
+
+ApplyDurocDamage:
+    lda #$01
+    sta !HitConnected
+    lda !AttackType
+    cmp #!ATTACK_RPUNCH
+    bne .CheckLP
+    lda #$08
+    bra .DamageReady
+.CheckLP:
+    cmp #!ATTACK_LPUNCH
+    bne .CheckKick
+    lda #$0A
+    bra .DamageReady
+.CheckKick:
+    cmp #!ATTACK_KICK
+    bne .Done
+    lda #$0C
+    bra .DamageReady
+.Done:
+    rts
+.DamageReady:
+    sta !DamageValue
+    lda !OpponentHealth
+    sec
+    sbc !DamageValue
+    bcs .HealthRemaining
+    lda #$00
+.HealthRemaining:
+    sta !OpponentHealth
+    bne .Alive
+    lda #$01
+    sta !OpponentKO
+    stz !OpponentHitStun
+    stz !DummyAttackActive
+    rts
+.Alive:
+    lda #$0C
+    sta !OpponentHitStun
+
+    lda !Facing
+    beq .KnockRight
+    lda !OpponentX
+    cmp #$04
+    bcs .MoveLeft
+    stz !OpponentX
+    bra .KnockDone
+.MoveLeft:
+    sec
+    sbc #$04
+    sta !OpponentX
+    bra .KnockDone
+.KnockRight:
+    lda !OpponentX
+    cmp #$C7
+    bcc .MoveRight
+    lda #$C7
+    sta !OpponentX
+    bra .KnockDone
+.MoveRight:
+    clc
+    adc #$04
+    cmp #$C8
+    bcc .StoreRight
+    lda #$C7
+.StoreRight:
+    sta !OpponentX
+.KnockDone:
+    jsr BuildOpponentHurtbox
+    rts
+
+; ============================================================
+; DUMMY ATTACK / DAMAGE TO DUROC
+; ============================================================
+UpdateDummyAttack:
+    lda !OpponentKO
+    beq .Alive
+    stz !DummyAttackActive
+    rts
+.Alive:
+    lda !DummyAttackActive
+    beq .Waiting
+    jsr CheckDummyAttackHit
+    dec !DummyAttackActive
+    rts
+.Waiting:
+    lda !DummyAttackTimer
+    beq .Start
+    dec !DummyAttackTimer
+    rts
+.Start:
+    lda #!DUMMY_ATTACK_DELAY
+    sta !DummyAttackTimer
+    lda #!DUMMY_ATTACK_TIME
+    sta !DummyAttackActive
+    rts
+
+CheckDummyAttackHit:
+    lda !DurocKO
+    beq .CheckInvuln
+    rts
+.CheckInvuln:
+    lda !DurocInvulnTimer
+    beq .BuildLeft
+    rts
+.BuildLeft:
+    lda !OpponentX
+    cmp #$18
+    bcc .ClampLeft
+    sec
+    sbc #$18
+    sta !TempX
+    bra .BuildRight
+.ClampLeft:
+    stz !TempX
+.BuildRight:
+    lda !OpponentX
+    clc
+    adc #$10
+    bcc .StoreRight
+    lda #$FF
+.StoreRight:
+    sta !TempTile
+    lda !TempTile
+    cmp !HurtLeft
+    bcs .H2
+    rts
+.H2:
+    lda !TempX
+    cmp !HurtRight
+    bcc .V1
+    rts
+.V1:
+    lda !OpponentY
+    clc
+    adc #$50
+    cmp !HurtTop
+    bcs .V2
+    rts
+.V2:
+    lda !OpponentY
+    clc
+    adc #$20
+    cmp !HurtBottom
+    bcc .Hit
+    rts
+.Hit:
+    jsr ApplyOpponentDamageToDuroc
+    rts
+
+ApplyOpponentDamageToDuroc:
+    lda #!DUROC_INVULN_TIME
+    sta !DurocInvulnTimer
+
+    lda !DurocBlockState
+    beq .FullHit
+
+    lda #!BLOCK_DAMAGE
+    sta !DamageValue
+    lda #!BLOCK_STUN_TIME
+    sta !DurocHitStun
+    lda #$01
+    sta !BlockImpactState
+    lda #!BLOCK_IMPACT_DELAY
+    sta !AnimTimer
+    jmp .SubtractHealth
+
+.FullHit:
+    lda #!DUMMY_DAMAGE
+    sta !DamageValue
+    lda #!DUROC_HIT_STUN_TIME
+    sta !DurocHitStun
+    jsr StartDamageAnimation
+
+    lda !DurocX
+    cmp #$04
+    bcs .MoveLeft
+    stz !DurocX
+    bra .SubtractHealth
+.MoveLeft:
+    sec
+    sbc #$04
+    sta !DurocX
+
+.SubtractHealth:
+    lda !DurocHealth
+    sec
+    sbc !DamageValue
+    bcs .HealthRemaining
+    lda #$00
+.HealthRemaining:
+    sta !DurocHealth
+    bne .Alive
+
+    lda #$01
+    sta !DurocKO
+    stz !DurocHitStun
+    stz !HitActive
+    stz !DummyAttackActive
+    jsr StartKOAnimation
+.Alive:
+    rts
+
+; ============================================================
+; OAM
+; ============================================================
+BuildDurocOAM:
+    ldx #$0000
+.HideAll:
+    stz !OAMShadow,x
+    lda #$E0
+    sta !OAMShadow+1,x
+    stz !OAMShadow+2,x
+    stz !OAMShadow+3,x
+    inx
+    inx
+    inx
+    inx
+    cpx #$0200
+    bne .HideAll
+
+    ldx #$0000
+.ClearHigh:
+    stz !OAMShadow+$0200,x
+    inx
+    cpx #$0020
+    bne .ClearHigh
+
+    lda !CurrentAnim
+    cmp #!ANIM_PUNCH
+    beq .WideGrid
+    cmp #!ANIM_LPUNCH
+    beq .WideGrid
+    cmp #!ANIM_KICK
+    beq .WideGrid
+    cmp #!ANIM_CROUCH
+    beq .WideGrid
+    cmp #!ANIM_BLOCK
+    beq .WideGrid
+    cmp #!ANIM_DAMAGE
+    beq .WideGrid
+    cmp #!ANIM_KO
+    beq .WideGrid
+    cmp #!ANIM_JUMP
+    bne .NormalGrid
+.WideGrid:
+    lda #!WIDE_OBJECTS
+    sta !ObjCount
+    lda #$01
+    sta !OAMMode
+    bra .GridReady
+.NormalGrid:
+    lda #!DUROC_OBJECTS
+    sta !ObjCount
+    stz !OAMMode
+.GridReady:
+    ldx #$0000
+    ldy #$0000
+
+.ObjectLoop:
+    lda !ObjCount
+    bne .HaveObject
+    rts
+.HaveObject:
+    lda !OAMMode
+    beq .NormalX
+    lda DurocWideGrid,x
+    bra .GotX
+.NormalX:
+    lda Duroc2DGrid,x
+.GotX:
+    sta !TempX
+    inx
+
+    lda !OAMMode
+    beq .NormalY
+    lda DurocWideGrid,x
+    bra .GotY
+.NormalY:
+    lda Duroc2DGrid,x
+.GotY:
+    sta !TempY
+    inx
+
+    lda !OAMMode
+    beq .NormalTile
+    lda DurocWideGrid,x
+    bra .GotTile
+.NormalTile:
+    lda Duroc2DGrid,x
+.GotTile:
+    sta !TempTile
+    inx
+
+    lda !Facing
+    beq .FacingRight
+    lda !OAMMode
+    beq .MirrorNormal
+    lda #!WIDE_WIDTH
+    bra .MirrorWidthReady
+.MirrorNormal:
+    lda #!DUROC_WIDTH
+.MirrorWidthReady:
+    sec
+    sbc !TempX
+    sec
+    sbc #$10
+    clc
+    adc !DurocX
+    sta !OAMShadow,y
+    bra .CenterWide
+
+.FacingRight:
+    lda !TempX
+    clc
+    adc !DurocX
+    sta !OAMShadow,y
+
+.CenterWide:
+    lda !OAMMode
+    beq .XDone
+    lda !CurrentAnim
+    cmp #!ANIM_CROUCH
+    beq .XDone
+    cmp #!ANIM_BLOCK
+    beq .XDone
+    cmp #!ANIM_DAMAGE
+    beq .XDone
+    cmp #!ANIM_KO
+    beq .XDone
+    cmp #!ANIM_JUMP
+    beq .XDone
+    lda !OAMShadow,y
+    sec
+    sbc #$10
+    sta !OAMShadow,y
+.XDone:
+    lda !TempY
+    clc
+    adc !DurocY
+    sta !OAMShadow+1,y
+    lda !TempTile
+    sta !OAMShadow+2,y
+    lda !Facing
+    beq .RightAttr
+    lda #$70
+    bra .AttrReady
+.RightAttr:
+    lda #$30
+.AttrReady:
+    sta !OAMShadow+3,y
+    iny
+    iny
+    iny
+    iny
+    dec !ObjCount
+    jmp .ObjectLoop
+
+; ============================================================
+; HUD
+; ============================================================
+BuildCombatHUD:
+    ldy #$0100
+    jsr BuildDurocHealthBar
+    jsr BuildOpponentHealthBar
+    jsr BuildOpponentMarker
+    rts
+
+BuildDurocHealthBar:
+    lda !DurocHealth
+    sta !HUDHealth
+    lda #$08
+    sta !TempX
+    lda #$0A
+    sta !HUDCols
+.Loop:
+    lda !HUDHealth
+    cmp #$0A
+    bcc .Done
+    lda !TempX
+    sta !OAMShadow,y
+    lda #$08
+    sta !OAMShadow+1,y
+    lda #!HUD_BAR_TILE
+    sta !OAMShadow+2,y
+    lda #!HUD_GREEN_ATTR
+    sta !OAMShadow+3,y
+    iny
+    iny
+    iny
+    iny
+    lda !HUDHealth
+    sec
+    sbc #$0A
+    sta !HUDHealth
+    lda !TempX
+    clc
+    adc #$08
+    sta !TempX
+    dec !HUDCols
+    bne .Loop
+.Done:
+    rts
+
+BuildOpponentHealthBar:
+    lda !OpponentHealth
+    sta !HUDHealth
+    lda #$A8
+    sta !TempX
+    lda #$0A
+    sta !HUDCols
+.Loop:
+    lda !HUDHealth
+    cmp #$0A
+    bcc .Done
+    lda !TempX
+    sta !OAMShadow,y
+    lda #$08
+    sta !OAMShadow+1,y
+    lda #!HUD_BAR_TILE
+    sta !OAMShadow+2,y
+    lda #!HUD_GREEN_ATTR
+    sta !OAMShadow+3,y
+    iny
+    iny
+    iny
+    iny
+    lda !HUDHealth
+    sec
+    sbc #$0A
+    sta !HUDHealth
+    lda !TempX
+    clc
+    adc #$08
+    sta !TempX
+    dec !HUDCols
+    bne .Loop
+.Done:
+    rts
+
+BuildOpponentMarker:
+    lda !OpponentKO
+    beq .Alive
+    rts
+.Alive:
+    lda !OpponentY
+    clc
+    adc #$08
+    sta !TempY
+    lda #$06
+    sta !HUDRows
+.Row:
+    lda !OpponentX
+    clc
+    adc #$08
+    sta !TempX
+    lda #$03
+    sta !HUDCols
+.Col:
+    lda !TempX
+    sta !OAMShadow,y
+    lda !TempY
+    sta !OAMShadow+1,y
+    lda #!HUD_SOLID_TILE
+    sta !OAMShadow+2,y
+    lda !OpponentHitStun
+    beq .CheckAttack
+    lda #!HUD_WHITE_ATTR
+    bra .AttrReady
+.CheckAttack:
+    lda !DummyAttackActive
+    beq .Red
+    lda #!HUD_YELLOW_ATTR
+    bra .AttrReady
+.Red:
+    lda #!HUD_RED_ATTR
+.AttrReady:
+    sta !OAMShadow+3,y
+    iny
+    iny
+    iny
+    iny
+    lda !TempX
+    clc
+    adc #$10
+    sta !TempX
+    dec !HUDCols
+    bne .Col
+    lda !TempY
+    clc
+    adc #$10
+    sta !TempY
+    dec !HUDRows
+    bne .Row
+    rts
+
+; ============================================================
+; OAM GRIDS
+; ============================================================
+Duroc2DGrid:
+    db  0,  0,$00, 16,  0,$02, 32,  0,$04, 48,  0,$06, 64,  0,$08, 80,  0,$0A
+    db  0, 16,$20, 16, 16,$22, 32, 16,$24, 48, 16,$26, 64, 16,$28, 80, 16,$2A
+    db  0, 32,$40, 16, 32,$42, 32, 32,$44, 48, 32,$46, 64, 32,$48, 80, 32,$4A
+    db  0, 48,$60, 16, 48,$62, 32, 48,$64, 48, 48,$66, 64, 48,$68, 80, 48,$6A
+    db  0, 64,$80, 16, 64,$82, 32, 64,$84, 48, 64,$86, 64, 64,$88, 80, 64,$8A
+    db  0, 80,$A0, 16, 80,$A2, 32, 80,$A4, 48, 80,$A6, 64, 80,$A8, 80, 80,$AA
+    db  0, 96,$C0, 16, 96,$C2, 32, 96,$C4, 48, 96,$C6, 64, 96,$C8, 80, 96,$CA
+
+DurocWideGrid:
+    db   0,  0,$00, 16,  0,$02, 32,  0,$04, 48,  0,$06, 64,  0,$08, 80,  0,$0A, 96,  0,$0C,112,  0,$0E
+    db   0, 16,$20, 16, 16,$22, 32, 16,$24, 48, 16,$26, 64, 16,$28, 80, 16,$2A, 96, 16,$2C,112, 16,$2E
+    db   0, 32,$40, 16, 32,$42, 32, 32,$44, 48, 32,$46, 64, 32,$48, 80, 32,$4A, 96, 32,$4C,112, 32,$4E
+    db   0, 48,$60, 16, 48,$62, 32, 48,$64, 48, 48,$66, 64, 48,$68, 80, 48,$6A, 96, 48,$6C,112, 48,$6E
+    db   0, 64,$80, 16, 64,$82, 32, 64,$84, 48, 64,$86, 64, 64,$88, 80, 64,$8A, 96, 64,$8C,112, 64,$8E
+    db   0, 80,$A0, 16, 80,$A2, 32, 80,$A4, 48, 80,$A6, 64, 80,$A8, 80, 80,$AA, 96, 80,$AC,112, 80,$AE
+    db   0, 96,$C0, 16, 96,$C2, 32, 96,$C4, 48, 96,$C6, 64, 96,$C8, 80, 96,$CA, 96, 96,$CC,112, 96,$CE
+
+; FRAME SOURCES
+DurocIdleFrameSourceHi:      db $80,$A0,$C0,$E0
+DurocLeftPunchFrameSourceHi: db $80,$A0,$C0,$E0
+DurocWalkFrameSourceHi:      db $80,$A0,$C0,$E0,$80,$A0,$C0,$E0
+DurocWalkFrameSourceBank:    db $05,$05,$05,$05,$06,$06,$06,$06
+DurocPunchFrameSourceHi:     db $80,$A0,$C0,$E0
+DurocKickFrameSourceHi:      db $80,$A0,$C0,$E0
+DurocCrouchFrameSourceHi:    db $80,$A0,$C0,$E0
+DurocBlockFrameSourceHi:     db $80,$A0,$C0
+DurocDamageFrameSourceHi:    db $80,$A0,$C0
+DurocKOFrameSourceHi:        db $80,$A0,$C0,$E0
+DurocJumpFrameSourceHi:      db $80,$A0,$C0,$E0
+
+UploadOAM:
+    stz $2102
+    stz $2103
+    stz $4300
+    lda #$04
+    sta $4301
+    lda #$00
+    sta $4302
+    lda #$02
+    sta $4303
+    lda #$7E
+    sta $4304
+    lda #$20
+    sta $4305
+    lda #$02
+    sta $4306
+    lda #$01
+    sta $420B
+    rts
+
+DurocPaletteData:
+    incbin "../build/duroc_2d/duroc_idle_palette.bin"
+
+; ============================================================
+; HEADER / VECTORS
+; ============================================================
+org $00FFC0
+    db "FATAL INSTINCT       "
+    db $20
+    db $00
+    db $09
+    db $00
+    db $01
+    db $00
+    db $08
+    dw $FFFF
+    dw $0000
+
+org $00FFE0
+    dw $0000
+    dw $0000
+    dw $8000
+    dw $8000
+    dw $8000
+    dw $8000
+    dw $0000
+    dw $8000
+    dw $0000
+    dw $0000
+    dw $8000
+    dw $0000
+    dw $8000
+    dw $8000
+    dw $8000
+    dw $8000
+
+; ============================================================
+; ASSETS
+; ============================================================
+org $018000
+    incbin "../build/title/title.4bpp"
+org $01F000
+    incbin "../build/title/title.map"
+org $01F700
+    incbin "../build/title/title.pal"
+
+org $028000
+    incbin "../build/vs/vs.4bpp"
+org $02F000
+    incbin "../build/vs/vs.map"
+org $02F700
+    incbin "../build/vs/vs.pal"
+
+org $038000
+    incbin "../build/arena/arena.4bpp"
+org $03F000
+    incbin "../build/arena/arena.map"
+org $03F700
+    incbin "../build/arena/arena.pal"
+
+org $048000
+    incbin "../build/duroc_2d/duroc_idle_frames.bin"
+
+org $058000
+    ; 4 approved Walk Forward frames = 32 KiB; whole-file INCBIN avoids Asar end-offset ambiguity.
+    incbin "../build/duroc_2d/duroc_walk_bank05.bin"
+
+org $068000
+    incbin "../build/duroc_2d/duroc_walk_bank06.bin"
+
+org $0F8000
+HUDTileRowData:
+    ; E0 / F0
+    db $FF,$00,$FF,$00,$FF,$00,$FF,$00,$FF,$00,$FF,$00,$FF,$00,$FF,$00
+    db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    ; E1 / F1
+    db $FF,$00,$FF,$00,$FF,$00,$FF,$00,$FF,$00,$FF,$00,$FF,$00,$FF,$00
+    db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    ; E2 / F2
+    db $FF,$00,$FF,$00,$FF,$00,$FF,$00,$FF,$00,$FF,$00,$FF,$00,$FF,$00
+    db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    ; E3 / F3 transparent
+    db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+
+org $0F8100
+DurocWalkPaletteData:
+    incbin "../build/duroc_2d/duroc_walk_palette.bin"
+
+org $078000
+    incbin "../build/duroc_2d/duroc_punch_frames.bin"
+org $088000
+    incbin "../build/duroc_2d/duroc_kick_frames.bin"
+org $098000
+    incbin "../build/duroc_2d/duroc_punch_left_frames.bin"
+org $0A8000
+    incbin "../build/duroc_2d/duroc_crouch_frames.bin"
+org $0B8000
+    incbin "../build/duroc_2d/duroc_block_frames.bin"
+org $0C8000
+    incbin "../build/duroc_2d/duroc_damage_frames.bin"
+org $0D8000
+    incbin "../build/duroc_2d/duroc_ko_frames.bin"
+org $0E8000
+    incbin "../build/duroc_2d/duroc_jump_frames.bin"
