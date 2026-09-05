@@ -1,0 +1,9 @@
+{
+  "name": "fatal-instinct-sprite-walker",
+  "version": "28.1.0",
+  "private": true,
+  "description": "2.5D sprite animation studio: rig tracing, walk-cycle correction, bone-mapping + IK preview.",
+  "scripts": {
+    "start": "npx --yes serve . -l 8000"
+  }
+}
