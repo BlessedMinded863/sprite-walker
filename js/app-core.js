@@ -10,6 +10,7 @@
  * including dynamic/string lookups, before removal.)
  */
 import { FISpriteWalkerRuntime } from './wasm-runtime.js';
+import { FI_APP_VERSION } from './version.js';
 import * as THREE from "three";
 import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
@@ -1099,7 +1100,7 @@ function autoTraceAndBind(){
     $("showBones").checked=false;
     $("showSprite").checked=true;
     $("traceRegionSelect").value="all";
-    status(`V28.1 Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Body-Part Approval is required.`);
+    status(`${FI_APP_VERSION} Auto Trace complete: ${traceDiagnostics.detected}/${EXPECTED_AUTO_PARTS.length} regions detected. Body-Part Approval is required.`);
     draw();
     if(window.FIBodyPartsGate && typeof window.FIBodyPartsGate.reviewAfterBind==="function"){
       window.FIBodyPartsGate.reviewAfterBind();
@@ -3102,6 +3103,20 @@ function v2562ApplyFinalFootLock(frame,pose,anchor=null){
     pose[k.ankle]=[a[0],a[1]];
   }
   if($("v2562ToeRelock")?.checked&&t&&pose[k.toe])pose[k.toe]=[t[0],t[1]];
+  // V29: the ankle (and toe) get snapped to their locked world position here,
+  // but nothing re-solved the knee afterward -- so the knee stayed wherever
+  // it was computed against a slightly different ankle position earlier in
+  // the pipeline, leaving the hip-knee-ankle segment lengths a hair off.
+  // That small elastic "give," repeated every frame while the pelvis travels
+  // over the support leg, is what read as skating even though the ankle
+  // itself was genuinely locked. Re-solving the knee against the final,
+  // truly-locked ankle removes that residual error entirely.
+  const hip=pose[`${k.side}_hip`],hip0=rig.joints?.[`${k.side}_hip`],knee0=rig.joints?.[`${k.side}_knee`],ankle0=rig.joints?.[`${k.side}_ankle`];
+  if(hip&&hip0&&knee0&&ankle0&&pose[k.ankle]){
+    const l1=length(hip0,knee0),l2=length(knee0,ankle0);
+    const knee=v243CircleKnee(hip,pose[k.ankle],l1,l2,pose[`${k.side}_knee`]);
+    if(knee)pose[`${k.side}_knee`]=knee;
+  }
   v2562LastFootDrift=drift;
   if($("v2562FootDrift"))$("v2562FootDrift").textContent=drift.toFixed(2)+" px";
   const tol=(+$("v2562GroundTol")?.value)||1;
@@ -3586,23 +3601,23 @@ function v253ApplySwingFoot(i,pose){
   // further to close the gap. That's what produces a visible knee drive
   // instead of just a toe grazing upward.
   if(ph.name==="High Step"||ph.name==="Opposite High Step"){
-    a[1]-=leg*.09;
-    if(t)t[1]-=leg*.07;
+    a[1]-=leg*.12;
+    if(t)t[1]-=leg*.09;
     if(h){
       const dx=a[0]-h[0],dy=a[1]-h[1],d=Math.hypot(dx,dy)||1;
-      const shrink=leg*.16; // pull the ankle this much closer to the hip
-      const ux=dx/d,uy=dy/d,newD=Math.max(d-shrink,leg*.35);
+      const shrink=leg*.24; // pull the ankle this much closer to the hip
+      const ux=dx/d,uy=dy/d,newD=Math.max(d-shrink,leg*.32);
       const shift=newD-d;
       a[0]=h[0]+ux*newD; a[1]=h[1]+uy*newD;
       if(t){t[0]+=ux*shift;t[1]+=uy*shift;}
     }
   }else if(ph.name==="Passing"||ph.name==="Opposite Passing"){
-    a[1]-=leg*.035;
-    if(t)t[1]-=leg*.022;
+    a[1]-=leg*.05;
+    if(t)t[1]-=leg*.032;
     if(h){
       const dx=a[0]-h[0],dy=a[1]-h[1],d=Math.hypot(dx,dy)||1;
-      const shrink=leg*.07;
-      const ux=dx/d,uy=dy/d,newD=Math.max(d-shrink,leg*.4);
+      const shrink=leg*.10;
+      const ux=dx/d,uy=dy/d,newD=Math.max(d-shrink,leg*.38);
       const shift=newD-d;
       a[0]=h[0]+ux*newD; a[1]=h[1]+uy*newD;
       if(t){t[0]+=ux*shift;t[1]+=uy*shift;}
@@ -4101,7 +4116,7 @@ async function v25RunSelfCorrection(){
   v255ResetContactLocks();
   v253ResetFootLocks();
   v2562LastFootDrift=0;
-  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent="V28.1 protected-channel correction started.";
+  v25Motion.running=true;v25Motion.stopRequested=false;v25Motion.pass=0;$("v25Status").textContent="RUNNING";$("v25Report").textContent=`${FI_APP_VERSION} protected-channel correction started.`;
   const target=+$("v25TargetQuality").value||92,maxPasses=+$("v25MaxPasses").value||12,minImprove=+$("v25MinImprove").value||.5;
   let base=v25ScoreMotion();v251UpdateDiagnostics(base);v25Motion.currentScore=base.score;v25Motion.bestScore=base.score;
   v25Motion.bestCorrectives=JSON.parse(JSON.stringify(v23.correctives||[]));v25Motion.bestFinalCorrections=JSON.parse(JSON.stringify(v252FinalCorrections||{}));v25Motion.bestControls=v242CaptureControls();v25Motion.history=[{pass:0,score:base.score,metrics:base.metrics}];

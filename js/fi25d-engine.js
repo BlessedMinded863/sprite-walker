@@ -23,11 +23,14 @@ import * as THREE from "three";
 import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { GLTFExporter } from "three/addons/exporters/GLTFExporter.js";
+import { FI_APP_VERSION } from './version.js';
 
 // ============================================================
-// FATAL INSTINCT V28.1 — TRUE BONE MAPPING + IK
+// FATAL INSTINCT -- TRUE BONE MAPPING + IK (see js/version.js for the
+// current build number; this comment is intentionally version-agnostic
+// so it can't go stale the way the old hardcoded "V28.1" did).
 // Imported skeleton retargeting + two-bone IK authoring layer.
-// V27/V28 Sprite Walker motion remains the authoritative source.
+// Sprite Walker motion remains the authoritative source across versions.
 // Legacy deterministic SNES validation/export remains untouched.
 // ============================================================
 const FI25D = {
@@ -36,7 +39,11 @@ const FI25D = {
   frame:0, playTimer:null, importedName:'', clock:new THREE.Clock(), driveModel:true, ikEnabled:true,
   boneMap:{}, bindPose:new Map(), boneCount:0,
   fightCamera:{x:0,y:1.55,z:6.8,lookY:1.35},
-  stages:['Contact','Down','Passing','High Step','Opp. Contact','Opp. Down','Opp. Passing','Opp. High Step']
+  stages:['Contact','Down','Passing','High Step','Opp. Contact','Opp. Down','Opp. Passing','Opp. High Step'],
+  baseScale:1,
+  // V29: controller-driven movement test -- LEFT/RIGHT held moves the root
+  // and auto-plays the 8-frame walk; releasing returns to Idle.
+  player:{held:{left:false,right:false},facing:1,moving:false,speed:1.7,walkTimer:null}
 };
 const FI25D_BONE_ALIASES={
   hips:['hips','pelvis','root','mixamorighips'],spine:['spine','spine1','chest','upperchest','mixamorigspine'],neck:['neck','mixamorigneck'],head:['head','mixamorighead'],
@@ -56,20 +63,95 @@ function fi25dResetBones(){for(const [b,v] of FI25D.bindPose){b.position.copy(v.
 function fi25dRenderBoneMap(){const e=document.getElementById('fi25dBoneMapReadout');if(!e)return;const required=['hips','leftUpperLeg','leftLowerLeg','leftFoot','rightUpperLeg','rightLowerLeg','rightFoot','leftUpperArm','leftForeArm','leftHand','rightUpperArm','rightForeArm','rightHand'];const found=required.filter(k=>FI25D.boneMap[k]).length;e.innerHTML=`Mapped ${found}/${required.length} production controls<br>`+required.map(k=>`${FI25D.boneMap[k]?'✓':'—'} ${k}: ${FI25D.boneMap[k]?.name||'not found'}`).join('<br>');}
 function fi25dAutoMapBones(){const bones=fi25dAllBones();FI25D.boneMap={};for(const [k,a] of Object.entries(FI25D_BONE_ALIASES)){const b=fi25dFindBone(bones,a);if(b)FI25D.boneMap[k]=b;}FI25D.boneCount=bones.length;if(!FI25D.bindPose.size)fi25dCaptureBindPose();fi25dRenderBoneMap();const core=['hips','leftUpperLeg','leftLowerLeg','leftFoot','rightUpperLeg','rightLowerLeg','rightFoot','leftUpperArm','leftForeArm','leftHand','rightUpperArm','rightForeArm','rightHand'];const n=core.filter(k=>FI25D.boneMap[k]).length;fi25dRigStatus(n===core.length?`AUTO-MAP PASS • ${n}/${core.length} core controls ready for IK.`:`AUTO-MAP PARTIAL • ${n}/${core.length} core controls found. Unmapped bones remain protected.`);return n;}
 function fi25dBuildProxy(){const g=new THREE.Group();g.name='DUROC_2_5D_PROXY_RIG';const mat=new THREE.MeshStandardMaterial({color:0x7b8794,roughness:.72,metalness:.12}),jointMat=new THREE.MeshStandardMaterial({color:0xd8e4ee,roughness:.6});const limb=(name,a,b,r=.09)=>{const va=new THREE.Vector3(...a),vb=new THREE.Vector3(...b),d=vb.clone().sub(va),len=d.length();const mesh=new THREE.Mesh(new THREE.CylinderGeometry(r,r,len,10),mat);mesh.name=name;mesh.position.copy(va.clone().add(vb).multiplyScalar(.5));mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.clone().normalize());g.add(mesh);return mesh;};const pts={pelvis:[0,1.25,0],neck:[0,2.02,0],head:[0,2.30,0],ls:[-.34,1.95,0],le:[-.62,1.55,0],lw:[-.72,1.15,0],rs:[.34,1.95,0],re:[.62,1.55,0],rw:[.72,1.15,0],lh:[-.21,1.2,0],lk:[-.28,.67,0],la:[-.25,.12,0],rh:[.21,1.2,0],rk:[.28,.67,0],ra:[.25,.12,0]};[['spine','pelvis','neck',.14],['lUpperArm','ls','le',.10],['lForearm','le','lw',.085],['rUpperArm','rs','re',.10],['rForearm','re','rw',.085],['lThigh','lh','lk',.13],['lShin','lk','la',.105],['rThigh','rh','rk',.13],['rShin','rk','ra',.105]].forEach(x=>limb(x[0],pts[x[1]],pts[x[2]],x[3]));limb('shoulders',pts.ls,pts.rs,.12);limb('hips',pts.lh,pts.rh,.13);const torso=new THREE.Mesh(new THREE.BoxGeometry(.72,.72,.34),mat);torso.name='torso';torso.position.set(0,1.62,0);g.add(torso);const head=new THREE.Mesh(new THREE.SphereGeometry(.23,16,12),jointMat);head.name='head';head.position.set(...pts.head);g.add(head);const hg=new THREE.SphereGeometry(.11,10,8),fg=new THREE.BoxGeometry(.22,.12,.42);for(const [n,p] of [['left_hand',pts.lw],['right_hand',pts.rw]]){const m=new THREE.Mesh(hg,jointMat);m.name=n;m.position.set(...p);g.add(m);}for(const [n,p] of [['left_foot',pts.la],['right_foot',pts.ra]]){const m=new THREE.Mesh(fg,mat);m.name=n;m.position.set(p[0],p[1],.12);g.add(m);}g.userData.base={};g.children.forEach(o=>g.userData.base[o.name]={p:o.position.clone(),q:o.quaternion.clone()});return g;}
-function fi25dClearRoot(){if(FI25D.root){FI25D.scene.remove(FI25D.root);FI25D.root=null;}if(FI25D.skeletonHelper){FI25D.scene.remove(FI25D.skeletonHelper);FI25D.skeletonHelper=null;}FI25D.bindPose.clear();FI25D.boneMap={};}
+function fi25dClearRoot(){if(FI25D.root){FI25D.scene.remove(FI25D.root);FI25D.root=null;}if(FI25D.skeletonHelper){FI25D.scene.remove(FI25D.skeletonHelper);FI25D.skeletonHelper=null;}FI25D.bindPose.clear();FI25D.boneMap={};fi25dSetIdle();FI25D.baseScale=1;}
 function fi25dUseProxy(){fi25dClearRoot();FI25D.proxy=fi25dBuildProxy();FI25D.root=FI25D.proxy;FI25D.model=null;FI25D.scene.add(FI25D.root);document.getElementById('fi25dModelChip').textContent='PROXY RIG';document.getElementById('fi25dModelStat').textContent='Proxy';document.getElementById('fi25dBoneStat').textContent='18';fi25dRenderBoneMap();fi25dApplyFrame(FI25D.frame);fi25dRigStatus('Proxy mode: import Duroc GLB/GLTF/FBX to activate true skeleton mapping + IK.');}
-function fi25dFitModel(obj){const box=new THREE.Box3().setFromObject(obj),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());const h=Math.max(.001,size.y),scale=2.25/h;obj.scale.setScalar(scale);obj.position.sub(center.multiplyScalar(scale));obj.position.y+=1.15;}
+function fi25dFitModel(obj){const box=new THREE.Box3().setFromObject(obj),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());const h=Math.max(.001,size.y),scale=2.25/h;obj.scale.setScalar(scale);obj.position.sub(center.multiplyScalar(scale));obj.position.y+=1.15;FI25D.baseScale=scale;}
 function fi25dInspectBones(obj){let n=0;obj.traverse(o=>{if(o.isBone)n++;});return n;}
 async function fi25dLoadModel(file){const ext=(file.name.split('.').pop()||'').toLowerCase(),url=URL.createObjectURL(file);fi25dStatus('Loading '+file.name+'…');try{let obj=null,animations=[];if(ext==='fbx'){obj=await new Promise((resolve,reject)=>new FBXLoader().load(url,resolve,undefined,reject));animations=obj.animations||[];}else{const gltf=await new Promise((resolve,reject)=>new GLTFLoader().load(url,resolve,undefined,reject));obj=gltf.scene;animations=gltf.animations||[];}fi25dClearRoot();fi25dFitModel(obj);FI25D.root=obj;FI25D.model=obj;FI25D.proxy=null;FI25D.scene.add(obj);FI25D.importedName=file.name;const bones=fi25dInspectBones(obj);document.getElementById('fi25dModelChip').textContent=file.name.toUpperCase();document.getElementById('fi25dModelStat').textContent='Imported';document.getElementById('fi25dBoneStat').textContent=String(bones);if(bones){FI25D.skeletonHelper=new THREE.SkeletonHelper(obj);FI25D.skeletonHelper.visible=FI25D.bonesVisible;FI25D.scene.add(FI25D.skeletonHelper);}if(animations.length)FI25D.mixer=new THREE.AnimationMixer(obj);fi25dCaptureBindPose();const mapped=fi25dAutoMapBones();fi25dApplyFrame(FI25D.frame);fi25dStatus(`${file.name} loaded • ${bones} bones • ${mapped} production controls mapped • ${animations.length} embedded clip(s).`);}catch(err){console.error(err);fi25dStatus('Model import failed: '+(err?.message||err));}finally{URL.revokeObjectURL(url);}}
 function fi25dRotateFromBind(key,axis,angle){const b=FI25D.boneMap[key],base=b&&FI25D.bindPose.get(b);if(!b||!base)return;b.quaternion.copy(base.q);const q=new THREE.Quaternion().setFromAxisAngle(axis,angle);b.quaternion.multiply(q);}
-function fi25dPoseProxy(i){const g=FI25D.proxy;if(!g||!g.userData.base)return;const phase=i%8,down=[0,-.06,0,.04,0,-.06,0,.04][phase];g.children.forEach(o=>{const b=g.userData.base[o.name];if(b){o.position.copy(b.p);o.quaternion.copy(b.q);}});g.position.y=down;const swing=[.18,.10,0,-.12,-.18,-.10,0,.12][phase],lead=phase<4?1:-1;const LF=g.getObjectByName('left_foot'),RF=g.getObjectByName('right_foot');if(LF&&RF){LF.position.x+=swing;RF.position.x-=swing;const lift=[0,0,.05,.22,0,0,.05,.22][phase];(lead>0?RF:LF).position.y+=lift;}const LA=g.getObjectByName('lUpperArm'),RA=g.getObjectByName('rUpperArm');if(LA&&RA){LA.rotation.z+=swing*.55;RA.rotation.z-=swing*.55;}const torso=g.getObjectByName('torso');if(torso)torso.rotation.z=[.018,.012,0,-.012,-.018,-.012,0,.012][phase];}
-function fi25dApplyImportedWalk(i){if(!FI25D.model||!FI25D.driveModel||!FI25D.bindPose.size)return;fi25dResetBones();const p=i%8;const hipDrop=[0,-.035,-.005,.025,0,-.035,-.005,.025][p],leg=[-.34,-.18,.02,.28,.34,.18,-.02,-.28][p],knee=[.20,.42,.26,.58,.20,.42,.26,.58][p],arm=-leg*.62;const hips=FI25D.boneMap.hips,base=hips&&FI25D.bindPose.get(hips);if(hips&&base)hips.position.y=base.p.y+hipDrop;const A=new THREE.Vector3(0,0,1);fi25dRotateFromBind('leftUpperLeg',A,leg);fi25dRotateFromBind('rightUpperLeg',A,-leg);fi25dRotateFromBind('leftLowerLeg',A,p<4?knee:.10);fi25dRotateFromBind('rightLowerLeg',A,p>=4?knee:.10);fi25dRotateFromBind('leftUpperArm',A,arm);fi25dRotateFromBind('rightUpperArm',A,-arm);fi25dRotateFromBind('leftForeArm',A,.12+Math.max(0,-arm)*.35);fi25dRotateFromBind('rightForeArm',A,.12+Math.max(0,arm)*.35);if(FI25D.ikEnabled){const plantedLeft=[0,1,2,7].includes(p),plantedRight=[3,4,5,6].includes(p);fi25dRotateFromBind('leftFoot',A,plantedLeft?-leg*.55:leg*.18);fi25dRotateFromBind('rightFoot',A,plantedRight?leg*.55:-leg*.18);}FI25D.model.updateMatrixWorld(true);}
+function fi25dPoseProxy(i){const g=FI25D.proxy;if(!g||!g.userData.base)return;const phase=i%8,down=[0,-.06,0,.04,0,-.06,0,.04][phase];g.children.forEach(o=>{const b=g.userData.base[o.name];if(b){o.position.copy(b.p);o.quaternion.copy(b.q);}});g.position.y=down;const swing=[.18,.10,0,-.12,-.18,-.10,0,.12][phase],lead=phase<4?1:-1;const LF=g.getObjectByName('left_foot'),RF=g.getObjectByName('right_foot');if(LF&&RF){LF.position.x+=swing;RF.position.x-=swing;const lift=[0,0,.05,.22,0,0,.05,.22][phase];(lead>0?RF:LF).position.y+=lift;}const LA=g.getObjectByName('lUpperArm'),RA=g.getObjectByName('rUpperArm');if(LA&&RA){LA.rotation.z+=swing*.55;RA.rotation.z-=swing*.55;}const torso=g.getObjectByName('torso');if(torso)torso.rotation.z=[.018,.012,0,-.012,-.018,-.012,0,.012][phase];
+  // V29: same contained pelvis/torso twist as the imported-model path --
+  // rotation.y applied to the individual hips/torso meshes only, never to
+  // `g` (the proxy's root group), so it can't turn the figure away from
+  // the locked side camera.
+  const hipsMesh=g.getObjectByName('hips'),twist=swing*.47;
+  if(hipsMesh)hipsMesh.rotation.y=twist;
+  if(torso)torso.rotation.y=-twist*.65;
+}
+function fi25dApplyImportedWalk(i){if(!FI25D.model||!FI25D.driveModel||!FI25D.bindPose.size)return;fi25dResetBones();const p=i%8;const hipDrop=[0,-.035,-.005,.025,0,-.035,-.005,.025][p],leg=[-.34,-.18,.02,.28,.34,.18,-.02,-.28][p],knee=[.20,.42,.26,.58,.20,.42,.26,.58][p],arm=-leg*.62;const hips=FI25D.boneMap.hips,base=hips&&FI25D.bindPose.get(hips);if(hips&&base)hips.position.y=base.p.y+hipDrop;const A=new THREE.Vector3(0,0,1);fi25dRotateFromBind('leftUpperLeg',A,leg);fi25dRotateFromBind('rightUpperLeg',A,-leg);fi25dRotateFromBind('leftLowerLeg',A,p<4?knee:.10);fi25dRotateFromBind('rightLowerLeg',A,p>=4?knee:.10);fi25dRotateFromBind('leftUpperArm',A,arm);fi25dRotateFromBind('rightUpperArm',A,-arm);fi25dRotateFromBind('leftForeArm',A,.12+Math.max(0,-arm)*.35);fi25dRotateFromBind('rightForeArm',A,.12+Math.max(0,arm)*.35);if(FI25D.ikEnabled){const plantedLeft=[0,1,2,7].includes(p),plantedRight=[3,4,5,6].includes(p);fi25dRotateFromBind('leftFoot',A,plantedLeft?-leg*.55:leg*.18);fi25dRotateFromBind('rightFoot',A,plantedRight?leg*.55:-leg*.18);}
+  // V29: controlled pelvis/torso twist for weight and power. This is
+  // deliberately a LOCAL rotation composed on top of bind pose via
+  // fi25dRotateFromBind (same helper used for every limb above) -- it is
+  // applied to the hips/spine BONES only, never to FI25D.root or the
+  // camera. A rotation on the root would yaw the whole fighter's silhouette
+  // away from the fixed side-on camera; a rotation on hips/spine is a
+  // contained twist within the character's own frame and can't do that,
+  // regardless of magnitude. Y is the bone's own vertical axis (twist),
+  // not a scene-space turn.
+  const Y=new THREE.Vector3(0,1,0),hipTwist=leg*.47,spineCounter=-hipTwist*.65;
+  fi25dRotateFromBind('hips',Y,hipTwist);
+  fi25dRotateFromBind('spine',Y,spineCounter);
+  FI25D.model.updateMatrixWorld(true);}
+// V29: controller test milestone -- LEFT/RIGHT held moves the root and
+// auto-plays the walk cycle; releasing both keys returns to Idle. Idle is a
+// genuine neutral stance (bind pose / proxy rest pose), not just holding
+// frame 0, so it doesn't look like freezing mid-step.
+function fi25dApplyIdle(){
+  FI25D.frame=-1;
+  clearInterval(FI25D.player.walkTimer);FI25D.player.walkTimer=null;FI25D.player.moving=false;
+  const chip=document.getElementById('fi25dFrameChip');if(chip)chip.textContent='IDLE';
+  document.querySelectorAll('#fi25dTimeline button').forEach(b=>b.classList.remove('active'));
+  if(FI25D.proxy&&FI25D.proxy.userData.base){
+    const g=FI25D.proxy;g.position.y=0;
+    g.children.forEach(o=>{const b=g.userData.base[o.name];if(b){o.position.copy(b.p);o.quaternion.copy(b.q);}});
+  }else if(FI25D.model&&FI25D.bindPose.size){
+    fi25dResetBones();
+  }
+}
+function fi25dSetIdle(){fi25dApplyIdle();}
+function fi25dStartWalking(){
+  if(FI25D.player.walkTimer)return;
+  FI25D.player.moving=true;
+  if(FI25D.frame<0)FI25D.frame=0;
+  fi25dApplyFrame(FI25D.frame);
+  FI25D.player.walkTimer=setInterval(()=>fi25dApplyFrame(FI25D.frame+1),125);
+}
+function fi25dUpdatePlayerMovement(dt){
+  const p=FI25D.player,held=p.held.left||p.held.right;
+  if(held){
+    p.facing=p.held.right?1:-1;
+    if(!p.moving)fi25dStartWalking();
+    if(FI25D.root){
+      FI25D.root.position.x+=p.facing*p.speed*dt;
+      const s=FI25D.baseScale||1;
+      FI25D.root.scale.set(s*p.facing,s,s);
+    }
+  }else if(p.moving){
+    fi25dApplyIdle();
+  }
+}
 function fi25dApplyFrame(i){FI25D.frame=((i%8)+8)%8;document.getElementById('fi25dFrameChip').textContent=`FRAME ${FI25D.frame+1} / 8 · ${FI25D.stages[FI25D.frame]}`;document.querySelectorAll('#fi25dTimeline button').forEach((b,j)=>b.classList.toggle('active',j===FI25D.frame));if(FI25D.proxy)fi25dPoseProxy(FI25D.frame);else fi25dApplyImportedWalk(FI25D.frame);const sketch=window.FIProgressiveSketch;if(sketch?.state?.frames?.length>=8){sketch.state.frame=FI25D.frame;sketch.draw();}}
 function fi25dFightCamera(){FI25D.orbit=false;FI25D.camera.position.set(FI25D.fightCamera.x,FI25D.fightCamera.y,FI25D.fightCamera.z);FI25D.camera.lookAt(0,FI25D.fightCamera.lookY,0);document.getElementById('fi25dCameraStat').textContent='Locked';}
 function fi25dInspectCamera(){FI25D.orbit=!FI25D.orbit;document.getElementById('fi25dCameraStat').textContent=FI25D.orbit?'Inspect':'Locked';if(!FI25D.orbit)fi25dFightCamera();}
-function fi25dAnimate(){requestAnimationFrame(fi25dAnimate);const dt=Math.min(.05,FI25D.clock.getDelta());if(FI25D.mixer&&!FI25D.driveModel)FI25D.mixer.update(dt);if(FI25D.orbit){const t=performance.now()*.00022;FI25D.camera.position.set(Math.sin(t)*6.2,2.2,Math.cos(t)*6.2);FI25D.camera.lookAt(0,1.25,0);}fi25dResize();FI25D.renderer.render(FI25D.scene,FI25D.camera);}
+function fi25dAnimate(){requestAnimationFrame(fi25dAnimate);const dt=Math.min(.05,FI25D.clock.getDelta());if(FI25D.mixer&&!FI25D.driveModel)FI25D.mixer.update(dt);fi25dUpdatePlayerMovement(dt);if(FI25D.orbit){const t=performance.now()*.00022;FI25D.camera.position.set(Math.sin(t)*6.2,2.2,Math.cos(t)*6.2);FI25D.camera.lookAt(0,1.25,0);}fi25dResize();FI25D.renderer.render(FI25D.scene,FI25D.camera);}
 function fi25dDownload(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1200);}
-function fi25dExportGLB(){if(!FI25D.root){fi25dStatus('Nothing to export.');return;}const exporter=new GLTFExporter();exporter.parse(FI25D.root,res=>{const blob=res instanceof ArrayBuffer?new Blob([res],{type:'model/gltf-binary'}):new Blob([JSON.stringify(res,null,2)],{type:'model/gltf+json'});fi25dDownload(blob,'Fatal_Instinct_Duroc_2_5D_V28_1.glb');fi25dStatus('V28.1 modern GLB exported. Legacy SNES output remains available.');},err=>fi25dStatus('GLB export failed: '+err),{binary:true,onlyVisible:false});}
-function fi25dExportMeta(){const audit=window.FIProgressiveSketch?.cycleAudit?.()||null;const map={};for(const[k,b]of Object.entries(FI25D.boneMap))map[k]=b?.name||null;const data={schema:'fatal-instinct-2.5d/v2',character:window.FIProgressiveSketch?.characterKey?.()||'duroc',camera:'side_locked',movementPlane:'XY',depthGameplay:false,rig:{ikEnabled:FI25D.ikEnabled,driveModel:FI25D.driveModel,boneMap:map},walk:{name:'DUROC_WALK_v1.0',stages:FI25D.stages,frameCount:8,cycleAudit:audit},combat:{hitboxesFollowBones:true,hurtboxesFollowBones:true},exports:{modern:['glb','combat-json'],legacy:['snes-4bpp','palette','oam']}};fi25dDownload(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),'Duroc_2_5D_V28_1_Combat_Metadata.json');fi25dStatus('V28.1 rig + combat metadata exported.');}
-function fi25dInit(){const canvas=document.getElementById('fi25dViewport');if(!canvas)return;FI25D.scene=new THREE.Scene();FI25D.scene.background=new THREE.Color(0x050910);FI25D.camera=new THREE.PerspectiveCamera(26,1,.05,100);FI25D.renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});FI25D.renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));FI25D.renderer.outputColorSpace=THREE.SRGBColorSpace;FI25D.scene.add(new THREE.HemisphereLight(0xbfd8ff,0x202735,2.1));const key=new THREE.DirectionalLight(0xffffff,2.6);key.position.set(3,6,5);FI25D.scene.add(key);const rim=new THREE.DirectionalLight(0x89b8ff,1.2);rim.position.set(-4,3,-3);FI25D.scene.add(rim);FI25D.grid=new THREE.GridHelper(8,16,0x31455b,0x182231);FI25D.scene.add(FI25D.grid);const floor=new THREE.Mesh(new THREE.PlaneGeometry(8,5),new THREE.MeshStandardMaterial({color:0x0d141d,roughness:1}));floor.rotation.x=-Math.PI/2;floor.position.y=-.02;FI25D.scene.add(floor);fi25dFightCamera();fi25dUseProxy();const tl=document.getElementById('fi25dTimeline');FI25D.stages.forEach((n,i)=>{const b=document.createElement('button');b.type='button';b.textContent=String(i+1);b.title=n;b.onclick=()=>fi25dApplyFrame(i);tl.appendChild(b);});fi25dApplyFrame(0);document.getElementById('fi25dModelFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(f)fi25dLoadModel(f);});document.getElementById('fi25dResetModel').onclick=fi25dUseProxy;document.getElementById('fi25dAutoMap').onclick=fi25dAutoMapBones;document.getElementById('fi25dCaptureBind').onclick=()=>{fi25dCaptureBindPose();fi25dApplyFrame(FI25D.frame);};document.getElementById('fi25dDriveModel').onclick=()=>{FI25D.driveModel=!FI25D.driveModel;document.getElementById('fi25dDriveModel').textContent=FI25D.driveModel?'Drive Imported Model':'Embedded Animation';fi25dApplyFrame(FI25D.frame);};document.getElementById('fi25dToggleIK').onclick=()=>{FI25D.ikEnabled=!FI25D.ikEnabled;document.getElementById('fi25dToggleIK').textContent=`IK: ${FI25D.ikEnabled?'ON':'OFF'}`;fi25dApplyFrame(FI25D.frame);};document.getElementById('fi25dCameraSide').onclick=fi25dFightCamera;document.getElementById('fi25dCameraOrbit').onclick=fi25dInspectCamera;document.getElementById('fi25dToggleGrid').onclick=()=>{FI25D.gridVisible=!FI25D.gridVisible;FI25D.grid.visible=FI25D.gridVisible;};document.getElementById('fi25dToggleBones').onclick=()=>{FI25D.bonesVisible=!FI25D.bonesVisible;if(FI25D.skeletonHelper)FI25D.skeletonHelper.visible=FI25D.bonesVisible;};document.getElementById('fi25dPlay').onclick=()=>{clearInterval(FI25D.playTimer);FI25D.playTimer=setInterval(()=>fi25dApplyFrame(FI25D.frame+1),125);};document.getElementById('fi25dStop').onclick=()=>{clearInterval(FI25D.playTimer);FI25D.playTimer=null;};document.getElementById('fi25dExportGLB').onclick=fi25dExportGLB;document.getElementById('fi25dExportMeta').onclick=fi25dExportMeta;window.addEventListener('resize',fi25dResize);fi25dAnimate();}
+function fi25dExportGLB(){if(!FI25D.root){fi25dStatus('Nothing to export.');return;}const exporter=new GLTFExporter();exporter.parse(FI25D.root,res=>{const blob=res instanceof ArrayBuffer?new Blob([res],{type:'model/gltf-binary'}):new Blob([JSON.stringify(res,null,2)],{type:'model/gltf+json'});fi25dDownload(blob,`Fatal_Instinct_Duroc_2_5D_${FI_APP_VERSION}.glb`);fi25dStatus(`${FI_APP_VERSION} modern GLB exported. Legacy SNES output remains available.`);},err=>fi25dStatus('GLB export failed: '+err),{binary:true,onlyVisible:false});}
+function fi25dExportMeta(){const audit=window.FIProgressiveSketch?.cycleAudit?.()||null;const map={};for(const[k,b]of Object.entries(FI25D.boneMap))map[k]=b?.name||null;const data={schema:'fatal-instinct-2.5d/v2',character:window.FIProgressiveSketch?.characterKey?.()||'duroc',camera:'side_locked',movementPlane:'XY',depthGameplay:false,rig:{ikEnabled:FI25D.ikEnabled,driveModel:FI25D.driveModel,boneMap:map},walk:{name:'DUROC_WALK_v1.0',stages:FI25D.stages,frameCount:8,cycleAudit:audit},combat:{hitboxesFollowBones:true,hurtboxesFollowBones:true},exports:{modern:['glb','combat-json'],legacy:['snes-4bpp','palette','oam']}};fi25dDownload(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),`Duroc_2_5D_${FI_APP_VERSION}_Combat_Metadata.json`);fi25dStatus(`${FI_APP_VERSION} rig + combat metadata exported.`);}
+function fi25dInit(){const canvas=document.getElementById('fi25dViewport');if(!canvas)return;FI25D.scene=new THREE.Scene();FI25D.scene.background=new THREE.Color(0x050910);FI25D.camera=new THREE.PerspectiveCamera(26,1,.05,100);FI25D.renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});FI25D.renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));FI25D.renderer.outputColorSpace=THREE.SRGBColorSpace;FI25D.scene.add(new THREE.HemisphereLight(0xbfd8ff,0x202735,2.1));const key=new THREE.DirectionalLight(0xffffff,2.6);key.position.set(3,6,5);FI25D.scene.add(key);const rim=new THREE.DirectionalLight(0x89b8ff,1.2);rim.position.set(-4,3,-3);FI25D.scene.add(rim);FI25D.grid=new THREE.GridHelper(8,16,0x31455b,0x182231);FI25D.scene.add(FI25D.grid);const floor=new THREE.Mesh(new THREE.PlaneGeometry(8,5),new THREE.MeshStandardMaterial({color:0x0d141d,roughness:1}));floor.rotation.x=-Math.PI/2;floor.position.y=-.02;FI25D.scene.add(floor);fi25dFightCamera();fi25dUseProxy();const tl=document.getElementById('fi25dTimeline');FI25D.stages.forEach((n,i)=>{const b=document.createElement('button');b.type='button';b.textContent=String(i+1);b.title=n;b.onclick=()=>fi25dApplyFrame(i);tl.appendChild(b);});fi25dApplyFrame(0);document.getElementById('fi25dModelFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(f)fi25dLoadModel(f);});document.getElementById('fi25dResetModel').onclick=fi25dUseProxy;document.getElementById('fi25dAutoMap').onclick=fi25dAutoMapBones;document.getElementById('fi25dCaptureBind').onclick=()=>{fi25dCaptureBindPose();fi25dApplyFrame(FI25D.frame);};document.getElementById('fi25dDriveModel').onclick=()=>{FI25D.driveModel=!FI25D.driveModel;document.getElementById('fi25dDriveModel').textContent=FI25D.driveModel?'Drive Imported Model':'Embedded Animation';fi25dApplyFrame(FI25D.frame);};document.getElementById('fi25dToggleIK').onclick=()=>{FI25D.ikEnabled=!FI25D.ikEnabled;document.getElementById('fi25dToggleIK').textContent=`IK: ${FI25D.ikEnabled?'ON':'OFF'}`;fi25dApplyFrame(FI25D.frame);};document.getElementById('fi25dCameraSide').onclick=fi25dFightCamera;document.getElementById('fi25dCameraOrbit').onclick=fi25dInspectCamera;document.getElementById('fi25dToggleGrid').onclick=()=>{FI25D.gridVisible=!FI25D.gridVisible;FI25D.grid.visible=FI25D.gridVisible;};document.getElementById('fi25dToggleBones').onclick=()=>{FI25D.bonesVisible=!FI25D.bonesVisible;if(FI25D.skeletonHelper)FI25D.skeletonHelper.visible=FI25D.bonesVisible;};document.getElementById('fi25dPlay').onclick=()=>{clearInterval(FI25D.playTimer);FI25D.playTimer=setInterval(()=>fi25dApplyFrame(FI25D.frame+1),125);};document.getElementById('fi25dStop').onclick=()=>{clearInterval(FI25D.playTimer);FI25D.playTimer=null;};document.getElementById('fi25dExportGLB').onclick=fi25dExportGLB;document.getElementById('fi25dExportMeta').onclick=fi25dExportMeta;window.addEventListener('resize',fi25dResize);
+// V29 controller test: LEFT/RIGHT held moves root + auto-walks; release -> Idle.
+// Ignore key events while typing in a text field/slider elsewhere on the page.
+window.addEventListener('keydown',e=>{
+  const tag=document.activeElement?.tagName;
+  if(tag==='INPUT'||tag==='TEXTAREA')return;
+  if(e.key==='ArrowLeft'){FI25D.player.held.left=true;e.preventDefault();}
+  else if(e.key==='ArrowRight'){FI25D.player.held.right=true;e.preventDefault();}
+});
+window.addEventListener('keyup',e=>{
+  if(e.key==='ArrowLeft')FI25D.player.held.left=false;
+  else if(e.key==='ArrowRight')FI25D.player.held.right=false;
+});
+window.addEventListener('blur',()=>{FI25D.player.held.left=false;FI25D.player.held.right=false;});
+fi25dApplyIdle();
+fi25dStatus('Controller test: hold ← / → to move Duroc. Release to return to Idle.');
+fi25dAnimate();}
 fi25dInit();
