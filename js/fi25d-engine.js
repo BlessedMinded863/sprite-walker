@@ -36,14 +36,23 @@ import { FI_APP_VERSION } from './version.js';
 const FI25D = {
   scene:null, camera:null, renderer:null, root:null, proxy:null, model:null, mixer:null,
   grid:null, skeletonHelper:null, bonesVisible:true, gridVisible:true, orbit:false,
-  frame:0, playTimer:null, importedName:'', clock:new THREE.Clock(), driveModel:true, ikEnabled:true,
-  boneMap:{}, bindPose:new Map(), boneCount:0,
+  frame:0, importedName:'', clock:new THREE.Clock(), driveModel:true, ikEnabled:true,
+  boneMap:{}, bindPose:new Map(), boneCount:0, ikRef:{},
   fightCamera:{x:0,y:1.55,z:6.8,lookY:1.35},
   stages:['Contact','Down','Passing','High Step','Opp. Contact','Opp. Down','Opp. Passing','Opp. High Step'],
   baseScale:1,
   // V29: controller-driven movement test -- LEFT/RIGHT held moves the root
   // and auto-plays the 8-frame walk; releasing returns to Idle.
-  player:{held:{left:false,right:false},facing:1,moving:false,speed:1.7,walkTimer:null}
+  player:{held:{left:false,right:false},facing:1,moving:false,speed:1.7},
+  // V29.3: ONE locomotion state machine / ONE timer, shared by the manual
+  // Play button, the keyboard controller, and the touch controls -- source
+  // records who started the current walk, so releasing the controller
+  // only stops it if the controller was actually the one driving it (a
+  // manual Play run keeps going until Stop is pressed; starting the
+  // controller while manual play is running takes over cleanly, since
+  // there's only ever one timer to replace).
+  locomotion:{mode:'idle',source:null,timer:null},
+  arena:{minX:-2.6,maxX:2.6}
 };
 const FI25D_BONE_ALIASES={
   hips:['hips','pelvis','root','mixamorighips'],spine:['spine','spine1','chest','upperchest','mixamorigspine'],neck:['neck','mixamorigneck'],head:['head','mixamorighead'],
@@ -60,45 +69,267 @@ function fi25dAllBones(obj=FI25D.model){const a=[];obj?.traverse(o=>{if(o.isBone
 function fi25dFindBone(bones,aliases){const exact=new Map(bones.map(b=>[fi25dNormName(b.name),b]));for(const a of aliases){const n=fi25dNormName(a);if(exact.has(n))return exact.get(n);}for(const a of aliases){const n=fi25dNormName(a);const hit=bones.find(b=>fi25dNormName(b.name).includes(n));if(hit)return hit;}return null;}
 function fi25dCaptureBindPose(){FI25D.bindPose.clear();fi25dAllBones().forEach(b=>FI25D.bindPose.set(b,{q:b.quaternion.clone(),p:b.position.clone(),s:b.scale.clone()}));fi25dRigStatus(`Bind pose captured for ${FI25D.bindPose.size} bones.`);}
 function fi25dResetBones(){for(const [b,v] of FI25D.bindPose){b.position.copy(v.p);b.quaternion.copy(v.q);b.scale.copy(v.s);}}
+
+// V29.2: this is the actual fix for "two walk engines" -- the reference
+// data captured here (bind-pose world positions/quaternions/segment
+// lengths for each hip-knee-ankle and shoulder-elbow-wrist chain) is what
+// lets fi25dRetargetFromSpriteWalker() solve real two-bone IK against
+// Sprite Walker's corrected joint coordinates every frame, instead of
+// replaying a hardcoded 8-entry array. Standard humanoid bone hierarchy is
+// assumed (lowerLeg's parent is upperLeg, upperLeg's parent is hips or a
+// pelvis bone, etc.) -- true for Mixamo rigs and most humanoid GLTF/FBX
+// exports; unusual hierarchies fall back gracefully per limb (a chain with
+// no clean parent link is just skipped, not crashed on).
+function fi25dCaptureIKReference(){
+  FI25D.ikRef={};
+  if(!FI25D.model)return;
+  FI25D.model.updateMatrixWorld(true);
+  const chains={
+    leftLeg:['leftUpperLeg','leftLowerLeg','leftFoot'],
+    rightLeg:['rightUpperLeg','rightLowerLeg','rightFoot'],
+    leftArm:['leftUpperArm','leftForeArm','leftHand'],
+    rightArm:['rightUpperArm','rightForeArm','rightHand']
+  };
+  for(const [chainKey,[upperKey,lowerKey,endKey]] of Object.entries(chains)){
+    const upper=FI25D.boneMap[upperKey],lower=FI25D.boneMap[lowerKey],end=FI25D.boneMap[endKey];
+    if(!upper||!lower||!end||!upper.parent||!lower.parent)continue;
+    const wUpperStart=new THREE.Vector3(),wLowerStart=new THREE.Vector3(),wEnd=new THREE.Vector3();
+    upper.getWorldPosition(wUpperStart);lower.getWorldPosition(wLowerStart);end.getWorldPosition(wEnd);
+    const upperWorldQuat=new THREE.Quaternion(),lowerWorldQuat=new THREE.Quaternion();
+    upper.getWorldQuaternion(upperWorldQuat);lower.getWorldQuaternion(lowerWorldQuat);
+    FI25D.ikRef[chainKey]={
+      upperKey,lowerKey,endKey,
+      l1:wUpperStart.distanceTo(wLowerStart),
+      l2:wLowerStart.distanceTo(wEnd),
+      upperBindWorldDir:wLowerStart.clone().sub(wUpperStart).normalize(),
+      lowerBindWorldDir:wEnd.clone().sub(wLowerStart).normalize(),
+      upperBindWorldQuat:upperWorldQuat.clone(),
+      lowerBindWorldQuat:lowerWorldQuat.clone()
+    };
+  }
+}
+
+// Rotates `bone` so its bind-pose direction to its child now points along
+// `desiredWorldDir`, expressed correctly in the bone's own parent-local
+// space regardless of what the parent is currently doing (hip drop, twist,
+// facing-mirror on the root, etc.) -- because it goes through the parent's
+// CURRENT world quaternion, not an assumed one.
+function fi25dAimBoneWorld(bone,bindWorldDir,bindWorldQuat,desiredWorldDir){
+  if(!bone||!bone.parent)return;
+  const parentWorldQuat=new THREE.Quaternion();
+  bone.parent.getWorldQuaternion(parentWorldQuat);
+  const from=bindWorldDir.clone().normalize(),to=desiredWorldDir.clone().normalize();
+  if(from.lengthSq()<1e-8||to.lengthSq()<1e-8)return;
+  const deltaWorld=new THREE.Quaternion().setFromUnitVectors(from,to);
+  const newWorldQuat=deltaWorld.multiply(bindWorldQuat);
+  const newLocalQuat=parentWorldQuat.invert().multiply(newWorldQuat);
+  bone.quaternion.copy(newLocalQuat);
+}
+
+// Standard two-bone IK circle-intersection, done directly in world space
+// (same law-of-cosines approach as Sprite Walker's own v243CircleKnee --
+// see js/app-core.js -- just embedded in 3D instead of a 2D canvas). Picks
+// the bend side that's closer to the bind pose's natural knee/elbow
+// direction so limbs don't flip to the wrong side of straight.
+function fi25dSolveMidJointWorld(hipWorld,targetWorld,l1,l2,bindMidDirWorld){
+  const diff=targetWorld.clone().sub(hipWorld);
+  let d=diff.length();
+  const maxReach=(l1+l2)*0.985,minReach=Math.abs(l1-l2)+1e-4;
+  d=Math.max(minReach,Math.min(maxReach,d||minReach));
+  const dir=diff.lengthSq()>1e-8?diff.normalize():bindMidDirWorld.clone();
+  const a=(l1*l1-l2*l2+d*d)/(2*d);
+  const h=Math.sqrt(Math.max(0,l1*l1-a*a));
+  const mid=hipWorld.clone().add(dir.clone().multiplyScalar(a));
+  // Bend stays within the walking plane (hip and target always share the
+  // same Z in every caller here), so the perpendicular is just a 90-degree
+  // rotation of `dir` within that X-Y plane -- NOT a 3D cross product,
+  // which (with two same-plane vectors) would incorrectly point straight
+  // out of the plane along Z instead of bending the knee/elbow forward.
+  const perp=new THREE.Vector3(-dir.y,dir.x,0).normalize().multiplyScalar(h);
+  const candidateA=mid.clone().add(perp),candidateB=mid.clone().sub(perp);
+  const bindMid=hipWorld.clone().add(bindMidDirWorld.clone().multiplyScalar(l1));
+  return candidateA.distanceTo(bindMid)<=candidateB.distanceTo(bindMid)?candidateA:candidateB;
+}
+
+// The actual bridge: pulls Sprite Walker's corrected 2D joint coordinates
+// for this frame and retargets them onto the imported model via the IK
+// above. Returns false (caller should fall back) if Sprite Walker doesn't
+// have usable pose data yet -- e.g. no reference image has been traced --
+// so the viewer still works standalone before any Sprite Walker work
+// exists, and upgrades automatically once it does.
+function fi25dRetargetFromSpriteWalker(i){
+  const bridge=window.FIProgressiveSketch;
+  if(!bridge||typeof bridge.getPose!=="function")return false;
+  const result=bridge.getPose(i);
+  if(!result||result.error||!result.pose)return false;
+  const pose=result.pose;
+  const need=["left_hip","left_knee","left_ankle","right_hip","right_knee","right_ankle","left_shoulder","left_elbow","left_wrist","right_shoulder","right_elbow","right_wrist"];
+  if(!need.every(j=>Array.isArray(pose[j])))return false;
+  const spriteLeg=(typeof bridge.legScale==="function"&&bridge.legScale())||null;
+  if(!spriteLeg)return false;
+
+  fi25dResetBones();
+  const hips=FI25D.boneMap.hips,hipsBase=hips&&FI25D.bindPose.get(hips);
+  // Hip drop / weight-transfer height: Sprite Walker's own pelvis Y delta
+  // (relative to the average of its two hip joints, so it's independent of
+  // where the sprite happens to sit on the canvas) drives this instead of
+  // a hardcoded per-frame number.
+  if(hips&&hipsBase&&pose.pelvis&&pose.left_hip&&pose.right_hip){
+    const hipMidY=(pose.left_hip[1]+pose.right_hip[1])/2;
+    const dropSprite=pose.pelvis[1]-hipMidY; // sprite Y grows downward
+    hips.position.y=hipsBase.p.y-(dropSprite/spriteLeg)*((FI25D.ikRef.leftLeg?.l1||0)+(FI25D.ikRef.leftLeg?.l2||0));
+  }
+  // Pelvis/torso twist -- same contained local-Y twist as before, but the
+  // angle now comes from Sprite Walker's actual hip-line geometry (how far
+  // the two hips have separated horizontally from their neutral spread)
+  // instead of a hardcoded table.
+  if(pose.left_hip&&pose.right_hip){
+    const hipSpread=pose.left_hip[0]-pose.right_hip[0];
+    const neutralSpread=(FI25D.ikRef.leftLeg&&FI25D.ikRef.rightLeg)?spriteLeg*0.22:hipSpread;
+    const twistDrive=Math.max(-1,Math.min(1,(hipSpread-neutralSpread)/(spriteLeg*0.12||1)));
+    const Y=new THREE.Vector3(0,1,0);
+    fi25dRotateFromBind('hips',Y,twistDrive*0.16);
+    fi25dRotateFromBind('spine',Y,-twistDrive*0.10);
+  }
+  FI25D.model.updateMatrixWorld(true);
+
+  const sides=[
+    {chain:"leftLeg",hipJ:"left_hip",midJ:"left_knee",endJ:"left_ankle"},
+    {chain:"rightLeg",hipJ:"right_hip",midJ:"right_knee",endJ:"right_ankle"},
+    {chain:"leftArm",hipJ:"left_shoulder",midJ:"left_elbow",endJ:"left_wrist"},
+    {chain:"rightArm",hipJ:"right_shoulder",midJ:"right_elbow",endJ:"right_wrist"}
+  ];
+  const signX=(FI25D.root&&FI25D.root.scale.x<0)?-1:1;
+  for(const {chain,hipJ,midJ,endJ} of sides){
+    const ref=FI25D.ikRef[chain]; if(!ref)continue;
+    const upperBone=FI25D.boneMap[ref.upperKey],lowerBone=FI25D.boneMap[ref.lowerKey];
+    if(!upperBone||!lowerBone)continue;
+    const hipWorld=new THREE.Vector3(); upperBone.getWorldPosition(hipWorld);
+    const scale=(ref.l1+ref.l2)/spriteLeg;
+    const dxSprite=pose[endJ][0]-pose[hipJ][0], dySprite=pose[endJ][1]-pose[hipJ][1];
+    const targetWorld=hipWorld.clone().add(new THREE.Vector3(dxSprite*scale*signX,-dySprite*scale,0));
+    const midWorld=fi25dSolveMidJointWorld(hipWorld,targetWorld,ref.l1,ref.l2,ref.upperBindWorldDir);
+    fi25dAimBoneWorld(upperBone,ref.upperBindWorldDir,ref.upperBindWorldQuat,midWorld.clone().sub(hipWorld));
+    FI25D.model.updateMatrixWorld(true); // lower bone's parent (upper) just rotated -- refresh before aiming it
+    fi25dAimBoneWorld(lowerBone,ref.lowerBindWorldDir,ref.lowerBindWorldQuat,targetWorld.clone().sub(midWorld));
+    FI25D.model.updateMatrixWorld(true);
+  }
+
+  // Feet: real orientation from the sprite's own ankle->toe vector rather
+  // than a planted/lifted guess, when the sprite has toe joints; otherwise
+  // leave the foot at its bind orientation (still correct, just neutral).
+  if(FI25D.ikEnabled){
+    for(const [side,footKey] of [["left","leftFoot"],["right","rightFoot"]]){
+      const ankleJ=pose[`${side}_ankle`],toeJ=pose[`${side}_toe`],footBone=FI25D.boneMap[footKey];
+      if(!ankleJ||!toeJ||!footBone||!footBone.parent)continue;
+      const footRef=FI25D.ikRef[side==="left"?"leftLeg":"rightLeg"]; if(!footRef)continue;
+      const dxF=(toeJ[0]-ankleJ[0])*signX,dyF=-(toeJ[1]-ankleJ[1]);
+      const desired=new THREE.Vector3(dxF,dyF,0);
+      if(desired.lengthSq()>1e-8)fi25dAimBoneWorld(footBone,footRef.lowerBindWorldDir,footRef.lowerBindWorldQuat,desired);
+    }
+  }
+  FI25D.model.updateMatrixWorld(true);
+  return true;
+}
+
 function fi25dRenderBoneMap(){const e=document.getElementById('fi25dBoneMapReadout');if(!e)return;const required=['hips','leftUpperLeg','leftLowerLeg','leftFoot','rightUpperLeg','rightLowerLeg','rightFoot','leftUpperArm','leftForeArm','leftHand','rightUpperArm','rightForeArm','rightHand'];const found=required.filter(k=>FI25D.boneMap[k]).length;e.innerHTML=`Mapped ${found}/${required.length} production controls<br>`+required.map(k=>`${FI25D.boneMap[k]?'✓':'—'} ${k}: ${FI25D.boneMap[k]?.name||'not found'}`).join('<br>');}
-function fi25dAutoMapBones(){const bones=fi25dAllBones();FI25D.boneMap={};for(const [k,a] of Object.entries(FI25D_BONE_ALIASES)){const b=fi25dFindBone(bones,a);if(b)FI25D.boneMap[k]=b;}FI25D.boneCount=bones.length;if(!FI25D.bindPose.size)fi25dCaptureBindPose();fi25dRenderBoneMap();const core=['hips','leftUpperLeg','leftLowerLeg','leftFoot','rightUpperLeg','rightLowerLeg','rightFoot','leftUpperArm','leftForeArm','leftHand','rightUpperArm','rightForeArm','rightHand'];const n=core.filter(k=>FI25D.boneMap[k]).length;fi25dRigStatus(n===core.length?`AUTO-MAP PASS • ${n}/${core.length} core controls ready for IK.`:`AUTO-MAP PARTIAL • ${n}/${core.length} core controls found. Unmapped bones remain protected.`);return n;}
-function fi25dBuildProxy(){const g=new THREE.Group();g.name='DUROC_2_5D_PROXY_RIG';const mat=new THREE.MeshStandardMaterial({color:0x7b8794,roughness:.72,metalness:.12}),jointMat=new THREE.MeshStandardMaterial({color:0xd8e4ee,roughness:.6});const limb=(name,a,b,r=.09)=>{const va=new THREE.Vector3(...a),vb=new THREE.Vector3(...b),d=vb.clone().sub(va),len=d.length();const mesh=new THREE.Mesh(new THREE.CylinderGeometry(r,r,len,10),mat);mesh.name=name;mesh.position.copy(va.clone().add(vb).multiplyScalar(.5));mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.clone().normalize());g.add(mesh);return mesh;};const pts={pelvis:[0,1.25,0],neck:[0,2.02,0],head:[0,2.30,0],ls:[-.34,1.95,0],le:[-.62,1.55,0],lw:[-.72,1.15,0],rs:[.34,1.95,0],re:[.62,1.55,0],rw:[.72,1.15,0],lh:[-.21,1.2,0],lk:[-.28,.67,0],la:[-.25,.12,0],rh:[.21,1.2,0],rk:[.28,.67,0],ra:[.25,.12,0]};[['spine','pelvis','neck',.14],['lUpperArm','ls','le',.10],['lForearm','le','lw',.085],['rUpperArm','rs','re',.10],['rForearm','re','rw',.085],['lThigh','lh','lk',.13],['lShin','lk','la',.105],['rThigh','rh','rk',.13],['rShin','rk','ra',.105]].forEach(x=>limb(x[0],pts[x[1]],pts[x[2]],x[3]));limb('shoulders',pts.ls,pts.rs,.12);limb('hips',pts.lh,pts.rh,.13);const torso=new THREE.Mesh(new THREE.BoxGeometry(.72,.72,.34),mat);torso.name='torso';torso.position.set(0,1.62,0);g.add(torso);const head=new THREE.Mesh(new THREE.SphereGeometry(.23,16,12),jointMat);head.name='head';head.position.set(...pts.head);g.add(head);const hg=new THREE.SphereGeometry(.11,10,8),fg=new THREE.BoxGeometry(.22,.12,.42);for(const [n,p] of [['left_hand',pts.lw],['right_hand',pts.rw]]){const m=new THREE.Mesh(hg,jointMat);m.name=n;m.position.set(...p);g.add(m);}for(const [n,p] of [['left_foot',pts.la],['right_foot',pts.ra]]){const m=new THREE.Mesh(fg,mat);m.name=n;m.position.set(p[0],p[1],.12);g.add(m);}g.userData.base={};g.children.forEach(o=>g.userData.base[o.name]={p:o.position.clone(),q:o.quaternion.clone()});return g;}
-function fi25dClearRoot(){if(FI25D.root){FI25D.scene.remove(FI25D.root);FI25D.root=null;}if(FI25D.skeletonHelper){FI25D.scene.remove(FI25D.skeletonHelper);FI25D.skeletonHelper=null;}FI25D.bindPose.clear();FI25D.boneMap={};fi25dSetIdle();FI25D.baseScale=1;}
+function fi25dAutoMapBones(){const bones=fi25dAllBones();FI25D.boneMap={};for(const [k,a] of Object.entries(FI25D_BONE_ALIASES)){const b=fi25dFindBone(bones,a);if(b)FI25D.boneMap[k]=b;}FI25D.boneCount=bones.length;if(!FI25D.bindPose.size)fi25dCaptureBindPose();fi25dRenderBoneMap();fi25dCaptureIKReference();const core=['hips','leftUpperLeg','leftLowerLeg','leftFoot','rightUpperLeg','rightLowerLeg','rightFoot','leftUpperArm','leftForeArm','leftHand','rightUpperArm','rightForeArm','rightHand'];const n=core.filter(k=>FI25D.boneMap[k]).length;fi25dRigStatus(n===core.length?`AUTO-MAP PASS • ${n}/${core.length} core controls ready for IK.`:`AUTO-MAP PARTIAL • ${n}/${core.length} core controls found. Unmapped bones remain protected.`);return n;}
+function fi25dBuildProxy(){const g=new THREE.Group();g.name='DUROC_2_5D_PROXY_RIG';const mat=new THREE.MeshStandardMaterial({color:0x7b8794,roughness:.72,metalness:.12}),jointMat=new THREE.MeshStandardMaterial({color:0xd8e4ee,roughness:.6});const limb=(name,a,b,r=.09)=>{const va=new THREE.Vector3(...a),vb=new THREE.Vector3(...b),d=vb.clone().sub(va),len=d.length();const mesh=new THREE.Mesh(new THREE.CylinderGeometry(r,r,len,10),mat);mesh.name=name;mesh.position.copy(va.clone().add(vb).multiplyScalar(.5));mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.clone().normalize());g.add(mesh);return mesh;};const pts={pelvis:[0,1.25,0],neck:[0,2.02,0],head:[0,2.30,0],ls:[-.34,1.95,0],le:[-.62,1.55,0],lw:[-.72,1.15,0],rs:[.34,1.95,0],re:[.62,1.55,0],rw:[.72,1.15,0],lh:[-.21,1.2,0],lk:[-.28,.67,0],la:[-.25,.12,0],rh:[.21,1.2,0],rk:[.28,.67,0],ra:[.25,.12,0]};[['spine','pelvis','neck',.14],['lUpperArm','ls','le',.10],['lForearm','le','lw',.085],['rUpperArm','rs','re',.10],['rForearm','re','rw',.085],['lThigh','lh','lk',.13],['lShin','lk','la',.105],['rThigh','rh','rk',.13],['rShin','rk','ra',.105]].forEach(x=>limb(x[0],pts[x[1]],pts[x[2]],x[3]));limb('shoulders',pts.ls,pts.rs,.12);limb('hips',pts.lh,pts.rh,.13);const torso=new THREE.Mesh(new THREE.BoxGeometry(.72,.72,.34),mat);torso.name='torso';torso.position.set(0,1.62,0);g.add(torso);const head=new THREE.Mesh(new THREE.SphereGeometry(.23,16,12),jointMat);head.name='head';head.position.set(...pts.head);g.add(head);const hg=new THREE.SphereGeometry(.11,10,8),fg=new THREE.BoxGeometry(.22,.12,.42);for(const [n,p] of [['left_hand',pts.lw],['right_hand',pts.rw]]){const m=new THREE.Mesh(hg,jointMat);m.name=n;m.position.set(...p);g.add(m);}for(const [n,p] of [['left_foot',pts.la],['right_foot',pts.ra]]){const m=new THREE.Mesh(fg,mat);m.name=n;m.position.set(p[0],p[1],.12);g.add(m);}g.userData.base={};g.children.forEach(o=>g.userData.base[o.name]={p:o.position.clone(),q:o.quaternion.clone()});g.userData.points=pts;return g;}
+function fi25dClearRoot(){if(FI25D.root){FI25D.scene.remove(FI25D.root);FI25D.root=null;}if(FI25D.skeletonHelper){FI25D.scene.remove(FI25D.skeletonHelper);FI25D.skeletonHelper=null;}FI25D.bindPose.clear();FI25D.boneMap={};FI25D.ikRef={};fi25dSetIdle();FI25D.baseScale=1;}
 function fi25dUseProxy(){fi25dClearRoot();FI25D.proxy=fi25dBuildProxy();FI25D.root=FI25D.proxy;FI25D.model=null;FI25D.scene.add(FI25D.root);document.getElementById('fi25dModelChip').textContent='PROXY RIG';document.getElementById('fi25dModelStat').textContent='Proxy';document.getElementById('fi25dBoneStat').textContent='18';fi25dRenderBoneMap();fi25dApplyFrame(FI25D.frame);fi25dRigStatus('Proxy mode: import Duroc GLB/GLTF/FBX to activate true skeleton mapping + IK.');}
 function fi25dFitModel(obj){const box=new THREE.Box3().setFromObject(obj),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());const h=Math.max(.001,size.y),scale=2.25/h;obj.scale.setScalar(scale);obj.position.sub(center.multiplyScalar(scale));obj.position.y+=1.15;FI25D.baseScale=scale;}
 function fi25dInspectBones(obj){let n=0;obj.traverse(o=>{if(o.isBone)n++;});return n;}
 async function fi25dLoadModel(file){const ext=(file.name.split('.').pop()||'').toLowerCase(),url=URL.createObjectURL(file);fi25dStatus('Loading '+file.name+'…');try{let obj=null,animations=[];if(ext==='fbx'){obj=await new Promise((resolve,reject)=>new FBXLoader().load(url,resolve,undefined,reject));animations=obj.animations||[];}else{const gltf=await new Promise((resolve,reject)=>new GLTFLoader().load(url,resolve,undefined,reject));obj=gltf.scene;animations=gltf.animations||[];}fi25dClearRoot();fi25dFitModel(obj);FI25D.root=obj;FI25D.model=obj;FI25D.proxy=null;FI25D.scene.add(obj);FI25D.importedName=file.name;const bones=fi25dInspectBones(obj);document.getElementById('fi25dModelChip').textContent=file.name.toUpperCase();document.getElementById('fi25dModelStat').textContent='Imported';document.getElementById('fi25dBoneStat').textContent=String(bones);if(bones){FI25D.skeletonHelper=new THREE.SkeletonHelper(obj);FI25D.skeletonHelper.visible=FI25D.bonesVisible;FI25D.scene.add(FI25D.skeletonHelper);}if(animations.length)FI25D.mixer=new THREE.AnimationMixer(obj);fi25dCaptureBindPose();const mapped=fi25dAutoMapBones();fi25dApplyFrame(FI25D.frame);fi25dStatus(`${file.name} loaded • ${bones} bones • ${mapped} production controls mapped • ${animations.length} embedded clip(s).`);}catch(err){console.error(err);fi25dStatus('Model import failed: '+(err?.message||err));}finally{URL.revokeObjectURL(url);}}
 function fi25dRotateFromBind(key,axis,angle){const b=FI25D.boneMap[key],base=b&&FI25D.bindPose.get(b);if(!b||!base)return;b.quaternion.copy(base.q);const q=new THREE.Quaternion().setFromAxisAngle(axis,angle);b.quaternion.multiply(q);}
-function fi25dPoseProxy(i){const g=FI25D.proxy;if(!g||!g.userData.base)return;const phase=i%8,down=[0,-.06,0,.04,0,-.06,0,.04][phase];g.children.forEach(o=>{const b=g.userData.base[o.name];if(b){o.position.copy(b.p);o.quaternion.copy(b.q);}});g.position.y=down;const swing=[.18,.10,0,-.12,-.18,-.10,0,.12][phase],lead=phase<4?1:-1;const LF=g.getObjectByName('left_foot'),RF=g.getObjectByName('right_foot');if(LF&&RF){LF.position.x+=swing;RF.position.x-=swing;const lift=[0,0,.05,.22,0,0,.05,.22][phase];(lead>0?RF:LF).position.y+=lift;}const LA=g.getObjectByName('lUpperArm'),RA=g.getObjectByName('rUpperArm');if(LA&&RA){LA.rotation.z+=swing*.55;RA.rotation.z-=swing*.55;}const torso=g.getObjectByName('torso');if(torso)torso.rotation.z=[.018,.012,0,-.012,-.018,-.012,0,.012][phase];
-  // V29: same contained pelvis/torso twist as the imported-model path --
-  // rotation.y applied to the individual hips/torso meshes only, never to
-  // `g` (the proxy's root group), so it can't turn the figure away from
-  // the locked side camera.
+function fi25dRepositionLimb(mesh,a,b){if(!mesh)return;const d=b.clone().sub(a);mesh.position.copy(a.clone().add(b).multiplyScalar(0.5));if(d.lengthSq()>1e-8)mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());}
+// V29.2: same real-data retarget as the imported-model path, adapted for
+// the proxy's plain cylinder meshes -- reposition/reorient each limb
+// segment directly between the IK-solved joint points (no bone hierarchy
+// to aim, so no quaternion-composition needed here; just placing meshes).
+function fi25dRetargetProxyFromSpriteWalker(i){
+  const g=FI25D.proxy; if(!g||!g.userData.points)return false;
+  const bridge=window.FIProgressiveSketch;
+  if(!bridge||typeof bridge.getPose!=="function")return false;
+  const result=bridge.getPose(i);
+  if(!result||result.error||!result.pose)return false;
+  const pose=result.pose;
+  const need=["left_hip","left_knee","left_ankle","right_hip","right_knee","right_ankle","left_shoulder","left_elbow","left_wrist","right_shoulder","right_elbow","right_wrist","pelvis"];
+  if(!need.every(j=>Array.isArray(pose[j])))return false;
+  const spriteLeg=(typeof bridge.legScale==="function"&&bridge.legScale())||null;
+  if(!spriteLeg)return false;
+
+  g.children.forEach(o=>{const b=g.userData.base[o.name];if(b){o.position.copy(b.p);o.quaternion.copy(b.q);}});
+  const P=g.userData.points,V=p=>new THREE.Vector3(...p);
+  const hipMidY=(pose.left_hip[1]+pose.right_hip[1])/2,dropSprite=pose.pelvis[1]-hipMidY;
+  const legLenProxy=V(P.lh).distanceTo(V(P.lk))+V(P.lk).distanceTo(V(P.la));
+  g.position.y=-(dropSprite/spriteLeg)*legLenProxy;
+
+  const chains=[
+    {hipP:'lh',midP:'lk',hipJ:'left_hip',endJ:'left_ankle',upper:'lThigh',lower:'lShin',end:'left_foot'},
+    {hipP:'rh',midP:'rk',hipJ:'right_hip',endJ:'right_ankle',upper:'rThigh',lower:'rShin',end:'right_foot'},
+    {hipP:'ls',midP:'le',hipJ:'left_shoulder',endJ:'left_wrist',upper:'lUpperArm',lower:'lForearm',end:'left_hand'},
+    {hipP:'rs',midP:'re',hipJ:'right_shoulder',endJ:'right_wrist',upper:'rUpperArm',lower:'rForearm',end:'right_hand'}
+  ];
+  for(const c of chains){
+    const hip=V(P[c.hipP]),midBind=V(P[c.midP]);
+    const bindEndKey={lThigh:'la',rThigh:'ra',lUpperArm:'lw',rUpperArm:'rw'}[c.upper];
+    const endBind=V(P[bindEndKey]);
+    const l1=hip.distanceTo(midBind),l2=midBind.distanceTo(endBind);
+    const scale=(l1+l2)/spriteLeg;
+    const dx=(pose[c.endJ][0]-pose[c.hipJ][0])*scale,dy=-(pose[c.endJ][1]-pose[c.hipJ][1])*scale;
+    const target=hip.clone().add(new THREE.Vector3(dx,dy,0));
+    const mid=fi25dSolveMidJointWorld(hip,target,l1,l2,midBind.clone().sub(hip).normalize());
+    fi25dRepositionLimb(g.getObjectByName(c.upper),hip,mid);
+    fi25dRepositionLimb(g.getObjectByName(c.lower),mid,target);
+    const endMesh=g.getObjectByName(c.end); if(endMesh)endMesh.position.copy(target);
+  }
+  const hipsMesh=g.getObjectByName('hips'),torso=g.getObjectByName('torso');
+  const hipSpread=pose.left_hip[0]-pose.right_hip[0],neutralSpread=spriteLeg*0.22;
+  const twist=Math.max(-1,Math.min(1,(hipSpread-neutralSpread)/(spriteLeg*0.12||1)))*0.35;
+  if(hipsMesh)hipsMesh.rotation.y=twist;
+  if(torso)torso.rotation.y=-twist*0.65;
+  return true;
+}
+// Fallback for when Sprite Walker doesn't have usable pose data yet --
+// original hardcoded 8-phase proxy animation.
+function fi25dPoseProxyFallback(i){const g=FI25D.proxy;if(!g||!g.userData.base)return;const phase=i%8,down=[0,-.06,0,.04,0,-.06,0,.04][phase];g.children.forEach(o=>{const b=g.userData.base[o.name];if(b){o.position.copy(b.p);o.quaternion.copy(b.q);}});g.position.y=down;const swing=[.18,.10,0,-.12,-.18,-.10,0,.12][phase],lead=phase<4?1:-1;const LF=g.getObjectByName('left_foot'),RF=g.getObjectByName('right_foot');if(LF&&RF){LF.position.x+=swing;RF.position.x-=swing;const lift=[0,0,.05,.22,0,0,.05,.22][phase];(lead>0?RF:LF).position.y+=lift;}const LA=g.getObjectByName('lUpperArm'),RA=g.getObjectByName('rUpperArm');if(LA&&RA){LA.rotation.z+=swing*.55;RA.rotation.z-=swing*.55;}const torso=g.getObjectByName('torso');if(torso)torso.rotation.z=[.018,.012,0,-.012,-.018,-.012,0,.012][phase];
   const hipsMesh=g.getObjectByName('hips'),twist=swing*.47;
   if(hipsMesh)hipsMesh.rotation.y=twist;
   if(torso)torso.rotation.y=-twist*.65;
 }
-function fi25dApplyImportedWalk(i){if(!FI25D.model||!FI25D.driveModel||!FI25D.bindPose.size)return;fi25dResetBones();const p=i%8;const hipDrop=[0,-.035,-.005,.025,0,-.035,-.005,.025][p],leg=[-.34,-.18,.02,.28,.34,.18,-.02,-.28][p],knee=[.20,.42,.26,.58,.20,.42,.26,.58][p],arm=-leg*.62;const hips=FI25D.boneMap.hips,base=hips&&FI25D.bindPose.get(hips);if(hips&&base)hips.position.y=base.p.y+hipDrop;const A=new THREE.Vector3(0,0,1);fi25dRotateFromBind('leftUpperLeg',A,leg);fi25dRotateFromBind('rightUpperLeg',A,-leg);fi25dRotateFromBind('leftLowerLeg',A,p<4?knee:.10);fi25dRotateFromBind('rightLowerLeg',A,p>=4?knee:.10);fi25dRotateFromBind('leftUpperArm',A,arm);fi25dRotateFromBind('rightUpperArm',A,-arm);fi25dRotateFromBind('leftForeArm',A,.12+Math.max(0,-arm)*.35);fi25dRotateFromBind('rightForeArm',A,.12+Math.max(0,arm)*.35);if(FI25D.ikEnabled){const plantedLeft=[0,1,2,7].includes(p),plantedRight=[3,4,5,6].includes(p);fi25dRotateFromBind('leftFoot',A,plantedLeft?-leg*.55:leg*.18);fi25dRotateFromBind('rightFoot',A,plantedRight?leg*.55:-leg*.18);}
-  // V29: controlled pelvis/torso twist for weight and power. This is
-  // deliberately a LOCAL rotation composed on top of bind pose via
-  // fi25dRotateFromBind (same helper used for every limb above) -- it is
-  // applied to the hips/spine BONES only, never to FI25D.root or the
-  // camera. A rotation on the root would yaw the whole fighter's silhouette
-  // away from the fixed side-on camera; a rotation on hips/spine is a
-  // contained twist within the character's own frame and can't do that,
-  // regardless of magnitude. Y is the bone's own vertical axis (twist),
-  // not a scene-space turn.
+function fi25dPoseProxy(i){
+  if(fi25dRetargetProxyFromSpriteWalker(i))return;
+  fi25dPoseProxyFallback(i);
+}
+// Fallback for when Sprite Walker doesn't have usable pose data yet (no
+// reference image traced). Kept so the 2.5D viewer still works standalone;
+// this is the ORIGINAL hardcoded-array walk, used only when
+// fi25dRetargetFromSpriteWalker() returns false.
+function fi25dApplyImportedWalkFallback(i){fi25dResetBones();const p=i%8;const hipDrop=[0,-.035,-.005,.025,0,-.035,-.005,.025][p],leg=[-.34,-.18,.02,.28,.34,.18,-.02,-.28][p],knee=[.20,.42,.26,.58,.20,.42,.26,.58][p],arm=-leg*.62;const hips=FI25D.boneMap.hips,base=hips&&FI25D.bindPose.get(hips);if(hips&&base)hips.position.y=base.p.y+hipDrop;const A=new THREE.Vector3(0,0,1);fi25dRotateFromBind('leftUpperLeg',A,leg);fi25dRotateFromBind('rightUpperLeg',A,-leg);fi25dRotateFromBind('leftLowerLeg',A,p<4?knee:.10);fi25dRotateFromBind('rightLowerLeg',A,p>=4?knee:.10);fi25dRotateFromBind('leftUpperArm',A,arm);fi25dRotateFromBind('rightUpperArm',A,-arm);fi25dRotateFromBind('leftForeArm',A,.12+Math.max(0,-arm)*.35);fi25dRotateFromBind('rightForeArm',A,.12+Math.max(0,arm)*.35);if(FI25D.ikEnabled){const plantedLeft=[0,1,2,7].includes(p),plantedRight=[3,4,5,6].includes(p);fi25dRotateFromBind('leftFoot',A,plantedLeft?-leg*.55:leg*.18);fi25dRotateFromBind('rightFoot',A,plantedRight?leg*.55:-leg*.18);}
   const Y=new THREE.Vector3(0,1,0),hipTwist=leg*.47,spineCounter=-hipTwist*.65;
   fi25dRotateFromBind('hips',Y,hipTwist);
   fi25dRotateFromBind('spine',Y,spineCounter);
-  FI25D.model.updateMatrixWorld(true);}
+  FI25D.model.updateMatrixWorld(true);
+}
+// V29.2: this is now the real fix for "two walk engines" -- try genuine
+// IK retargeting from Sprite Walker's corrected pose data first (see
+// fi25dRetargetFromSpriteWalker above), and only fall back to the old
+// hardcoded 8-frame arrays if that data isn't available yet.
+function fi25dApplyImportedWalk(i){
+  if(!FI25D.model||!FI25D.driveModel||!FI25D.bindPose.size)return;
+  if(!FI25D.ikRef||!Object.keys(FI25D.ikRef).length)fi25dCaptureIKReference();
+  if(fi25dRetargetFromSpriteWalker(i))return;
+  fi25dApplyImportedWalkFallback(i);
+}
 // V29: controller test milestone -- LEFT/RIGHT held moves the root and
 // auto-plays the walk cycle; releasing both keys returns to Idle. Idle is a
 // genuine neutral stance (bind pose / proxy rest pose), not just holding
 // frame 0, so it doesn't look like freezing mid-step.
 function fi25dApplyIdle(){
   FI25D.frame=-1;
-  clearInterval(FI25D.player.walkTimer);FI25D.player.walkTimer=null;FI25D.player.moving=false;
+  if(FI25D.locomotion.timer){clearInterval(FI25D.locomotion.timer);FI25D.locomotion.timer=null;}
+  FI25D.locomotion.mode='idle';FI25D.locomotion.source=null;
+  FI25D.player.moving=false;
   const chip=document.getElementById('fi25dFrameChip');if(chip)chip.textContent='IDLE';
   document.querySelectorAll('#fi25dTimeline button').forEach(b=>b.classList.remove('active'));
   if(FI25D.proxy&&FI25D.proxy.userData.base){
@@ -109,24 +340,31 @@ function fi25dApplyIdle(){
   }
 }
 function fi25dSetIdle(){fi25dApplyIdle();}
-function fi25dStartWalking(){
-  if(FI25D.player.walkTimer)return;
+// source: 'manual' (Play button) or 'controller' (keyboard/touch). Starting
+// either one replaces whatever timer/source was previously running -- there
+// is only ever one interval, so a manual Play run and controller input can
+// never both be advancing frames at once.
+function fi25dStartWalking(source='controller'){
+  if(FI25D.locomotion.mode==='walking'&&FI25D.locomotion.source===source)return;
+  if(FI25D.locomotion.timer)clearInterval(FI25D.locomotion.timer);
+  FI25D.locomotion.mode='walking';FI25D.locomotion.source=source;
   FI25D.player.moving=true;
   if(FI25D.frame<0)FI25D.frame=0;
   fi25dApplyFrame(FI25D.frame);
-  FI25D.player.walkTimer=setInterval(()=>fi25dApplyFrame(FI25D.frame+1),125);
+  FI25D.locomotion.timer=setInterval(()=>fi25dApplyFrame(FI25D.frame+1),125);
 }
 function fi25dUpdatePlayerMovement(dt){
   const p=FI25D.player,held=p.held.left||p.held.right;
   if(held){
     p.facing=p.held.right?1:-1;
-    if(!p.moving)fi25dStartWalking();
+    if(!(FI25D.locomotion.mode==='walking'&&FI25D.locomotion.source==='controller'))fi25dStartWalking('controller');
     if(FI25D.root){
-      FI25D.root.position.x+=p.facing*p.speed*dt;
+      const arena=FI25D.arena;
+      FI25D.root.position.x=Math.max(arena.minX,Math.min(arena.maxX,FI25D.root.position.x+p.facing*p.speed*dt));
       const s=FI25D.baseScale||1;
       FI25D.root.scale.set(s*p.facing,s,s);
     }
-  }else if(p.moving){
+  }else if(FI25D.locomotion.mode==='walking'&&FI25D.locomotion.source==='controller'){
     fi25dApplyIdle();
   }
 }
@@ -137,7 +375,7 @@ function fi25dAnimate(){requestAnimationFrame(fi25dAnimate);const dt=Math.min(.0
 function fi25dDownload(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1200);}
 function fi25dExportGLB(){if(!FI25D.root){fi25dStatus('Nothing to export.');return;}const exporter=new GLTFExporter();exporter.parse(FI25D.root,res=>{const blob=res instanceof ArrayBuffer?new Blob([res],{type:'model/gltf-binary'}):new Blob([JSON.stringify(res,null,2)],{type:'model/gltf+json'});fi25dDownload(blob,`Fatal_Instinct_Duroc_2_5D_${FI_APP_VERSION}.glb`);fi25dStatus(`${FI_APP_VERSION} modern GLB exported. Legacy SNES output remains available.`);},err=>fi25dStatus('GLB export failed: '+err),{binary:true,onlyVisible:false});}
 function fi25dExportMeta(){const audit=window.FIProgressiveSketch?.cycleAudit?.()||null;const map={};for(const[k,b]of Object.entries(FI25D.boneMap))map[k]=b?.name||null;const data={schema:'fatal-instinct-2.5d/v2',character:window.FIProgressiveSketch?.characterKey?.()||'duroc',camera:'side_locked',movementPlane:'XY',depthGameplay:false,rig:{ikEnabled:FI25D.ikEnabled,driveModel:FI25D.driveModel,boneMap:map},walk:{name:'DUROC_WALK_v1.0',stages:FI25D.stages,frameCount:8,cycleAudit:audit},combat:{hitboxesFollowBones:true,hurtboxesFollowBones:true},exports:{modern:['glb','combat-json'],legacy:['snes-4bpp','palette','oam']}};fi25dDownload(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),`Duroc_2_5D_${FI_APP_VERSION}_Combat_Metadata.json`);fi25dStatus(`${FI_APP_VERSION} rig + combat metadata exported.`);}
-function fi25dInit(){const canvas=document.getElementById('fi25dViewport');if(!canvas)return;FI25D.scene=new THREE.Scene();FI25D.scene.background=new THREE.Color(0x050910);FI25D.camera=new THREE.PerspectiveCamera(26,1,.05,100);FI25D.renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});FI25D.renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));FI25D.renderer.outputColorSpace=THREE.SRGBColorSpace;FI25D.scene.add(new THREE.HemisphereLight(0xbfd8ff,0x202735,2.1));const key=new THREE.DirectionalLight(0xffffff,2.6);key.position.set(3,6,5);FI25D.scene.add(key);const rim=new THREE.DirectionalLight(0x89b8ff,1.2);rim.position.set(-4,3,-3);FI25D.scene.add(rim);FI25D.grid=new THREE.GridHelper(8,16,0x31455b,0x182231);FI25D.scene.add(FI25D.grid);const floor=new THREE.Mesh(new THREE.PlaneGeometry(8,5),new THREE.MeshStandardMaterial({color:0x0d141d,roughness:1}));floor.rotation.x=-Math.PI/2;floor.position.y=-.02;FI25D.scene.add(floor);fi25dFightCamera();fi25dUseProxy();const tl=document.getElementById('fi25dTimeline');FI25D.stages.forEach((n,i)=>{const b=document.createElement('button');b.type='button';b.textContent=String(i+1);b.title=n;b.onclick=()=>fi25dApplyFrame(i);tl.appendChild(b);});fi25dApplyFrame(0);document.getElementById('fi25dModelFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(f)fi25dLoadModel(f);});document.getElementById('fi25dResetModel').onclick=fi25dUseProxy;document.getElementById('fi25dAutoMap').onclick=fi25dAutoMapBones;document.getElementById('fi25dCaptureBind').onclick=()=>{fi25dCaptureBindPose();fi25dApplyFrame(FI25D.frame);};document.getElementById('fi25dDriveModel').onclick=()=>{FI25D.driveModel=!FI25D.driveModel;document.getElementById('fi25dDriveModel').textContent=FI25D.driveModel?'Drive Imported Model':'Embedded Animation';fi25dApplyFrame(FI25D.frame);};document.getElementById('fi25dToggleIK').onclick=()=>{FI25D.ikEnabled=!FI25D.ikEnabled;document.getElementById('fi25dToggleIK').textContent=`IK: ${FI25D.ikEnabled?'ON':'OFF'}`;fi25dApplyFrame(FI25D.frame);};document.getElementById('fi25dCameraSide').onclick=fi25dFightCamera;document.getElementById('fi25dCameraOrbit').onclick=fi25dInspectCamera;document.getElementById('fi25dToggleGrid').onclick=()=>{FI25D.gridVisible=!FI25D.gridVisible;FI25D.grid.visible=FI25D.gridVisible;};document.getElementById('fi25dToggleBones').onclick=()=>{FI25D.bonesVisible=!FI25D.bonesVisible;if(FI25D.skeletonHelper)FI25D.skeletonHelper.visible=FI25D.bonesVisible;};document.getElementById('fi25dPlay').onclick=()=>{clearInterval(FI25D.playTimer);FI25D.playTimer=setInterval(()=>fi25dApplyFrame(FI25D.frame+1),125);};document.getElementById('fi25dStop').onclick=()=>{clearInterval(FI25D.playTimer);FI25D.playTimer=null;};document.getElementById('fi25dExportGLB').onclick=fi25dExportGLB;document.getElementById('fi25dExportMeta').onclick=fi25dExportMeta;window.addEventListener('resize',fi25dResize);
+function fi25dInit(){const canvas=document.getElementById('fi25dViewport');if(!canvas)return;FI25D.scene=new THREE.Scene();FI25D.scene.background=new THREE.Color(0x050910);FI25D.camera=new THREE.PerspectiveCamera(26,1,.05,100);FI25D.renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});FI25D.renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));FI25D.renderer.outputColorSpace=THREE.SRGBColorSpace;FI25D.scene.add(new THREE.HemisphereLight(0xbfd8ff,0x202735,2.1));const key=new THREE.DirectionalLight(0xffffff,2.6);key.position.set(3,6,5);FI25D.scene.add(key);const rim=new THREE.DirectionalLight(0x89b8ff,1.2);rim.position.set(-4,3,-3);FI25D.scene.add(rim);FI25D.grid=new THREE.GridHelper(8,16,0x31455b,0x182231);FI25D.scene.add(FI25D.grid);const floor=new THREE.Mesh(new THREE.PlaneGeometry(8,5),new THREE.MeshStandardMaterial({color:0x0d141d,roughness:1}));floor.rotation.x=-Math.PI/2;floor.position.y=-.02;FI25D.scene.add(floor);fi25dFightCamera();fi25dUseProxy();const tl=document.getElementById('fi25dTimeline');FI25D.stages.forEach((n,i)=>{const b=document.createElement('button');b.type='button';b.textContent=String(i+1);b.title=n;b.onclick=()=>fi25dApplyFrame(i);tl.appendChild(b);});fi25dApplyFrame(0);document.getElementById('fi25dModelFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(f)fi25dLoadModel(f);});document.getElementById('fi25dResetModel').onclick=fi25dUseProxy;document.getElementById('fi25dAutoMap').onclick=fi25dAutoMapBones;document.getElementById('fi25dCaptureBind').onclick=()=>{fi25dCaptureBindPose();fi25dApplyFrame(FI25D.frame);};document.getElementById('fi25dDriveModel').onclick=()=>{FI25D.driveModel=!FI25D.driveModel;document.getElementById('fi25dDriveModel').textContent=FI25D.driveModel?'Drive Imported Model':'Embedded Animation';fi25dApplyFrame(FI25D.frame);};document.getElementById('fi25dToggleIK').onclick=()=>{FI25D.ikEnabled=!FI25D.ikEnabled;document.getElementById('fi25dToggleIK').textContent=`IK: ${FI25D.ikEnabled?'ON':'OFF'}`;fi25dApplyFrame(FI25D.frame);};document.getElementById('fi25dCameraSide').onclick=fi25dFightCamera;document.getElementById('fi25dCameraOrbit').onclick=fi25dInspectCamera;document.getElementById('fi25dToggleGrid').onclick=()=>{FI25D.gridVisible=!FI25D.gridVisible;FI25D.grid.visible=FI25D.gridVisible;};document.getElementById('fi25dToggleBones').onclick=()=>{FI25D.bonesVisible=!FI25D.bonesVisible;if(FI25D.skeletonHelper)FI25D.skeletonHelper.visible=FI25D.bonesVisible;};document.getElementById('fi25dPlay').onclick=()=>fi25dStartWalking('manual');document.getElementById('fi25dStop').onclick=()=>fi25dApplyIdle();document.getElementById('fi25dExportGLB').onclick=fi25dExportGLB;document.getElementById('fi25dExportMeta').onclick=fi25dExportMeta;window.addEventListener('resize',fi25dResize);
 // V29 controller test: LEFT/RIGHT held moves root + auto-walks; release -> Idle.
 // Ignore key events while typing in a text field/slider elsewhere on the page.
 window.addEventListener('keydown',e=>{
@@ -151,6 +389,21 @@ window.addEventListener('keyup',e=>{
   else if(e.key==='ArrowRight')FI25D.player.held.right=false;
 });
 window.addEventListener('blur',()=>{FI25D.player.held.left=false;FI25D.player.held.right=false;});
+// V29.3: touch controls -- same held-state as the keyboard, so both feed
+// the one locomotion state machine above identically. Pointer events cover
+// touch and mouse with one handler (works for iPhone Safari and for
+// testing with a mouse on desktop).
+const fi25dTouchBind=(id,side)=>{
+  const el=document.getElementById(id); if(!el)return;
+  const press=e=>{e.preventDefault();FI25D.player.held[side]=true;};
+  const release=()=>{FI25D.player.held[side]=false;};
+  el.addEventListener('pointerdown',press);
+  el.addEventListener('pointerup',release);
+  el.addEventListener('pointercancel',release);
+  el.addEventListener('pointerleave',release);
+};
+fi25dTouchBind('fi25dTouchLeft','left');
+fi25dTouchBind('fi25dTouchRight','right');
 fi25dApplyIdle();
 fi25dStatus('Controller test: hold ← / → to move Duroc. Release to return to Idle.');
 fi25dAnimate();}

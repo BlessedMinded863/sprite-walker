@@ -9189,7 +9189,15 @@ detectTargetChains();renderAnimationLibrary();updateControlBadge();animationFram
     get state(){return fiSketchState;},
     draw:fiSketchDraw,
     characterKey:fiSketchCharacterKey,
-    cycleAudit:fiDurocCycleAudit
+    cycleAudit:fiDurocCycleAudit,
+    // V29.2: the actual bridge the 3D engine needs -- the corrected pose
+    // (buildPose already prefers a manually-approved pose over the
+    // algorithmic correction, same precedence used everywhere else in the
+    // app, so callers get one consistent answer regardless of source), plus
+    // the sprite's leg length in its own pixel units so a caller can scale
+    // these joint coordinates onto a rig of different proportions.
+    getPose:(i)=>buildPose(i),
+    legScale:()=>legMetrics()?.avgLeg||120
   };
 
 
