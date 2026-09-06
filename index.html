@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#101218">
-<title>Fatal Instinct Sprite Walker V28.1 - Bone Mapping + IK</title>
+<title>Fatal Instinct Sprite Walker - Bone Mapping + IK</title>
 <link rel="stylesheet" href="css/styles.css">
 
 <!--
@@ -36,7 +36,7 @@
 </script>
 </head>
 <body>
-<header><h1>Fatal Instinct Sprite Walker <span class="badge">V28.1</span></h1><div class="sub">2.5D Motion Studio • True Bone Mapping + IK • Modern GLB + Legacy SNES Pipeline</div></header>
+<header><h1>Fatal Instinct Sprite Walker <span class="badge" id="appVersionBadge">V29</span></h1><div class="sub">2.5D Motion Studio • True Bone Mapping + IK • Modern GLB + Legacy SNES Pipeline</div></header>
 <main>
 <div class="topbar">
 <label class="btn">Load Character PNG<input id="imageInput" type="file" accept="image/png,image/webp,image/jpeg"></label>
@@ -383,7 +383,7 @@
 
     <section class="fi25dPanel" id="fi25dPanel">
       <div class="fi25dHead">
-        <div><h3>FATAL INSTINCT 2.5D STUDIO — BONE MAPPING + IK</h3><p>Imported character skeletons are now auto-mapped to Fatal Instinct controls. Sprite Walker walk poses can drive hips, knees, ankles, shoulders, elbows and wrists through the V28.1 bone-mapping and IK-assisted retarget layer while the Legacy SNES pipeline remains preserved.</p></div>
+        <div><h3>FATAL INSTINCT 2.5D STUDIO — BONE MAPPING + IK</h3><p>Imported character skeletons are now auto-mapped to Fatal Instinct controls. Sprite Walker walk poses can drive hips, knees, ankles, shoulders, elbows and wrists through the <span id="appVersionInline">V29</span> bone-mapping and IK-assisted retarget layer while the Legacy SNES pipeline remains preserved.</p></div>
         <div class="fi25dBadge" id="fi25dModeBadge">BONE + IK READY</div>
       </div>
       <div class="fi25dGrid">
@@ -1232,5 +1232,16 @@
 
 <script type="module" src="js/app-core.js"></script>
 <script type="module" src="js/fi25d-engine.js"></script>
+<script type="module">
+  // Single source of truth for the version shown in the title/header/copy --
+  // see js/version.js. Keeps the UI in sync with package.json and the
+  // export filenames without hand-editing the same string in four places.
+  import { FI_APP_VERSION } from './js/version.js';
+  document.title = document.title.replace(/^Fatal Instinct Sprite Walker/, `Fatal Instinct Sprite Walker ${FI_APP_VERSION}`);
+  const badge = document.getElementById('appVersionBadge');
+  if (badge) badge.textContent = FI_APP_VERSION;
+  const inline = document.getElementById('appVersionInline');
+  if (inline) inline.textContent = FI_APP_VERSION;
+</script>
 </body>
 </html>
